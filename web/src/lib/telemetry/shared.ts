@@ -113,11 +113,11 @@ export function sanitizeTelemetryEvent<T extends { event: string; properties?: R
 }
 
 export function companionEvent(event: { event: string; properties?: Record<string, unknown> }) {
-  if (event.event !== "$pageview" && event.event !== "$exception") return null;
+  if (event.event !== "$exception") return null;
   const properties = event.properties ?? {};
   const first = Array.isArray(properties.$exception_list) ? properties.$exception_list[0] as Record<string, unknown> | undefined : undefined;
   return {
-    event: event.event === "$pageview" ? "hackuniverse-pageview" as const : "hackuniverse-exception" as const,
+    event: "hackuniverse-exception" as const,
     properties: {
       ...Object.fromEntries(Object.entries(properties).filter(([key]) => contextFields.has(key) || ["$current_url", "$pathname"].includes(key))),
       native_event: event.event,
