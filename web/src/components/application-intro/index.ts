@@ -1,0 +1,1 @@
+export { ApplicationIntro } from "./component";

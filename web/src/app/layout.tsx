@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import localFont from "next/font/local";
 import { Suspense, type ReactNode } from "react";
 import { ApplicationShell } from "@/components/application-shell";
+import { ApplicationIntro } from "@/components/application-intro";
 import { localeRequestHeader, resolveLocale } from "@/i18n/config";
 import { messages } from "@/i18n/messages";
 import { I18nProvider } from "@/i18n/provider";
@@ -40,6 +41,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Suspense fallback={null}>
           <I18nProvider initialLocale={locale}>
             <ApplicationShell>{children}</ApplicationShell>
+            <ApplicationIntro />
           </I18nProvider>
         </Suspense>
       </body>

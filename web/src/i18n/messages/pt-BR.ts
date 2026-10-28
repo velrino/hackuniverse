@@ -19,6 +19,10 @@ const ptBR = {
     hint: "Você pode mudar seu idioma a qualquer momento.",
   },
   designSystem: designSystemPtBR,
+  applicationIntro: {
+    label: "Bem-vindo ao HackUniverse",
+    detail: "Seu universo começa aqui.",
+  },
   notFound: {
     eyebrow: "Erro 404 / Rota não encontrada",
     title: "Página não encontrada.",

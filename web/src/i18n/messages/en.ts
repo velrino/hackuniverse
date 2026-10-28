@@ -17,6 +17,10 @@ const en = {
     hint: "You can change your language at any time.",
   },
   designSystem: designSystemEn,
+  applicationIntro: {
+    label: "Welcome to HackUniverse",
+    detail: "Your universe starts here.",
+  },
   notFound: {
     eyebrow: "Error 404 / Route not found",
     title: "Page not found.",

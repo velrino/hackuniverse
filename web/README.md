@@ -14,6 +14,12 @@ Every shared UI component has its own folder under `src/components/ui/`, with a 
 
 The design module owns adapters, state controllers, pure UI, feature composition and message catalogs. Its host bridge supplies localization and application components; core module code does not import Next.js or the concrete global language picker. The route mounts the public host entry.
 
+## First-visit welcome
+
+The shared `ApplicationIntro` displays the full-screen planetary loader for three seconds on the first visit to any route. It persists `hackuniverse.intro.v1.seen` in browser local storage before opening, so refreshes, later visits and page navigation do not replay it. This is an introductory animation with indeterminate progress, not a measure of network or Firecrawl work. Locale preference remains exclusively URL-driven.
+
+The intro is mounted once inside the application provider. It keeps its deadline across effect replay, cleans up timers on unmount and falls back to a document guard when storage is unavailable. The five-second manual preview on `/design` remains available independently.
+
 ## Run locally
 
 ```sh
