@@ -51,9 +51,11 @@ export function createDestinationHighlight(root: THREE.Object3D) {
           material.opacity = Math.min(1, opacity * 1.15);
         } else {
           const particles = material instanceof THREE.PointsMaterial;
-          material.color.lerp(cyan, particles ? 0.55 : 0.35).multiplyScalar(particles ? 2 : 1.45);
-          material.opacity = Math.min(1, opacity * (particles ? 1.6 : 1.35));
-          if (size !== null && particles) material.size = size * 1.5;
+          const coloredParticles = particles && material.vertexColors;
+          if (coloredParticles) material.color.multiplyScalar(1.3);
+          else material.color.lerp(cyan, particles ? 0.55 : 0.35).multiplyScalar(particles ? 2 : 1.45);
+          material.opacity = Math.min(1, opacity * (coloredParticles ? 1.15 : particles ? 1.6 : 1.35));
+          if (size !== null && particles) material.size = size * (coloredParticles ? 1.3 : 1.5);
         }
       }
     });

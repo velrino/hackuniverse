@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import type { SceneNode, UniverseSceneView } from "../domain/types";
 import { getPlanetAppearance, type PlanetAppearance } from "../domain/planet-appearance";
-import { glowTexture, planetTexture, seededRandom, starSurfaceTexture, starCoronaTexture, nebulaTexture } from "./textures";
+import { glowTexture, planetTexture, starSurfaceTexture, starCoronaTexture, nebulaTexture } from "./textures";
 import { createShipPilot, type ShipFlightInput } from "./flight";
 import type { UniverseFlightStatus, UniverseTourCameraStep } from "./types";
 import { createSemanticZoomGate } from "./semantic-zoom";
@@ -11,6 +11,9 @@ import { createSpatialBackground } from "./background";
 import { createDestinationHover } from "./destination-hover";
 import { createDestinationHighlight } from "./destination-highlight";
 import { createTourDolly, type TourDolly } from "./tour-motion";
+import { galaxyParticleTexture } from "./galaxy-particles";
+import { createCloudHaze, createGalaxyVisual, createGlow, createRoundPointMaterial, updateCloudHaze, updateGalaxyVisual } from "./cluster-visuals";
+import { createSurroundingContext } from "./surrounding-context";
 
 type Callbacks = { onSelect: (id: string) => void; onSelectStar: () => void; onReady: () => void; onUnavailable: () => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onInteraction: () => void };
 type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; previewPixels?: number; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[]; dust?: THREE.Points; core?: THREE.Sprite; highlight?: (active: boolean) => void; haze?: { primary: THREE.Sprite; secondary: THREE.Sprite } };
@@ -33,7 +36,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   const starMap = starSurfaceTexture();
   const coronaMap = starCoronaTexture();
   const nebulaMap = nebulaTexture();
-  const sharedMaps = new Set<THREE.Texture>([glowMap, starMap, coronaMap, nebulaMap]);
+  const galaxyPointMap = galaxyParticleTexture();
+  const sharedMaps = new Set<THREE.Texture>([glowMap, starMap, coronaMap, nebulaMap, galaxyPointMap]);
   let renderer: THREE.WebGLRenderer;
   try {
     renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "low-power" });
@@ -46,6 +50,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.3;
+  const clusterResources = { glowMap, coronaMap, galaxyPointMap, pixelRatio: () => renderer.getPixelRatio() };
   const canvas = renderer.domElement;
   canvas.className = "universe-canvas";
   canvas.setAttribute("role", "img");
@@ -101,6 +106,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   let bodies: Body[] = [];
   let systemPreviews: Body[] = [];
   let centralStar: CentralStar | null = null;
+  let surroundingContext: ReturnType<typeof createSurroundingContext> | null = null;
+  let contextMobile = false;
   let starSelected = false;
   let labels: Label[] = [];
   let hitTargets: THREE.Object3D[] = [];
@@ -222,10 +229,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function addGlow(group: THREE.Object3D, scale: number, color: string | number, opacity: number, map = glowMap, toneMapped = true) {
-    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map, color, transparent: true, opacity, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped }));
-    sprite.scale.set(scale, scale, 1);
-    group.add(sprite);
-    return sprite;
+    return createGlow(group, scale, color, opacity, map, toneMapped);
   }
 
   function addOrbits(radii: number[], parent: THREE.Group = orbitGroup) {
@@ -253,15 +257,17 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function roundPointMaterial(size: number, color: string | number, opacity: number, map = glowMap) {
-    const material = new THREE.PointsMaterial({ map, color, size, transparent: true, opacity, alphaTest: 0.025, depthWrite: false, toneMapped: false });
-    material.onBeforeCompile = (shader) => {
-      shader.uniforms.pointPixelRatio = { value: renderer.getPixelRatio() };
-      shader.vertexShader = `uniform float pointPixelRatio;\n${shader.vertexShader}`.replace(
-        "#include <logdepthbuf_vertex>",
-        "gl_PointSize = clamp(gl_PointSize, pointPixelRatio, 5.0 * pointPixelRatio);\n#include <logdepthbuf_vertex>",
-      );
-    };
-    return material;
+    return createRoundPointMaterial(size, color, opacity, map, clusterResources.pixelRatio);
+  }
+
+  function refreshSurroundingContext(view: UniverseSceneView) {
+    if (surroundingContext) {
+      viewGroup.remove(surroundingContext.root);
+      disposeObjects(surroundingContext.root, true);
+    }
+    contextMobile = width < 640;
+    surroundingContext = createSurroundingContext(view, clusterResources, { mobile: contextMobile, elapsed: orbitalTime });
+    viewGroup.add(surroundingContext.root);
   }
 
   function addLabel(text: string, body?: Body, position?: THREE.Vector3, star = false) {
@@ -316,24 +322,14 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       body.proxy = addGlow(object, 5, 0xffffff, 0.9, coronaMap, false);
     } else if (node.kind === "cloud") {
       body.mesh.visible = false;
-      const haze = addGlow(object, extent * 2.8, node.color, 0.5);
-      haze.scale.y *= 0.55;
-      const second = addGlow(object, extent * 1.6, 0x4b71b0, 0.3);
-      second.position.set(extent * 0.25, extent * 0.08, -extent * 0.15);
-      body.haze = { primary: haze, secondary: second };
+      body.haze = createCloudHaze(object, extent, node.color, clusterResources);
+      updateCloudHaze(body.haze, node.seed, extent, orbitalTime);
       addStarPoints(object, children.filter((child) => child.kind === "system").map((child, index, systems) => clusterPosition(child, index, systems.length, extent * 1.1)), extent * 0.13);
     } else {
       body.mesh.visible = false;
-      const random = seededRandom(node.seed);
-      const positions: [number, number, number][] = [];
-      for (let index = 0; index < 260; index++) {
-        const radius = Math.sqrt(random()) * extent;
-        const angle = radius / extent * 5.8 + index % 3 * Math.PI * 2 / 3 + (random() - 0.5) * 0.4;
-        positions.push([Math.cos(angle) * radius, (random() - 0.5) * extent * 0.055, Math.sin(angle) * radius]);
-      }
-      const dust = new THREE.BufferGeometry().setFromPoints(positions.map((position) => new THREE.Vector3(...position)));
-      body.dust = new THREE.Points(dust, roundPointMaterial(extent * 0.019, node.color, 0.8));
-      object.add(body.dust);
+      const visual = createGalaxyVisual(object, node.seed, extent, clusterResources, orbitalTime);
+      body.dust = visual.dust;
+      body.core = visual.core;
       const systemPoints: [number, number, number][] = [];
       const galaxyScale = previewScale(node, extent);
       const cloudExtent = clusterScale(children).marker;
@@ -345,9 +341,6 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         });
       });
       addStarPoints(object, systemPoints, extent * 0.035);
-      const core = addGlow(object, extent * 1.3, 0x8eb9df, 0.5);
-      core.scale.y *= 0.6;
-      body.core = core;
     }
     const hit = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false }));
     // The luminous core is the destination; the sparse outer dust is scenery.
@@ -471,7 +464,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function setView(view: UniverseSceneView) {
-    const nextSignature = `${view.key}|${view.mode}|${Boolean(view.starName)}|${view.nodes.map(nodeGeometrySignature).join("|")}`;
+    const anchorSignature = view.anchor ? `${view.anchor.kind}:${view.anchor.seed}:${view.anchor.color}` : "";
+    const ancestrySignature = view.ancestors?.[0] ? nodeGeometrySignature(view.ancestors[0]) : "";
+    const nextSignature = `${view.key}|${view.mode}|${Boolean(view.starName)}|${anchorSignature}|${ancestrySignature}|${view.nodes.map(nodeGeometrySignature).join("|")}`;
     if (signature === nextSignature) {
       currentView = view;
       const nodes = new Map(view.nodes.map((node) => [node.id, node]));
@@ -490,6 +485,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     destinationHover.clear();
     centralStar = null;
     starSelected = false;
+    surroundingContext = null;
     if (pilot.isActive() || flightMapPose) stopFlight();
     const previousView = currentView;
     const previousPose = pose();
@@ -544,6 +540,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     sunLight.position.set(0, 0, 0);
     sunLight.intensity = focus || cluster ? 0.7 : 3.8;
 
+    refreshSurroundingContext(view);
     if (view.mode === "system") {
       const star = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ map: starMap, color: 0xffffff, toneMapped: false }));
       star.scale.setScalar(3.4);
@@ -738,6 +735,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     const previousAspect = camera.aspect;
     width = Math.max(1, rect.width);
     height = Math.max(1, rect.height);
+    if (currentView && contextMobile !== (width < 640)) refreshSurroundingContext(currentView);
     // The host reserves HUD space through inherited CSS, without scene/UI coupling.
     const styles = getComputedStyle(container);
     const top = Number.parseFloat(styles.getPropertyValue("--universe-label-inset-top"));
@@ -794,6 +792,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     lastRendered = time;
     const animate = playing && !reducedMotion;
     if (animate) orbitalTime += delta;
+    if (animate) surroundingContext?.update(orbitalTime);
     if (animate) bodies.forEach((body) => {
       if (currentView?.mode === "system") {
         body.angle += delta * orbitalSpeed(body.orbit);
@@ -804,17 +803,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         planet.mesh.position.set(Math.cos(angle) * planet.orbit * planet.scale, 0, Math.sin(angle) * planet.orbit * planet.scale);
       });
       body.mesh.rotation.y += delta * 0.09;
-      const phase = body.node.seed * 0.001;
-      if (body.dust) body.dust.rotation.y = orbitalTime * 0.018 + phase;
-      if (body.core) {
-        const pulse = 1 + Math.sin(orbitalTime * 0.35 + phase) * 0.025;
-        body.core.scale.set(body.extent * 1.3 * pulse, body.extent * 0.78 * pulse, 1);
-      }
-      if (body.haze) {
-        body.haze.primary.scale.y = body.extent * 2.8 * (0.55 + Math.sin(orbitalTime * 0.2 + phase) * 0.025);
-        body.haze.secondary.position.x = body.extent * (0.25 + Math.sin(orbitalTime * 0.15 + phase) * 0.06);
-        body.haze.secondary.position.y = body.extent * (0.08 + Math.cos(orbitalTime * 0.17 + phase) * 0.035);
-      }
+      if (body.dust && body.core) updateGalaxyVisual({ dust: body.dust, core: body.core }, body.node.seed, body.extent, orbitalTime);
+      if (body.haze) updateCloudHaze(body.haze, body.node.seed, body.extent, orbitalTime);
     });
     const piloting = pilot.isActive();
     const focused = bodies.find((body) => body.node.id === focusedId);
@@ -878,6 +868,11 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     }
     sky.position.copy(camera.position);
     background.update(camera, height, renderer.getPixelRatio());
+    const contextFar = surroundingContext ? camera.position.length() + surroundingContext.radius : 0;
+    if (contextFar > camera.far) {
+      camera.far = contextFar * 1.02;
+      camera.updateProjectionMatrix();
+    }
     camera.updateMatrixWorld();
     for (const body of systemPreviews) {
       projected.copy(body.object.position).project(camera);

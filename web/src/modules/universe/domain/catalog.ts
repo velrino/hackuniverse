@@ -104,9 +104,9 @@ function indexCatalog(catalog: UniverseCatalog) {
   return { byId, children, planets, counts };
 }
 
-function sceneNode(index: ReturnType<typeof indexCatalog>, entity: UniverseEntity, depth = 0): SceneNode {
+function sceneNode(index: ReturnType<typeof indexCatalog>, entity: UniverseEntity, projected: Map<string, SceneNode>, depth = 0): SceneNode {
   const planet = entity.kind === "planet" ? index.planets.get(entity.id) : undefined;
-  return {
+  const node: SceneNode = {
     id: entity.id,
     kind: entity.kind,
     name: entity.name,
@@ -115,9 +115,11 @@ function sceneNode(index: ReturnType<typeof indexCatalog>, entity: UniverseEntit
     seed: entity.seed,
     color: entity.kind === "planet" ? getPlanetAppearance(entity.seed).color : groupColors[entity.kind],
     ...(entity.kind !== "planet" && depth < 4 ? {
-      children: (index.children.get(entity.id) ?? []).map((child) => sceneNode(index, child, depth + 1)),
+      children: (index.children.get(entity.id) ?? []).map((child) => sceneNode(index, child, projected, depth + 1)),
     } : {}),
   };
+  projected.set(node.id, node);
+  return node;
 }
 
 export function getSceneView(catalog: UniverseCatalog, target: EntityReference): UniverseSceneView {
@@ -131,10 +133,28 @@ export function getSceneView(catalog: UniverseCatalog, target: EntityReference):
     entity = system;
   }
 
+  const root = index.byId.get(catalog.rootId);
+  if (root?.kind !== "universe") return { key: "missing", mode: "cluster", nodes: [] };
+  const projected = new Map<string, SceneNode>();
+  sceneNode(index, root, projected);
+  const anchor = projected.get(entity.id);
+  if (!anchor) return { key: "missing", mode: "cluster", nodes: [] };
+  const ancestors: SceneNode[] = [];
+  let parentId = entity.parentId;
+  while (parentId !== null && ancestors.length < 4) {
+    const parent = index.byId.get(parentId);
+    const parentNode = projected.get(parentId);
+    if (!parent || !parentNode) return { key: "missing", mode: "cluster", nodes: [] };
+    ancestors.unshift(parentNode);
+    parentId = parent.parentId;
+  }
+  if (parentId !== null) return { key: "missing", mode: "cluster", nodes: [] };
   return {
     key: `${entity.kind}:${entity.id}`,
     mode: entity.kind === "system" ? "system" : "cluster",
-    nodes: (index.children.get(entity.id) ?? []).map((child) => sceneNode(index, child)),
+    anchor,
+    ancestors,
+    nodes: anchor.children ?? [],
     ...(entity.kind === "system" ? { starName: entity.star?.name ?? entity.name } : {}),
   };
 }
