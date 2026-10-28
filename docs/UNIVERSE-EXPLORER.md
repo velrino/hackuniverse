@@ -8,7 +8,7 @@ The home route is an explicitly synthetic, full-viewport 3D explorer. It current
 - Selecting a planet moves the camera smoothly within its existing system over 900 ms. The star, sibling planets, orbits, geometry identities and orbital state remain intact. Clicking a group also animates the approach before entering its detail; interacting with the camera cancels the pending approach. Returning to the system restores the saved overview rather than rebuilding a one-object scene.
 - The unobtrusive hamburger opens one bounded, tabbed modal: Atlas, View, Controls and Settings. Search reaches every catalog planet regardless of camera scale; 24 results render per page, with accessible previous/next controls. Language changes preserve the current scene, menu tab, page and query. Escape opens the menu and pauses active flight; there is no standalone pause toolbar.
 - The wider-view action steps through system, cloud, galaxy and universe. It disables the ship before showing a wider map. Physical camera zoom remains available through wheel/pinch; it is distinct from changing the logical grouping.
-- Choosing a different system performs a three-second presentation jump. Skip reaches the same validated destination immediately; cancel/Escape retains the previous location. Timers clean up on cancellation and unmount. This animation is not a measure of Firecrawl work or network progress.
+- The Space Jump presentation is temporarily disabled. Choosing another system navigates without a timed delay or full-screen travel dialog; normal camera focus and hierarchy morphs remain active. The travel hook and cutscene source are retained for future use but are not mounted by the explorer, so they schedule no timer and do not pause navigation.
 - Third-person flight is optional and confined to the current system. Desktop input uses WASD, Q/E and Shift; touch controls appear on devices with coarse pointers. Opening the menu, hiding the page or losing focus clears held inputs. Leaving flight restores the map camera. Wider views never render the ship.
 
 ## Scene detail and scale
@@ -27,7 +27,7 @@ During flight, selecting a planet keeps the pilot active and exposes a localized
 
 ## Module boundaries
 
-`UniverseHost` supplies the catalog, localization, branding, navigation links and a dynamically imported renderer. Core adapters are consumer-owned; feature composition uses navigation/travel hooks and pure UI. Provider-shaped mock data is parsed once by the catalog adapter. The renderer owns only scene/camera/input lifecycles and does not start imports or create catalog data.
+`UniverseHost` supplies the catalog, localization, branding, navigation links and a dynamically imported renderer. Core adapters are consumer-owned; feature composition uses the navigation hook and pure UI. Provider-shaped mock data is parsed once by the catalog adapter. The renderer owns only scene/camera/input lifecycles and does not start imports or create catalog data.
 
 Three.js and OrbitControls load only for the home renderer. GLTFLoader and the starter spacecraft load only after an explicit flight request. The ship helper owns the chase camera while loading or flying; the map controller suspends its own camera writers until that ownership ends. Stale model loads are aborted or disposed, and all GPU resources, observers, input listeners and animation frames are cleaned up on disposal.
 
@@ -35,7 +35,7 @@ Three.js and OrbitControls load only for the home renderer. GLTFLoader and the s
 
 The scene uses shared low-segment geometry, original 128/256-pixel procedural planet textures, a point starfield, capped device pixel ratio and no remote planet images, shadow maps or expensive bloom stack. The render loop targets 30 frames per second for normal motion and allows 60 while interacting; those are configured budgets, not measured physical-device guarantees. Hidden/offscreen views suspend rendering; paused/reduced-motion scenes render on demand outside active flight.
 
-Labels provide 44-pixel targets, collision handling and reserved HUD space. The atlas and controls remain usable when WebGL is unavailable. Reduced motion removes orbital animation and camera tweening and offers a quiet travel transition. Modals retain keyboard focus, bounded scrolling and translated accessible labels. Browser viewport tests do not establish physical iPhone/Android FPS, battery use or thermal behavior.
+Labels provide 44-pixel targets, collision handling and reserved HUD space. The atlas and controls remain usable when WebGL is unavailable. Reduced motion removes orbital animation and camera tweening. Modals retain keyboard focus, bounded scrolling and translated accessible labels. Browser viewport tests do not establish physical iPhone/Android FPS, battery use or thermal behavior.
 
 ## References and ownership
 
