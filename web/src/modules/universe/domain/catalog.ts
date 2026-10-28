@@ -68,43 +68,67 @@ export function getPlanetCount(catalog: UniverseCatalog, target: EntityReference
   if (!entity) return 0;
   if (entity.kind === "planet") return findPlanet(catalog, entity.id) ? 1 : 0;
 
-  return catalog.planets.reduce((count, planet) => {
-    const belongs = getBreadcrumbs(catalog, planet.id).some((ancestor) => ancestor.id === entity.id);
-    return count + (belongs ? 1 : 0);
-  }, 0);
+  return indexCatalog(catalog).counts.get(entity.id) ?? 0;
 }
 
-function sceneNode(catalog: UniverseCatalog, entity: UniverseEntity, depth = 0): SceneNode {
-  const planet = entity.kind === "planet" ? findPlanet(catalog, entity.id) : undefined;
+/** One projection owns these indexes; nothing is retained across catalogs or calls. */
+function indexCatalog(catalog: UniverseCatalog) {
+  const byId = new Map<string, UniverseEntity>();
+  const children = new Map<string, UniverseEntity[]>();
+  const planets = new Map<string, UniversePlanet>();
+  const counts = new Map<string, number>();
+  for (const entity of catalog.entities) {
+    if (!byId.has(entity.id)) byId.set(entity.id, entity);
+    if (entity.parentId !== null) {
+      const siblings = children.get(entity.parentId);
+      if (siblings) siblings.push(entity);
+      else children.set(entity.parentId, [entity]);
+    }
+  }
+  for (const planet of catalog.planets) {
+    if (!planets.has(planet.id)) planets.set(planet.id, planet);
+    const seen = new Set<string>();
+    let entity = byId.get(planet.id);
+    while (entity && !seen.has(entity.id)) {
+      seen.add(entity.id);
+      counts.set(entity.id, (counts.get(entity.id) ?? 0) + 1);
+      entity = entity.parentId === null ? undefined : byId.get(entity.parentId);
+    }
+  }
+  return { byId, children, planets, counts };
+}
+
+function sceneNode(index: ReturnType<typeof indexCatalog>, entity: UniverseEntity, depth = 0): SceneNode {
+  const planet = entity.kind === "planet" ? index.planets.get(entity.id) : undefined;
   return {
     id: entity.id,
     kind: entity.kind,
     name: entity.name,
     subtitle: planet?.reference?.label || entity.description,
-    count: getPlanetCount(catalog, entity.id),
+    count: entity.kind === "planet" ? Number(Boolean(planet)) : index.counts.get(entity.id) ?? 0,
     seed: entity.seed,
     color: entity.kind === "planet" ? getPlanetAppearance(entity.seed).color : groupColors[entity.kind],
     ...(entity.kind !== "planet" && depth < 4 ? {
-      children: getChildren(catalog, entity.id).map((child) => sceneNode(catalog, child, depth + 1)),
+      children: (index.children.get(entity.id) ?? []).map((child) => sceneNode(index, child, depth + 1)),
     } : {}),
   };
 }
 
 export function getSceneView(catalog: UniverseCatalog, target: EntityReference): UniverseSceneView {
-  const entity = getEntity(catalog, target);
+  let entity = getEntity(catalog, target);
   if (!entity) return { key: "missing", mode: "cluster", nodes: [] };
+  const index = indexCatalog(catalog);
 
   if (entity.kind === "planet") {
-    const system = getParent(catalog, entity.id);
-    return system?.kind === "system"
-      ? getSceneView(catalog, system.id)
-      : { key: "missing", mode: "cluster", nodes: [] };
+    const system = index.byId.get(entity.parentId);
+    if (system?.kind !== "system") return { key: "missing", mode: "cluster", nodes: [] };
+    entity = system;
   }
 
   return {
     key: `${entity.kind}:${entity.id}`,
     mode: entity.kind === "system" ? "system" : "cluster",
-    nodes: getChildren(catalog, entity.id).map((child) => sceneNode(catalog, child)),
+    nodes: (index.children.get(entity.id) ?? []).map((child) => sceneNode(index, child)),
     ...(entity.kind === "system" ? { starName: entity.name } : {}),
   };
 }
