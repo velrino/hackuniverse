@@ -116,6 +116,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   let selectedId: string | null = null;
   let focusedId: string | null = null;
   let tourStep: UniverseTourCameraStep | null = null;
+  let tourPreparing = false;
   let arrivedTourToken: string | null = null;
   let overviewPose: CameraPose | null = null;
   let cameraTween: CameraTween | null = null;
@@ -688,13 +689,19 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     if (step.target.kind === "planet") {
       const body = bodies.find((candidate) => candidate.node.id === step.target.id);
       if (!body) return;
+      selectedId = body.node.id;
+      starSelected = false;
+      updateLabelSelection();
       focusBody(body);
     } else if (currentView?.key === `${step.target.kind}:${step.target.id}`) {
-      if (worldTransition) configureTourMotion(worldTransition, false, step.target.kind === "universe");
+      if (worldTransition) {
+        // Manual replay follows adjacent views from their live, similarity-mapped pose.
+        if (step.motion !== "approach") configureTourMotion(worldTransition, false, step.target.kind === "universe");
+      }
       else {
         const direction = camera.position.clone().sub(controls.target).normalize();
         beginCameraTween({ position: direction.multiplyScalar(overviewDistance), target: new THREE.Vector3() }, 0);
-        if (cameraTween) configureTourMotion(cameraTween, step.target.kind === "system", step.target.kind === "universe");
+        if (cameraTween && step.motion !== "approach") configureTourMotion(cameraTween, step.target.kind === "system", step.target.kind === "universe");
       }
     }
     requestRender();
@@ -1090,9 +1097,23 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   function onContextLost(event: Event) { event.preventDefault(); if (!unavailable) { destinationHover.clear(); unavailable = true; stopFlight(); stopFrame(); callbacks.onUnavailable(); } }
 
   function restoreMapCamera() {
-    const saved = flightMapPose;
+    let saved = flightMapPose;
     flightMapPose = null;
     if (!saved) return;
+    if (tourPreparing) {
+      // The pilot owns camera orientation, while OrbitControls still has its old target.
+      // Retain the visible pose only for replay; ordinary flight exits restore the map.
+      const position = camera.position.clone();
+      const distance = Math.max(7, sceneRadius);
+      const target = camera.getWorldDirection(new THREE.Vector3()).multiplyScalar(distance).add(position);
+      saved = { position, target, framing: 0, focusPosition: null };
+      focusedId = null;
+      selectedId = null;
+      focusDistance = undefined;
+      overviewPose = null;
+      controls.minDistance = Math.min(controls.minDistance, distance);
+      controls.maxDistance = Math.max(controls.maxDistance, distance);
+    }
     camera.position.copy(saved.position);
     controls.target.copy(saved.target);
     focusFraming = saved.framing;
@@ -1110,7 +1131,17 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     updateLabelSelection();
     canvas.style.cursor = "grab";
     if (!destroyed && !unavailable) {
+      const visiblePose = tourPreparing ? pose() : null;
+      const orientation = tourPreparing ? camera.quaternion.clone() : null;
+      if (tourPreparing) controls.enableDamping = false;
       controls.update();
+      if (visiblePose && orientation) {
+        // Flush old control damping without changing the pilot's final frame.
+        camera.position.copy(visiblePose.position);
+        controls.target.copy(visiblePose.target);
+        camera.quaternion.copy(orientation);
+        controls.enableDamping = !reducedMotion;
+      }
       if (selectedId !== focusedId) setSelected(selectedId);
       requestRender();
     }
@@ -1252,6 +1283,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     setSelected,
     setStarSelected,
     setTourStep,
+    setTourPreparing(value: boolean) { tourPreparing = value; },
     setAriaLabel(value: string) { canvas.setAttribute("aria-label", value); },
     setAutoOrbit(value: boolean) { autoOrbit = value; if (!value) controls.autoRotate = false; requestRender(); },
     setPlaying(value: boolean) {

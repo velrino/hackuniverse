@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { NavigationTarget } from "../domain/types";
 
-export type UniverseTourStep = Readonly<{ target: NavigationTarget; holdMs?: number }>;
+export type UniverseTourStep = Readonly<{ target: NavigationTarget; holdMs?: number; motion?: "approach" }>;
 export type UniverseTourOptions = Readonly<{
   storageKey: string | null;
   steps: readonly UniverseTourStep[];
@@ -59,7 +59,7 @@ export function useUniverseTour({ storageKey, steps, ready, enabled = true, auto
   const mounted = useRef(false);
   const sequence = useRef(0);
   const run = useRef<Run | null>(null);
-  const waiting = useRef(false);
+  const waiting = useRef<{ storageKey: string; steps: readonly UniverseTourStep[] } | null>(null);
   const cancelledAutoKey = useRef<string | null>(null);
   const timer = useRef<number | null>(null);
   const latest = useRef({ storageKey, steps, ready, enabled, autoStart, onStep, onComplete });
@@ -76,7 +76,7 @@ export function useUniverseTour({ storageKey, steps, ready, enabled = true, auto
   const stop = useCallback(() => {
     clearTimer();
     run.current = null;
-    waiting.current = false;
+    waiting.current = null;
     if (mounted.current) setState(idle);
   }, [clearTimer]);
 
@@ -86,22 +86,27 @@ export function useUniverseTour({ storageKey, steps, ready, enabled = true, auto
     stop();
   }, [stop]);
 
-  const begin = useCallback(() => {
+  const begin = useCallback((preparedSteps?: readonly UniverseTourStep[]) => {
     if (!mounted.current) return;
     const options = latest.current;
     clearTimer();
     run.current = null;
-    if (!options.enabled || !options.storageKey || options.steps.length === 0) { stop(); return; }
+    const source = preparedSteps ?? options.steps;
+    if (!options.enabled || !options.storageKey || source.length === 0) { stop(); return; }
+    const ownedSteps = source.map((step) => {
+      const duration = step.holdMs ?? 0;
+      return {
+        target: { ...step.target },
+        holdMs: Number.isFinite(duration) ? Math.min(0x7fffffff, Math.max(0, duration)) : 0,
+        ...(step.motion === "approach" ? { motion: step.motion } : {}),
+      };
+    });
     if (!options.ready) {
-      waiting.current = true;
-      setState({ ...idle, phase: "waiting" });
+      waiting.current = { storageKey: options.storageKey, steps: ownedSteps };
+      setState({ ...idle, phase: "waiting", currentStep: ownedSteps[0] });
       return;
     }
-    waiting.current = false;
-    const ownedSteps = options.steps.map((step) => {
-      const duration = step.holdMs ?? 0;
-      return { target: { ...step.target }, holdMs: Number.isFinite(duration) ? Math.min(0x7fffffff, Math.max(0, duration)) : 0 };
-    });
+    waiting.current = null;
     const number = ++sequence.current;
     const current: Run = {
       storageKey: options.storageKey, steps: ownedSteps, sequence: number,
@@ -165,11 +170,13 @@ export function useUniverseTour({ storageKey, steps, ready, enabled = true, auto
       if (!current || !mounted.current) return;
       if (!enabled || !storageKey || steps.length === 0) { stop(); return; }
       if (run.current && run.current.storageKey !== storageKey) stop();
+      if (waiting.current && waiting.current.storageKey !== storageKey) stop();
       if (!ready) {
         if (run.current) stop();
         return;
       }
-      if (!run.current && (waiting.current || autoStart && cancelledAutoKey.current !== storageKey && !hasSeen(storageKey))) begin();
+      if (!run.current && waiting.current) begin(waiting.current.steps);
+      else if (!run.current && autoStart && cancelledAutoKey.current !== storageKey && !hasSeen(storageKey)) begin();
     });
     return () => { current = false; };
   }, [ready, enabled, storageKey, steps, autoStart, begin, stop]);
