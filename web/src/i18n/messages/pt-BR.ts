@@ -1,3 +1,4 @@
+import { designSystemPtBR } from "@/modules/design-system/messages";
 import type { Messages } from "../messages";
 
 const ptBR = {
@@ -17,6 +18,7 @@ const ptBR = {
     choose: "Escolher idioma",
     hint: "Você pode mudar seu idioma a qualquer momento.",
   },
+  designSystem: designSystemPtBR,
   example: {
     eyebrow: "Uma nova perspectiva",
     title: "Seu universo começa aqui.",

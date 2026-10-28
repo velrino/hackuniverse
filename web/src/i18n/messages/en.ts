@@ -1,3 +1,4 @@
+import { designSystemEn } from "@/modules/design-system/messages";
 const en = {
   common: {
     home: "Home",
@@ -15,6 +16,7 @@ const en = {
     choose: "Choose language",
     hint: "You can change your language at any time.",
   },
+  designSystem: designSystemEn,
   example: {
     eyebrow: "A new perspective",
     title: "Your universe starts here.",

@@ -359,3 +359,17 @@
     transition: none;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+.hud-anchor-target {
+  scroll-margin-block-start: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
