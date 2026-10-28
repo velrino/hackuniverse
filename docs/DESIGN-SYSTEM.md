@@ -6,7 +6,7 @@ These seven local images define visual principles, not production assets. Their 
 
 Use a dark blue-black background, cyan interaction accents, thin technical outlines, restrained glow and cut-corner panels. Pale text carries primary information; muted blue-gray supports secondary information. The approved HackUniverse logo uses the cyan metallic palette. Preserve its silhouette, proportions and transparent margins. The earlier gold version is retained as an archived asset, not the interface default.
 
-The implementation authority is `web/src/styles/hud.css`, with shared `HudPanel`, Button and Dialog primitives. Current base tokens include `#020a10` background, `#06131e` surface, `#42e8f4` accent and `#e5fbff` text. Consume semantic tokens rather than copying colors into each screen. `/design` must demonstrate those actual defaults, including hover, focus, selected, disabled, loading and validation states.
+Application tokens live in `web/src/styles/hud.css`; reusable Panel, Button, Dialog and other primitives come from [Velrino UI](https://github.com/velrino/velrino-ui). Current base tokens include `#020a10` background, `#06131e` surface, `#42e8f4` accent and `#e5fbff` text. Consume semantic tokens rather than copying colors into each screen. `/design` must demonstrate those actual defaults, including hover, focus, selected, disabled, loading and validation states.
 
 ## Reference decisions
 
@@ -48,7 +48,7 @@ The catalog opens in Single page mode, with native smooth anchors for all eight 
 
 `/design` is the live component reference. Its previews use the same primitives and tokens as the application. Add future defaults to those shared components before documenting them here. The loading preview is a labeled simulation; real use supplies operation progress to the reusable full-screen loader.
 
-Shared components live in individual folders with a public `index.ts`; component-specific styles stay in that folder. Modules own consumer contracts in `adapters`, behavior in `hooks`, pure presentation in `ui`, and application integration in an explicit host entry. The route composes that host. All standard dialogs inherit the cyan chamfered frame from the shared Dialog primitive, and enabled buttons inherit a pointer cursor.
+The compiled package owns components, styles, behavior and the reusable gallery. Thin application exports retain individual component folders and public `index.ts` entries. The design-system host injects localization and branding. `Panel` groups content; `Dialog` provides modal behavior. The application opts into sci-fi appearance through `UIProvider` and maps its cyan tokens to package variables; other consumers can choose standard surfaces and their own palettes.
 
 Barlow 400, 600, 700 and 800 are bundled locally under `web/src/styles/fonts/` through `next/font/local`, with their [SIL Open Font License](../web/src/styles/fonts/OFL.txt). Files come from [Google Fonts](https://fonts.google.com/specimen/Barlow); build and runtime do not fetch fonts externally.
 
