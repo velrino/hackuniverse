@@ -127,16 +127,33 @@ export function nebulaTexture() {
   if (!context) throw new Error("Nebula texture unavailable");
   const pixels = context.createImageData(canvas.width, canvas.height);
   const random = seededRandom(9827);
+  const grids = [8, 16, 32].map((width) => ({ width, height: width / 2 + 1, values: Float32Array.from({ length: width * (width / 2 + 1) }, random) }));
+  const sample = (grid: typeof grids[number], u: number, v: number) => {
+    const x = ((u % 1 + 1) % 1) * grid.width;
+    const y = THREE.MathUtils.clamp(v, 0, 1) * (grid.height - 1);
+    const ix = Math.floor(x);
+    const iy = Math.min(Math.floor(y), grid.height - 2);
+    const fx = x - ix;
+    const fy = y - iy;
+    const sx = fx * fx * (3 - 2 * fx);
+    const sy = fy * fy * (3 - 2 * fy);
+    const next = (ix + 1) % grid.width;
+    return THREE.MathUtils.lerp(
+      THREE.MathUtils.lerp(grid.values[iy * grid.width + ix], grid.values[iy * grid.width + next], sx),
+      THREE.MathUtils.lerp(grid.values[(iy + 1) * grid.width + ix], grid.values[(iy + 1) * grid.width + next], sx), sy,
+    );
+  };
   for (let y = 0; y < canvas.height; y++) {
     const v = y / canvas.height;
     for (let x = 0; x < canvas.width; x++) {
       const angle = x / canvas.width * Math.PI * 2;
-      const ribbon = v - 0.5 - Math.sin(angle + 0.7) * 0.22;
+      const u = x / canvas.width;
+      const broad = sample(grids[0], u, v);
+      const ribbon = v - 0.5 - Math.sin(angle + 0.7) * 0.22 - (broad - 0.5) * 0.18;
       const body = Math.exp(-(ribbon * ribbon) / 0.018);
-      const filament = 0.5 + Math.sin(angle * 17 + v * 31 + Math.sin(angle * 5) * 2) * 0.22
-        + Math.cos(angle * 37 - v * 63) * 0.16;
-      const window = 0.15 + 0.85 * (0.5 + Math.sin(angle * 3 - v * 11) * 0.5);
-      const mist = body * filament * filament * window * 2.1;
+      const turbulence = broad * 0.55 + sample(grids[1], u + broad * 0.08, v) * 0.3 + sample(grids[2], u, v) * 0.15;
+      const window = 0.18 + broad * 0.82;
+      const mist = body * Math.pow(Math.max(0, turbulence - 0.2), 1.6) * window * 5.5;
       const teal = 0.5 + Math.sin(angle + 1.6) * 0.5;
       const amber = Math.max(0, Math.cos(angle * 2 - 1.2)) * 0.4;
       const grain = random() * 1.3;

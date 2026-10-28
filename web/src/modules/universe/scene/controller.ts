@@ -6,6 +6,7 @@ import { createShipPilot, type ShipFlightInput } from "./flight";
 import type { UniverseFlightStatus } from "./types";
 import { createSemanticZoomGate } from "./semantic-zoom";
 import { clusterPosition, clusterScale, nodeGeometrySignature, orbitalAngle, orbitalSpeed, planetRadius, previewScale, systemOrbit, systemRadius } from "./layout";
+import { createSpatialBackground } from "./background";
 
 type Callbacks = { onSelect: (id: string) => void; onReady: () => void; onUnavailable: () => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void };
 type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[] };
@@ -81,23 +82,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   let orbitGroup = new THREE.Group();
   scene.add(viewGroup, orbitGroup);
 
-  const random = seededRandom(4924);
-  const positions = new Float32Array(1800 * 3);
-  const colors = new Float32Array(1800 * 3);
-  for (let i = 0; i < 1800; i++) {
-    const angle = random() * Math.PI * 2;
-    const latitude = random() * 2 - 1;
-    const radius = 300 + random() * 400;
-    const planar = Math.sqrt(1 - latitude * latitude);
-    positions.set([Math.cos(angle) * planar * radius, latitude * radius, Math.sin(angle) * planar * radius], i * 3);
-    const light = 0.2 + random() * 0.7;
-    colors.set([light * 0.72, light * 0.9, light], i * 3);
-  }
-  const starGeometry = new THREE.BufferGeometry();
-  starGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-  starGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-  const starfield = new THREE.Points(starGeometry, new THREE.PointsMaterial({ size: 0.7, vertexColors: true, transparent: true, opacity: 0.8, depthWrite: false }));
-  scene.add(starfield);
+  const background = createSpatialBackground(scene, nebulaMap, glowMap);
   const selection = new THREE.Mesh(new THREE.RingGeometry(1, 1.035, 64), new THREE.MeshBasicMaterial({ color: 0x48e9ff, transparent: true, opacity: 0.85, side: THREE.DoubleSide, depthWrite: false }));
   selection.visible = false;
   scene.add(selection);
@@ -477,6 +462,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     const cluster = view.mode === "cluster";
     const layout = clusterScale(view.nodes);
     sceneRadius = focus ? 10 : cluster ? layout.radius : systemRadius(view.nodes.length);
+    if (!canTransition) background.reset(sceneRadius, view);
     sunLight.position.set(0, 0, 0);
     sunLight.intensity = focus || cluster ? 0.7 : 3.8;
 
@@ -527,6 +513,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       const translation = entering ? entering.object.position.clone().multiplyScalar(-scale) : destinationParent!.object.position.clone();
       outgoing.scale.setScalar(scale);
       outgoing.position.copy(translation);
+      background.remap(scale, translation);
       outgoing.traverse((object) => {
         if (object instanceof THREE.Points) {
           const materials = Array.isArray(object.material) ? object.material : [object.material];
@@ -709,7 +696,11 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     }
     else controls.update();
     sky.position.copy(camera.position);
-    starfield.position.copy(camera.position);
+    const backgroundFar = background.update(camera, height, renderer.getPixelRatio());
+    if (backgroundFar > camera.far) {
+      camera.far = backgroundFar * 1.02;
+      camera.updateProjectionMatrix();
+    }
     for (const body of bodies) if (body.detail && body.proxy) {
       const pixels = body.extent / camera.position.distanceTo(body.object.position) * height / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
       body.detail.visible = pixels >= 13;
@@ -1073,6 +1064,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       finishWorldTransition();
       flightGeneration++;
       pilot.dispose();
+      background.dispose();
       guideButton.removeEventListener("click", onGuideClick);
       flightMapPose = null;
       stopFrame();
