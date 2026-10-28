@@ -24,9 +24,15 @@ Use Barlow for readable interface typography, reserving uppercase/tracking for s
 
 ## 3D destination feedback
 
-Every galaxy, cloud, system and planet uses its own stable native-highlight callback. Hover brightens existing cores, particles, mini planets, globes and rings; it adds no circular overlay, hover-only aura, Sprite or geometry. Orbit lines and the outer background are excluded. Textured planets receive a restrained emissive cue that preserves their surface map and base hue, including the 100-color palette. Leaving or cancelling hover restores the exact material baselines. Dragging, menus, flight, tours and camera/view transitions suppress transient hover feedback.
+Every galaxy, cloud, system, central star and planet uses its own stable native-highlight callback. Hover brightens existing cores, particles, mini planets, globes and rings; it adds no circular overlay, hover-only aura, Sprite or geometry. Orbit lines and the outer background are excluded. Textured planets receive a restrained emissive cue that preserves their surface map and base hue, including the 100-color palette. Leaving or cancelling hover restores the exact material baselines. Dragging, menus, flight, tours and camera/view transitions suppress transient hover feedback.
 
 Destination names anchor to the projected object center, with text normally 28 screen pixels above it. Keep 44-pixel label targets, visible keyboard focus, collision handling and reserved HUD space. Cluster pick proxies use a radius of 24% of the marker extent, keeping the outer decorative particles out of the interaction target; physical planet meshes retain their normal picking shape. Labels and the searchable Atlas provide accessible alternatives when a cluster center is small, especially on touch screens. See [the explorer guide](UNIVERSE-EXPLORER.md) for camera and tour behavior.
+
+Central-star labels are keyboard-operable destinations. Their detail panel keeps the whole system visible, shows only supplied physical facts and exposes a validated reference when available. Illustrative systems use an immediate Demo marker; a real object name does not imply a confirmed orbital-body inventory or physical layout. Canonical classification rules remain in [the data guide](UNIVERSE-DATA.md).
+
+## Detail text reveal
+
+Use shared `TypewriterText` only for the current planet/star panel name and description. It is a span within the caller's heading or paragraph; facts, classifications, links and actions appear immediately. Defaults are 25 ms per grapheme with a 3,500 ms cap, no loop/deletion/cursor/speech, and replay when text or the explicit replay key changes. The final text reserves layout from the start, screen readers receive one full copy, and reduced motion bypasses the visual writing. Long unbroken text must wrap without widening the panel. See [the public component usage](../web/README.md#typewriter-text).
 
 ## Implementation and local assets
 

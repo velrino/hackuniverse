@@ -23,6 +23,12 @@ The five kinds form a strict hierarchy: `universe → galaxy → cloud → syste
 
 `UniverseGroup` covers the four grouping kinds. `UniversePlanet` adds an optional `reference: { label, href? }` and optional string `tags`. A planet need not be a website or have a URL. Provider names, operations, raw payloads, search queries and rankings are not canonical fields. When a discovery term is useful to the application, an adapter can project it into neutral tags.
 
+Every entity may explicitly carry `type: "demo"`. Absence means an ordinary object; neither catalog `mode` nor an ancestor's type assigns it implicitly. The parser accepts only this supported type when supplied, and adapters preserve an explicit application classification rather than deriving it from a supplier response. All 528 bundled entities currently carry the flag.
+
+This classification does not implement visibility, ownership or authorization. No hide-demo filter exists yet. A future filtered catalog must preserve a valid root and the ancestors needed by retained ordinary objects, then derive children and counts from the retained records. Hiding a marked ancestor must not discard its ordinary descendants; CSS-only hiding is not a data filter or an authorization boundary.
+
+System groups may also carry optional `star: SystemStar` metadata: required name/description and optional spectral type, effective temperature in kelvin, radius in kilometers, age in billions of years and a reference. This metadata is allowed only on systems; unknown facts can be omitted. It is projected and frozen with the catalog, without creating another entity or planet.
+
 The validated `UniverseCatalog` resolves a required `initialTarget`, defaulting to the root, and derives a readonly `planets` array from the entities. Each derived planet is the same object as its entry in `entities`; callers do not maintain a second set of records. Entity and planet order is preserved.
 
 ## Parse at the boundary
@@ -71,17 +77,21 @@ The [document catalog example](../web/src/modules/universe/data/examples/documen
 }
 ```
 
-References and tags can also be omitted entirely. The detail panel always uses the canonical name and description, shows reference metadata only when present, and does not construct a URL for a URLless object. Demo references remain illustrative and have no outbound action. A validated live reference with an href can expose the external-link action.
+References and tags can also be omitted entirely. Planet details use the canonical name and description, show reference metadata only when present, and do not construct a URL for a URLless object. Demo planet references remain illustrative and have no outbound action; a validated live planet href can expose an external link. System-star source links are separate factual references and can remain available in the demo.
 
 ## Default source and host composition
 
 The [default catalog adapter](../web/src/modules/universe/adapters/catalog/index.ts) imports the canonical demo JSON and parses it once. `DemoUniverseHost` selects that dataset for `/`; the reusable `UniverseHost` requires an already validated `catalog` prop and does not choose a supplier or import the fixture itself. Both hosts are available through `@/modules/universe/host`.
 
-The fixture contains **408 planets and 468 total entities**: 400 fictional website records plus eight Solar System objects, organized under one universe, five galaxies, thirteen clouds and forty-one systems. The original four fictional galaxies retain 100 planets each across ten systems whose sizes are a permutation of `20, 15, 12, 10, 10, 8, 8, 6, 6, 5`. The additional hierarchy is `Milky Way → Local Interstellar Cloud → Solar System`, with Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune in that order. These eight records have reference labels without website links. The initial target is `{ kind: "planet", id: "planet-earth" }`. These are current data values, not runtime quotas.
+The fixture contains **458 planets and 528 total entities**: 400 fictional website records, eight Solar System planets and 50 illustrative orbital bodies across ten real-named neighboring objects. It has one universe, five galaxies, thirteen clouds and fifty-one systems. The original four fictional galaxies retain 100 planets each across ten systems whose sizes are a permutation of `20, 15, 12, 10, 10, 8, 8, 6, 6, 5`. The initial target remains `{ kind: "planet", id: "planet-earth" }`. These are current data values, not runtime quotas.
 
-The provider-neutral migration preserved the original 400 planet records and 457 entities, including IDs, parents, seeds, names, descriptions and ordering. The Solar System records were appended without changing that original sequence. Previous synthetic discovery queries became tags, and previous URLs became reference hrefs with hostname labels. The reserved `.example` links remain fictional. No provider response is required to edit the fixture, and loading it makes no provider, favicon, screenshot or content requests.
+The added hierarchy is `Milky Way → Solar Neighborhood → Solar System` and ten neighboring map markers, each with five invented bodies. Solar Neighborhood retains the stable ID `cloud-local-interstellar`; its display rename does not change identity. These named markers and their layouts are not a confirmed exoplanet inventory, a physical interstellar-cloud model or measured distances. The Solar System's ordered records are Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune, with URLless references.
 
-Keep IDs, parents, seeds and child ordering stable when editing display content. They control selection, deterministic appearance, orbital placement, hierarchy previews and camera continuity. A rendered star is a system's visual anchor, not an extra planet or source record.
+The Solar System's nested star is named Sun. Its `G2 V` spectral type, `5772 K` effective temperature and `695700 km` mean radius follow [NASA's Sun Fact Sheet](https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html). Its approximate age of `4.6` billion years and displayed reference follow [NASA Sun facts](https://science.nasa.gov/sun/facts/). The Sun is not an additional entity or planet, so the planet count stays 458. Other systems can provide descriptive star metadata without inventing measured physical facts.
+
+The provider-neutral migration preserved the original 400 planet records and 457 entities, including IDs, parents, seeds, names, descriptions and ordering. Solar System and neighborhood records were appended without changing that original sequence or rerolling existing seeds. Previous synthetic discovery queries became tags, and previous URLs became reference hrefs with hostname labels. The reserved `.example` links remain fictional. No provider response is required to edit the fixture, and loading it makes no provider, favicon, screenshot or content requests.
+
+Keep IDs, parents, seeds and child ordering stable when editing display content. They control selection, deterministic appearance, orbital placement, hierarchy previews and camera continuity. A rendered central star is a selectable system anchor backed by optional system metadata, not another catalog record.
 
 ## Supplier adapters
 
@@ -101,7 +111,7 @@ function catalogFromSearch(input: FirecrawlSearchInput) {
 
 The [synthetic input example](../web/src/modules/universe/data/examples/firecrawl-search.json) includes application-owned groups, destination systems, IDs and visual seeds separately from a `success`/`data.web` search response. A batch's mapping connects each one-based result position to an application planet ID and seed. Mapping order is retained; provider ranking never defines object identity.
 
-The normalizer validates supplier response shape, success, batch IDs, complete unique mappings, optional result positions, destination systems, result metadata and duplicate normalized website URLs. It projects title/description into canonical name/description, URL into a reference, and query into tags. Raw response fields and provider credentials are not copied. It rejects recognizable credential/signature parameters rather than silently stripping them; callers remain responsible for safe source data. The canonical parser then validates and freezes the resulting application tree.
+The normalizer validates supplier response shape, success, batch IDs, complete unique mappings, optional result positions, destination systems, result metadata and duplicate normalized website URLs. It projects title/description into canonical name/description, URL into a reference, and query into tags. Explicit group/mapping demo types and system-star context come from the application, not the provider ranking or catalog mode. Raw response fields and provider credentials are not copied. It rejects recognizable credential/signature parameters rather than silently stripping them; callers remain responsible for safe source data. The canonical parser then validates and freezes the resulting application tree.
 
 This is a local transformation, not a live integration: it performs no fetch, SDK call, import job or persistence. Additional suppliers implement the same outward document contract in their own adapters; they do not add supplier fields to domain types or conditionals to the renderer.
 
