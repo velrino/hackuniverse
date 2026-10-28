@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:catalog": "tsc --project tsconfig.catalog-tests.json && node --test .catalog-tests/domain/catalog.test.js .catalog-tests/adapters/catalog/firecrawl/normalize.test.js"
+    "test:catalog": "tsc --project tsconfig.catalog-tests.json && node --test .catalog-tests/domain/catalog.test.js .catalog-tests/adapters/catalog/firecrawl/normalize.test.js",
+    "test:scene": "tsc --project tsconfig.scene-tests.json && node --test .scene-tests/scene/tour-motion.test.js"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

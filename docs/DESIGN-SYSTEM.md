@@ -22,6 +22,12 @@ The implementation authority is `web/src/styles/hud.css`, with shared `HudPanel`
 
 Use Barlow for readable interface typography, reserving uppercase/tracking for short labels. Keep body copy comfortable, localizable and responsive. Preserve semantic buttons/dialogs, visible keyboard focus, meaningful labels, contrast and sufficiently large targets. Clip decorative layers rather than content or focus rings. Reduced-motion mode removes unnecessary movement; selection and status must remain understandable without animation, glow or color alone. Use the existing i18n system for English and Portuguese content.
 
+## 3D destination feedback
+
+Every galaxy, cloud, system and planet uses its own stable native-highlight callback. Hover brightens existing cores, particles, mini planets, globes and rings; it adds no circular overlay, hover-only aura, Sprite or geometry. Orbit lines and the outer background are excluded. Textured planets receive a restrained emissive cue that preserves their surface map and base hue, including the 100-color palette. Leaving or cancelling hover restores the exact material baselines. Dragging, menus, flight, tours and camera/view transitions suppress transient hover feedback.
+
+Destination names anchor to the projected object center, with text normally 28 screen pixels above it. Keep 44-pixel label targets, visible keyboard focus, collision handling and reserved HUD space. Cluster pick proxies use a radius of 24% of the marker extent, keeping the outer decorative particles out of the interaction target; physical planet meshes retain their normal picking shape. Labels and the searchable Atlas provide accessible alternatives when a cluster center is small, especially on touch screens. See [the explorer guide](UNIVERSE-EXPLORER.md) for camera and tour behavior.
+
 ## Implementation and local assets
 
 `/design` is the live component reference. Its previews use the same primitives and tokens as the application. Add future defaults to those shared components before documenting them here. The loading preview is a labeled simulation; real use supplies operation progress to the reusable full-screen loader.

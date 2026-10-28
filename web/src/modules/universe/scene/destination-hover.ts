@@ -1,12 +1,10 @@
 import * as THREE from "three";
 
-export type Destination = { position: THREE.Vector3; extent: number; highlight?: (active: boolean) => void };
+export type Destination = { highlight: (active: boolean) => void };
 type HoverOptions = {
-  scene: THREE.Scene;
   camera: THREE.Camera;
   canvas: HTMLCanvasElement;
   labelLayer: HTMLElement;
-  map: THREE.Texture;
   getHitTargets: () => THREE.Object3D[];
   resolve: (id: string) => Destination | null;
   requestRender: () => void;
@@ -14,14 +12,8 @@ type HoverOptions = {
 
 const labelSelector = "button.universe-node-label[data-destination-id]";
 
-/** One decorative aura; it never changes selection or owns the shared glow map. */
-export function createDestinationHover({ scene, camera, canvas, labelLayer, map, getHitTargets, resolve, requestRender }: HoverOptions) {
-  const material = new THREE.SpriteMaterial({ map, color: 0x53e4ff, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
-  const aura = new THREE.Sprite(material);
-  aura.name = "destination-hover";
-  aura.renderOrder = 4;
-  aura.visible = false;
-  scene.add(aura);
+/** Resolve destinations and activate their existing materials without owning GPU resources. */
+export function createDestinationHover({ camera, canvas, labelLayer, getHitTargets, resolve, requestRender }: HoverOptions) {
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   const intersections: THREE.Intersection[] = [];
@@ -33,10 +25,10 @@ export function createDestinationHover({ scene, camera, canvas, labelLayer, map,
   let disposed = false;
   let activeHighlight: Destination["highlight"] | null = null;
 
-  function highlight(next: Destination["highlight"] = undefined) {
-    if (activeHighlight === (next ?? null)) return;
+  function highlight(next: Destination["highlight"] | null = null) {
+    if (activeHighlight === next) return;
     activeHighlight?.(false);
-    activeHighlight = next ?? null;
+    activeHighlight = next;
     activeHighlight?.(true);
   }
 
@@ -54,7 +46,6 @@ export function createDestinationHover({ scene, camera, canvas, labelLayer, map,
 
   function hide() {
     highlight();
-    aura.visible = false;
     cursor(false);
   }
 
@@ -142,13 +133,8 @@ export function createDestinationHover({ scene, camera, canvas, labelLayer, map,
           if (destination) break;
         }
       }
-      if (!destination || !Number.isFinite(destination.extent) || destination.extent <= 0) { hide(); return; }
+      if (!destination || typeof destination.highlight !== "function") { hide(); return; }
       highlight(destination.highlight);
-      aura.visible = !destination.highlight;
-      if (!destination.highlight) {
-        aura.position.copy(destination.position);
-        aura.scale.setScalar(destination.extent * 4.2);
-      }
       cursor(true);
     },
     clear,
@@ -163,8 +149,6 @@ export function createDestinationHover({ scene, camera, canvas, labelLayer, map,
       canvas.removeEventListener("pointercancel", onPointerCancel);
       labelLayer.removeEventListener("pointerover", onLabelOver);
       labelLayer.removeEventListener("pointerout", onLabelOut);
-      scene.remove(aura);
-      material.dispose();
       intersections.length = 0;
     },
   };
