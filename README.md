@@ -1,14 +1,10 @@
 # HackUniverse
 
-**[Watch the 8.9-second demo (MP4)](assets/demo/video/demo.mp4)** · [Explore the live demo](https://hackuniverse.vercel.app/) · [Run locally](#run-the-web-app)
+https://github.com/user-attachments/assets/71ee72c3-f5f6-4b40-8359-383dcdcb93ad
 
 **TL;DR:** Turn websites into planets and organize them into systems, galaxies and universes. The working 3D demo includes smooth exploration, a searchable atlas, planet/star details and optional flight. It uses a local, provider-neutral catalog; a Firecrawl search adapter demonstrates normalization. Live ingestion, accounts, persistence and the Go API remain planned. New accounts will start with zero planets.
 
-<p align="center">
-  <a href="assets/demo/video/demo.mp4"><img src="assets/demo/images/04-universe-galaxy-overview.png" alt="Watch the HackUniverse demo: five luminous galaxies in the universe overview" width="100%" /></a>
-</p>
-
-Select the preview to open the demo video.
+[Explore the live demo](https://hackuniverse.vercel.app/) · [Run locally](#run-the-web-app) · [Download the demo (MP4)](assets/demo/video/demo.mp4)
 
 ## Product tour
 
@@ -34,7 +30,7 @@ Select any screenshot below to open it at full resolution. The catalog and astro
 
 ## Design system
 
-Explore the live reference at [/design?lang=en](https://hackuniverse.vercel.app/design?lang=en). It documents the shared cyan sci-fi HUD defaults: colors, typography, buttons, inputs, dialogs, branding and the full-screen planetary loading component, with interactive examples.
+Explore the live reference at [/design?lang=en](https://hackuniverse.vercel.app/design?lang=en). It documents the shared cyan sci-fi HUD defaults: colors, typography, buttons, inputs, dialogs, branding and the full-screen planetary loading component, with interactive examples. Switch between Single page with section anchors and Tabs to inspect one category at a time; examples retain their state across mode and language changes.
 
 Use these shared components and tokens when building new pages. The [visual reference guide](docs/DESIGN-SYSTEM.md) explains the design direction, and [the web guide](web/README.md) covers component usage and module structure. The `lang=en` query parameter opens the interface in English; the global language dialog can switch to Brazilian Portuguese without reloading.
 
