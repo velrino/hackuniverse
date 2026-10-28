@@ -98,16 +98,17 @@ test("automatic and manual native events share transport sanitization and app co
   assert.ok(!JSON.stringify(result).includes("hackuniverse-private"));
 });
 
-test("native page/error events get one prefixed companion and companions do not recurse", (t) => {
+test("native pageviews stay single and exceptions alone get one prefixed companion", (t) => {
   const sdk = setup(t);
   initializeClientTelemetry();
   const listener = sdk.listener();
   assert.ok(listener);
   listener({ uuid: "hackuniverse-page-id", event: "$pageview", properties: { source: "navigation", $current_url: "https://app.example/design?lang=en" } });
+  assert.equal(sdk.capture.mock.callCount(), 0);
   listener({ uuid: "hackuniverse-error-id", event: "$exception", properties: { exception_id: "hackuniverse-error-id", $exception_list: [{ type: "Error", value: "hackuniverse-test" }] } });
-  listener({ uuid: "hackuniverse-companion-id", event: "hackuniverse-pageview", properties: {} });
-  assert.deepEqual(sdk.capture.mock.calls.map((call) => call.arguments[0]), ["hackuniverse-pageview", "hackuniverse-exception"]);
-  assert.equal(sdk.capture.mock.calls[1].arguments[1]?.exception_id, "hackuniverse-error-id");
+  listener({ uuid: "hackuniverse-companion-id", event: "hackuniverse-exception", properties: {} });
+  assert.deepEqual(sdk.capture.mock.calls.map((call) => call.arguments[0]), ["hackuniverse-exception"]);
+  assert.equal(sdk.capture.mock.calls[0].arguments[1]?.exception_id, "hackuniverse-error-id");
 });
 
 test("custom event API rejects unprefixed names at runtime and isolates transport failures", (t) => {
