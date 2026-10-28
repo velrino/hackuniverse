@@ -17,6 +17,7 @@ Read the nearest package guide before changing code. The current application liv
 - Keep `ui/base`, `ui/shared` and `ui/layout` focused on their actual consumers. Do not create empty layers, generic repositories, service locators or a callback for every business operation.
 - Give each shared UI component its own folder and public `index.ts`. Keep implementation, styles and useful types/hooks together. Application code uses the public entry rather than importing component internals.
 - The design module owns its message catalogs. Its host supplies global localization, branding and application components; core code does not import those concrete integrations.
+- Universe data uses the provider-neutral canonical contract and parser from `@/modules/universe/domain`. Supplier formats stay in their adapters; the default JSON is canonical, and source selection belongs outside the reusable host. Preserve application IDs, parents, seeds and ordering when normalizing data. See [the data guide](docs/UNIVERSE-DATA.md).
 - Promote shared code when its consumers share meaning and lifecycle. Preserve distinct models and responsibilities instead of forcing similar code into one abstraction.
 
 ## Web defaults

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "mode": "demo",
+  "rootId": "document-universe",
+  "initialTarget": { "kind": "planet", "id": "document-field-notes" },
+  "entities": [
+    { "id": "document-universe", "kind": "universe", "parentId": null, "name": "Document Universe", "description": "A synthetic canonical catalog with no website supplier.", "seed": 201 },
+    { "id": "document-galaxy", "kind": "galaxy", "parentId": "document-universe", "name": "Research Collection", "description": "", "seed": 202 },
+    { "id": "document-cloud", "kind": "cloud", "parentId": "document-galaxy", "name": "Fieldwork", "description": "", "seed": 203 },
+    { "id": "document-system", "kind": "system", "parentId": "document-cloud", "name": "Observation Notes", "description": "", "seed": 204 },
+    { "id": "document-field-notes", "kind": "planet", "parentId": "document-system", "name": "Field Notes", "description": "A fictional local document about landscape observations, with no URL or provider metadata.", "seed": 205, "reference": { "label": "Notebook / Field Notes" }, "tags": [ "fieldwork", "local document" ] }
+  ]
+}

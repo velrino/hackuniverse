@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noEmit": false,
+    "incremental": false,
+    "rootDir": "src/modules/universe",
+    "outDir": ".catalog-tests",
+    "types": ["node"],
+    "plugins": []
+  },
+  "include": [
+    "src/modules/universe/domain/catalog.test.ts",
+    "src/modules/universe/adapters/catalog/firecrawl/normalize.test.ts"
+  ]
+}

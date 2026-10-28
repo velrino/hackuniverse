@@ -7,7 +7,7 @@ export type PendingTravel = { destinationId: string; systemId: string; name: str
 /** Presentation travel never creates records or starts an import. */
 export function useUniverseTravel(catalog: UniverseCatalog, navigate: (id: string) => void) {
   const [pending, setPending] = useState<PendingTravel | null>(null);
-  const lastSystem = useRef(catalog.initialSystemId);
+  const lastSystem = useRef(getBreadcrumbs(catalog, catalog.initialTarget).find((entity) => entity.kind === "system")?.id ?? null);
   const complete = useCallback(() => {
     if (!pending) return;
     const destination = getEntity(catalog, pending.destinationId);

@@ -5,8 +5,7 @@ import { useMemo, type ReactNode } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import { LanguageSelector } from "@/i18n/language-selector";
 import { LocalizedLink, useTranslations } from "@/i18n";
-import { UniverseRoot, type UniverseAdapters } from "@/modules/universe";
-import { mockCatalog } from "../adapters/catalog";
+import { UniverseRoot, type UniverseAdapters, type UniverseCatalog } from "@/modules/universe";
 
 const Scene = dynamic(() => import("../scene").then((module) => module.UniverseScene), { ssr: false });
 
@@ -14,8 +13,8 @@ function DesignLink({ children, className }: { children: ReactNode; className?: 
   return <LocalizedLink href="/design" className={className}>{children}</LocalizedLink>;
 }
 
-export function UniverseHost() {
+export function UniverseHost({ catalog }: { catalog: UniverseCatalog }) {
   const copy = useTranslations("universe");
-  const adapters = useMemo<UniverseAdapters>(() => ({ catalog: mockCatalog, copy, components: { Scene, BrandLogo, LanguagePicker: LanguageSelector, DesignLink } }), [copy]);
+  const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, components: { Scene, BrandLogo, LanguagePicker: LanguageSelector, DesignLink } }), [catalog, copy]);
   return <UniverseRoot adapters={adapters} />;
 }

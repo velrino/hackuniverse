@@ -1,0 +1,23 @@
+{
+  "mode": "demo",
+  "rootId": "example-universe",
+  "initialTarget": { "kind": "system", "id": "example-system" },
+  "groups": [
+    { "id": "example-universe", "kind": "universe", "parentId": null, "name": "Example Universe", "description": "A small synthetic supplier example.", "seed": 101 },
+    { "id": "example-galaxy", "kind": "galaxy", "parentId": "example-universe", "name": "Example Galaxy", "description": "", "seed": 102 },
+    { "id": "example-cloud", "kind": "cloud", "parentId": "example-galaxy", "name": "Example Cloud", "description": "", "seed": 103 },
+    { "id": "example-system", "kind": "system", "parentId": "example-cloud", "name": "Example System", "description": "", "seed": 104 }
+  ],
+  "batches": [
+    {
+      "id": "example-search",
+      "systemId": "example-system",
+      "query": "synthetic mapping resources",
+      "mapping": [ { "planetId": "example-map-notebook", "seed": 105, "position": 1 } ],
+      "response": {
+        "success": true,
+        "data": { "web": [ { "url": "https://map-notebook.example/", "title": "Map Notebook", "description": "A fictional introduction to maps and spatial observations." } ] }
+      }
+    }
+  ]
+}

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:catalog": "tsc --project tsconfig.catalog-tests.json && node --test .catalog-tests/domain/catalog.test.js .catalog-tests/adapters/catalog/firecrawl/normalize.test.js"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

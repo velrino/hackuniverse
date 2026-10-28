@@ -82,14 +82,14 @@ export function Explorer() {
       </div>
       <div className="universe-vignette" aria-hidden="true" />
       <header className="universe-topbar">
-        <div className="universe-brand universe-brand-static"><BrandLogo size={32} eager /><span>HackUniverse<small>{copy.demo}</small></span></div>
+        <div className="universe-brand universe-brand-static"><BrandLogo size={32} eager /><span>HackUniverse<small>{catalog.mode === "demo" ? copy.demo : copy.title}</small></span></div>
         <div className="universe-context" aria-live="polite"><span>{copy.kinds[current.kind]}</span><h1>{current.name}</h1></div>
         <ExplorerMenu catalog={catalog} copy={copy} open={menuOpen} onOpenChange={setMenuOpen} currentId={current.id} onNavigate={goTo} showOrbits={showOrbits} onToggleOrbits={() => setShowOrbits((value) => !value)} autoOrbit={autoOrbit} onToggleAutoOrbit={() => setAutoOrbit((value) => !value)} onResetCamera={() => setResetToken((value) => value + 1)} flightEnabled={flightEnabled} flightAvailable={Boolean(activeSystem) && sceneStatus === "ready"} flightStatus={flightStatus} onToggleFlight={toggleFlight} LanguagePicker={LanguagePicker} DesignLink={DesignLink} />
       </header>
       {(sceneStatus === "loading" || flightStatus === "loading") && <div className="universe-scene-state" role="status"><Orbit className="universe-loading-orbit" size={24} aria-hidden="true" /><p>{flightStatus === "loading" ? copy.flightLoading : copy.loading}</p></div>}
       {sceneStatus === "unavailable" && <section className="universe-scene-state universe-fallback" role="status"><h2>{copy.fallbackTitle}</h2><p>{copy.fallbackDescription}</p><Button className="hud-button" onClick={() => setMenuOpen(true)}>{copy.library}</Button></section>}
       {flightStatus === "error" && <button type="button" className="universe-flight-error" onClick={() => setMenuOpen(true)}>{copy.flightError}</button>}
-      {planet && !flightEnabled && <PlanetDetails planet={planet} copy={copy} onBack={goWider} />}
+      {planet && !flightEnabled && <PlanetDetails planet={planet} copy={copy} onBack={goWider} demo={catalog.mode === "demo"} />}
       {parent && <Button type="button" variant="outline" className="hud-button universe-scale-back" onClick={goWider} title={`${copy.wider}: ${copy.kinds[parent.kind]}`}><Layers3 aria-hidden="true" /><span>{copy.kinds[parent.kind]}</span></Button>}
       {flightEnabled && !blocked && <><FlightControls copy={copy} onInput={setFlightInput} /><Button type="button" variant="outline" className="hud-button universe-flight-exit" onClick={() => setFlightEnabled(false)}><ArrowLeft aria-hidden="true" />{copy.exitFlight}</Button></>}
     </main>

@@ -1,0 +1,155 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { getBreadcrumbs, getEntity, getPlanetCount, getSceneView, searchPlanets } from "./catalog";
+import { parseUniverseCatalog } from "./parse-catalog";
+import type { UniverseCatalogDocument } from "./types";
+
+function document(): UniverseCatalogDocument {
+  return {
+    schemaVersion: 1, mode: "live", rootId: "universe:main",
+    entities: [
+      { id: "universe:main", kind: "universe", parentId: null, name: "Library", description: "", seed: 1 },
+      { id: "galaxy:main", kind: "galaxy", parentId: "universe:main", name: "Knowledge", description: "", seed: 2 },
+      { id: "cloud:main", kind: "cloud", parentId: "galaxy:main", name: "Shared work", description: "", seed: 3 },
+      { id: "system:main", kind: "system", parentId: "cloud:main", name: "Workspace", description: "", seed: 4 },
+      { id: "7F:Document_Alpha.v1", kind: "planet", parentId: "system:main", name: "Planning notes", description: "A readable document", seed: 5, reference: { label: "Team notebook" }, tags: ["roadmap", "shared"] },
+      { id: "ticket:42", kind: "planet", parentId: "system:main", name: "Repair search", description: "", seed: 6 },
+    ],
+  };
+}
+
+function patchEntity(id: string, patch: object) {
+  const input = document();
+  return { ...input, entities: input.entities.map((entity) => entity.id === id ? { ...entity, ...patch } : entity) };
+}
+
+function assertRedactedFailure(input: unknown, marker = "SYNTHETIC_ONLY_SECRET") {
+  assert.throws(() => parseUniverseCatalog(input), (error: unknown) => {
+    assert.ok(error instanceof Error);
+    assert.ok(!error.message.includes(marker), "validation must not echo rejected payload values");
+    return true;
+  });
+}
+
+test("an empty universe is valid and defaults navigation to its root", () => {
+  const input = document();
+  const catalog = parseUniverseCatalog({ ...input, entities: [input.entities[0]] });
+  assert.deepEqual(catalog.initialTarget, { kind: "universe", id: input.rootId });
+  assert.deepEqual(catalog.planets, []);
+  assert.equal(getPlanetCount(catalog, input.rootId), 0);
+  assert.deepEqual(getSceneView(catalog, input.rootId).nodes, []);
+});
+
+test("URLless documents and tickets preserve identity, order and parent-system scenes", () => {
+  const input = document();
+  const catalog = parseUniverseCatalog({ ...input, initialTarget: { kind: "planet", id: "7F:Document_Alpha.v1" } });
+  assert.deepEqual(catalog.entities.map(({ id }) => id), input.entities.map(({ id }) => id));
+  assert.deepEqual(catalog.planets.map(({ id }) => id), ["7F:Document_Alpha.v1", "ticket:42"]);
+  assert.equal(catalog.planets[0], getEntity(catalog, "7F:Document_Alpha.v1"));
+  assert.equal(catalog.planets[1].reference, undefined);
+  assert.deepEqual(getSceneView(catalog, "7F:Document_Alpha.v1"), getSceneView(catalog, "system:main"));
+  assert.equal(getSceneView(catalog, "system:main").nodes[0].subtitle, "Team notebook");
+  assert.equal(getSceneView(catalog, "system:main").nodes[1].subtitle, "");
+  assert.equal(getPlanetCount(catalog, input.rootId), 2);
+  assert.deepEqual(getBreadcrumbs(catalog, "ticket:42").map(({ kind }) => kind), ["universe", "galaxy", "cloud", "system", "planet"]);
+  assert.equal(getEntity(catalog, { kind: "galaxy", id: "ticket:42" }), undefined);
+});
+
+test("search uses neutral text, tags and optional reference metadata", () => {
+  const catalog = parseUniverseCatalog(patchEntity("ticket:42", { reference: { label: "Issue tracker", href: "https://tickets.example/items/42" } }));
+  assert.deepEqual(searchPlanets(catalog, "ROADMAP notebook").map(({ id }) => id), ["7F:Document_Alpha.v1"]);
+  assert.deepEqual(searchPlanets(catalog, "tickets.example tracker").map(({ id }) => id), ["ticket:42"]);
+  assert.deepEqual(searchPlanets(catalog, "readable").map(({ id }) => id), ["7F:Document_Alpha.v1"]);
+  assert.deepEqual(searchPlanets(catalog, "no-match"), []);
+  assert.deepEqual(searchPlanets(catalog, "  "), catalog.planets);
+});
+
+test("HTTPS references normalize without prohibiting meaningful ports, queries or fragments", () => {
+  const href = "https://DOCS.example:8443/notes?id=42#section";
+  const input = document();
+  const catalog = parseUniverseCatalog({ ...input, entities: input.entities.map((entity) => entity.kind === "planet" ? { ...entity, reference: { label: "Shared destination", href } } : entity) });
+  assert.equal(catalog.planets.length, 2, "shared links do not define generic object identity");
+  assert.equal(catalog.planets[0].reference?.href, "https://docs.example:8443/notes?id=42#section");
+  assert.equal(catalog.planets[0].reference?.href, catalog.planets[1].reference?.href);
+});
+
+test("projection drops raw/provider fields at every owned boundary", () => {
+  const marker = "SYNTHETIC_ONLY_SECRET";
+  const input = patchEntity("7F:Document_Alpha.v1", {
+    provider: "unused-provider", operation: "search", raw: { token: marker },
+    source: { accessToken: marker }, reference: { label: "Notebook", raw: marker },
+  });
+  const catalog = parseUniverseCatalog({ ...input, accessToken: marker, raw: { credential: marker }, initialTarget: { kind: "planet", id: "7F:Document_Alpha.v1", token: marker } });
+  const serialized = JSON.stringify(catalog);
+  assert.ok(!serialized.includes(marker));
+  assert.ok(!serialized.includes("unused-provider"));
+  assert.equal(Object.hasOwn(catalog.planets[0], "source"), false);
+  assert.equal(Object.hasOwn(catalog.planets[0], "raw"), false);
+  assert.deepEqual(catalog.planets[0].reference, { label: "Notebook" });
+  assert.deepEqual(catalog.initialTarget, { kind: "planet", id: "7F:Document_Alpha.v1" });
+});
+
+test("validated catalog owns frozen copies and shares its derived planet references", () => {
+  const tags = ["stable"];
+  const reference = { label: "Notebook" };
+  const input = patchEntity("7F:Document_Alpha.v1", { tags, reference });
+  const catalog = parseUniverseCatalog(input);
+  reference.label = "Changed upstream";
+  tags.push("later");
+  assert.equal(catalog.planets[0].reference?.label, "Notebook");
+  assert.deepEqual(catalog.planets[0].tags, ["stable"]);
+  for (const owned of [catalog, catalog.initialTarget, catalog.entities, catalog.planets, ...catalog.entities, catalog.planets[0].reference, catalog.planets[0].tags]) {
+    assert.ok(Object.isFrozen(owned));
+  }
+  assert.equal(catalog.planets[0], catalog.entities.find(({ id }) => id === catalog.planets[0].id));
+  assert.notEqual(catalog.entities[0], input.entities[0]);
+  assert.throws(() => (catalog.planets as unknown[]).push(null), TypeError);
+  assert.equal(Reflect.set(catalog.planets[0], "name", "Unexpected mutation"), false);
+});
+
+test("rejects malformed hierarchy, identity and initial targets", async (t) => {
+  const input = document();
+  const invalid: [string, unknown][] = [
+    ["unsupported schema", { ...input, schemaVersion: 2 }],
+    ["unsupported mode", { ...input, mode: "preview" }],
+    ["empty ID", patchEntity("ticket:42", { id: "" })],
+    ["control in ID", patchEntity("ticket:42", { id: "ticket:\n42" })],
+    ["unbounded ID", patchEntity("ticket:42", { id: "x".repeat(10000) })],
+    ["duplicate ID", { ...input, entities: [...input.entities, input.entities[4]] }],
+    ["unknown kind", patchEntity("ticket:42", { kind: "asteroid" })],
+    ["missing root", { ...input, rootId: "missing" }],
+    ["root of wrong kind", { ...input, rootId: "system:main" }],
+    ["extra universe", { ...input, entities: [...input.entities, { ...input.entities[0], id: "universe:extra" }] }],
+    ["orphan", patchEntity("ticket:42", { parentId: "missing" })],
+    ["wrong parent kind", patchEntity("ticket:42", { parentId: "galaxy:main" })],
+    ["non-root null parent", patchEntity("system:main", { parentId: null })],
+    ["root has parent", patchEntity("universe:main", { parentId: "system:main" })],
+    ["missing initial target", { ...input, initialTarget: { kind: "planet", id: "missing" } }],
+    ["mismatched initial kind", { ...input, initialTarget: { kind: "galaxy", id: "ticket:42" } }],
+  ];
+  for (const [name, value] of invalid) await t.test(name, () => assertRedactedFailure(value));
+});
+
+test("rejects invalid seeds and bounded display fields", async (t) => {
+  const invalid: [string, object][] = [
+    ["negative seed", { seed: -1 }], ["fractional seed", { seed: 1.5 }],
+    ["nonfinite seed", { seed: Infinity }], ["NaN seed", { seed: NaN }], ["overflow seed", { seed: 0x100000000 }],
+    ["empty name", { name: "" }], ["long name", { name: "x".repeat(161) }],
+    ["long description", { description: "x".repeat(4001) }],
+    ["too many tags", { tags: Array.from({ length: 33 }, () => "tag") }],
+    ["long tag", { tags: ["x".repeat(1001)] }], ["nontext tag", { tags: [1] }],
+    ["long reference label", { reference: { label: "x".repeat(161) } }],
+  ];
+  for (const [name, patch] of invalid) await t.test(name, () => assertRedactedFailure(patchEntity("ticket:42", patch)));
+});
+
+test("rejects unsafe reference URLs without echoing their values", async (t) => {
+  const marker = "SYNTHETIC_ONLY_SECRET";
+  const invalid = [
+    `javascript:alert('${marker}')`, `data:text/plain,${marker}`, `file:///${marker}`, `http://docs.example/${marker}`,
+    `https://${marker}:password@docs.example/notes`, `https://docs.example/notes\n${marker}`, `not-a-url-${marker}`,
+  ];
+  for (const [index, href] of invalid.entries()) await t.test(`unsafe reference ${index + 1}`, () => {
+    assertRedactedFailure(patchEntity("ticket:42", { reference: { label: "Source", href } }), marker);
+  });
+});

@@ -1,5 +1,5 @@
-import { UniverseHost } from "@/modules/universe/host";
+import { DemoUniverseHost } from "@/modules/universe/host";
 
 export default function Home() {
-  return <UniverseHost />;
+  return <DemoUniverseHost />;
 }
