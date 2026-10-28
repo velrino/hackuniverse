@@ -7,14 +7,26 @@ type EntityFields = Readonly<{
   name: string;
   description: string;
   seed: number;
+  type?: "demo";
 }>;
 
-export type UniverseGroup = EntityFields & Readonly<{
-  kind: Exclude<EntityKind, "planet">;
-  parentId: string | null;
+export type CatalogReference = Readonly<{ label: string; href?: string }>;
+export type PlanetReference = CatalogReference;
+
+export type SystemStar = Readonly<{
+  name: string;
+  description: string;
+  spectralType?: string;
+  temperatureK?: number;
+  radiusKm?: number;
+  ageBillionYears?: number;
+  reference?: CatalogReference;
 }>;
 
-export type PlanetReference = Readonly<{ label: string; href?: string }>;
+export type UniverseGroup = EntityFields & Readonly<
+  | { kind: Exclude<EntityKind, "planet" | "system">; parentId: string | null }
+  | { kind: "system"; parentId: string | null; star?: SystemStar }
+>;
 
 export type UniversePlanet = EntityFields & Readonly<{
   kind: "planet";
