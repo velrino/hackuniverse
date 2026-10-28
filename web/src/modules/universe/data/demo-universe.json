@@ -9,7 +9,7 @@
       "kind": "universe",
       "parentId": null,
       "name": "Demo Atlas",
-      "description": "A synthetic constellation of fifty website discoveries, arranged for exploration.",
+      "description": "A synthetic constellation of two hundred website discoveries, arranged for exploration.",
       "seed": 3983766564
     },
     {
@@ -139,6 +139,326 @@
       "name": "Everyday Balance",
       "description": "Explore gentle routines, movement, food, and reflection.",
       "seed": 1423029542
+    },
+    {
+      "id": "galaxy-inquiry",
+      "kind": "galaxy",
+      "parentId": "universe-demo-atlas",
+      "name": "Inquiry Frontier",
+      "description": "Follow matter, living systems, and the models used to ask better questions.",
+      "seed": 1808439429
+    },
+    {
+      "id": "galaxy-culture",
+      "kind": "galaxy",
+      "parentId": "universe-demo-atlas",
+      "name": "Culture Meridian",
+      "description": "Explore language, shared places, creative futures, and collective memory.",
+      "seed": 592520406
+    },
+    {
+      "id": "cloud-measured-earth",
+      "kind": "cloud",
+      "parentId": "galaxy-discovery",
+      "name": "Measured Earth",
+      "description": "Read rocks, weather, maps, and the energy systems shaping everyday landscapes.",
+      "seed": 3733752356
+    },
+    {
+      "id": "cloud-makers-frontier",
+      "kind": "cloud",
+      "parentId": "galaxy-creation",
+      "name": "Makers Frontier",
+      "description": "Small circuits, machines, fabrication, and circular design meet hands-on curiosity.",
+      "seed": 1420384566
+    },
+    {
+      "id": "cloud-matter-and-motion",
+      "kind": "cloud",
+      "parentId": "galaxy-inquiry",
+      "name": "Matter & Motion",
+      "description": "Explore physical laws, chemical transformations, and the structure of materials.",
+      "seed": 2164813609
+    },
+    {
+      "id": "cloud-life-and-mind",
+      "kind": "cloud",
+      "parentId": "galaxy-inquiry",
+      "name": "Life & Mind",
+      "description": "Discover genetics, nervous systems, and the behavior of living communities.",
+      "seed": 964583454
+    },
+    {
+      "id": "cloud-data-and-models",
+      "kind": "cloud",
+      "parentId": "galaxy-inquiry",
+      "name": "Data & Models",
+      "description": "Connect mathematical ideas, statistical reasoning, simulations, and visual explanations.",
+      "seed": 4166254186
+    },
+    {
+      "id": "cloud-language-and-memory",
+      "kind": "cloud",
+      "parentId": "galaxy-culture",
+      "name": "Language & Memory",
+      "description": "Literature, oral traditions, and translation preserve different ways of knowing.",
+      "seed": 1775719121
+    },
+    {
+      "id": "cloud-places-and-communities",
+      "kind": "cloud",
+      "parentId": "galaxy-culture",
+      "name": "Places & Communities",
+      "description": "Architecture, urban life, and community archives reveal how places are made.",
+      "seed": 82642801
+    },
+    {
+      "id": "cloud-future-commons",
+      "kind": "cloud",
+      "parentId": "galaxy-culture",
+      "name": "Future Commons",
+      "description": "Public science, ethics, digital heritage, and speculative practice open shared questions.",
+      "seed": 3630419885
+    },
+    {
+      "id": "system-languages",
+      "kind": "system",
+      "parentId": "cloud-human-stories",
+      "name": "Living Languages",
+      "description": "Language communities, writing systems, and everyday communication.",
+      "seed": 2538019410
+    },
+    {
+      "id": "system-geology",
+      "kind": "system",
+      "parentId": "cloud-measured-earth",
+      "name": "Stone & Strata",
+      "description": "Read landscapes through minerals, rocks, and the passage of geological time.",
+      "seed": 2681559221
+    },
+    {
+      "id": "system-climate",
+      "kind": "system",
+      "parentId": "cloud-measured-earth",
+      "name": "Weather Patterns",
+      "description": "Explore atmospheric observations and the methods behind climate explanations.",
+      "seed": 29534922
+    },
+    {
+      "id": "system-mapping",
+      "kind": "system",
+      "parentId": "cloud-measured-earth",
+      "name": "Spatial Notebook",
+      "description": "Maps, coordinates, and spatial stories reveal different views of a place.",
+      "seed": 2721660615
+    },
+    {
+      "id": "system-energy",
+      "kind": "system",
+      "parentId": "cloud-measured-earth",
+      "name": "Energy Pathways",
+      "description": "Explore the movement, storage, and practical measurement of energy.",
+      "seed": 2073769359
+    },
+    {
+      "id": "system-food-craft",
+      "kind": "system",
+      "parentId": "cloud-everyday-horizons",
+      "name": "Kitchen Fieldnotes",
+      "description": "Study ingredients, food traditions, and the small experiments of a kitchen.",
+      "seed": 3530250716
+    },
+    {
+      "id": "system-electronics",
+      "kind": "system",
+      "parentId": "cloud-makers-frontier",
+      "name": "Circuit Workshop",
+      "description": "Build intuition for signals, components, and small electronic systems.",
+      "seed": 2388784726
+    },
+    {
+      "id": "system-robotics",
+      "kind": "system",
+      "parentId": "cloud-makers-frontier",
+      "name": "Motion Workshop",
+      "description": "Explore sensing, actuation, and the coordination of simple machines.",
+      "seed": 223939326
+    },
+    {
+      "id": "system-fabrication",
+      "kind": "system",
+      "parentId": "cloud-makers-frontier",
+      "name": "Material Workshop",
+      "description": "Explore fabrication methods through models, tolerances, and tools.",
+      "seed": 253899491
+    },
+    {
+      "id": "system-circular-design",
+      "kind": "system",
+      "parentId": "cloud-makers-frontier",
+      "name": "Circular Practice",
+      "description": "Repair, reuse, and thoughtful material choices extend the life of objects.",
+      "seed": 4269492907
+    },
+    {
+      "id": "system-physics",
+      "kind": "system",
+      "parentId": "cloud-matter-and-motion",
+      "name": "Physical Questions",
+      "description": "Build explanations of motion, waves, fields, and everyday physical effects.",
+      "seed": 1196828248
+    },
+    {
+      "id": "system-chemistry",
+      "kind": "system",
+      "parentId": "cloud-matter-and-motion",
+      "name": "Chemical Stories",
+      "description": "Follow molecular structure, reactions, and the methods of chemical observation.",
+      "seed": 2930432571
+    },
+    {
+      "id": "system-materials",
+      "kind": "system",
+      "parentId": "cloud-matter-and-motion",
+      "name": "Material Signals",
+      "description": "Study how structure and processing influence the behavior of materials.",
+      "seed": 3988738283
+    },
+    {
+      "id": "system-genetics",
+      "kind": "system",
+      "parentId": "cloud-life-and-mind",
+      "name": "Genetic Patterns",
+      "description": "Explore inherited information and the methods used to study living systems.",
+      "seed": 4002933875
+    },
+    {
+      "id": "system-neuroscience",
+      "kind": "system",
+      "parentId": "cloud-life-and-mind",
+      "name": "Neural Questions",
+      "description": "Study nervous systems through observation, models, and cautious explanations.",
+      "seed": 1866669392
+    },
+    {
+      "id": "system-animal-behavior",
+      "kind": "system",
+      "parentId": "cloud-life-and-mind",
+      "name": "Behavior Fieldnotes",
+      "description": "Observe communication, movement, and cooperation across animal communities.",
+      "seed": 1374093416
+    },
+    {
+      "id": "system-mathematics",
+      "kind": "system",
+      "parentId": "cloud-data-and-models",
+      "name": "Mathematical Landscapes",
+      "description": "Explore patterns, proofs, and the structures behind mathematical questions.",
+      "seed": 69047887
+    },
+    {
+      "id": "system-statistics",
+      "kind": "system",
+      "parentId": "cloud-data-and-models",
+      "name": "Statistical Lens",
+      "description": "Read data with attention to variation, uncertainty, and study design.",
+      "seed": 766525144
+    },
+    {
+      "id": "system-simulation",
+      "kind": "system",
+      "parentId": "cloud-data-and-models",
+      "name": "Model Workshop",
+      "description": "Explore simplified worlds and the limits of computational simulations.",
+      "seed": 1537208912
+    },
+    {
+      "id": "system-data-visualization",
+      "kind": "system",
+      "parentId": "cloud-data-and-models",
+      "name": "Visual Evidence",
+      "description": "Build readable visual explanations without hiding uncertainty or context.",
+      "seed": 1632427302
+    },
+    {
+      "id": "system-literature",
+      "kind": "system",
+      "parentId": "cloud-language-and-memory",
+      "name": "Reading Constellations",
+      "description": "Explore narrative, poetry, and the craft of reading with attention.",
+      "seed": 765061832
+    },
+    {
+      "id": "system-oral-traditions",
+      "kind": "system",
+      "parentId": "cloud-language-and-memory",
+      "name": "Spoken Memory",
+      "description": "Meet the methods and responsibilities of preserving spoken histories.",
+      "seed": 3352618747
+    },
+    {
+      "id": "system-translation",
+      "kind": "system",
+      "parentId": "cloud-language-and-memory",
+      "name": "Translation Bridges",
+      "description": "Explore the choices involved in carrying meaning across languages.",
+      "seed": 3635241634
+    },
+    {
+      "id": "system-architecture",
+      "kind": "system",
+      "parentId": "cloud-places-and-communities",
+      "name": "Built Form",
+      "description": "Explore buildings through materials, light, structure, and human use.",
+      "seed": 2543506544
+    },
+    {
+      "id": "system-urbanism",
+      "kind": "system",
+      "parentId": "cloud-places-and-communities",
+      "name": "City Patterns",
+      "description": "Read cities through movement, public space, and everyday observations.",
+      "seed": 3712392852
+    },
+    {
+      "id": "system-community-archives",
+      "kind": "system",
+      "parentId": "cloud-places-and-communities",
+      "name": "Community Collections",
+      "description": "Explore local collections and the choices involved in preserving shared records.",
+      "seed": 2712293296
+    },
+    {
+      "id": "system-public-science",
+      "kind": "system",
+      "parentId": "cloud-future-commons",
+      "name": "Science in Public",
+      "description": "Explore how scientific questions are shared, discussed, and investigated together.",
+      "seed": 3997671169
+    },
+    {
+      "id": "system-ethics",
+      "kind": "system",
+      "parentId": "cloud-future-commons",
+      "name": "Thoughtful Systems",
+      "description": "Examine values, responsibilities, and the consequences of design choices.",
+      "seed": 3792164595
+    },
+    {
+      "id": "system-digital-heritage",
+      "kind": "system",
+      "parentId": "cloud-future-commons",
+      "name": "Digital Heritage",
+      "description": "Explore preservation methods for digital objects and their surrounding context.",
+      "seed": 3575877457
+    },
+    {
+      "id": "system-speculative-design",
+      "kind": "system",
+      "parentId": "cloud-future-commons",
+      "name": "Possible Futures",
+      "description": "Use clearly fictional scenarios to question assumptions and imagine alternatives.",
+      "seed": 2980163611
     }
   ],
   "searchBatches": [
@@ -777,6 +1097,1926 @@
               "url": "https://mindful-minutes.example/",
               "title": "Mindful Minutes",
               "description": "A fictional collection of short attention and reflection exercises."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-languages",
+      "systemId": "system-languages",
+      "query": "synthetic language discovery",
+      "mapping": [
+        {
+          "planetId": "planet-word-weave-atlas",
+          "seed": 2366709339,
+          "position": 1
+        },
+        {
+          "planetId": "planet-script-garden",
+          "seed": 920323981,
+          "position": 2
+        },
+        {
+          "planetId": "planet-dialect-window",
+          "seed": 3308365731,
+          "position": 3
+        },
+        {
+          "planetId": "planet-speech-paths",
+          "seed": 3951690937,
+          "position": 4
+        },
+        {
+          "planetId": "planet-lexicon-lantern",
+          "seed": 2690439675,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://word-weave-atlas.example/",
+              "title": "Word Weave Atlas",
+              "description": "A fictional resource exploring language families and the connections between neighboring communities."
+            },
+            {
+              "url": "https://script-garden.example/",
+              "title": "Script Garden",
+              "description": "An invented notebook about writing systems, letterforms, and the tools used to record speech."
+            },
+            {
+              "url": "https://dialect-window.example/",
+              "title": "Dialect Window",
+              "description": "A synthetic collection explaining regional expressions and the stories carried by local vocabulary."
+            },
+            {
+              "url": "https://speech-paths.example/",
+              "title": "Speech Paths",
+              "description": "An illustrative guide to pronunciation, conversation patterns, and approachable phonetics."
+            },
+            {
+              "url": "https://lexicon-lantern.example/",
+              "title": "Lexicon Lantern",
+              "description": "A fictional learning space for word origins and the changing meanings of familiar phrases."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-geology",
+      "systemId": "system-geology",
+      "query": "synthetic geology field learning",
+      "mapping": [
+        {
+          "planetId": "planet-strata-ledger",
+          "seed": 100820891,
+          "position": 1
+        },
+        {
+          "planetId": "planet-mineral-window",
+          "seed": 3080223435,
+          "position": 2
+        },
+        {
+          "planetId": "planet-fault-line-notes",
+          "seed": 3186854727,
+          "position": 3
+        },
+        {
+          "planetId": "planet-stone-cycle-lab",
+          "seed": 995952022,
+          "position": 4
+        },
+        {
+          "planetId": "planet-landform-archive",
+          "seed": 3003623178,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://strata-ledger.example/",
+              "title": "Strata Ledger",
+              "description": "A fictional resource exploring sedimentary layers and the traces of earlier environments."
+            },
+            {
+              "url": "https://mineral-window.example/",
+              "title": "Mineral Window",
+              "description": "An invented notebook about mineral textures, crystal shapes, and identification methods."
+            },
+            {
+              "url": "https://fault-line-notes.example/",
+              "title": "Fault Line Notes",
+              "description": "A synthetic collection explaining plate boundaries, faults, and the slow movement of terrain."
+            },
+            {
+              "url": "https://stone-cycle-lab.example/",
+              "title": "Stone Cycle Lab",
+              "description": "An illustrative guide to weathering, erosion, and the transformations of common rocks."
+            },
+            {
+              "url": "https://landform-archive.example/",
+              "title": "Landform Archive",
+              "description": "A fictional learning space for valleys, dunes, cliffs, and the forces behind their shapes."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-climate",
+      "systemId": "system-climate",
+      "query": "synthetic weather and climate learning",
+      "mapping": [
+        {
+          "planetId": "planet-cloud-layer-journal",
+          "seed": 2897654629,
+          "position": 1
+        },
+        {
+          "planetId": "planet-rainfall-ledger",
+          "seed": 3288170109,
+          "position": 2
+        },
+        {
+          "planetId": "planet-climate-thread",
+          "seed": 4195699436,
+          "position": 3
+        },
+        {
+          "planetId": "planet-wind-field-notes",
+          "seed": 2413779609,
+          "position": 4
+        },
+        {
+          "planetId": "planet-season-signal-lab",
+          "seed": 4131610184,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://cloud-layer-journal.example/",
+              "title": "Cloud Layer Journal",
+              "description": "A fictional resource exploring cloud types and the observations used to describe the atmosphere."
+            },
+            {
+              "url": "https://rainfall-ledger.example/",
+              "title": "Rainfall Ledger",
+              "description": "An invented notebook about rain gauges, seasonal patterns, and clear weather records."
+            },
+            {
+              "url": "https://climate-thread.example/",
+              "title": "Climate Thread",
+              "description": "A synthetic collection explaining long-term climate indicators and how to read their uncertainty."
+            },
+            {
+              "url": "https://wind-field-notes.example/",
+              "title": "Wind Field Notes",
+              "description": "An illustrative guide to air pressure, local winds, and shifting weather fronts."
+            },
+            {
+              "url": "https://season-signal-lab.example/",
+              "title": "Season Signal Lab",
+              "description": "A fictional learning space for seasonal observations across gardens, coasts, and city streets."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-mapping",
+      "systemId": "system-mapping",
+      "query": "synthetic mapping and cartography resources",
+      "mapping": [
+        {
+          "planetId": "planet-contour-workshop",
+          "seed": 2512300566,
+          "position": 1
+        },
+        {
+          "planetId": "planet-coordinate-commons",
+          "seed": 2234232163,
+          "position": 2
+        },
+        {
+          "planetId": "planet-map-margin-studio",
+          "seed": 1589567830,
+          "position": 3
+        },
+        {
+          "planetId": "planet-watershed-sketchbook",
+          "seed": 3490031851,
+          "position": 4
+        },
+        {
+          "planetId": "planet-spatial-story-atlas",
+          "seed": 2067984652,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://contour-workshop.example/",
+              "title": "Contour Workshop",
+              "description": "A fictional resource exploring elevation contours and the choices that make terrain readable."
+            },
+            {
+              "url": "https://coordinate-commons.example/",
+              "title": "Coordinate Commons",
+              "description": "An invented notebook about coordinate systems and the everyday uses of spatial reference."
+            },
+            {
+              "url": "https://map-margin-studio.example/",
+              "title": "Map Margin Studio",
+              "description": "A synthetic collection explaining legends, symbols, and the craft of explaining a map."
+            },
+            {
+              "url": "https://watershed-sketchbook.example/",
+              "title": "Watershed Sketchbook",
+              "description": "An illustrative guide to drainage basins and the routes water takes through landscapes."
+            },
+            {
+              "url": "https://spatial-story-atlas.example/",
+              "title": "Spatial Story Atlas",
+              "description": "A fictional learning space for local observations organized into thoughtful geographic stories."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-energy",
+      "systemId": "system-energy",
+      "query": "synthetic energy systems learning",
+      "mapping": [
+        {
+          "planetId": "planet-solar-yield-notes",
+          "seed": 2617111051,
+          "position": 1
+        },
+        {
+          "planetId": "planet-grid-pattern-lab",
+          "seed": 21891035,
+          "position": 2
+        },
+        {
+          "planetId": "planet-storage-cell-journal",
+          "seed": 682191364,
+          "position": 3
+        },
+        {
+          "planetId": "planet-heat-flow-atlas",
+          "seed": 728828957,
+          "position": 4
+        },
+        {
+          "planetId": "planet-renewable-route",
+          "seed": 3550907371,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://solar-yield-notes.example/",
+              "title": "Solar Yield Notes",
+              "description": "A fictional resource exploring sunlight, panel orientation, and illustrative solar observations."
+            },
+            {
+              "url": "https://grid-pattern-lab.example/",
+              "title": "Grid Pattern Lab",
+              "description": "An invented notebook about electricity networks and the balance between supply and demand."
+            },
+            {
+              "url": "https://storage-cell-journal.example/",
+              "title": "Storage Cell Journal",
+              "description": "A synthetic collection explaining battery concepts and the tradeoffs of energy storage."
+            },
+            {
+              "url": "https://heat-flow-atlas.example/",
+              "title": "Heat Flow Atlas",
+              "description": "An illustrative guide to heat transfer, insulation, and the energy behavior of buildings."
+            },
+            {
+              "url": "https://renewable-route.example/",
+              "title": "Renewable Route",
+              "description": "A fictional learning space for wind, water, and other approaches to renewable generation."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-food-craft",
+      "systemId": "system-food-craft",
+      "query": "synthetic food craft and ingredient learning",
+      "mapping": [
+        {
+          "planetId": "planet-ferment-fieldbook",
+          "seed": 2524106911,
+          "position": 1
+        },
+        {
+          "planetId": "planet-grain-table-archive",
+          "seed": 374057035,
+          "position": 2
+        },
+        {
+          "planetId": "planet-flavor-compass-lab",
+          "seed": 974727401,
+          "position": 3
+        },
+        {
+          "planetId": "planet-seasonal-pantry-notes",
+          "seed": 1446067069,
+          "position": 4
+        },
+        {
+          "planetId": "planet-shared-recipe-journal",
+          "seed": 641710634,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://ferment-fieldbook.example/",
+              "title": "Ferment Fieldbook",
+              "description": "A fictional resource exploring fermentation traditions and the observation of changing ingredients."
+            },
+            {
+              "url": "https://grain-table-archive.example/",
+              "title": "Grain Table Archive",
+              "description": "An invented notebook about grains, milling, and the stories behind everyday staples."
+            },
+            {
+              "url": "https://flavor-compass-lab.example/",
+              "title": "Flavor Compass Lab",
+              "description": "A synthetic collection explaining aroma, texture, and the language used to describe food."
+            },
+            {
+              "url": "https://seasonal-pantry-notes.example/",
+              "title": "Seasonal Pantry Notes",
+              "description": "An illustrative guide to seasonal ingredients and low-waste pantry organization."
+            },
+            {
+              "url": "https://shared-recipe-journal.example/",
+              "title": "Shared Recipe Journal",
+              "description": "A fictional learning space for recipe annotations and the cultural memory carried by meals."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-electronics",
+      "systemId": "system-electronics",
+      "query": "synthetic electronics and circuit learning",
+      "mapping": [
+        {
+          "planetId": "planet-signal-bench-notes",
+          "seed": 4034420401,
+          "position": 1
+        },
+        {
+          "planetId": "planet-component-cabinet",
+          "seed": 2001394644,
+          "position": 2
+        },
+        {
+          "planetId": "planet-breadboard-orchard",
+          "seed": 1192377134,
+          "position": 3
+        },
+        {
+          "planetId": "planet-sensor-field-lab",
+          "seed": 3528529367,
+          "position": 4
+        },
+        {
+          "planetId": "planet-logic-gate-garden",
+          "seed": 1064305682,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://signal-bench-notes.example/",
+              "title": "Signal Bench Notes",
+              "description": "A fictional resource exploring voltage, current, and the interpretation of simple waveforms."
+            },
+            {
+              "url": "https://component-cabinet.example/",
+              "title": "Component Cabinet",
+              "description": "An invented notebook about resistors, capacitors, and the roles of common circuit parts."
+            },
+            {
+              "url": "https://breadboard-orchard.example/",
+              "title": "Breadboard Orchard",
+              "description": "A synthetic collection explaining small circuit sketches and systematic prototyping methods."
+            },
+            {
+              "url": "https://sensor-field-lab.example/",
+              "title": "Sensor Field Lab",
+              "description": "An illustrative guide to sensing light, temperature, and motion in illustrative projects."
+            },
+            {
+              "url": "https://logic-gate-garden.example/",
+              "title": "Logic Gate Garden",
+              "description": "A fictional learning space for digital logic and the behavior of small computational circuits."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-robotics",
+      "systemId": "system-robotics",
+      "query": "synthetic robotics and motion resources",
+      "mapping": [
+        {
+          "planetId": "planet-servo-sketchbook",
+          "seed": 2612974379,
+          "position": 1
+        },
+        {
+          "planetId": "planet-robot-path-lab",
+          "seed": 3930145644,
+          "position": 2
+        },
+        {
+          "planetId": "planet-gripper-field-notes",
+          "seed": 374041288,
+          "position": 3
+        },
+        {
+          "planetId": "planet-perception-desk",
+          "seed": 175520169,
+          "position": 4
+        },
+        {
+          "planetId": "planet-kinematic-compass",
+          "seed": 1240587474,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://servo-sketchbook.example/",
+              "title": "Servo Sketchbook",
+              "description": "A fictional resource exploring motors, joints, and controlled mechanical motion."
+            },
+            {
+              "url": "https://robot-path-lab.example/",
+              "title": "Robot Path Lab",
+              "description": "An invented notebook about path planning and small examples of obstacle-aware movement."
+            },
+            {
+              "url": "https://gripper-field-notes.example/",
+              "title": "Gripper Field Notes",
+              "description": "A synthetic collection explaining grasping mechanisms and the handling of different shapes."
+            },
+            {
+              "url": "https://perception-desk.example/",
+              "title": "Perception Desk",
+              "description": "An illustrative guide to robot sensing and the interpretation of a changing environment."
+            },
+            {
+              "url": "https://kinematic-compass.example/",
+              "title": "Kinematic Compass",
+              "description": "A fictional learning space for linkages, coordinate frames, and approachable robot geometry."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-fabrication",
+      "systemId": "system-fabrication",
+      "query": "synthetic digital fabrication learning",
+      "mapping": [
+        {
+          "planetId": "planet-layer-by-layer-studio",
+          "seed": 3364525096,
+          "position": 1
+        },
+        {
+          "planetId": "planet-toolpath-notebook",
+          "seed": 297252379,
+          "position": 2
+        },
+        {
+          "planetId": "planet-tolerance-table",
+          "seed": 539503100,
+          "position": 3
+        },
+        {
+          "planetId": "planet-joinery-prototype-lab",
+          "seed": 2324214609,
+          "position": 4
+        },
+        {
+          "planetId": "planet-fabrication-field-guide",
+          "seed": 1459346372,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://layer-by-layer-studio.example/",
+              "title": "Layer by Layer Studio",
+              "description": "A fictional resource exploring additive manufacturing and the choices behind a printable model."
+            },
+            {
+              "url": "https://toolpath-notebook.example/",
+              "title": "Toolpath Notebook",
+              "description": "An invented notebook about subtractive fabrication and the geometry of planned tool movement."
+            },
+            {
+              "url": "https://tolerance-table.example/",
+              "title": "Tolerance Table",
+              "description": "A synthetic collection explaining fit, clearance, and measurement in small fabricated assemblies."
+            },
+            {
+              "url": "https://joinery-prototype-lab.example/",
+              "title": "Joinery Prototype Lab",
+              "description": "An illustrative guide to joints, fasteners, and methods of assembling useful objects."
+            },
+            {
+              "url": "https://fabrication-field-guide.example/",
+              "title": "Fabrication Field Guide",
+              "description": "A fictional learning space for workshop processes and clear documentation of material experiments."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-circular-design",
+      "systemId": "system-circular-design",
+      "query": "synthetic repair and circular design resources",
+      "mapping": [
+        {
+          "planetId": "planet-repair-pattern-library",
+          "seed": 149582886,
+          "position": 1
+        },
+        {
+          "planetId": "planet-material-afterlife",
+          "seed": 3720559750,
+          "position": 2
+        },
+        {
+          "planetId": "planet-disassembly-notes",
+          "seed": 2440751310,
+          "position": 3
+        },
+        {
+          "planetId": "planet-reuse-route-atlas",
+          "seed": 248067468,
+          "position": 4
+        },
+        {
+          "planetId": "planet-durable-design-desk",
+          "seed": 3458512308,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://repair-pattern-library.example/",
+              "title": "Repair Pattern Library",
+              "description": "A fictional resource exploring repairable construction and the documentation of common fixes."
+            },
+            {
+              "url": "https://material-afterlife.example/",
+              "title": "Material Afterlife",
+              "description": "An invented notebook about reuse pathways and the second lives of everyday materials."
+            },
+            {
+              "url": "https://disassembly-notes.example/",
+              "title": "Disassembly Notes",
+              "description": "A synthetic collection explaining reversible joints and practical approaches to taking products apart."
+            },
+            {
+              "url": "https://reuse-route-atlas.example/",
+              "title": "Reuse Route Atlas",
+              "description": "An illustrative guide to local reuse networks and the movement of recovered objects."
+            },
+            {
+              "url": "https://durable-design-desk.example/",
+              "title": "Durable Design Desk",
+              "description": "A fictional learning space for maintenance, longevity, and adaptable product details."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-physics",
+      "systemId": "system-physics",
+      "query": "synthetic physics explanations",
+      "mapping": [
+        {
+          "planetId": "planet-inertia-notebook",
+          "seed": 494467814,
+          "position": 1
+        },
+        {
+          "planetId": "planet-wave-window-lab",
+          "seed": 4278165720,
+          "position": 2
+        },
+        {
+          "planetId": "planet-field-line-studio",
+          "seed": 2327005048,
+          "position": 3
+        },
+        {
+          "planetId": "planet-thermal-puzzle-desk",
+          "seed": 538657314,
+          "position": 4
+        },
+        {
+          "planetId": "planet-optics-walkthrough",
+          "seed": 3383048183,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://inertia-notebook.example/",
+              "title": "Inertia Notebook",
+              "description": "A fictional resource exploring forces, motion, and the design of small illustrative experiments."
+            },
+            {
+              "url": "https://wave-window-lab.example/",
+              "title": "Wave Window Lab",
+              "description": "An invented notebook about oscillation, interference, and the behavior of different waves."
+            },
+            {
+              "url": "https://field-line-studio.example/",
+              "title": "Field Line Studio",
+              "description": "A synthetic collection explaining electric and magnetic fields through approachable visual models."
+            },
+            {
+              "url": "https://thermal-puzzle-desk.example/",
+              "title": "Thermal Puzzle Desk",
+              "description": "An illustrative guide to temperature, energy transfer, and the behavior of matter."
+            },
+            {
+              "url": "https://optics-walkthrough.example/",
+              "title": "Optics Walkthrough",
+              "description": "A fictional learning space for reflection, refraction, and the paths taken by light."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-chemistry",
+      "systemId": "system-chemistry",
+      "query": "synthetic chemistry concepts",
+      "mapping": [
+        {
+          "planetId": "planet-molecule-mosaic",
+          "seed": 3469322597,
+          "position": 1
+        },
+        {
+          "planetId": "planet-reaction-route-lab",
+          "seed": 3259807511,
+          "position": 2
+        },
+        {
+          "planetId": "planet-periodic-pattern-notes",
+          "seed": 1322538072,
+          "position": 3
+        },
+        {
+          "planetId": "planet-solution-fieldbook",
+          "seed": 4199014413,
+          "position": 4
+        },
+        {
+          "planetId": "planet-bond-geometry-studio",
+          "seed": 3326419523,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://molecule-mosaic.example/",
+              "title": "Molecule Mosaic",
+              "description": "A fictional resource exploring molecular shapes and the ways atoms form useful structures."
+            },
+            {
+              "url": "https://reaction-route-lab.example/",
+              "title": "Reaction Route Lab",
+              "description": "An invented notebook about reaction pathways and how chemists organize changing substances."
+            },
+            {
+              "url": "https://periodic-pattern-notes.example/",
+              "title": "Periodic Pattern Notes",
+              "description": "A synthetic collection explaining element families and recurring properties in the periodic table."
+            },
+            {
+              "url": "https://solution-fieldbook.example/",
+              "title": "Solution Fieldbook",
+              "description": "An illustrative guide to mixtures, concentration, and the behavior of dissolved substances."
+            },
+            {
+              "url": "https://bond-geometry-studio.example/",
+              "title": "Bond Geometry Studio",
+              "description": "A fictional learning space for chemical bonds and the relationship between structure and properties."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-materials",
+      "systemId": "system-materials",
+      "query": "synthetic materials science learning",
+      "mapping": [
+        {
+          "planetId": "planet-alloy-observatory",
+          "seed": 3259870900,
+          "position": 1
+        },
+        {
+          "planetId": "planet-polymer-pathways",
+          "seed": 2821718932,
+          "position": 2
+        },
+        {
+          "planetId": "planet-ceramic-window",
+          "seed": 2841219873,
+          "position": 3
+        },
+        {
+          "planetId": "planet-fiber-structure-lab",
+          "seed": 3660816582,
+          "position": 4
+        },
+        {
+          "planetId": "planet-surface-property-notes",
+          "seed": 1982939421,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://alloy-observatory.example/",
+              "title": "Alloy Observatory",
+              "description": "A fictional resource exploring metal mixtures and the influence of processing on useful properties."
+            },
+            {
+              "url": "https://polymer-pathways.example/",
+              "title": "Polymer Pathways",
+              "description": "An invented notebook about polymer chains and the variety of flexible material behaviors."
+            },
+            {
+              "url": "https://ceramic-window.example/",
+              "title": "Ceramic Window",
+              "description": "A synthetic collection explaining ceramics, firing processes, and the structure of brittle materials."
+            },
+            {
+              "url": "https://fiber-structure-lab.example/",
+              "title": "Fiber Structure Lab",
+              "description": "An illustrative guide to fibers, composites, and the organization of lightweight structures."
+            },
+            {
+              "url": "https://surface-property-notes.example/",
+              "title": "Surface Property Notes",
+              "description": "A fictional learning space for coatings, texture, and the behavior of material surfaces."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-genetics",
+      "systemId": "system-genetics",
+      "query": "synthetic genetics explanations",
+      "mapping": [
+        {
+          "planetId": "planet-genome-garden-notes",
+          "seed": 3767388575,
+          "position": 1
+        },
+        {
+          "planetId": "planet-trait-pattern-atlas",
+          "seed": 4092762007,
+          "position": 2
+        },
+        {
+          "planetId": "planet-cell-signal-fieldbook",
+          "seed": 1770896469,
+          "position": 3
+        },
+        {
+          "planetId": "planet-sequence-story-lab",
+          "seed": 252379757,
+          "position": 4
+        },
+        {
+          "planetId": "planet-gene-context-library",
+          "seed": 3789155287,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://genome-garden-notes.example/",
+              "title": "Genome Garden Notes",
+              "description": "A fictional resource exploring genomes and the organization of inherited biological information."
+            },
+            {
+              "url": "https://trait-pattern-atlas.example/",
+              "title": "Trait Pattern Atlas",
+              "description": "An invented notebook about inheritance patterns and carefully simplified examples of variation."
+            },
+            {
+              "url": "https://cell-signal-fieldbook.example/",
+              "title": "Cell Signal Fieldbook",
+              "description": "A synthetic collection explaining cellular communication and the regulation of biological processes."
+            },
+            {
+              "url": "https://sequence-story-lab.example/",
+              "title": "Sequence Story Lab",
+              "description": "An illustrative guide to sequence comparisons and the questions they can help investigate."
+            },
+            {
+              "url": "https://gene-context-library.example/",
+              "title": "Gene Context Library",
+              "description": "A fictional learning space for the interaction of genetic information and environmental context."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-neuroscience",
+      "systemId": "system-neuroscience",
+      "query": "synthetic neuroscience learning resources",
+      "mapping": [
+        {
+          "planetId": "planet-neuron-window",
+          "seed": 1749885864,
+          "position": 1
+        },
+        {
+          "planetId": "planet-sense-making-lab",
+          "seed": 3281331616,
+          "position": 2
+        },
+        {
+          "planetId": "planet-memory-map-notes",
+          "seed": 2941596966,
+          "position": 3
+        },
+        {
+          "planetId": "planet-brain-methods-desk",
+          "seed": 2787180241,
+          "position": 4
+        },
+        {
+          "planetId": "planet-neural-network-fieldbook",
+          "seed": 1432675646,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://neuron-window.example/",
+              "title": "Neuron Window",
+              "description": "A fictional resource exploring nerve cells and the signals exchanged across neural connections."
+            },
+            {
+              "url": "https://sense-making-lab.example/",
+              "title": "Sense Making Lab",
+              "description": "An invented notebook about sensory pathways and the interpretation of everyday observations."
+            },
+            {
+              "url": "https://memory-map-notes.example/",
+              "title": "Memory Map Notes",
+              "description": "A synthetic collection explaining memory research and the limits of simplified cognitive models."
+            },
+            {
+              "url": "https://brain-methods-desk.example/",
+              "title": "Brain Methods Desk",
+              "description": "An illustrative guide to experimental methods and the interpretation of brain measurements."
+            },
+            {
+              "url": "https://neural-network-fieldbook.example/",
+              "title": "Neural Network Fieldbook",
+              "description": "A fictional learning space for biological networks and the questions raised by their organization."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-animal-behavior",
+      "systemId": "system-animal-behavior",
+      "query": "synthetic animal behavior field resources",
+      "mapping": [
+        {
+          "planetId": "planet-migration-route-notes",
+          "seed": 3112106358,
+          "position": 1
+        },
+        {
+          "planetId": "planet-animal-signal-atlas",
+          "seed": 1254761247,
+          "position": 2
+        },
+        {
+          "planetId": "planet-foraging-fieldbook",
+          "seed": 3926969667,
+          "position": 3
+        },
+        {
+          "planetId": "planet-social-species-journal",
+          "seed": 2696208600,
+          "position": 4
+        },
+        {
+          "planetId": "planet-behavior-observation-lab",
+          "seed": 2866976849,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://migration-route-notes.example/",
+              "title": "Migration Route Notes",
+              "description": "A fictional resource exploring seasonal movement and the methods used to observe animal journeys."
+            },
+            {
+              "url": "https://animal-signal-atlas.example/",
+              "title": "Animal Signal Atlas",
+              "description": "An invented notebook about calls, gestures, and other forms of communication between animals."
+            },
+            {
+              "url": "https://foraging-fieldbook.example/",
+              "title": "Foraging Fieldbook",
+              "description": "A synthetic collection explaining feeding strategies and the environmental choices faced by wildlife."
+            },
+            {
+              "url": "https://social-species-journal.example/",
+              "title": "Social Species Journal",
+              "description": "An illustrative guide to cooperation and social organization in different animal groups."
+            },
+            {
+              "url": "https://behavior-observation-lab.example/",
+              "title": "Behavior Observation Lab",
+              "description": "A fictional learning space for careful observation methods and clear records of animal activity."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-mathematics",
+      "systemId": "system-mathematics",
+      "query": "synthetic mathematics discovery websites",
+      "mapping": [
+        {
+          "planetId": "planet-proof-pathways",
+          "seed": 867803960,
+          "position": 1
+        },
+        {
+          "planetId": "planet-geometry-grove",
+          "seed": 3317421380,
+          "position": 2
+        },
+        {
+          "planetId": "planet-number-pattern-desk",
+          "seed": 2812892310,
+          "position": 3
+        },
+        {
+          "planetId": "planet-algebra-window",
+          "seed": 619607597,
+          "position": 4
+        },
+        {
+          "planetId": "planet-topology-sketchbook",
+          "seed": 1289374587,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://proof-pathways.example/",
+              "title": "Proof Pathways",
+              "description": "A fictional resource exploring mathematical arguments and the habits of clear proof writing."
+            },
+            {
+              "url": "https://geometry-grove.example/",
+              "title": "Geometry Grove",
+              "description": "An invented notebook about shapes, transformations, and approachable spatial reasoning."
+            },
+            {
+              "url": "https://number-pattern-desk.example/",
+              "title": "Number Pattern Desk",
+              "description": "A synthetic collection explaining number sequences and the relationships hidden in familiar arithmetic."
+            },
+            {
+              "url": "https://algebra-window.example/",
+              "title": "Algebra Window",
+              "description": "An illustrative guide to symbols, functions, and different ways to describe a relationship."
+            },
+            {
+              "url": "https://topology-sketchbook.example/",
+              "title": "Topology Sketchbook",
+              "description": "A fictional learning space for continuity, connected spaces, and intuitive geometric puzzles."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-statistics",
+      "systemId": "system-statistics",
+      "query": "synthetic statistics and uncertainty resources",
+      "mapping": [
+        {
+          "planetId": "planet-sample-space-journal",
+          "seed": 3160922749,
+          "position": 1
+        },
+        {
+          "planetId": "planet-uncertainty-workshop",
+          "seed": 3450127152,
+          "position": 2
+        },
+        {
+          "planetId": "planet-distribution-atlas",
+          "seed": 740149574,
+          "position": 3
+        },
+        {
+          "planetId": "planet-study-design-notes",
+          "seed": 2205785500,
+          "position": 4
+        },
+        {
+          "planetId": "planet-inference-fieldbook",
+          "seed": 70790117,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://sample-space-journal.example/",
+              "title": "Sample Space Journal",
+              "description": "A fictional resource exploring sampling, variation, and what observations can support."
+            },
+            {
+              "url": "https://uncertainty-workshop.example/",
+              "title": "Uncertainty Workshop",
+              "description": "An invented notebook about intervals, uncertainty, and honest explanations of numerical estimates."
+            },
+            {
+              "url": "https://distribution-atlas.example/",
+              "title": "Distribution Atlas",
+              "description": "A synthetic collection explaining common distributions and the patterns they describe."
+            },
+            {
+              "url": "https://study-design-notes.example/",
+              "title": "Study Design Notes",
+              "description": "An illustrative guide to experimental design and the questions behind a useful comparison."
+            },
+            {
+              "url": "https://inference-fieldbook.example/",
+              "title": "Inference Fieldbook",
+              "description": "A fictional learning space for statistical inference and the assumptions behind a conclusion."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-simulation",
+      "systemId": "system-simulation",
+      "query": "synthetic simulation and modeling resources",
+      "mapping": [
+        {
+          "planetId": "planet-model-boundary-lab",
+          "seed": 3644430090,
+          "position": 1
+        },
+        {
+          "planetId": "planet-agent-pattern-studio",
+          "seed": 4272091953,
+          "position": 2
+        },
+        {
+          "planetId": "planet-dynamics-sketchbook",
+          "seed": 2598897190,
+          "position": 3
+        },
+        {
+          "planetId": "planet-simulation-noteshelf",
+          "seed": 723137968,
+          "position": 4
+        },
+        {
+          "planetId": "planet-scenario-window",
+          "seed": 3406026111,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://model-boundary-lab.example/",
+              "title": "Model Boundary Lab",
+              "description": "A fictional resource exploring model assumptions and the boundaries of a simplified explanation."
+            },
+            {
+              "url": "https://agent-pattern-studio.example/",
+              "title": "Agent Pattern Studio",
+              "description": "An invented notebook about agent-based systems and the behavior of small interacting populations."
+            },
+            {
+              "url": "https://dynamics-sketchbook.example/",
+              "title": "Dynamics Sketchbook",
+              "description": "A synthetic collection explaining changing systems and the interpretation of time-based models."
+            },
+            {
+              "url": "https://simulation-noteshelf.example/",
+              "title": "Simulation Noteshelf",
+              "description": "An illustrative guide to reproducible experiments and clear records of computational runs."
+            },
+            {
+              "url": "https://scenario-window.example/",
+              "title": "Scenario Window",
+              "description": "A fictional learning space for scenario comparisons and the importance of uncertain inputs."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-data-visualization",
+      "systemId": "system-data-visualization",
+      "query": "synthetic data visualization learning",
+      "mapping": [
+        {
+          "planetId": "planet-chart-choice-library",
+          "seed": 2727843872,
+          "position": 1
+        },
+        {
+          "planetId": "planet-axis-and-context",
+          "seed": 831939681,
+          "position": 2
+        },
+        {
+          "planetId": "planet-color-encoding-lab",
+          "seed": 2768764727,
+          "position": 3
+        },
+        {
+          "planetId": "planet-annotation-workbench",
+          "seed": 748974715,
+          "position": 4
+        },
+        {
+          "planetId": "planet-visual-uncertainty-desk",
+          "seed": 1324957663,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://chart-choice-library.example/",
+              "title": "Chart Choice Library",
+              "description": "A fictional resource exploring chart selection and the relationship between data and visual form."
+            },
+            {
+              "url": "https://axis-and-context.example/",
+              "title": "Axis & Context",
+              "description": "An invented notebook about scales, baselines, and the context behind a visual comparison."
+            },
+            {
+              "url": "https://color-encoding-lab.example/",
+              "title": "Color Encoding Lab",
+              "description": "A synthetic collection explaining color choices and accessible ways to encode information."
+            },
+            {
+              "url": "https://annotation-workbench.example/",
+              "title": "Annotation Workbench",
+              "description": "An illustrative guide to labels, callouts, and the narrative structure of a useful chart."
+            },
+            {
+              "url": "https://visual-uncertainty-desk.example/",
+              "title": "Visual Uncertainty Desk",
+              "description": "A fictional learning space for visual methods for showing ranges, estimates, and incomplete evidence."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-literature",
+      "systemId": "system-literature",
+      "query": "synthetic literature and reading resources",
+      "mapping": [
+        {
+          "planetId": "planet-marginalia-orchard",
+          "seed": 792613065,
+          "position": 1
+        },
+        {
+          "planetId": "planet-narrative-thread-lab",
+          "seed": 2132780693,
+          "position": 2
+        },
+        {
+          "planetId": "planet-poetry-window-journal",
+          "seed": 1245057540,
+          "position": 3
+        },
+        {
+          "planetId": "planet-reading-route-library",
+          "seed": 284020384,
+          "position": 4
+        },
+        {
+          "planetId": "planet-character-map-studio",
+          "seed": 982192527,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://marginalia-orchard.example/",
+              "title": "Marginalia Orchard",
+              "description": "A fictional resource exploring reading notes and the conversations held in the margins of books."
+            },
+            {
+              "url": "https://narrative-thread-lab.example/",
+              "title": "Narrative Thread Lab",
+              "description": "An invented notebook about story structure, perspective, and the arrangement of a narrative."
+            },
+            {
+              "url": "https://poetry-window-journal.example/",
+              "title": "Poetry Window Journal",
+              "description": "A synthetic collection explaining poetic forms and the effects of rhythm, image, and line."
+            },
+            {
+              "url": "https://reading-route-library.example/",
+              "title": "Reading Route Library",
+              "description": "An illustrative guide to thematic reading paths and connections between different texts."
+            },
+            {
+              "url": "https://character-map-studio.example/",
+              "title": "Character Map Studio",
+              "description": "A fictional learning space for characters, relationships, and the construction of fictional worlds."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-oral-traditions",
+      "systemId": "system-oral-traditions",
+      "query": "synthetic oral history and storytelling resources",
+      "mapping": [
+        {
+          "planetId": "planet-story-circle-archive",
+          "seed": 2346725249,
+          "position": 1
+        },
+        {
+          "planetId": "planet-oral-memory-notes",
+          "seed": 3718152790,
+          "position": 2
+        },
+        {
+          "planetId": "planet-voice-and-place",
+          "seed": 997682642,
+          "position": 3
+        },
+        {
+          "planetId": "planet-listening-practice-lab",
+          "seed": 24485965,
+          "position": 4
+        },
+        {
+          "planetId": "planet-narrator-fieldbook",
+          "seed": 2938247559,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://story-circle-archive.example/",
+              "title": "Story Circle Archive",
+              "description": "A fictional resource exploring community storytelling and the context surrounding a remembered event."
+            },
+            {
+              "url": "https://oral-memory-notes.example/",
+              "title": "Oral Memory Notes",
+              "description": "An invented notebook about oral history methods and respectful annotation of recorded testimony."
+            },
+            {
+              "url": "https://voice-and-place.example/",
+              "title": "Voice & Place",
+              "description": "A synthetic collection explaining connections between spoken stories and the places they describe."
+            },
+            {
+              "url": "https://listening-practice-lab.example/",
+              "title": "Listening Practice Lab",
+              "description": "An illustrative guide to interview preparation and the craft of careful listening."
+            },
+            {
+              "url": "https://narrator-fieldbook.example/",
+              "title": "Narrator Fieldbook",
+              "description": "A fictional learning space for storyteller context, consent, and the interpretation of personal memory."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-translation",
+      "systemId": "system-translation",
+      "query": "synthetic translation and multilingual practice",
+      "mapping": [
+        {
+          "planetId": "planet-meaning-bridge-studio",
+          "seed": 3330300330,
+          "position": 1
+        },
+        {
+          "planetId": "planet-parallel-text-garden",
+          "seed": 1379805195,
+          "position": 2
+        },
+        {
+          "planetId": "planet-idiom-window",
+          "seed": 2614721969,
+          "position": 3
+        },
+        {
+          "planetId": "planet-translation-margin-notes",
+          "seed": 2961086590,
+          "position": 4
+        },
+        {
+          "planetId": "planet-multilingual-workbench",
+          "seed": 950206279,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://meaning-bridge-studio.example/",
+              "title": "Meaning Bridge Studio",
+              "description": "A fictional resource exploring translation choices and the context behind a phrase."
+            },
+            {
+              "url": "https://parallel-text-garden.example/",
+              "title": "Parallel Text Garden",
+              "description": "An invented notebook about parallel passages and the comparison of different interpretations."
+            },
+            {
+              "url": "https://idiom-window.example/",
+              "title": "Idiom Window",
+              "description": "A synthetic collection explaining idioms, cultural context, and expressions without direct equivalents."
+            },
+            {
+              "url": "https://translation-margin-notes.example/",
+              "title": "Translation Margin Notes",
+              "description": "An illustrative guide to annotation and the reasoning behind editorial language decisions."
+            },
+            {
+              "url": "https://multilingual-workbench.example/",
+              "title": "Multilingual Workbench",
+              "description": "A fictional learning space for multilingual writing workflows and the review of translated text."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-architecture",
+      "systemId": "system-architecture",
+      "query": "synthetic architecture and built environment",
+      "mapping": [
+        {
+          "planetId": "planet-section-line-studio",
+          "seed": 80546731,
+          "position": 1
+        },
+        {
+          "planetId": "planet-light-in-rooms",
+          "seed": 1219540491,
+          "position": 2
+        },
+        {
+          "planetId": "planet-structure-and-shelter",
+          "seed": 2029310363,
+          "position": 3
+        },
+        {
+          "planetId": "planet-material-detail-archive",
+          "seed": 3398831468,
+          "position": 4
+        },
+        {
+          "planetId": "planet-adaptive-place-notes",
+          "seed": 454312226,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://section-line-studio.example/",
+              "title": "Section Line Studio",
+              "description": "A fictional resource exploring building sections and the spaces revealed by architectural drawings."
+            },
+            {
+              "url": "https://light-in-rooms.example/",
+              "title": "Light in Rooms",
+              "description": "An invented notebook about daylight, orientation, and the experience of interior spaces."
+            },
+            {
+              "url": "https://structure-and-shelter.example/",
+              "title": "Structure & Shelter",
+              "description": "A synthetic collection explaining structural ideas and different approaches to making a building."
+            },
+            {
+              "url": "https://material-detail-archive.example/",
+              "title": "Material Detail Archive",
+              "description": "An illustrative guide to building details and the meeting of different construction materials."
+            },
+            {
+              "url": "https://adaptive-place-notes.example/",
+              "title": "Adaptive Place Notes",
+              "description": "A fictional learning space for adaptation, reuse, and the changing purposes of existing buildings."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-urbanism",
+      "systemId": "system-urbanism",
+      "query": "synthetic urbanism and public space",
+      "mapping": [
+        {
+          "planetId": "planet-street-scale-journal",
+          "seed": 2441933676,
+          "position": 1
+        },
+        {
+          "planetId": "planet-public-space-window",
+          "seed": 3670336675,
+          "position": 2
+        },
+        {
+          "planetId": "planet-transit-pattern-lab",
+          "seed": 846902840,
+          "position": 3
+        },
+        {
+          "planetId": "planet-neighborhood-fieldbook",
+          "seed": 3342891454,
+          "position": 4
+        },
+        {
+          "planetId": "planet-city-time-atlas",
+          "seed": 1034768555,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://street-scale-journal.example/",
+              "title": "Street Scale Journal",
+              "description": "A fictional resource exploring street sections and the experience of moving through a neighborhood."
+            },
+            {
+              "url": "https://public-space-window.example/",
+              "title": "Public Space Window",
+              "description": "An invented notebook about public spaces and the activities that give them meaning."
+            },
+            {
+              "url": "https://transit-pattern-lab.example/",
+              "title": "Transit Pattern Lab",
+              "description": "A synthetic collection explaining transit networks and the relationship between routes and access."
+            },
+            {
+              "url": "https://neighborhood-fieldbook.example/",
+              "title": "Neighborhood Fieldbook",
+              "description": "An illustrative guide to local observation and the small details of urban life."
+            },
+            {
+              "url": "https://city-time-atlas.example/",
+              "title": "City Time Atlas",
+              "description": "A fictional learning space for how city activities change across hours, seasons, and generations."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-community-archives",
+      "systemId": "system-community-archives",
+      "query": "synthetic community archives resources",
+      "mapping": [
+        {
+          "planetId": "planet-local-memory-cabinet",
+          "seed": 873007598,
+          "position": 1
+        },
+        {
+          "planetId": "planet-archive-description-lab",
+          "seed": 71954665,
+          "position": 2
+        },
+        {
+          "planetId": "planet-photograph-story-notes",
+          "seed": 3203381362,
+          "position": 3
+        },
+        {
+          "planetId": "planet-community-record-window",
+          "seed": 1068103270,
+          "position": 4
+        },
+        {
+          "planetId": "planet-collection-care-journal",
+          "seed": 1031595410,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://local-memory-cabinet.example/",
+              "title": "Local Memory Cabinet",
+              "description": "A fictional resource exploring local collections and the everyday records of community life."
+            },
+            {
+              "url": "https://archive-description-lab.example/",
+              "title": "Archive Description Lab",
+              "description": "An invented notebook about catalog descriptions and the context needed to understand a record."
+            },
+            {
+              "url": "https://photograph-story-notes.example/",
+              "title": "Photograph Story Notes",
+              "description": "A synthetic collection explaining photographic collections and the stories surrounding an image."
+            },
+            {
+              "url": "https://community-record-window.example/",
+              "title": "Community Record Window",
+              "description": "An illustrative guide to community records and approachable preservation practices."
+            },
+            {
+              "url": "https://collection-care-journal.example/",
+              "title": "Collection Care Journal",
+              "description": "A fictional learning space for collection care and careful documentation of material condition."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-public-science",
+      "systemId": "system-public-science",
+      "query": "synthetic public science communication",
+      "mapping": [
+        {
+          "planetId": "planet-question-square",
+          "seed": 3000828638,
+          "position": 1
+        },
+        {
+          "planetId": "planet-citizen-observation-lab",
+          "seed": 1139777127,
+          "position": 2
+        },
+        {
+          "planetId": "planet-science-explainer-studio",
+          "seed": 1424489874,
+          "position": 3
+        },
+        {
+          "planetId": "planet-evidence-conversation",
+          "seed": 2281322129,
+          "position": 4
+        },
+        {
+          "planetId": "planet-research-window-notes",
+          "seed": 57806866,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://question-square.example/",
+              "title": "Question Square",
+              "description": "A fictional resource exploring public questions and approachable routes into scientific discussion."
+            },
+            {
+              "url": "https://citizen-observation-lab.example/",
+              "title": "Citizen Observation Lab",
+              "description": "An invented notebook about collaborative observation and the documentation of local findings."
+            },
+            {
+              "url": "https://science-explainer-studio.example/",
+              "title": "Science Explainer Studio",
+              "description": "A synthetic collection explaining clear explanations and the limits of simplified scientific stories."
+            },
+            {
+              "url": "https://evidence-conversation.example/",
+              "title": "Evidence Conversation",
+              "description": "An illustrative guide to how evidence is discussed across different public contexts."
+            },
+            {
+              "url": "https://research-window-notes.example/",
+              "title": "Research Window Notes",
+              "description": "A fictional learning space for research processes and the questions raised by an evolving result."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-ethics",
+      "systemId": "system-ethics",
+      "query": "synthetic ethics and technology learning",
+      "mapping": [
+        {
+          "planetId": "planet-ethics-case-garden",
+          "seed": 1380559833,
+          "position": 1
+        },
+        {
+          "planetId": "planet-design-responsibility-notes",
+          "seed": 1014330161,
+          "position": 2
+        },
+        {
+          "planetId": "planet-consent-and-context",
+          "seed": 2471078178,
+          "position": 3
+        },
+        {
+          "planetId": "planet-value-question-lab",
+          "seed": 2709866972,
+          "position": 4
+        },
+        {
+          "planetId": "planet-technology-dialogue-desk",
+          "seed": 2819084745,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://ethics-case-garden.example/",
+              "title": "Ethics Case Garden",
+              "description": "A fictional resource exploring ethical questions explored through fictional, clearly framed cases."
+            },
+            {
+              "url": "https://design-responsibility-notes.example/",
+              "title": "Design Responsibility Notes",
+              "description": "An invented notebook about responsibility and the tradeoffs behind a technical decision."
+            },
+            {
+              "url": "https://consent-and-context.example/",
+              "title": "Consent & Context",
+              "description": "A synthetic collection explaining consent, context, and the interpretation of information practices."
+            },
+            {
+              "url": "https://value-question-lab.example/",
+              "title": "Value Question Lab",
+              "description": "An illustrative guide to the values expressed by the structure of a system."
+            },
+            {
+              "url": "https://technology-dialogue-desk.example/",
+              "title": "Technology Dialogue Desk",
+              "description": "A fictional learning space for different perspectives on the consequences of technological change."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-digital-heritage",
+      "systemId": "system-digital-heritage",
+      "query": "synthetic digital preservation and heritage",
+      "mapping": [
+        {
+          "planetId": "planet-format-memory-lab",
+          "seed": 3607207181,
+          "position": 1
+        },
+        {
+          "planetId": "planet-digital-object-atlas",
+          "seed": 3608819100,
+          "position": 2
+        },
+        {
+          "planetId": "planet-preservation-pathways",
+          "seed": 215007532,
+          "position": 3
+        },
+        {
+          "planetId": "planet-version-history-journal",
+          "seed": 1888480621,
+          "position": 4
+        },
+        {
+          "planetId": "planet-access-copy-studio",
+          "seed": 781530883,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://format-memory-lab.example/",
+              "title": "Format Memory Lab",
+              "description": "A fictional resource exploring file formats and the challenges of keeping digital objects readable."
+            },
+            {
+              "url": "https://digital-object-atlas.example/",
+              "title": "Digital Object Atlas",
+              "description": "An invented notebook about digital collections and the metadata used to explain their context."
+            },
+            {
+              "url": "https://preservation-pathways.example/",
+              "title": "Preservation Pathways",
+              "description": "A synthetic collection explaining preservation workflows and the documentation of technical decisions."
+            },
+            {
+              "url": "https://version-history-journal.example/",
+              "title": "Version History Journal",
+              "description": "An illustrative guide to versions, provenance, and the changing history of a digital object."
+            },
+            {
+              "url": "https://access-copy-studio.example/",
+              "title": "Access Copy Studio",
+              "description": "A fictional learning space for access formats and the relationship between masters and public derivatives."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-speculative-design",
+      "systemId": "system-speculative-design",
+      "query": "synthetic speculative design and futures practice",
+      "mapping": [
+        {
+          "planetId": "planet-future-question-studio",
+          "seed": 1475413837,
+          "position": 1
+        },
+        {
+          "planetId": "planet-scenario-artifact-lab",
+          "seed": 3201743883,
+          "position": 2
+        },
+        {
+          "planetId": "planet-alternative-everyday",
+          "seed": 2450088287,
+          "position": 3
+        },
+        {
+          "planetId": "planet-design-fiction-notes",
+          "seed": 1369241741,
+          "position": 4
+        },
+        {
+          "planetId": "planet-possibility-map-workshop",
+          "seed": 2968567704,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://future-question-studio.example/",
+              "title": "Future Question Studio",
+              "description": "A fictional resource exploring fictional scenarios used to examine choices in the present."
+            },
+            {
+              "url": "https://scenario-artifact-lab.example/",
+              "title": "Scenario Artifact Lab",
+              "description": "An invented notebook about imagined objects and the questions they raise about possible futures."
+            },
+            {
+              "url": "https://alternative-everyday.example/",
+              "title": "Alternative Everyday",
+              "description": "A synthetic collection explaining speculative everyday practices and the assumptions behind them."
+            },
+            {
+              "url": "https://design-fiction-notes.example/",
+              "title": "Design Fiction Notes",
+              "description": "An illustrative guide to design fiction methods and the framing of invented evidence."
+            },
+            {
+              "url": "https://possibility-map-workshop.example/",
+              "title": "Possibility Map Workshop",
+              "description": "A fictional learning space for mapping alternatives without presenting speculation as prediction."
             }
           ]
         }

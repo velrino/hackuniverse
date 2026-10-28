@@ -20,7 +20,7 @@ Use these shared components and tokens when building new pages. The [visual refe
 
 ## Universe demo
 
-The home now provides a mobile-first, full-screen 3D demo backed by [50 synthetic website records](web/src/modules/universe/data/demo-universe.json). Explore planets, systems, stellar clouds, galaxies and a universe. Selecting a planet zooms within its existing system; a compact hamburger opens the atlas and options. Optional third-person flight stays inside the active system, with a three-second jump when choosing another system.
+The home now provides a mobile-first, full-screen 3D demo backed by [200 synthetic website records](web/src/modules/universe/data/demo-universe.json), across 40 systems, 12 stellar clouds and four galaxies. Selecting a planet zooms within its existing system; a compact hamburger opens the atlas and options. Optional third-person flight stays inside the active system, with a three-second jump when choosing another system.
 
 See the [explorer guide](docs/UNIVERSE-EXPLORER.md), [JSON contract](docs/UNIVERSE-DATA.md) and [spacecraft credits](docs/ASSET-CREDITS.md). This synthetic demo does not create real account content or call Firecrawl.
 
