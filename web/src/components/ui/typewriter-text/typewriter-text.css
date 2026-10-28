@@ -1,0 +1,27 @@
+.typewriter-text {
+  position: relative;
+  display: inline-grid;
+  max-width: 100%;
+  min-width: 0;
+  vertical-align: top;
+}
+.typewriter-text__reserve,
+.typewriter-text__visible {
+  grid-area: 1 / 1;
+  min-width: 0;
+  align-self: start;
+  overflow-wrap: anywhere;
+}
+.typewriter-text__reserve { visibility: hidden; }
+.typewriter-text__accessible {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .typewriter-text__reserve { visibility: visible; }
+  .typewriter-text__visible { visibility: hidden; }
+}

@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowUpRight, CircleDot, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HudPanel } from "@/components/ui/hud-panel";
+import { TypewriterText } from "@/components/ui/typewriter-text";
 import type { UniversePlanet } from "../../domain/types";
 import type { UniverseCopy } from "../../messages";
 
@@ -11,8 +12,8 @@ export function PlanetDetails({ planet, copy, onBack, demo }: { planet: Universe
   return (
     <HudPanel as="section" className="universe-details" aria-label={planet.name}>
       <p className="hud-kicker">{copy.kinds.planet} / {reference ? copy.source : copy.details}</p>
-      <h2>{planet.name}</h2>
-      <p className="universe-details-description">{planet.description}</p>
+      <h2><TypewriterText text={planet.name} replayKey={planet.id} /></h2>
+      <p className="universe-details-description"><TypewriterText text={planet.description} replayKey={planet.id} /></p>
       {reference && <div className="universe-source"><SourceIcon size={15} aria-hidden="true" /><span>{reference.label}</span></div>}
       {demo && reference && <p className="universe-source-note">{copy.demoReference}</p>}
       <div className="universe-details-actions">
