@@ -64,6 +64,46 @@ test("search uses neutral text, tags and optional reference metadata", () => {
   assert.deepEqual(searchPlanets(catalog, "  "), catalog.planets);
 });
 
+test("branching scene projections preserve ordering, empty groups and descendant counts", () => {
+  const input = document();
+  const catalog = parseUniverseCatalog({ ...input, entities: [
+    ...input.entities,
+    { id: "system:empty", kind: "system", parentId: "cloud:main", name: "Empty", description: "", seed: 7 },
+    { id: "system:second", kind: "system", parentId: "cloud:main", name: "Second", description: "", seed: 8 },
+    { id: "planet:third", kind: "planet", parentId: "system:second", name: "Third", description: "", seed: 9, reference: { label: "Third reference" } },
+    { id: "cloud:empty", kind: "cloud", parentId: "galaxy:main", name: "Empty cloud", description: "", seed: 10 },
+  ] });
+  const galaxy = getSceneView(catalog, catalog.rootId).nodes[0];
+  assert.equal(galaxy.count, 3);
+  assert.deepEqual(galaxy.children?.map(({ id, count }) => ({ id, count })), [
+    { id: "cloud:main", count: 3 }, { id: "cloud:empty", count: 0 },
+  ]);
+  assert.deepEqual(galaxy.children?.[0].children?.map(({ id, count }) => ({ id, count })), [
+    { id: "system:main", count: 2 }, { id: "system:empty", count: 0 }, { id: "system:second", count: 1 },
+  ]);
+  assert.deepEqual(getSceneView(catalog, "system:empty").nodes, []);
+  assert.deepEqual(getSceneView(catalog, "planet:third"), getSceneView(catalog, "system:second"));
+  assert.equal(getSceneView(catalog, "system:second").nodes[0].subtitle, "Third reference");
+  for (const [id, count] of [[catalog.rootId, 3], ["cloud:main", 3], ["system:empty", 0], ["planet:third", 1]] as const) assert.equal(getPlanetCount(catalog, id), count);
+  assert.equal(getPlanetCount(catalog, { kind: "galaxy", id: "planet:third" }), 0);
+  assert.equal(getPlanetCount(catalog, "missing"), 0);
+  assert.deepEqual(getSceneView(catalog, { kind: "galaxy", id: "planet:third" }), { key: "missing", mode: "cluster", nodes: [] });
+});
+
+test("projection counts and scene outputs never leak between catalogs or calls", () => {
+  const input = document();
+  const first = parseUniverseCatalog(input);
+  const second = parseUniverseCatalog({ ...input, entities: input.entities.filter(({ id }) => id !== "ticket:42") });
+  const original = getSceneView(first, first.rootId);
+  assert.equal(getPlanetCount(first, first.rootId), 2);
+  assert.equal(getPlanetCount(second, second.rootId), 1);
+  assert.equal(getSceneView(second, second.rootId).nodes[0].count, 1);
+  assert.deepEqual(getSceneView(first, first.rootId), original);
+  original.nodes[0].children = [];
+  assert.equal(getSceneView(first, first.rootId).nodes[0].children?.length, 1);
+  assert.equal(getPlanetCount(first, first.rootId), 2);
+});
+
 test("HTTPS references normalize without prohibiting meaningful ports, queries or fragments", () => {
   const href = "https://DOCS.example:8443/notes?id=42#section";
   const input = document();
