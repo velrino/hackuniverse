@@ -25,7 +25,7 @@ export function nodeGeometrySignature(node: SceneNode): string {
 export const systemOrbit = (index: number) => 9 + Math.min(index, 4) * 6 + Math.max(0, index - 4) * 5;
 export const systemRadius = (count: number) => Math.max(28, systemOrbit(Math.max(0, count - 1)) + 9);
 export const planetRadius = (seed: number) => getPlanetAppearance(seed).radius;
-export const orbitalSpeed = (orbit: number) => 0.06 * Math.pow(9 / orbit, 1.5);
+export const orbitalSpeed = (orbit: number) => 0.09 * Math.pow(9 / orbit, 1.5);
 export const orbitalAngle = (index: number, elapsed: number) => index * 2.39996 + 0.4 + elapsed * orbitalSpeed(systemOrbit(index));
 
 /** Exact child-coordinate scale used by a parent marker and hierarchy handoff. */
