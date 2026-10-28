@@ -1,0 +1,14 @@
+.design-showcase-anchors[hidden],
+.design-showcase-tab-strip[hidden],
+.design-section-panel[hidden] {
+  display: none;
+}
+
+.design-showcase-tab-strip {
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: 3px;
+}

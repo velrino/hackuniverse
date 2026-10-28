@@ -5,6 +5,7 @@ const ptBR = {
     title: "Sistema de design",
     description: "A linguagem visual compartilhada do HackUniverse. Componentes reais, estados interativos e padrões reutilizáveis.",
     navigation: "Seções do sistema de design",
+    viewMode: { label: "Visualização do catálogo", page: "Página única", tabs: "Abas" },
     sections: {
       principles: "Princípios",
       colors: "Cores",
