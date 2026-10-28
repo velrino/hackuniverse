@@ -1,5 +1,6 @@
 "use client";
 
+import { UIProvider } from "@velrino/ui/provider";
 import localFont from "next/font/local";
 import { useEffect } from "react";
 import { RuntimeErrorPage, useRuntimeErrorLocale } from "@/components/errors/runtime-error";
@@ -26,7 +27,9 @@ export default function GlobalError({ error, retry }: { error: unknown; retry: (
     <html lang={locale} className={`dark ${barlow.variable}`}>
       <body className="hud-body runtime-error-document">
         <title>{locale === "pt-BR" ? "Página indisponível · HackUniverse" : "Page unavailable · HackUniverse"}</title>
-        <RuntimeErrorPage retry={retry} locale={locale} />
+        <UIProvider appearance="sci-fi">
+          <RuntimeErrorPage retry={retry} locale={locale} />
+        </UIProvider>
       </body>
     </html>
   );
