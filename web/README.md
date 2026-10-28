@@ -1,6 +1,6 @@
 # HackUniverse web
 
-Next.js App Router, React, TypeScript and Tailwind CSS, with shadcn/ui Button and Dialog primitives. `/` and `/example` share a small translated example and the global language dialog. The catalog, 3D universe and account dashboard remain planned work.
+Next.js App Router, React, TypeScript and Tailwind CSS, with shadcn/ui Button and Dialog primitives. `/` is an immersive, full-viewport 3D universe demo with floating controls; `/example` retains the translated input example. All routes share the URL-driven language contract. Account-backed catalog persistence, the production universe and the account dashboard remain planned work.
 
 The approved transparent logo is stored at `../assets/images/logo.png`, served from `public/brand/logo.png`, and displayed in the shared header. App Router serves the generated `src/app/favicon.ico` and `src/app/icon.png` automatically.
 
@@ -13,6 +13,12 @@ Open `/design` for the live defaults and interactive component previews. Barlow 
 Every shared UI component has its own folder under `src/components/ui/`, with a public `index.ts` and its implementation. Keep component-specific styles and meaningful types/hooks there as they grow. Application imports use `@/components/ui/button`, `@/components/ui/dialog`, and the other public entries. The Dialog primitive owns the default cyan HUD frame and enabled buttons use a pointer cursor globally.
 
 The design module owns adapters, state controllers, pure UI, feature composition and message catalogs. Its host bridge supplies localization and application components; core module code does not import Next.js or the concrete global language picker. The route mounts the public host entry.
+
+## Universe home
+
+The home is a minimal, mobile-first 3D map with 50 fictional websites organized into systems, stellar clouds, galaxies and a universe. Planet selection zooms the camera while preserving the whole system. One hamburger menu contains the searchable atlas, view options, flight controls and language settings; the other pages keep their normal application header.
+
+Edit the [demo JSON](src/modules/universe/data/demo-universe.json) to change its content and groupings. Counts come from that data. [The data guide](../docs/UNIVERSE-DATA.md) explains provider-shaped records; [the explorer guide](../docs/UNIVERSE-EXPLORER.md) documents camera ownership, optional system-bound flight, three-second jumps, performance budgets and validation limits. The [starter spacecraft credits](../docs/ASSET-CREDITS.md) identify its creator and CC BY 4.0 license.
 
 ## First-visit welcome
 
