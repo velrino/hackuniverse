@@ -40,8 +40,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body className="antialiased">
         <Suspense fallback={null}>
           <I18nProvider initialLocale={locale}>
-            <ApplicationShell>{children}</ApplicationShell>
-            <ApplicationIntro />
+            <ApplicationIntro>
+              <ApplicationShell>{children}</ApplicationShell>
+            </ApplicationIntro>
           </I18nProvider>
         </Suspense>
       </body>

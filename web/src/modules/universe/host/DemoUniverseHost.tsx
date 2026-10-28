@@ -2,8 +2,20 @@
 
 import { mockCatalog } from "../adapters/catalog";
 import { UniverseHost } from "./UniverseHost";
+import type { UniverseTourDefinition } from "../adapters/types";
+
+const tour: UniverseTourDefinition = {
+  storageKey: "hackuniverse.demo-tour.v1.seen",
+  steps: [
+    { target: { kind: "planet", id: "planet-earth" }, holdMs: 3000 },
+    { target: { kind: "system", id: "system-solar" } },
+    { target: { kind: "cloud", id: "cloud-local-interstellar" } },
+    { target: { kind: "galaxy", id: "galaxy-milky-way" } },
+    { target: { kind: "universe", id: "universe-demo-atlas" } },
+  ],
+};
 
 /** The bundled demo is one source selection, outside the reusable host. */
 export function DemoUniverseHost() {
-  return <UniverseHost catalog={mockCatalog} />;
+  return <UniverseHost catalog={mockCatalog} tour={tour} />;
 }

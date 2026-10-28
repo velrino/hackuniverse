@@ -19,9 +19,23 @@
 }
 
 .universe-node-label[hidden] { display: none; }
-.universe-node-label[data-selected="true"],
-.universe-node-label:hover { color: var(--hud-text); text-decoration: underline; text-underline-offset: 4px; }
-.universe-node-label:focus-visible { outline: 2px solid var(--hud-accent); outline-offset: 3px; }
+.universe-node-label[data-selected="true"] { color: var(--hud-text); text-decoration: underline; text-underline-offset: 4px; }
+button.universe-node-label:focus-visible {
+  color: var(--hud-text);
+  outline: 2px solid var(--hud-accent);
+  outline-offset: 3px;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--hud-accent) 18%, transparent), transparent 72%);
+  text-shadow: 0 0 8px var(--hud-accent), 0 0 18px color-mix(in srgb, var(--hud-accent) 65%, transparent);
+}
+@media (hover: hover) and (pointer: fine) {
+  button.universe-node-label:hover {
+    color: var(--hud-text);
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--hud-accent) 16%, transparent), transparent 72%);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-shadow: 0 0 8px var(--hud-accent), 0 0 18px color-mix(in srgb, var(--hud-accent) 65%, transparent);
+  }
+}
 .universe-node-label:not(button) { pointer-events: none; cursor: default; }
 
 .universe-guide-button {
