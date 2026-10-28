@@ -1,0 +1,4 @@
+interface:
+  display_name: "Senior Code Review"
+  short_description: "Evidence-based review of code, diffs and repositories"
+  default_prompt: "Use $review to review the provided code, diff, or repository."
