@@ -400,13 +400,6 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     return { position: camera.position.clone(), target: controls.target.clone() };
   }
 
-  function physicalSelectionRadius(center: THREE.Vector3, radius: number) {
-    const distance = camera.position.distanceTo(center);
-    if (!Number.isFinite(distance) || radius <= 0 || distance <= radius + camera.near) return null;
-    // A billboard through the center must enclose the sphere's projected silhouette.
-    return radius / Math.sqrt(1 - (radius / distance) ** 2) * 1.025;
-  }
-
   function beginCameraTween(to: CameraPose, toFraming: number, onComplete?: () => void) {
     clearZoomIntent();
     controls.autoRotate = false;
@@ -905,16 +898,12 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     selection.visible = Boolean(selected || starSelected && centralStar && !piloting) && !worldTransition;
     if (selected) {
       selection.position.copy(selected.object.position);
-      const radius = currentView?.mode === "cluster" ? selected.extent * 1.1 : physicalSelectionRadius(selected.object.position, selected.radius);
-      if (radius === null) selection.visible = false;
-      else selection.scale.setScalar(radius);
+      selection.scale.setScalar(currentView?.mode === "cluster" ? selected.extent * 1.1 : selected.radius * 1.45);
       selection.lookAt(camera.position);
     }
     else if (starSelected && centralStar && !piloting) {
       selection.position.copy(centralStar.object.position);
-      const radius = physicalSelectionRadius(centralStar.object.position, 3.4);
-      if (radius === null) selection.visible = false;
-      else selection.scale.setScalar(radius);
+      selection.scale.setScalar(3.4 * 1.45);
       selection.lookAt(camera.position);
     }
     try {
