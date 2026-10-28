@@ -1,0 +1,42 @@
+.universe-node-label {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  max-width: 140px;
+  overflow: hidden;
+  padding: 4px 7px;
+  border: 0;
+  background: transparent;
+  color: var(--hud-accent);
+  font: 11px var(--font-interface);
+  letter-spacing: 0.04em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.universe-node-label[hidden] { display: none; }
+.universe-node-label[data-selected="true"],
+.universe-node-label:hover { color: var(--hud-text); text-decoration: underline; text-underline-offset: 4px; }
+.universe-node-label:focus-visible { outline: 2px solid var(--hud-accent); outline-offset: 3px; }
+.universe-node-label:not(button) { pointer-events: none; cursor: default; }
+
+.universe-guide-button {
+  position: absolute;
+  z-index: 2;
+  height: 44px;
+  min-height: 44px;
+  min-width: 44px;
+  max-width: 224px;
+  padding: 6px 12px;
+  color: var(--hud-accent);
+  font: 600 12px/1.2 var(--font-interface);
+  text-align: center;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.universe-guide-button[hidden] { display: none; }
