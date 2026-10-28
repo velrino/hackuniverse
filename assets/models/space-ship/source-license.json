@@ -1,0 +1,19 @@
+{
+  "model": "space ship",
+  "uid": "356a3acb00164c698d657146caa5ebf3",
+  "sourceUrl": "https://sketchfab.com/3d-models/space-ship-356a3acb00164c698d657146caa5ebf3",
+  "creator": {
+    "name": "yanix",
+    "username": "yanix",
+    "profileUrl": "https://sketchfab.com/yanix"
+  },
+  "license": {
+    "uri": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+    "label": "CC Attribution",
+    "fullName": "Creative Commons Attribution",
+    "requirements": "Author must be credited. Commercial use is allowed.",
+    "url": "http://creativecommons.org/licenses/by/4.0/",
+    "slug": "by"
+  },
+  "isDownloadable": true
+}

@@ -1,0 +1,33 @@
+{
+  "id": "yanix-space-ship-v1",
+  "name": "space ship",
+  "creator": "yanix",
+  "sourceUrl": "https://sketchfab.com/3d-models/space-ship-356a3acb00164c698d657146caa5ebf3",
+  "creatorUrl": "https://sketchfab.com/yanix",
+  "license": {
+    "id": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "file": "space-ship-yanix.glb",
+  "sha256": "3fdd806437b08c873d9ece4c50b79cc6ccd5dd29e72423de92e6d211de0a5d7e",
+  "bytes": 1789708,
+  "assetUrl": "https://github.com/velrino/hackuniverse/releases/download/spacecraft-assets-v1/space-ship-yanix.glb",
+  "format": "glb",
+  "externalResources": false,
+  "modifications": "None by HackUniverse; supplied GLB redistributed unchanged.",
+  "provenance": "Source association supplied by the project owner; the GLB has no source model UID.",
+  "inspectedGeometry": {
+    "triangles": 1756,
+    "positionVertices": 2384
+  },
+  "sourceListingGeometry": {
+    "faces": 949,
+    "vertices": 919
+  },
+  "runtimeIntegration": "Optional third-person flight; lazily requested on explicit opt-in. Map overview does not load the GLB.",
+  "runtimeTransforms": {
+    "maxSpan": 0.375,
+    "forwardAlignment": "-Z",
+    "sourceBytesChanged": false
+  }
+}
