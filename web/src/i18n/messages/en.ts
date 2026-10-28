@@ -1,4 +1,5 @@
 import { designSystemEn } from "@/modules/design-system/messages";
+import { universeEn } from "@/modules/universe/messages";
 const en = {
   common: {
     home: "Home",
@@ -17,6 +18,7 @@ const en = {
     hint: "You can change your language at any time.",
   },
   designSystem: designSystemEn,
+  universe: universeEn,
   applicationIntro: {
     label: "Welcome to HackUniverse",
     detail: "Your universe starts here.",

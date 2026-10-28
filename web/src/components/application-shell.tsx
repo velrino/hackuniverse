@@ -16,6 +16,8 @@ export function ApplicationShell({ children }: { children: ReactNode }) {
     { href: "/design", label: common.designSystem },
   ];
 
+  if (pathname === "/") return <>{children}</>;
+
   return (
     <div className="hud-body flex min-h-dvh flex-col text-[var(--hud-text)]">
       <header className="shrink-0 border-b border-[var(--hud-line)] bg-[var(--hud-surface)]">

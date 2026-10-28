@@ -1,4 +1,5 @@
 import { designSystemPtBR } from "@/modules/design-system/messages";
+import { universePtBR } from "@/modules/universe/messages";
 import type { Messages } from "../messages";
 
 const ptBR = {
@@ -19,6 +20,7 @@ const ptBR = {
     hint: "Você pode mudar seu idioma a qualquer momento.",
   },
   designSystem: designSystemPtBR,
+  universe: universePtBR,
   applicationIntro: {
     label: "Bem-vindo ao HackUniverse",
     detail: "Seu universo começa aqui.",
