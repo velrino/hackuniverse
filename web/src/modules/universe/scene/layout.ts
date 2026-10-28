@@ -1,4 +1,5 @@
 import type { SceneNode } from "../domain/types";
+import { getPlanetAppearance } from "../domain/planet-appearance";
 import { seededRandom } from "./textures";
 
 /** Normalized display units: each wider level covers a progressively larger region. */
@@ -21,9 +22,9 @@ export function nodeGeometrySignature(node: SceneNode): string {
   return `${node.id}:${node.kind}:${node.seed}:${node.color}:${node.count}[${(node.children ?? []).map(nodeGeometrySignature).join(",")}]`;
 }
 
-export const systemOrbit = (index: number) => 9 + index * 6;
-export const systemRadius = (count: number) => Math.max(28, 12 + count * 6);
-export const planetRadius = (seed: number) => 1.1 + Math.abs(seed % 6) * 0.16;
+export const systemOrbit = (index: number) => 9 + Math.min(index, 4) * 6 + Math.max(0, index - 4) * 5;
+export const systemRadius = (count: number) => Math.max(28, systemOrbit(Math.max(0, count - 1)) + 9);
+export const planetRadius = (seed: number) => getPlanetAppearance(seed).radius;
 export const orbitalSpeed = (orbit: number) => 0.06 * Math.pow(9 / orbit, 1.5);
 export const orbitalAngle = (index: number, elapsed: number) => index * 2.39996 + 0.4 + elapsed * orbitalSpeed(systemOrbit(index));
 

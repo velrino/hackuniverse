@@ -1,4 +1,16 @@
 import * as THREE from "three";
+import { getPlanetAppearance } from "../domain/planet-appearance";
+
+// Share generated pixels, while each scene keeps a separately disposable GPU texture.
+const planetCanvases = new Map<string, HTMLCanvasElement>();
+const planetPixelBudget = 128 * 64 * 48;
+let planetPixelCount = 0;
+
+function surfaceTexture(canvas: HTMLCanvasElement) {
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
 
 export function seededRandom(seed: number) {
   let value = seed >>> 0;
@@ -12,6 +24,13 @@ export function seededRandom(seed: number) {
 export function planetTexture(seed: number, color: string, detailed: boolean) {
   const width = detailed ? 256 : 128;
   const height = width / 2;
+  const key = `${seed}:${color}:${width}`;
+  const cached = planetCanvases.get(key);
+  if (cached) {
+    planetCanvases.delete(key);
+    planetCanvases.set(key, cached);
+    return surfaceTexture(cached);
+  }
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
@@ -19,39 +38,117 @@ export function planetTexture(seed: number, color: string, detailed: boolean) {
   if (!context) throw new Error("Canvas textures unavailable");
   const image = context.createImageData(width, height);
   const random = seededRandom(seed);
-  const base = new THREE.Color(color);
-  const shade = base.clone().multiplyScalar(0.28);
-  const land = base.clone().lerp(new THREE.Color(0xb5d3b5), 0.58);
-  const ice = new THREE.Color(0xcdebf3);
-  const pixel = new THREE.Color();
-  const gas = seed % 3 === 0;
+  const { kind } = getPlanetAppearance(seed);
+  // Canvas pixels are sRGB values; avoid converting the selected color twice.
+  const base = [1, 3, 5].map((offset) => parseInt(color.slice(offset, offset + 2), 16));
+  const grids = [8, 16, 40].map((size) => ({ width: size, height: size / 2 + 1, values: Float32Array.from({ length: size * (size / 2 + 1) }, random) }));
+  const sample = (grid: typeof grids[number], u: number, v: number) => {
+    const x = ((u % 1 + 1) % 1) * grid.width;
+    const y = THREE.MathUtils.clamp(v, 0, 1) * (grid.height - 1);
+    const ix = Math.floor(x);
+    const iy = Math.min(Math.floor(y), grid.height - 2);
+    const fx = x - ix;
+    const fy = y - iy;
+    const sx = fx * fx * (3 - 2 * fx);
+    const sy = fy * fy * (3 - 2 * fy);
+    const next = (ix + 1) % grid.width;
+    return THREE.MathUtils.lerp(
+      THREE.MathUtils.lerp(grid.values[iy * grid.width + ix], grid.values[iy * grid.width + next], sx),
+      THREE.MathUtils.lerp(grid.values[(iy + 1) * grid.width + ix], grid.values[(iy + 1) * grid.width + next], sx), sy,
+    );
+  };
+  const craters = Array.from({ length: kind === "moon" ? 32 : kind === "rocky" ? 16 : 0 }, () => {
+    const longitude = random() * Math.PI * 2;
+    const latitude = Math.asin(random() * 2 - 1);
+    const radius = 0.07 + random() * 0.22;
+    return { x: Math.cos(longitude) * Math.cos(latitude), y: Math.sin(latitude), z: Math.sin(longitude) * Math.cos(latitude), edge: 1 - Math.cos(radius) };
+  });
+  const storms = Array.from({ length: kind === "gas-storm" ? 5 : kind === "gas-bands" ? 2 : 0 }, () => ({ u: random(), v: 0.15 + random() * 0.7, width: 0.04 + random() * 0.09, height: 0.025 + random() * 0.06 }));
+  const phase = (seed % 1000) * 0.017;
 
   for (let y = 0; y < height; y++) {
-    const latitude = (y / height - 0.5) * Math.PI;
+    const v = y / height;
+    const latitude = (v - 0.5) * Math.PI;
     for (let x = 0; x < width; x++) {
-      const longitude = x / width * Math.PI * 2;
-      const noise = Math.sin(longitude * 3 + seed) * Math.cos(latitude * 5)
-        + Math.sin(longitude * 7 - latitude * 9 + seed * 0.1) * 0.4
-        + Math.cos(longitude * 17 + latitude * 11) * 0.15;
-      if (gas) {
-        const band = 0.45 + Math.sin(latitude * 35 + noise * 0.8) * 0.2;
-        pixel.copy(shade).lerp(base, band + 0.2);
+      const u = x / width;
+      const longitude = u * Math.PI * 2;
+      const broad = sample(grids[0], u, v);
+      const middle = sample(grids[1], u + (broad - 0.5) * 0.08, v);
+      const fine = sample(grids[2], u, v);
+      const noise = broad * 0.55 + middle * 0.3 + fine * 0.15;
+      let shade = 0.64 + noise * 0.36;
+      let highlight = 0;
+      if (kind === "rocky" || kind === "moon") {
+        const sx = Math.cos(longitude) * Math.cos(latitude);
+        const sy = Math.sin(latitude);
+        const sz = Math.sin(longitude) * Math.cos(latitude);
+        shade = 0.58 + noise * 0.4;
+        for (const crater of craters) {
+          const distance = (1 - sx * crater.x - sy * crater.y - sz * crater.z) / crater.edge;
+          if (distance < 1.4) {
+            shade *= 0.55 + Math.min(1, distance / 0.68) * 0.45;
+            highlight += Math.exp(-Math.pow((distance - 0.95) * 7, 2)) * 0.22;
+          }
+        }
+        if (kind === "moon") highlight += fine * 0.16;
+      } else if (kind === "desert") {
+        const dune = Math.sin(longitude * 31 + broad * 16 + Math.cos(latitude * 13 + phase) * 2);
+        shade = 0.73 + noise * 0.22 + dune * 0.05;
+        highlight = Math.max(0, middle - 0.6) * 0.5;
+      } else if (kind === "ice") {
+        const crack = Math.max(0, 1 - Math.abs(middle - 0.5) * 32);
+        shade = 0.83 - crack * 0.34;
+        highlight = 0.2 + noise * 0.31;
+      } else if (kind === "ocean") {
+        const land = THREE.MathUtils.smoothstep(noise, 0.49, 0.55);
+        shade = 0.62 + noise * 0.25;
+        highlight = land * (0.2 + middle * 0.24);
+        const cloud = THREE.MathUtils.smoothstep(sample(grids[1], u + broad * 0.12, v + 0.03), 0.72, 0.86);
+        highlight = Math.max(highlight, cloud * 0.55);
+        if (Math.abs(latitude) > 1.32) highlight = Math.max(highlight, 0.35);
+      } else if (kind === "lava") {
+        const fissure = 1 - THREE.MathUtils.smoothstep(Math.abs(middle - 0.5), 0.015, 0.07);
+        shade = 0.28 + noise * 0.3 + fissure * 0.25;
+        highlight = fissure * (0.28 + fine * 0.2);
       } else {
-        pixel.copy(shade).lerp(noise > 0.25 ? land : base, noise > 0.25 ? 0.8 : 0.45);
-        if (Math.abs(latitude) > 1.35) pixel.lerp(ice, 0.65);
+        const band = Math.sin(latitude * (kind === "gas-bands" ? 36 : 17) + (broad - 0.5) * 5 + Math.sin(longitude * 3 + phase) * 0.65);
+        const eddy = Math.sin(longitude * 11 + Math.sin(latitude * 14 + broad * 8) * 2);
+        shade = 0.67 + band * 0.14 + noise * 0.17;
+        highlight = Math.max(0, band) * 0.14 + (kind === "gas-storm" ? Math.max(0, eddy) * 0.15 : 0);
+        for (const storm of storms) {
+          let du = Math.abs(u - storm.u);
+          du = Math.min(du, 1 - du) / storm.width;
+          const dv = (v - storm.v) / storm.height;
+          const radius = Math.hypot(du, dv);
+          if (radius < 1) {
+            const swirl = Math.sin(Math.atan2(dv, du) * 2 + radius * 12);
+            shade = THREE.MathUtils.lerp(shade, 0.6 + swirl * 0.16, 1 - radius);
+            highlight = Math.max(highlight, (1 - radius) * (0.23 + swirl * 0.14));
+          }
+        }
       }
-      const grain = (random() - 0.5) * 12;
+      shade = THREE.MathUtils.clamp(shade, 0.15, 1);
+      highlight = THREE.MathUtils.clamp(highlight, 0, 0.58);
+      const grain = (random() - 0.5) * 6;
       const offset = (y * width + x) * 4;
-      image.data[offset] = pixel.r * 255 + grain;
-      image.data[offset + 1] = pixel.g * 255 + grain;
-      image.data[offset + 2] = pixel.b * 255 + grain;
+      // Only mix the selected base with light/shadow: every family retains its hue.
+      image.data[offset] = base[0] * shade * (1 - highlight) + 255 * highlight + grain;
+      image.data[offset + 1] = base[1] * shade * (1 - highlight) + 255 * highlight + grain;
+      image.data[offset + 2] = base[2] * shade * (1 - highlight) + 255 * highlight + grain;
       image.data[offset + 3] = 255;
     }
   }
   context.putImageData(image, 0, 0);
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  return texture;
+  planetCanvases.set(key, canvas);
+  planetPixelCount += width * height;
+  while (planetPixelCount > planetPixelBudget) {
+    const oldest = planetCanvases.keys().next().value;
+    if (oldest === undefined) break;
+    const previous = planetCanvases.get(oldest)!;
+    planetPixelCount -= previous.width * previous.height;
+    planetCanvases.delete(oldest);
+  }
+  return surfaceTexture(canvas);
 }
 
 export function glowTexture() {
