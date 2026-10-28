@@ -22,13 +22,12 @@ Every event receives `app: "hackuniverse"`, `app_name: "hackuniverse-web"`, `eve
 
 | Event | Purpose |
 | --- | --- |
-| `hackuniverse-exception` | Application-scoped exception summary, with a correlation ID. |
 | `$pageview` | The single pageview event, scoped by application properties. |
 | `$exception` | Native PostHog Error Tracking event with SDK-generated exception structure. |
 
-Page visits use only native `$pageview`, filtered by `app_name: "hackuniverse-web"`; no prefixed pageview companion is emitted. The SDK is the only pageview owner. A tab or anchor change on `/design` is not a pageview; changing the global language query is. Custom product events retain the `hackuniverse-*` prefix.
+Page visits use native `$pageview`, and failures use native `$exception`, both filtered by `app_name: "hackuniverse-web"`. There are no mirrored custom events or event-capture subscriptions that resend native events. The SDK is the only pageview owner. A tab or anchor change on `/design` is not a pageview; changing the global language query is.
 
-Native `$exception` remains intact for PostHog Error Tracking, with one prefixed exception summary. Companions do not recursively generate events. Count either native exceptions with an application filter or their prefixed summaries; summing both would count the same exception twice.
+The `hackuniverse-*` prefix is reserved for actual product events, such as an import starting. Native exception names and SDK-generated structure remain intact for PostHog Error Tracking.
 
 For future browser events, import the shared application API rather than the SDK:
 
@@ -45,21 +44,21 @@ try {
 }
 ```
 
-Supply code-owned diagnostic context only. The transport intentionally allowlists properties; extend that policy with focused tests when new context is needed. Do not pass provider responses, imported website content, form values, headers or bodies.
+Supply code-owned diagnostic context only. The transport intentionally allowlists properties; extend that policy with focused tests when new context is needed. Development builds warn once about dropped custom property names from `captureEvent`, using a bounded warning cache and `console.warn`. Property values are never logged, and automatic SDK events do not produce these warnings. Do not pass provider responses, imported website content, form values, headers or bodies.
 
 ## Error coverage
 
-- The bundled exception extension is installed before hydration, without a remote script dependency. It captures uncaught browser errors and unhandled promise rejections on every page. One global `console.error` bridge preserves normal console output and reports through the same object-identity deduplication as React boundaries, avoiding a second copy of a caught render failure. Object arguments are not serialized into log messages, and SDK-internal diagnostics are excluded.
-- Root `error.tsx` and `global-error.tsx` report caught React failures. The global fallback owns its document, font and styles, and resolves EN/PT directly from the query without relying on a failed provider. Error text is generic; raw diagnostics stay out of the UI.
+- The bundled exception extension is installed before hydration, without a remote script dependency. It captures uncaught browser errors and unhandled promise rejections on every page. One global `console.error` bridge preserves normal console output and reports through the same object-identity deduplication as React boundaries, avoiding a second copy of a caught render failure. Repeated string-only console messages have a ten-second cooldown with at most 100 tracked messages. Object arguments are not serialized into log messages, and SDK-internal diagnostics are excluded. The SDK's global event-rate limit remains in place.
+- Root `error.tsx` and `global-error.tsx` report caught React failures. The global fallback owns its document, font and styles, and resolves EN/PT directly from the query without relying on a failed provider. Its stable server snapshot is also used during hydration, then synchronizes to the URL locale. Error text is generic; raw diagnostics stay out of the UI.
 - Already-caught scene initialization, view, frame and flight-loading failures pass through a provider-neutral callback. The application host supplies telemetry; rendering code does not import PostHog. Normal fallback and flight recovery remain unchanged.
-- `instrumentation.ts` reports Next.js Node request, render and action failures. It sends native and prefixed events before returning, with a 1.5-second request timeout, zero retries and a 2-second reporting deadline. No process-global crash handlers are installed. The current application runs on Node; the hook deliberately skips Edge.
+- `instrumentation.ts` reports Next.js Node request, render and action failures. Request metadata goes through the shared transport sanitizer, so malformed path metadata does not prevent reporting the original failure. One native exception is enqueued and its flush is awaited; overlapping failures may share an HTTP batch. Reporting retains a 1.5-second request timeout, zero automatic transport retries and a 2-second deadline. Failed queued events may be included in a later explicit flush, within the SDK's bounded queue. No process-global crash handlers are installed. The current application runs on Node; the hook deliberately skips Edge.
 - Explicitly reported browser error objects are deduplicated after successful capture. Server error objects are deduplicated while reporting. Another error instance remains a separate occurrence. Abort cancellations are excluded from manual client reporting.
 
 This cannot capture failures before the instrumentation bundle executes, a terminated browser/server process, blocked analytics transport or errors deliberately swallowed elsewhere without calling the reporting API. Compiled stack frames are retained; source-map upload and release symbolication are separate work.
 
 ## Transport policy
 
-`web/src/lib/telemetry/shared.ts` applies the same policy to automatic/manual and browser/server events. URLs retain origin/path and only a single valid `lang`; arbitrary query parameters, hashes and user information are removed. Common credential and email patterns are redacted in diagnostic strings. Request/response bodies, headers, cookies, stack variables, source context lines and person-property updates are excluded. String length, recursion depth and collection sizes are bounded. Redaction is a safeguard, not permission to attach raw private content to an exception.
+`web/src/lib/telemetry/shared.ts` applies the same policy to automatic/manual and browser/server events. URLs retain origin/path and only a single valid `lang`; arbitrary query parameters, hashes and user information are removed. Common credential and email patterns are redacted in diagnostic strings. Local home-directory prefixes are redacted from POSIX and Windows source paths, including nested folders and spaces, while useful source locations and line/column suffixes remain. Request/response bodies, headers, cookies, stack variables, source context lines and person-property updates are excluded. String length, recursion depth and collection sizes are bounded. Redaction is a safeguard, not permission to attach raw private content to an exception.
 
 Session recording, form/DOM autocapture, person-profile processing, marketing/referrer persistence, surveys, conversations, product tours and performance capture are disabled. The browser transport accepts only native pageviews/exceptions and `hackuniverse-*` application events; SDK profile events such as `$set` are blocked. Browser persistence uses an application-specific local-storage name, isolating it from other apps using the same ingestion project. PostHog may enrich accepted browser events with its normal network-derived metadata; this client policy does not change settings for other applications in the shared project.
 
@@ -74,6 +73,6 @@ npx tsc --noEmit
 npm run build
 ```
 
-The focused suite covers configuration, native/companion event contracts, lifecycle/deduplication, privacy, request metadata, disabled reporting and bounded transport failures without sending live events. Browser and ingestion validation are separate checks; use explicitly synthetic error messages for them. Keep diagnostic test routes and deliberate exception controls out of production source.
+The focused suite covers configuration, native-only event contracts, lifecycle/deduplication, string-log cooldowns, development diagnostics, cross-platform path privacy, malformed request metadata, concurrent server flushes, disabled reporting and bounded transport failures without sending live events. Browser and ingestion validation are separate checks; use explicitly synthetic error messages for them. Keep diagnostic test routes and deliberate exception controls out of production source.
 
 Reference contracts: [PostHog Next.js](https://posthog.com/docs/libraries/next-js), [exception capture](https://posthog.com/docs/error-tracking/capture), and the installed Next.js instrumentation/error-boundary documentation for the pinned version.

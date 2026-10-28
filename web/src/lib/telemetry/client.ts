@@ -1,21 +1,48 @@
 import "posthog-js/dist/exception-autocapture";
-import posthog, { type CaptureResult } from "posthog-js/no-external";
-import { companionEvent, eventContext, readTelemetryConfiguration, sanitizeTelemetryEvent, sanitizeUrl, type TelemetryEventName } from "./shared";
+import posthog from "posthog-js/no-external";
+import { droppedCustomPropertyNames, eventContext, isCustomEventName, readTelemetryConfiguration, sanitizeTelemetryEvent, sanitizeText, sanitizeUrl, type TelemetryEventName } from "./shared";
 
-type ClientState = { initialized: boolean; starting: boolean; reported: WeakSet<object>; unsubscribe?: () => void; consoleObserved?: boolean };
+type ClientState = {
+  initialized: boolean;
+  starting: boolean;
+  reported: WeakSet<object>;
+  consoleObserved?: boolean;
+  stringErrors?: Map<string, number>;
+  warnedProperties?: Set<string>;
+  /** An earlier development module may still own an exception-mirroring listener. */
+  unsubscribe?: () => void;
+};
 const stateKey = Symbol.for("hackuniverse.telemetry.client");
+const consoleCooldownMs = 10_000;
+const diagnosticKeyLimit = 100;
 
-// Keep one SDK/listener and dedup set across development module replacement as well as routes.
+// Keep one SDK/console observer and dedup set across module replacement and routes.
 function clientState(): ClientState {
   const root = globalThis as typeof globalThis & { [key: symbol]: ClientState | undefined };
   return root[stateKey] ??= { initialized: false, starting: false, reported: new WeakSet() };
 }
 
-function onCaptured(event: CaptureResult) {
-  try {
-    const companion = companionEvent(event);
-    if (companion) posthog.capture(companion.event, companion.properties);
-  } catch { /* A companion event must never interrupt its native event. */ }
+function consoleMessage(args: readonly unknown[]) {
+  let message = "";
+  for (const value of args) {
+    if (typeof value !== "string") continue;
+    const separator = message ? " " : "";
+    const remaining = 4096 - message.length - separator.length;
+    if (remaining <= 0) break;
+    message += separator + value.slice(0, remaining);
+  }
+  return sanitizeText(message || "Console error");
+}
+
+function shouldReportString(state: ClientState, message: string) {
+  const recent = state.stringErrors ??= new Map();
+  const now = Date.now();
+  const last = recent.get(message);
+  if (last !== undefined && now >= last && now - last < consoleCooldownMs) return false;
+  recent.delete(message);
+  if (recent.size >= diagnosticKeyLimit) recent.delete(recent.keys().next().value!);
+  recent.set(message, now);
+  return true;
 }
 
 function observeConsole(state: ClientState) {
@@ -25,9 +52,12 @@ function observeConsole(state: ClientState) {
     try {
       const diagnostic = typeof args[0] === "string" && (args[0].startsWith("[PostHog.js]") || args[0] === "rrweb logger error:");
       if (!diagnostic) {
-        const error = args.find((value) => value instanceof Error)
-          ?? new Error(args.filter((value) => typeof value === "string").join(" ").slice(0, 4096) || "Console error");
-        captureClientException(error, { source: "console" });
+        const error = args.find((value) => value instanceof Error);
+        if (error) captureClientException(error, { source: "console" });
+        else {
+          const message = consoleMessage(args);
+          if (shouldReportString(state, message)) captureClientException(new Error(message), { source: "console" });
+        }
       }
     } catch { /* Preserve the original console even if observation fails. */ }
     original.apply(console, args);
@@ -38,6 +68,10 @@ function observeConsole(state: ClientState) {
 export function initializeClientTelemetry(): boolean {
   if (typeof window === "undefined") return false;
   const state = clientState();
+  // Stop a legacy mirror when this module replaces an older one during development.
+  const unsubscribe = state.unsubscribe;
+  delete state.unsubscribe;
+  try { unsubscribe?.(); } catch { /* Optional cleanup. */ }
   if (state.initialized) return true;
   if (state.starting) return false;
   const config = readTelemetryConfiguration({
@@ -77,7 +111,7 @@ export function initializeClientTelemetry(): boolean {
       get_current_url: (url) => sanitizeUrl(url),
       before_send(event) {
         if (!event) return null;
-        if (!["$pageview", "$exception"].includes(event.event) && !event.event.startsWith("hackuniverse-")) return null;
+        if (!["$pageview", "$exception"].includes(event.event) && !isCustomEventName(event.event)) return null;
         try {
           return sanitizeTelemetryEvent({
             ...event,
@@ -90,24 +124,31 @@ export function initializeClientTelemetry(): boolean {
           });
         } catch { return null; }
       },
-      loaded(instance) {
-        state.unsubscribe?.();
-        state.unsubscribe = instance.on("eventCaptured", onCaptured);
-      },
     });
     state.initialized = true;
     try { observeConsole(state); } catch { /* A locked console must not block analytics. */ }
     return true;
   } catch {
-    state.unsubscribe?.();
-    state.unsubscribe = undefined;
     return false;
   } finally { state.starting = false; }
 }
 
 /** Use code-owned context; never pass imported content, input values or request bodies. */
 export function captureEvent(name: TelemetryEventName, properties: Record<string, unknown> = {}): void {
-  if (!name.startsWith("hackuniverse-") || !initializeClientTelemetry()) return;
+  if (!isCustomEventName(name) || !initializeClientTelemetry()) return;
+  if (process.env.NODE_ENV === "development") {
+    try {
+      const warned = clientState().warnedProperties ??= new Set();
+      const safeName = sanitizeText(name).slice(0, 128);
+      const unknown = droppedCustomPropertyNames(properties).map((key) => sanitizeText(key).slice(0, 128)).filter((key) => {
+        const signature = JSON.stringify([safeName, key]);
+        if (warned.has(signature) || warned.size >= diagnosticKeyLimit) return false;
+        warned.add(signature);
+        return true;
+      });
+      if (unknown.length) console.warn("[HackUniverse telemetry] Dropped custom property names:", safeName, unknown);
+    } catch { /* Developer feedback must not prevent event capture. */ }
+  }
   try { posthog.capture(name, properties); } catch { /* Optional telemetry. */ }
 }
 
