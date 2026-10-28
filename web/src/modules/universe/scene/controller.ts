@@ -9,9 +9,10 @@ import { createSemanticZoomGate } from "./semantic-zoom";
 import { clusterPosition, clusterScale, nodeGeometrySignature, orbitalAngle, orbitalSpeed, planetRadius, previewScale, systemOrbit, systemRadius } from "./layout";
 import { createSpatialBackground } from "./background";
 import { createDestinationHover } from "./destination-hover";
+import { createGalaxyHighlight } from "./galaxy-highlight";
 
 type Callbacks = { onSelect: (id: string) => void; onReady: () => void; onUnavailable: () => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onInteraction: () => void };
-type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[]; dust?: THREE.Points; core?: THREE.Sprite; haze?: { primary: THREE.Sprite; secondary: THREE.Sprite } };
+type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[]; dust?: THREE.Points; core?: THREE.Sprite; highlight?: (active: boolean) => void; haze?: { primary: THREE.Sprite; secondary: THREE.Sprite } };
 type Label = { element: HTMLElement; body?: Body; position?: THREE.Vector3; width: number };
 type CameraPose = { position: THREE.Vector3; target: THREE.Vector3 };
 type CameraTween = { from: CameraPose; to: CameraPose; started: number; duration: number; fromFraming: number; toFraming: number; onComplete?: () => void };
@@ -19,6 +20,7 @@ type FlightMapPose = CameraPose & { framing: number; focusPosition: THREE.Vector
 type FadeMaterial = { material: THREE.Material; opacity: number; transparent: boolean; depthWrite: boolean };
 type WorldTransition = { outgoing: THREE.Group; incomingMaterials: FadeMaterial[]; outgoingMaterials: FadeMaterial[]; from: CameraPose; to: CameraPose; started: number; duration: number; cameraOwned: boolean; fromFraming: number; far: number; minDistance: number; maxDistance: number; fromLightPosition: THREE.Vector3; fromIntensity: number; toIntensity: number };
 const LABEL_BUDGET = 32;
+const isGalaxy = (node: SceneNode) => node.kind === "galaxy" || node.kind === "universe";
 
 export function createUniverseController(container: HTMLElement, callbacks: Callbacks) {
   if (typeof ResizeObserver === "undefined" || typeof IntersectionObserver === "undefined") throw new Error("Scene observers unavailable");
@@ -335,9 +337,11 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       const core = addGlow(object, extent * 1.3, 0x8eb9df, 0.5);
       core.scale.y *= 0.6;
       body.core = core;
+      body.highlight = createGalaxyHighlight(object);
     }
     const hit = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false }));
-    hit.scale.setScalar(extent);
+    // The luminous core is the destination; the sparse outer dust is scenery.
+    hit.scale.setScalar(extent * (isGalaxy(node) ? 0.24 : 1));
     hit.userData.id = node.id;
     object.add(hit);
     hitTargets.push(hit);
@@ -843,12 +847,14 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       guideButton.hidden = !guideVisible;
       const ordered = [...labels].sort((a, b) => Number(b.element === document.activeElement) - Number(a.element === document.activeElement) || Number(b.body?.node.id === effectiveSelectedId) - Number(a.body?.node.id === effectiveSelectedId) || Number(Boolean(b.body)) - Number(Boolean(a.body)));
       ordered.forEach(({ element, body, position, width: labelWidth }) => {
+        const galaxyLabel = currentView?.mode === "cluster" && body && isGalaxy(body.node);
         labelPosition.copy(body?.object.position ?? position ?? new THREE.Vector3());
-        if (body) labelPosition.y += currentView?.mode === "cluster" ? body.extent * 0.75 : body.radius + 0.8;
+        if (body && !galaxyLabel) labelPosition.y += currentView?.mode === "cluster" ? body.extent * 0.75 : body.radius + 0.8;
         projected.copy(labelPosition).project(camera);
         const projectedX = (projected.x * 0.5 + 0.5) * width;
         const x = THREE.MathUtils.clamp(projectedX, labelWidth / 2 + 8, width - labelWidth / 2 - 8);
-        const y = (-projected.y * 0.5 + 0.5) * height;
+        // The bottom-anchored 44px target centers its text 22px above this point.
+        const y = (-projected.y * 0.5 + 0.5) * height - (galaxyLabel ? 6 : 0);
         if (projected.z < -1 || projected.z > 1 || projectedX < 0 || projectedX > width || y < 0 || y > height) { element.hidden = true; return; }
         const minBottom = labelInsetTop + 44;
         const maxBottom = height - labelInsetBottom;
@@ -1135,7 +1141,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     getHitTargets: () => hitTargets,
     resolve: (id) => {
       const body = bodies.find((candidate) => candidate.node.id === id);
-      return body ? { position: body.object.position, extent: currentView?.mode === "cluster" ? body.extent : body.radius } : null;
+      return body ? { position: body.object.position, extent: currentView?.mode === "cluster" ? body.extent : body.radius, highlight: body.highlight } : null;
     },
     requestRender,
   });
