@@ -4,6 +4,8 @@ Turn websites into planets and organize them into galaxies and universes.
 
 The initial proof of concept will use Firecrawl to import website content. New accounts will start with zero planets.
 
+Production web: [hackuniverse.vercel.app](https://hackuniverse.vercel.app). The live component reference is available at [/design](https://hackuniverse.vercel.app/design?lang=en).
+
 ## Project structure
 
 - `web/` — Next.js, React, TypeScript, and Tailwind CSS, with modular i18n and a shadcn/ui language dialog.

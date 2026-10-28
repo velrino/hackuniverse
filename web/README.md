@@ -29,6 +29,18 @@ npm run dev
 
 Open [localhost:3000](http://localhost:3000). `npm run build` builds the production app; `npm start` serves that build. `npm run lint` runs ESLint.
 
+## Production deployment
+
+The web app is deployed to [hackuniverse.vercel.app](https://hackuniverse.vercel.app) in the Vercel project `hackuniverse`, under the `velrino` scope. The first production deployment uses source commit `5761874`, with the Next.js preset, the default `npm run build` command and Node.js 24.x. The current UI requires no application environment variables.
+
+Run the production deployment from this `web/` directory:
+
+```sh
+npx vercel@65.4.0 deploy --prod --yes --project hackuniverse --scope velrino
+```
+
+This uploads the current local web source. If Git-based deployment is configured later for the monorepo, use `web` as its Root Directory. Keep credentials and local `.vercel` state out of Git.
+
 ## URL-driven language
 
 The supported values are `?lang=en` and `?lang=pt-BR`, on every application route. English is the default. Missing, invalid or repeated `lang` values resolve to English. Cookies, local storage and browser language do not select the application language. There are no locale path prefixes.
