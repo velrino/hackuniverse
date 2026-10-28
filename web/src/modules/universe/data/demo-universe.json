@@ -3,8 +3,8 @@
   "mode": "demo",
   "rootId": "universe-demo-atlas",
   "initialTarget": {
-    "kind": "system",
-    "id": "system-software"
+    "kind": "planet",
+    "id": "planet-earth"
   },
   "entities": [
     {
@@ -6461,6 +6461,166 @@
       },
       "tags": [
         "synthetic speculative design and futures practice"
+      ]
+    },
+    {
+      "id": "galaxy-milky-way",
+      "kind": "galaxy",
+      "parentId": "universe-demo-atlas",
+      "name": "Milky Way",
+      "description": "The familiar real-world exception among our fictional discoveries. Somehow, this galaxy already has a user base.",
+      "seed": 3500290604
+    },
+    {
+      "id": "cloud-local-interstellar",
+      "kind": "cloud",
+      "parentId": "galaxy-milky-way",
+      "name": "Local Interstellar Cloud",
+      "description": "Our local neighborhood, shown at the same illustrative map scale as everything else. No address verification required.",
+      "seed": 2328254348
+    },
+    {
+      "id": "system-solar",
+      "kind": "system",
+      "parentId": "cloud-local-interstellar",
+      "name": "Solar System",
+      "description": "Eight familiar planets around one Sun: the deliberately ordinary exception in this catalog. Sizes, spacing, and motion remain illustrative.",
+      "seed": 2283689132
+    },
+    {
+      "id": "planet-mercury",
+      "kind": "planet",
+      "parentId": "system-solar",
+      "name": "Mercury",
+      "description": "A small, cratered neighbor nearest the Sun. No startup pitch, just Mercury.",
+      "seed": 195956,
+      "reference": {
+        "label": "Solar System / Mercury"
+      },
+      "tags": [
+        "Solar System",
+        "Milky Way",
+        "real planet",
+        "terrestrial planet"
+      ]
+    },
+    {
+      "id": "planet-venus",
+      "kind": "planet",
+      "parentId": "system-solar",
+      "name": "Venus",
+      "description": "Cloud-covered Venus, represented with a warm palette. Familiar, bright, and thankfully not accepting walk-ins.",
+      "seed": 250848,
+      "reference": {
+        "label": "Solar System / Venus"
+      },
+      "tags": [
+        "Solar System",
+        "Milky Way",
+        "real planet",
+        "terrestrial planet"
+      ]
+    },
+    {
+      "id": "planet-earth",
+      "kind": "planet",
+      "parentId": "system-solar",
+      "name": "Earth",
+      "description": "Earth: oceans, continents, and the place this tour was probably launched from. A surprisingly normal planet for this catalog.",
+      "seed": 102729,
+      "reference": {
+        "label": "Solar System / Earth"
+      },
+      "tags": [
+        "Solar System",
+        "Milky Way",
+        "real planet",
+        "terrestrial planet"
+      ]
+    },
+    {
+      "id": "planet-mars",
+      "kind": "planet",
+      "parentId": "system-solar",
+      "name": "Mars",
+      "description": "The familiar red planet. Still more rocks than landing pages.",
+      "seed": 294251,
+      "reference": {
+        "label": "Solar System / Mars"
+      },
+      "tags": [
+        "Solar System",
+        "Milky Way",
+        "real planet",
+        "terrestrial planet"
+      ]
+    },
+    {
+      "id": "planet-jupiter",
+      "kind": "planet",
+      "parentId": "system-solar",
+      "name": "Jupiter",
+      "description": "A large banded gas giant, represented with a stormy surface. Finally, a giant that is not a growth metric.",
+      "seed": 135039,
+      "reference": {
+        "label": "Solar System / Jupiter"
+      },
+      "tags": [
+        "Solar System",
+        "Milky Way",
+        "real planet",
+        "gas giant"
+      ]
+    },
+    {
+      "id": "planet-saturn",
+      "kind": "planet",
+      "parentId": "system-solar",
+      "name": "Saturn",
+      "description": "A pale gas giant with unmistakable rings. The rings are included; no premium plan required.",
+      "seed": 172995,
+      "reference": {
+        "label": "Solar System / Saturn"
+      },
+      "tags": [
+        "Solar System",
+        "Milky Way",
+        "real planet",
+        "gas giant"
+      ]
+    },
+    {
+      "id": "planet-uranus",
+      "kind": "planet",
+      "parentId": "system-solar",
+      "name": "Uranus",
+      "description": "A cyan outer planet, shown here with a restrained banded look. Nothing to debug, for once.",
+      "seed": 240172,
+      "reference": {
+        "label": "Solar System / Uranus"
+      },
+      "tags": [
+        "Solar System",
+        "Milky Way",
+        "real planet",
+        "ice giant"
+      ]
+    },
+    {
+      "id": "planet-neptune",
+      "kind": "planet",
+      "parentId": "system-solar",
+      "name": "Neptune",
+      "description": "A deep blue outer planet. The edge of this familiar little exception, not the end of the universe.",
+      "seed": 105756,
+      "reference": {
+        "label": "Solar System / Neptune"
+      },
+      "tags": [
+        "Solar System",
+        "Milky Way",
+        "real planet",
+        "ice giant"
       ]
     }
   ]

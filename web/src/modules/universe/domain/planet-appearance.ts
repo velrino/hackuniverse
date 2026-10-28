@@ -33,6 +33,13 @@ export const planetPalette: readonly string[] = Object.freeze(Array.from({ lengt
   hslHex(index * 137.50776405003785 % 360, 0.5 + index % 5 * 0.065, 0.42 + Math.floor(index / 5) % 4 * 0.065),
 ));
 
+// One reserved visual seed gives the deliberately ordinary Solar System example
+// a neutral Mercury. The fictional catalog retains its 100-color palette; the
+// renderer never needs to recognize a planet ID or supplier to choose a surface.
+const curatedSolarSystemPresets: Readonly<Partial<Record<number, Readonly<{ color: string }>>>> = Object.freeze({
+  195956: Object.freeze({ color: "#9b9790" }),
+});
+
 const sizes: Record<PlanetKind, readonly [number, number]> = {
   rocky: [0.85, 1.35], desert: [1.05, 1.65], ice: [0.95, 1.6], ocean: [1.1, 1.8],
   lava: [0.9, 1.5], "gas-bands": [1.65, 2.25], "gas-storm": [1.55, 2.2], moon: [0.65, 1.05],
@@ -46,7 +53,7 @@ function ringColor(color: string) {
 
 /** Stable identity: independent of catalog order, locale, camera and refresh. */
 export function getPlanetAppearance(seed: number): PlanetAppearance {
-  const color = planetPalette[hash(seed ^ 0x61c88647) % planetPalette.length];
+  const color = curatedSolarSystemPresets[seed]?.color ?? planetPalette[hash(seed ^ 0x61c88647) % planetPalette.length];
   const kind = planetKinds[hash(seed ^ 0x9e3779b9) % planetKinds.length];
   const variation = hash(seed ^ 0x85ebca6b) / 0xffffffff;
   const [minimum, maximum] = sizes[kind];
