@@ -16,7 +16,7 @@ function getClient() {
   if (!configuration) return null;
   client ??= new PostHog(configuration.token, {
     host: configuration.host,
-    flushAt: 1,
+    flushAt: 32,
     flushInterval: 0,
     maxQueueSize: 32,
     requestTimeout: requestTimeoutMs,
@@ -41,22 +41,12 @@ export async function reportServerException(error: unknown, context: Record<stri
 
     const distinctId = `hackuniverse-server-${randomUUID()}`;
     const properties = eventContext("server", { ...context, exception_id: randomUUID() });
-    const summary = error instanceof Error
-      ? { exception_type: error.name, exception_message: error.message }
-      : { exception_type: typeof error, exception_message: typeof error === "string" ? error : "Non-Error thrown value" };
     const send = async () => {
-      try {
-        await Promise.allSettled([
-          posthog.captureExceptionImmediate(error, distinctId, properties),
-          posthog.captureImmediate({
-            distinctId,
-            event: "hackuniverse-exception",
-            properties: { ...properties, ...summary, native_event: "$exception" },
-          }),
-        ]);
-      } finally {
-        await posthog.flush();
-      }
+      posthog.captureException(error, distinctId, properties);
+      // Let errors captured in this turn join the same pending-construction batch.
+      await Promise.resolve();
+      // The SDK awaits exception construction and serializes overlapping flushes.
+      await posthog.flush();
     };
     await Promise.race([
       send(),

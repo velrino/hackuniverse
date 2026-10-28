@@ -3,6 +3,12 @@ export const eventPrefix = "hackuniverse-";
 export type TelemetryEventName = `${typeof eventPrefix}${string}`;
 export type TelemetryRuntime = "browser" | "server";
 
+/** SDK-owned events must not acquire a second custom alias. */
+export function isCustomEventName(value: unknown): value is TelemetryEventName {
+  return typeof value === "string" && value.startsWith(eventPrefix) && value.length > eventPrefix.length
+    && value !== "hackuniverse-pageview" && value !== "hackuniverse-exception";
+}
+
 type ConfigurationInput = { token?: string; host?: string; enabled?: string };
 
 /** Only an ingestion token belongs in browser configuration, never a personal API key. */
@@ -37,8 +43,12 @@ export function sanitizeUrl(value: string, base = "https://hackuniverse.invalid"
 }
 
 export function sanitizeText(value: string): string {
-  return redact(value.replace(/https?:\/\/[^\s"'<>]+/gi, (url) => sanitizeUrl(url)))
-    .replace(/\/(?:Users|home)\/[^\s:)]+?(?=\/(?:src|\.next|node_modules)\/)/g, "[local]")
+  // Consume HTTP locations as whole tokens so /Users in a web route is not
+  // mistaken for a filesystem home. Local components allow spaces, but cannot
+  // cross a stack-frame delimiter/newline; component count and size are bounded.
+  const locations = /https?:\/\/[^\s"'<>]+|(?:file:\/\/\/?)?(?:[A-Za-z]:)?[/\\](?:Users|home)[/\\](?:[^/\\\r\n:)]{1,255}[/\\]){1,64}?(?=(?:src|\.next|node_modules)[/\\])/gi;
+  return redact(value.slice(0, 16384).replace(locations, (location) => /^https?:\/\//i.test(location)
+    ? sanitizeUrl(location) : `[local]${location.slice(-1)}`))
     .slice(0, 4096);
 }
 
@@ -52,6 +62,21 @@ const sdkFields = new Set([
   "$os", "$os_version", "$device_type", "$screen_width", "$screen_height", "$viewport_width", "$viewport_height", "$host", "$pathname",
   "$current_url", "$referrer", "$referring_domain", "$is_identified", "$process_person_profile", "$anon_distinct_id", "$sent_at", "$sdk_debug_extensions_summary",
 ]);
+const forcedFields = new Set(["app", "app_name", "event_prefix", "lang"]);
+
+function isAcceptedProperty(key: string): boolean {
+  return key === "token" || contextFields.has(key) || sdkFields.has(key) || key.startsWith("$exception_");
+}
+
+/** Names only: developer feedback must never serialize private property values. */
+export function droppedCustomPropertyNames(properties: Record<string, unknown>): string[] {
+  const dropped: string[] = [];
+  for (const key of Object.keys(properties)) {
+    if (!isAcceptedProperty(key) && !forcedFields.has(key)) dropped.push(sanitizeText(key).slice(0, 128));
+    if (dropped.length === 100) break;
+  }
+  return dropped;
+}
 
 function sanitizeRoute(value: string): string {
   const url = new URL(sanitizeUrl(value), "https://hackuniverse.invalid");
@@ -89,7 +114,7 @@ export function sanitizeTelemetryEvent<T extends { event: string; properties?: R
   for (const [key, value] of Object.entries(event.properties ?? {})) {
     // The browser transport requires its public ingestion token unchanged.
     if (key === "token") { if (typeof value === "string" && value.startsWith("phc_")) properties[key] = value; continue; }
-    if (contextFields.has(key) || sdkFields.has(key) || key.startsWith("$exception_")) {
+    if (isAcceptedProperty(key)) {
       properties[key] = typeof value === "string" && ["$current_url", "$referrer"].includes(key) ? sanitizeUrl(value)
         : typeof value === "string" && ["path", "pathname", "route", "$pathname"].includes(key) ? sanitizeRoute(value)
           : sanitizeValue(value);
@@ -110,18 +135,4 @@ export function sanitizeTelemetryEvent<T extends { event: string; properties?: R
   delete result.$set_once;
   delete result.$unset;
   return result;
-}
-
-export function companionEvent(event: { event: string; properties?: Record<string, unknown> }) {
-  if (event.event !== "$exception") return null;
-  const properties = event.properties ?? {};
-  const first = Array.isArray(properties.$exception_list) ? properties.$exception_list[0] as Record<string, unknown> | undefined : undefined;
-  return {
-    event: "hackuniverse-exception" as const,
-    properties: {
-      ...Object.fromEntries(Object.entries(properties).filter(([key]) => contextFields.has(key) || ["$current_url", "$pathname"].includes(key))),
-      native_event: event.event,
-      ...(first ? { exception_type: first.type, exception_message: first.value } : {}),
-    },
-  };
 }
