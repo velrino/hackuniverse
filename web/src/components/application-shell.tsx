@@ -13,6 +13,7 @@ export function ApplicationShell({ children }: { children: ReactNode }) {
   const navigation = [
     { href: "/", label: common.home },
     { href: "/example", label: common.example },
+    { href: "/design", label: common.designSystem },
   ];
 
   return (
