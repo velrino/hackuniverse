@@ -1,0 +1,61 @@
+.runtime-error-page {
+  display: grid;
+  flex: 1 1 0;
+  place-items: center;
+  min-width: 0;
+  min-height: 100dvh;
+  padding: clamp(24px, 6dvh, 64px) 20px;
+  color: var(--hud-text);
+  font-family: var(--font-interface);
+}
+
+.hud-body > .runtime-error-page {
+  min-height: 0;
+}
+
+.runtime-error-document {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  margin: 0;
+}
+
+.runtime-error-panel {
+  display: grid;
+  gap: 20px;
+  width: min(100%, 720px);
+  min-width: 0;
+  padding: clamp(24px, 5vw, 48px);
+  overflow-wrap: anywhere;
+}
+
+.runtime-error-title {
+  margin: 0;
+  color: var(--hud-accent);
+  font-size: clamp(28px, 5vw, 44px);
+  line-height: 1.12;
+}
+
+.runtime-error-description {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--hud-muted);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.runtime-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.runtime-error-actions [data-slot="button"] {
+  min-height: 44px;
+  max-width: 100%;
+  height: auto;
+  padding: 12px 16px;
+  white-space: normal;
+  text-align: center;
+}
