@@ -1,8 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
-  companionEvent,
+  droppedCustomPropertyNames,
   eventContext,
+  isCustomEventName,
   readTelemetryConfiguration,
   sanitizeTelemetryEvent,
   sanitizeText,
@@ -63,6 +64,32 @@ test("developer-local source paths retain useful source locations without home f
   const result = sanitizeText("at render (/Users/hackuniverse-private/workspace/web/src/page.tsx:10:2)");
   assert.ok(!result.includes("hackuniverse-private"));
   assert.match(result, /\[local\]\/src\/page.tsx:10:2/);
+});
+
+test("nested local stack paths support Windows drives, spaces, case and file URLs", () => {
+  const locations = [
+    [String.raw`C:\Users\Jane Doe\Projects\Hack Universe\web\src\page.tsx:10:2`, String.raw`[local]\src\page.tsx:10:2`],
+    [String.raw`c:\users\private profile\work\app\.next\server\app.js:21:7`, String.raw`[local]\.next\server\app.js:21:7`],
+    ["C:/Users/Jane Doe/Projects/Hack Universe/web/src/page.tsx:11:3", "[local]/src/page.tsx:11:3"],
+    ["/home/jane doe/Projects/Hack Universe/node_modules/pkg/index.js:6:2", "[local]/node_modules/pkg/index.js:6:2"],
+    ["file:///C:/Users/Jane%20Doe/Projects/Hack%20Universe/web/src/page.tsx:3:9", "[local]/src/page.tsx:3:9"],
+    ["file:///Users/Jane Doe/Projects/Hack Universe/web/src/page.tsx:4:8", "[local]/src/page.tsx:4:8"],
+  ];
+  for (const [location, expected] of locations) {
+    assert.equal(sanitizeText(`at render (${location})`), `at render (${expected})`);
+  }
+});
+
+test("local path redaction cannot consume neighboring stack frames or HTTP routes", () => {
+  assert.equal(sanitizeText(String.raw`TypeError: synthetic
+at render (C:\Users\Jane Doe\Projects\Hack Universe\web\src\page.tsx:10:2)
+at load (/Users/Jane Doe/Projects/Hack Universe/web/.next/server/app.js:4:5)`), String.raw`TypeError: synthetic
+at render ([local]\src\page.tsx:10:2)
+at load ([local]/.next/server/app.js:4:5)`);
+  assert.equal(sanitizeText("Source https://app.example/Users/public/work/src/page.js?lang=pt-BR&token=synthetic-private"),
+    "Source https://app.example/Users/public/work/src/page.js?lang=pt-BR");
+  assert.equal(sanitizeText("Source https://app.example/home/public/work/node_modules/pkg/index.js"),
+    "Source https://app.example/home/public/work/node_modules/pkg/index.js");
 });
 
 test("transport preserves native exception structure while dropping sensitive nested context", () => {
@@ -163,19 +190,44 @@ test("cyclic and oversized exception metadata cannot cause unbounded serializati
   assert.doesNotThrow(() => JSON.stringify(result));
 });
 
-test("only native exceptions produce prefixed companions; pageviews stay native", () => {
-  const page = companionEvent(transport({ event: "$pageview", properties: { $current_url: "https://app.example/design?lang=en&token=hackuniverse-private", source: "hackuniverse-check" } }));
-  assert.equal(page, null);
-  const exception = companionEvent(transport({ event: "$exception", properties: {
-    exception_id: "hackuniverse-error-id", $exception_list: [{ type: "TypeError", value: "Failed token=hackuniverse-private", stacktrace: { frames: [] } }],
-  } }));
-  assert.equal(exception?.event, "hackuniverse-exception");
-  assert.equal(exception?.properties.native_event, "$exception");
-  assert.equal((exception?.properties as Record<string, unknown> | undefined)?.exception_id, "hackuniverse-error-id");
-  assert.equal(exception?.properties.exception_type, "TypeError");
-  assert.ok(!JSON.stringify(exception).includes("hackuniverse-private"));
-  assert.ok(!("$exception_list" in (exception?.properties ?? {})));
-  for (const event of ["hackuniverse-pageview", "hackuniverse-exception", "$identify", "$pageleave", "hackuniverse-custom"]) assert.equal(companionEvent({ event }), null);
+test("custom product events cannot use native events or legacy automatic aliases", () => {
+  assert.equal(isCustomEventName("hackuniverse-import-started"), true);
+  for (const event of [undefined, null, 1, "", "hackuniverse-", "$pageview", "$exception", "$identify", "pageview", "hackuniverse-pageview", "hackuniverse-exception"]) {
+    assert.equal(isCustomEventName(event), false);
+  }
+});
+
+test("dropped custom-property feedback shares the transport allowlist and returns names only", () => {
+  const accepted = {
+    token: ingestionToken, source: "navigation", operation: "import", runtime: "browser",
+    $current_url: "https://app.example/design?lang=en", $exception_list: [{ type: "Error", value: "synthetic" }],
+    $session_id: "synthetic-session", distinct_id: "synthetic-anonymous",
+    app: "hackuniverse", app_name: "hackuniverse-web", event_prefix: "hackuniverse-", lang: "en",
+  };
+  assert.deepEqual(droppedCustomPropertyNames(accepted), []);
+  const properties = { ...accepted, import_count: 3, private_note: "synthetic-private-value" };
+  assert.deepEqual(droppedCustomPropertyNames(properties), ["import_count", "private_note"]);
+  const sanitized = transport({ event: "hackuniverse-import-started", properties }).properties;
+  assert.ok(!("import_count" in sanitized));
+  assert.ok(!("private_note" in sanitized));
+  assert.ok(!JSON.stringify(droppedCustomPropertyNames(properties)).includes("synthetic-private-value"));
+});
+
+test("dropped-property diagnostics do not evaluate values and bound the number of names", () => {
+  const properties = Object.fromEntries(Array.from({ length: 150 }, (_, index) => [`unknown_${index}`, "synthetic-private-value"]));
+  Object.defineProperty(properties, "getter_value", { enumerable: true, get() { throw new Error("must not read values"); } });
+  assert.equal(droppedCustomPropertyNames(properties).length, 100);
+  assert.deepEqual(droppedCustomPropertyNames(Object.defineProperty({}, "getter_value", {
+    enumerable: true, get() { throw new Error("must not read values"); },
+  })), ["getter_value"]);
+});
+
+test("dynamic property names are redacted and individually bounded before diagnostics", () => {
+  assert.deepEqual(droppedCustomPropertyNames({
+    "person@hackuniverse.example": true,
+    [String.raw`C:\Users\Jane Doe\Projects\Hack Universe\web\src\page.tsx:10:2`]: true,
+    ["x".repeat(1000)]: true,
+  }), ["[redacted email]", String.raw`[local]\src\page.tsx:10:2`, "x".repeat(128)]);
 });
 
 test("event context never accepts an application/runtime override", () => {

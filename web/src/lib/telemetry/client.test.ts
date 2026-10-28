@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test, { type TestContext } from "node:test";
-import posthog, { type CaptureResult, type PostHogConfig } from "posthog-js/no-external";
+import posthog, { type PostHogConfig } from "posthog-js/no-external";
 import { captureClientException, captureEvent, initializeClientTelemetry } from "./client";
 import type { TelemetryEventName } from "./shared";
 
@@ -12,9 +12,14 @@ function setup(t: TestContext) {
   const previous = variables.map((name) => [name, process.env[name]] as const);
   const windowDescriptor = Object.getOwnPropertyDescriptor(globalThis, "window");
   const previousState = root[stateKey];
+  const previousEnvironment = process.env.NODE_ENV;
   const previousConsoleError = console.error;
+  const previousConsoleWarn = console.warn;
   const consoleCalls: unknown[][] = [];
+  const warningCalls: unknown[][] = [];
   console.error = (...args: unknown[]) => { consoleCalls.push(args); };
+  console.warn = (...args: unknown[]) => { warningCalls.push(args); };
+  Reflect.set(process.env, "NODE_ENV", "test");
   delete root[stateKey];
   Object.defineProperty(globalThis, "window", { configurable: true, value: {} });
   process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN = "phc_hackuniverse_synthetic_client";
@@ -26,23 +31,19 @@ function setup(t: TestContext) {
     }
     if (windowDescriptor) Object.defineProperty(globalThis, "window", windowDescriptor); else Reflect.deleteProperty(globalThis, "window");
     if (previousState === undefined) delete root[stateKey]; else root[stateKey] = previousState;
+    if (previousEnvironment === undefined) Reflect.deleteProperty(process.env, "NODE_ENV"); else Reflect.set(process.env, "NODE_ENV", previousEnvironment);
     console.error = previousConsoleError;
+    console.warn = previousConsoleWarn;
   });
   let configuration: Partial<PostHogConfig> = {};
-  let listener: ((event: CaptureResult) => void) | undefined;
-  let unsubscriptions = 0;
-  const subscribe = t.mock.method(posthog, "on", (...[, callback]: Parameters<typeof posthog.on>) => {
-    listener = callback;
-    return () => { unsubscriptions++; listener = undefined; };
-  });
+  const subscribe = t.mock.method(posthog, "on", () => () => {});
   const initialize = t.mock.method(posthog, "init", (...[, options]: Parameters<typeof posthog.init>) => {
     configuration = options ?? {};
-    configuration.loaded?.(posthog);
     return posthog;
   });
   const capture = t.mock.method(posthog, "capture", (...[event, properties]: Parameters<typeof posthog.capture>) => ({ uuid: "hackuniverse-captured-test", event, properties: properties ?? {} }));
   const captureException = t.mock.method(posthog, "captureException", () => ({ uuid: "hackuniverse-exception-test", event: "$exception", properties: {} }));
-  return { initialize, capture, captureException, subscribe, consoleCalls, configuration: () => configuration, listener: () => listener, unsubscriptions: () => unsubscriptions };
+  return { initialize, capture, captureException, subscribe, consoleCalls, warningCalls, configuration: () => configuration };
 }
 
 test("client telemetry does nothing during SSR or when missing/disabled", (t) => {
@@ -61,13 +62,14 @@ test("client telemetry does nothing during SSR or when missing/disabled", (t) =>
   assert.equal(sdk.captureException.mock.callCount(), 0);
 });
 
-test("one global initialization owns query-aware pageviews and one companion listener", (t) => {
+test("one global initialization leaves query-aware pageviews and native exceptions to the SDK", (t) => {
   const sdk = setup(t);
   assert.equal(initializeClientTelemetry(), true);
   assert.equal(initializeClientTelemetry(), true);
   captureEvent("hackuniverse-custom");
   assert.equal(sdk.initialize.mock.callCount(), 1);
-  assert.equal(sdk.subscribe.mock.callCount(), 1);
+  assert.equal(sdk.subscribe.mock.callCount(), 0);
+  assert.equal(sdk.configuration().loaded, undefined);
   assert.deepEqual(sdk.configuration().capture_pageview, { path: true, search: true, hash: false });
   assert.equal(sdk.configuration().capture_pageleave, false);
   assert.equal(sdk.configuration().autocapture, false);
@@ -98,22 +100,44 @@ test("automatic and manual native events share transport sanitization and app co
   assert.ok(!JSON.stringify(result).includes("hackuniverse-private"));
 });
 
-test("native pageviews stay single and exceptions alone get one prefixed companion", (t) => {
+test("native pageviews and exceptions pass through without creating custom companions", (t) => {
   const sdk = setup(t);
   initializeClientTelemetry();
-  const listener = sdk.listener();
-  assert.ok(listener);
-  listener({ uuid: "hackuniverse-page-id", event: "$pageview", properties: { source: "navigation", $current_url: "https://app.example/design?lang=en" } });
+  const beforeSend = sdk.configuration().before_send;
+  if (typeof beforeSend !== "function") throw new Error("hackuniverse-test missing transport hook");
+  for (const event of ["$pageview", "$exception"]) {
+    const result = beforeSend({ uuid: `hackuniverse-native-${event}`, event, properties: { $current_url: "https://app.example/design?lang=en" } });
+    assert.ok(result);
+    assert.equal(result.event, event);
+  }
+  captureClientException(new Error("hackuniverse-native-only"));
+  assert.equal(sdk.captureException.mock.callCount(), 1);
   assert.equal(sdk.capture.mock.callCount(), 0);
-  listener({ uuid: "hackuniverse-error-id", event: "$exception", properties: { exception_id: "hackuniverse-error-id", $exception_list: [{ type: "Error", value: "hackuniverse-test" }] } });
-  listener({ uuid: "hackuniverse-companion-id", event: "hackuniverse-exception", properties: {} });
-  assert.deepEqual(sdk.capture.mock.calls.map((call) => call.arguments[0]), ["hackuniverse-exception"]);
-  assert.equal(sdk.capture.mock.calls[0].arguments[1]?.exception_id, "hackuniverse-error-id");
+  assert.equal(sdk.subscribe.mock.callCount(), 0);
+});
+
+test("development replacement removes an older companion listener exactly once", (t) => {
+  const sdk = setup(t);
+  let unsubscriptions = 0;
+  root[stateKey] = { initialized: true, starting: false, reported: new WeakSet(), unsubscribe() { unsubscriptions++; } };
+  assert.equal(initializeClientTelemetry(), true);
+  assert.equal(initializeClientTelemetry(), true);
+  assert.equal(unsubscriptions, 1);
+  assert.equal(sdk.initialize.mock.callCount(), 0);
+  assert.equal(sdk.subscribe.mock.callCount(), 0);
+});
+
+test("failure to remove an older companion listener cannot prevent telemetry reuse", (t) => {
+  const sdk = setup(t);
+  root[stateKey] = { initialized: true, starting: false, reported: new WeakSet(), unsubscribe() { throw new Error("Synthetic legacy cleanup failure"); } };
+  assert.equal(initializeClientTelemetry(), true);
+  captureEvent("hackuniverse-product-event");
+  assert.equal(sdk.capture.mock.callCount(), 1);
 });
 
 test("custom event API rejects unprefixed names at runtime and isolates transport failures", (t) => {
   const sdk = setup(t);
-  captureEvent("wrong-name" as TelemetryEventName);
+  for (const name of ["wrong-name", "hackuniverse-", "hackuniverse-pageview", "hackuniverse-exception"]) captureEvent(name as TelemetryEventName);
   assert.equal(sdk.initialize.mock.callCount(), 0);
   sdk.capture.mock.mockImplementation(() => { throw new Error("hackuniverse-network-failure"); });
   assert.doesNotThrow(() => captureEvent("hackuniverse-test"));
@@ -139,14 +163,12 @@ test("failed initialization can retry without leaving the global starting guard 
   assert.equal(initializeClientTelemetry(), false);
   assert.equal(initializeClientTelemetry(), true);
   assert.equal(sdk.initialize.mock.callCount(), 2);
-  assert.equal(sdk.subscribe.mock.callCount(), 1);
+  assert.equal(sdk.subscribe.mock.callCount(), 0);
 });
 
-test("companion and exception SDK failures never replace application recovery", (t) => {
+test("exception SDK failures never replace application recovery", (t) => {
   const sdk = setup(t);
   initializeClientTelemetry();
-  sdk.capture.mock.mockImplementation(() => { throw new Error("hackuniverse-companion-failure"); });
-  assert.doesNotThrow(() => sdk.listener()?.({ uuid: "hackuniverse-native-id", event: "$exception", properties: {} }));
   sdk.captureException.mock.mockImplementation(() => { throw new Error("hackuniverse-sdk-failure"); });
   assert.doesNotThrow(() => captureClientException(new Error("hackuniverse-original-failure")));
 });
@@ -190,6 +212,57 @@ test("console diagnostics do not stringify object arguments and bound captured s
   assert.ok(longError.message.length <= 4096);
 });
 
+test("identical string console failures cool down while new messages and later occurrences remain observable", (t) => {
+  const sdk = setup(t);
+  let now = 1000;
+  t.mock.method(Date, "now", () => now);
+  initializeClientTelemetry();
+  console.error("Synthetic repeated string failure");
+  now += 9999;
+  console.error("Synthetic repeated string failure");
+  assert.equal(sdk.captureException.mock.callCount(), 1);
+  console.error("Synthetic distinct string failure");
+  assert.equal(sdk.captureException.mock.callCount(), 2);
+  now++;
+  console.error("Synthetic repeated string failure");
+  assert.equal(sdk.captureException.mock.callCount(), 3);
+  assert.deepEqual(sdk.consoleCalls, [
+    ["Synthetic repeated string failure"], ["Synthetic repeated string failure"],
+    ["Synthetic distinct string failure"], ["Synthetic repeated string failure"],
+  ]);
+});
+
+test("string cooldown keys use sanitized text without retaining private occurrences in captured messages", (t) => {
+  const sdk = setup(t);
+  t.mock.method(Date, "now", () => 1000);
+  initializeClientTelemetry();
+  console.error("Synthetic failure for first-person@example.test");
+  console.error("Synthetic failure for second-person@example.test");
+  assert.equal(sdk.captureException.mock.callCount(), 1);
+  const error = sdk.captureException.mock.calls[0].arguments[0];
+  assert.ok(error instanceof Error);
+  assert.equal(error.message, "Synthetic failure for [redacted email]");
+  assert.equal(sdk.consoleCalls.length, 2);
+});
+
+test("string cooldown has bounded history and evicts old messages without suppressing real Error occurrences", (t) => {
+  const sdk = setup(t);
+  t.mock.method(Date, "now", () => 1000);
+  initializeClientTelemetry();
+  for (let index = 0; index < 101; index++) console.error(`Synthetic bounded message ${index}`);
+  assert.equal(sdk.captureException.mock.callCount(), 101);
+  console.error("Synthetic bounded message 100");
+  assert.equal(sdk.captureException.mock.callCount(), 101);
+  console.error("Synthetic bounded message 0");
+  assert.equal(sdk.captureException.mock.callCount(), 102);
+  const error = new Error("Synthetic bounded message 0");
+  console.error(error);
+  captureClientException(error, { source: "react-boundary" });
+  console.error(new Error("Synthetic bounded message 0"));
+  assert.equal(sdk.captureException.mock.callCount(), 104);
+  assert.equal(sdk.consoleCalls.length, 105);
+});
+
 test("SDK-internal console diagnostics stay visible without recursively reporting themselves", (t) => {
   const sdk = setup(t);
   initializeClientTelemetry();
@@ -209,7 +282,7 @@ test("transport excludes person-profile protocol events while preserving scoped 
   initializeClientTelemetry();
   const beforeSend = sdk.configuration().before_send;
   if (typeof beforeSend !== "function") throw new Error("hackuniverse-test missing transport hook");
-  for (const event of ["$set", "$identify", "$groupidentify", "$create_alias", "unprefixed-product-event"]) {
+  for (const event of ["$set", "$identify", "$groupidentify", "$create_alias", "unprefixed-product-event", "hackuniverse-pageview", "hackuniverse-exception"]) {
     assert.equal(beforeSend({ uuid: "hackuniverse-filtered-id", event, properties: { $set: { email: "person@hackuniverse.example" } } }), null);
   }
   for (const event of ["$pageview", "$exception", "hackuniverse-product-event"]) {
@@ -220,4 +293,57 @@ test("transport excludes person-profile protocol events while preserving scoped 
     assert.equal(captured.properties.event_prefix, "hackuniverse-");
     assert.equal(captured.properties.$process_person_profile, false);
   }
+});
+
+test("production and test custom events never emit development property warnings", (t) => {
+  const sdk = setup(t);
+  for (const environment of ["production", "test"]) {
+    Reflect.set(process.env, "NODE_ENV", environment);
+    captureEvent("hackuniverse-product-event", { unexpected_field: "synthetic-private-value" });
+  }
+  assert.equal(sdk.warningCalls.length, 0);
+  assert.equal(sdk.capture.mock.callCount(), 2);
+});
+
+test("development custom-property feedback reports names once per event and key without reading values", (t) => {
+  const sdk = setup(t);
+  Reflect.set(process.env, "NODE_ENV", "development");
+  const properties = {
+    source: "view",
+    unexpected_field: { toJSON() { throw new Error("Private property must not be serialized"); } },
+    get another_field(): string { throw new Error("Private property value must not be read"); },
+  };
+  assert.doesNotThrow(() => captureEvent("hackuniverse-product-event", properties));
+  captureEvent("hackuniverse-product-event", { unexpected_field: "synthetic-private-value", another_field: "second-private-value" });
+  captureEvent("hackuniverse-another-event", { unexpected_field: "third-private-value" });
+  assert.equal(sdk.capture.mock.callCount(), 3);
+  assert.equal(sdk.warningCalls.length, 2);
+  assert.deepEqual(sdk.warningCalls.map((call) => call.slice(1)), [
+    ["hackuniverse-product-event", ["unexpected_field", "another_field"]],
+    ["hackuniverse-another-event", ["unexpected_field"]],
+  ]);
+  const warnings = JSON.stringify(sdk.warningCalls);
+  for (const value of ["synthetic-private-value", "second-private-value", "third-private-value"]) assert.ok(!warnings.includes(value));
+  assert.equal(sdk.captureException.mock.callCount(), 0);
+});
+
+test("development diagnostics stay bounded while analytics continues capturing", (t) => {
+  const sdk = setup(t);
+  Reflect.set(process.env, "NODE_ENV", "development");
+  for (let index = 0; index < 150; index++) captureEvent("hackuniverse-product-event", { [`unexpected_${index}`]: "synthetic-private-value" });
+  captureEvent("hackuniverse-product-event", { unexpected_0: "synthetic-private-value" });
+  assert.equal(sdk.warningCalls.length, 100);
+  assert.equal(sdk.capture.mock.callCount(), 151);
+  assert.equal(sdk.captureException.mock.callCount(), 0);
+  assert.ok(!JSON.stringify(sdk.warningCalls).includes("synthetic-private-value"));
+});
+
+test("warning failures cannot prevent custom capture or recursively produce exceptions", (t) => {
+  const sdk = setup(t);
+  Reflect.set(process.env, "NODE_ENV", "development");
+  console.warn = () => { throw new Error("Synthetic diagnostic sink failure"); };
+  assert.doesNotThrow(() => captureEvent("hackuniverse-product-event", { unexpected_field: "synthetic-private-value" }));
+  assert.equal(sdk.capture.mock.callCount(), 1);
+  assert.equal(sdk.captureException.mock.callCount(), 0);
+  assert.equal(sdk.consoleCalls.length, 0);
 });
