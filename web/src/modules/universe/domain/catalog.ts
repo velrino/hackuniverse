@@ -7,10 +7,10 @@ import type {
   UniverseSceneView,
   WebsitePlanet,
 } from "./types";
+import { getPlanetAppearance } from "./planet-appearance";
 
 type EntityReference = NavigationTarget | string;
 
-const planetColors = ["#42e8f4", "#72dafa", "#8ef2ed", "#67bee8", "#b0f5f4"];
 const groupColors: Record<EntityKind, string> = {
   universe: "#42e8f4",
   galaxy: "#72dafa",
@@ -83,7 +83,7 @@ function sceneNode(catalog: UniverseCatalog, entity: UniverseEntity, depth = 0):
     subtitle: planet ? new URL(planet.source.url).hostname : entity.description,
     count: getPlanetCount(catalog, entity.id),
     seed: entity.seed,
-    color: entity.kind === "planet" ? planetColors[entity.seed % planetColors.length] : groupColors[entity.kind],
+    color: entity.kind === "planet" ? getPlanetAppearance(entity.seed).color : groupColors[entity.kind],
     ...(entity.kind !== "planet" && depth < 4 ? {
       children: getChildren(catalog, entity.id).map((child) => sceneNode(catalog, child, depth + 1)),
     } : {}),
