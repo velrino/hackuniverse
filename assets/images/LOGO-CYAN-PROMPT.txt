@@ -1,0 +1,4 @@
+Generator: built-in imagegen
+Approved cyan variant of the galaxy mark.
+
+Precise recolor of this approved galaxy logo. Change ONLY the gold/amber metallic palette to luminous CYAN metal matching a sci-fi HUD, centered around #42E8F4 and #00DFFF, with icy pale-cyan/silver highlights and deeper teal shadows. Preserve the exact silhouette, line thicknesses and lengths, tilted spiral arms, central star, every small star and sphere, existing proportions, bevels, surface details, composition and transparent alpha background. Keep the same polished sculptural 3D metallic finish; recolor all gold parts consistently to cyan with no remaining gold/orange. Do not redesign, add or remove any element. No text, no new glow cloud, no backdrop, no black rectangle, no checkerboard. Clean transparent edges, same complete emblem and margins.
