@@ -1,3 +1,4 @@
+import { UIProvider } from "@velrino/ui/provider";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import localFont from "next/font/local";
@@ -40,9 +41,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body className="antialiased">
         <Suspense fallback={null}>
           <I18nProvider initialLocale={locale}>
-            <ApplicationIntro>
-              <ApplicationShell>{children}</ApplicationShell>
-            </ApplicationIntro>
+            <UIProvider appearance="sci-fi">
+              <ApplicationIntro>
+                <ApplicationShell>{children}</ApplicationShell>
+              </ApplicationIntro>
+            </UIProvider>
           </I18nProvider>
         </Suspense>
       </body>

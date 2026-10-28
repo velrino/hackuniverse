@@ -1,20 +1,20 @@
 # HackUniverse web
 
-Next.js App Router, React, TypeScript and Tailwind CSS, with shadcn/ui Button and Dialog primitives. `/` is an immersive, full-viewport 3D universe demo with floating controls; `/example` retains the translated input example. All routes share the URL-driven language contract. Account-backed catalog persistence, the production universe and the account dashboard remain planned work.
+Next.js App Router, React, TypeScript and Tailwind CSS, with shared Velrino UI primitives. `/` is an immersive, full-viewport 3D universe demo with floating controls; `/example` retains the translated input example. All routes share the URL-driven language contract. Account-backed catalog persistence, the production universe and the account dashboard remain planned work.
 
 The approved transparent logo is stored at `../assets/images/logo.png`, served from `public/brand/logo.png`, and displayed in the shared header. App Router serves the generated `src/app/favicon.ico` and `src/app/icon.png` automatically.
 
 ## Visual system
 
-The interface uses a cyan science-fiction HUD theme. `src/styles/hud.css` owns the `--hud-*` tokens, their shadcn color mappings and shared HUD styles; `src/app/globals.css` handles Tailwind integration. Use `HudPanel` from `@/components/ui/hud-panel` for reusable cut-corner frames, plus the shared `hud-button`, `hud-option`, `hud-input`, `hud-title` and `hud-kicker` styles. Decorative layers are clipped; content and focus rings are not. The approved cyan logo shares this palette; its proportions and metallic artwork stay intact.
+The interface uses a cyan science-fiction HUD theme. `src/styles/hud.css` owns the application `--hud-*` tokens and maps them to `--vui-*`; `src/app/globals.css` imports the compiled package styles. Barlow and the approved cyan logo remain application assets.
 
-Open `/design` for the live defaults and interactive component previews. Barlow is bundled locally with its OFL license. The [visual reference guide](../docs/DESIGN-SYSTEM.md) records how the seven reference images informed the system.
+The reusable implementations live in [Velrino UI](https://github.com/velrino/velrino-ui), pinned to its compiled `v0.0.1` GitHub release asset. `src/components/ui/<component>/index.ts` preserves application import paths through thin package exports. Use `Panel` for content grouping and `Dialog` for modal behavior. Standard surfaces are the package default; the application opts into chamfered frames once through `UIProvider appearance="sci-fi"`. Decorative layers are clipped; content and focus rings are not.
 
-The catalog defaults to Single page with smooth section anchors and offers Tabs for one section at a time. Both modes share the same mounted examples, preserving input across presentation and language changes. Section fragments remain usable in either mode, and the tab strip scrolls horizontally on small screens.
+Open `/design` for all 15 interactive catalog sections, including buttons, panels, inputs, dialogs, tabs, accordion, dropdown menus, sheets, sliders, links, typewriter text and loading. Import application primitives rather than showcase internals into product modules. See the [visual reference guide](../docs/DESIGN-SYSTEM.md) for the application's design direction.
 
-Every shared UI component has its own folder under `src/components/ui/`, with a public `index.ts` and its implementation. Keep component-specific styles and meaningful types/hooks there as they grow. Application imports use `@/components/ui/button`, `@/components/ui/dialog`, and the other public entries. The Dialog primitive owns the default cyan HUD frame and enabled buttons use a pointer cursor globally.
+Single page and Tabs share mounted examples, preserving input across presentation and language changes. Section fragments remain usable in either mode, and the tab strip scrolls horizontally on small screens. The fixed application header supplies its measured anchor offset.
 
-The design module owns adapters, state controllers, pure UI, feature composition and message catalogs. Its host bridge supplies localization and application components; core module code does not import Next.js or the concrete global language picker. The route mounts the public host entry.
+The package owns the framework-independent gallery, its typed dictionaries and behavior. `src/modules/design-system/host` supplies the application's localization, brand logo and language picker; the route mounts that host. Routing, first-visit intro, provider adapters, scene state and analytics stay in this application. See the package's [adoption guide](https://github.com/velrino/velrino-ui/blob/main/docs/adoption.md) for styling and dependency updates.
 
 ## Universe home
 

@@ -1,2 +1,1 @@
-export { DesignSystemRoot } from "./DesignSystemRoot";
-export type { DesignSystemAdapters, DesignSystemBrandLogoProps } from "./adapters/types";
+export { DesignSystemRoot, type DesignSystemAdapters, type DesignSystemBrandLogoProps } from "@velrino/ui/showcase";

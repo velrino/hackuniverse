@@ -1,6 +1,7 @@
 .application-shell--fixed-navigation {
   /* Match the initial two-row header until its actual height is measured. */
   --application-header-height: 7.8125rem;
+  --vui-anchor-offset: calc(var(--application-header-height) + 1.5rem);
   padding-block-start: var(--application-header-height);
 }
 

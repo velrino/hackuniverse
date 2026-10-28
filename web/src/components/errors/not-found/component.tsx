@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { HudPanel } from "@/components/ui/hud-panel";
+import { Panel } from "@/components/ui/panel";
 import "./not-found.css";
 
 export type NotFoundCopy = {
@@ -12,7 +12,7 @@ export type NotFoundCopy = {
 export function NotFoundPage({ copy, action }: { copy: NotFoundCopy; action: ReactNode }) {
   return (
     <main className="not-found-page" aria-labelledby="not-found-title">
-      <HudPanel as="div" className="not-found-panel">
+      <Panel as="div" className="not-found-panel">
         <div className="not-found-visual" aria-hidden="true">
           <span className="not-found-axis" />
           <p className="not-found-code">404</p>
@@ -23,7 +23,7 @@ export function NotFoundPage({ copy, action }: { copy: NotFoundCopy; action: Rea
           <p className="not-found-description">{copy.description}</p>
           <div className="not-found-action">{action}</div>
         </div>
-      </HudPanel>
+      </Panel>
     </main>
   );
 }
