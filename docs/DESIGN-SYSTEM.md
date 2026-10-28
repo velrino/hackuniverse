@@ -42,6 +42,8 @@ Use shared `TypewriterText` only for the current planet/star panel name and desc
 
 ## Implementation and local assets
 
+The `/design` catalog keeps its application header fixed, reserves its measured responsive height and offsets section anchors by that height plus 24 pixels.
+
 `/design` is the live component reference. Its previews use the same primitives and tokens as the application. Add future defaults to those shared components before documenting them here. The loading preview is a labeled simulation; real use supplies operation progress to the reusable full-screen loader.
 
 Shared components live in individual folders with a public `index.ts`; component-specific styles stay in that folder. Modules own consumer contracts in `adapters`, behavior in `hooks`, pure presentation in `ui`, and application integration in an explicit host entry. The route composes that host. All standard dialogs inherit the cyan chamfered frame from the shared Dialog primitive, and enabled buttons inherit a pointer cursor.

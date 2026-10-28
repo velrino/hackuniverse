@@ -1,0 +1,22 @@
+.application-shell--fixed-navigation {
+  /* Match the initial two-row header until its actual height is measured. */
+  --application-header-height: 7.8125rem;
+  padding-block-start: var(--application-header-height);
+}
+
+.application-shell--fixed-navigation > .application-shell__header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 40;
+}
+
+.application-shell--fixed-navigation .hud-anchor-target {
+  scroll-margin-block-start: calc(var(--application-header-height) + 1.5rem);
+}
+
+@media (min-width: 40rem) {
+  .application-shell--fixed-navigation {
+    --application-header-height: 4.8125rem;
+  }
+}
