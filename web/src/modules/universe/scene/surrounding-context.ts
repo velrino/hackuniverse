@@ -2,8 +2,8 @@ import * as THREE from "three";
 import type { SceneNode, UniverseSceneView } from "../domain/types";
 import { clusterPosition, clusterScale, previewScale, systemRadius } from "./layout";
 import {
-  createCloudHaze, createGalaxyVisual, createRoundPointMaterial,
-  updateCloudHaze, updateGalaxyVisual, type ClusterVisualResources,
+  createGalaxyVisual, createRoundPointMaterial,
+  updateGalaxyVisual, type ClusterVisualResources,
 } from "./cluster-visuals";
 
 type Similarity = { scale: number; offset: THREE.Vector3 };
@@ -41,7 +41,7 @@ function mappedGroup(parent: THREE.Group, name: string, mapping: Similarity) {
   return group;
 }
 
-function contextRadius(root: THREE.Group, motionPadding: number) {
+function contextRadius(root: THREE.Group) {
   root.updateMatrixWorld(true);
   const bounds = new THREE.Box3().setFromObject(root);
   if (bounds.isEmpty()) return 0;
@@ -59,7 +59,7 @@ function contextRadius(root: THREE.Group, motionPadding: number) {
     // Sprites turn toward the camera; enclose every billboard orientation.
     radius = Math.max(radius, center.length() + Math.max(scale.x, scale.y) * Math.SQRT1_2);
   });
-  return Number.isFinite(radius) ? radius * 1.03 + motionPadding : 0;
+  return Number.isFinite(radius) ? radius * 1.03 : 0;
 }
 
 /** Visual-only context; its caller owns geometry/material disposal and shared maps. */
@@ -71,7 +71,6 @@ export function createSurroundingContext(
   const root = new THREE.Group();
   root.name = "surrounding-context";
   const updates: ((elapsed: number) => void)[] = [];
-  let motionPadding = 0;
   const update = (time: number) => { for (const animate of updates) animate(time); };
   const anchor = view.anchor;
   if (!anchor) return { root, update, radius: 0 };
@@ -82,7 +81,6 @@ export function createSurroundingContext(
     ? systemRadius((anchor.children ?? []).filter((child) => child.kind === "planet").length)
     : clusterScale(view.nodes).radius;
   const galaxyIndex = chain.findLastIndex((node) => node.kind === "galaxy");
-  const cloudIndex = chain.findLastIndex((node) => node.kind === "cloud");
 
   if (galaxyIndex >= 0 && mappings[galaxyIndex]) {
     const node = chain[galaxyIndex];
@@ -92,23 +90,9 @@ export function createSurroundingContext(
     const visual = createGalaxyVisual(group, node.seed, extent, resources, elapsed);
     // PointsMaterial does not inherit an Object3D's scale for particle size.
     if (visual.dust.material instanceof THREE.PointsMaterial) visual.dust.material.size *= mapping.scale;
-    visual.core.material.opacity *= Math.min(1, radius / (extent * mapping.scale));
+    // Grouping glows give way to the actual contents at deeper zoom levels.
+    visual.core.visible = anchor.kind === "galaxy";
     updates.push((time) => updateGalaxyVisual(visual, node.seed, extent, time));
-  }
-
-  if (cloudIndex >= 0 && mappings[cloudIndex]) {
-    const node = chain[cloudIndex];
-    const mapping = mappings[cloudIndex]!;
-    const group = mappedGroup(root, "cloud-context", mapping);
-    const extent = clusterScale(node.children ?? []).radius / 1.1;
-    const haze = createCloudHaze(group, extent, node.color, resources);
-    const opacity = Math.min(1, radius / (extent * mapping.scale));
-    haze.primary.material.opacity *= opacity;
-    haze.secondary.material.opacity *= opacity;
-    // Enclose the full secondary-haze drift, not only its initial phase.
-    motionPadding = Math.max(motionPadding, extent * mapping.scale * 0.15);
-    updateCloudHaze(haze, node.seed, extent, elapsed);
-    updates.push((time) => updateCloudHaze(haze, node.seed, extent, time));
   }
 
   const candidates: Candidate[] = [];
@@ -146,5 +130,5 @@ export function createSurroundingContext(
     points.name = "surrounding-destinations";
     root.add(points);
   }
-  return { root, update, radius: contextRadius(root, motionPadding) };
+  return { root, update, radius: contextRadius(root) };
 }
