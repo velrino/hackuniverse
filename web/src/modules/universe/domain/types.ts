@@ -65,5 +65,7 @@ export type UniverseSceneView = {
   key: string;
   mode: "system" | "cluster" | "planet";
   nodes: SceneNode[];
+  anchor?: SceneNode;
+  ancestors?: readonly SceneNode[];
   starName?: string;
 };

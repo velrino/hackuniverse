@@ -38,6 +38,7 @@ test("an empty universe is valid and defaults navigation to its root", () => {
   assert.deepEqual(catalog.planets, []);
   assert.equal(getPlanetCount(catalog, input.rootId), 0);
   assert.deepEqual(getSceneView(catalog, input.rootId).nodes, []);
+  assert.deepEqual(getSceneView(catalog, input.rootId).ancestors, []);
 });
 
 test("URLless documents and tickets preserve identity, order and parent-system scenes", () => {
@@ -110,6 +111,75 @@ test("branching scene projections preserve ordering, empty groups and descendant
   assert.equal(getPlanetCount(catalog, { kind: "galaxy", id: "planet:third" }), 0);
   assert.equal(getPlanetCount(catalog, "missing"), 0);
   assert.deepEqual(getSceneView(catalog, { kind: "galaxy", id: "planet:third" }), { key: "missing", mode: "cluster", nodes: [] });
+});
+
+test("scene anchors preserve inspected group identity and reuse their projected children", () => {
+  const catalog = parseUniverseCatalog(document());
+  for (const id of [catalog.rootId, "galaxy:main", "cloud:main", "system:main", "ticket:42"]) {
+    const view = getSceneView(catalog, id);
+    const group = getEntity(catalog, id === "ticket:42" ? "system:main" : id);
+    assert.ok(group && view.anchor);
+    assert.equal(view.anchor.id, group.id);
+    assert.equal(view.anchor.kind, group.kind);
+    assert.equal(view.anchor.seed, group.seed);
+    assert.equal(view.anchor.count, 2);
+    assert.equal(view.nodes, view.anchor.children, "one projection owns the child array");
+  }
+  const universe = getSceneView(catalog, catalog.rootId);
+  const galaxy = getSceneView(catalog, "galaxy:main");
+  assert.deepEqual(galaxy.anchor, universe.nodes[0], "entering a galaxy preserves its complete scene identity");
+  assert.deepEqual(getSceneView(catalog, "ticket:42").anchor, getSceneView(catalog, "system:main").anchor);
+  assert.equal(getSceneView(catalog, "missing").anchor, undefined);
+  assert.equal(getSceneView(catalog, { kind: "galaxy", id: "ticket:42" }).anchor, undefined);
+  const empty = parseUniverseCatalog({ ...document(), entities: [document().entities[0]] });
+  const emptyView = getSceneView(empty, empty.rootId);
+  assert.equal(emptyView.nodes, emptyView.anchor?.children);
+  assert.deepEqual(emptyView.nodes, []);
+});
+
+test("scene ancestry shares one complete projected tree from root to inspected group", () => {
+  const catalog = parseUniverseCatalog(document());
+  const route = [catalog.rootId, "galaxy:main", "cloud:main", "system:main"];
+  for (const [index, id] of [...route, "ticket:42"].entries()) {
+    const view = getSceneView(catalog, id);
+    assert.ok(view.anchor && view.ancestors);
+    assert.deepEqual(view.ancestors.map(({ id }) => id), route.slice(0, Math.min(index, 3)));
+    const chain = [...view.ancestors, view.anchor];
+    for (const [position, node] of chain.entries()) {
+      const entity = getEntity(catalog, node.id);
+      assert.ok(entity);
+      assert.equal(node.kind, entity.kind);
+      assert.equal(node.seed, entity.seed);
+      assert.equal(node.count, 2);
+      if (position > 0) assert.equal(chain[position - 1].children?.find(({ id }) => id === node.id), node);
+    }
+    assert.equal(view.anchor.children, view.nodes);
+    assert.deepEqual(view.ancestors[0] ?? view.anchor, getSceneView(catalog, catalog.rootId).anchor);
+  }
+  assert.equal(getSceneView(catalog, "missing").ancestors, undefined);
+  assert.equal(getSceneView(catalog, { kind: "cloud", id: "ticket:42" }).ancestors, undefined);
+  const empty = parseUniverseCatalog({ ...document(), entities: document().entities.filter(({ kind }) => kind !== "planet") });
+  const system = getSceneView(empty, "system:main");
+  assert.equal(system.nodes, system.anchor?.children);
+  assert.deepEqual(system.nodes, []);
+  assert.deepEqual(system.ancestors?.map(({ count }) => count), [0, 0, 0]);
+  assert.deepEqual(getSceneView(empty, empty.rootId).ancestors, []);
+});
+
+test("scene ancestry remains local to each catalog and projection call", () => {
+  const input = document();
+  const first = parseUniverseCatalog(input);
+  const second = parseUniverseCatalog({ ...input, entities: input.entities.filter(({ id }) => id !== "ticket:42") });
+  const original = getSceneView(first, "7F:Document_Alpha.v1");
+  const other = getSceneView(second, "7F:Document_Alpha.v1");
+  assert.deepEqual(original.ancestors?.map(({ count }) => count), [2, 2, 2]);
+  assert.deepEqual(other.ancestors?.map(({ count }) => count), [1, 1, 1]);
+  assert.notEqual(original.ancestors?.[0], other.ancestors?.[0]);
+  const sameCatalog = getSceneView(first, "7F:Document_Alpha.v1");
+  assert.deepEqual(original, sameCatalog);
+  assert.notEqual(original.ancestors?.[0], sameCatalog.ancestors?.[0]);
+  original.ancestors![0].children = [];
+  assert.deepEqual(getSceneView(first, "7F:Document_Alpha.v1"), sameCatalog);
 });
 
 test("projection counts and scene outputs never leak between catalogs or calls", () => {
