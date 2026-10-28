@@ -63,7 +63,7 @@
   color: var(--hud-text);
 }
 
-.hud-panel:where(:not([data-slot="dialog-content"])) {
+.hud-panel:not([data-slot="dialog-content"]) {
   position: relative;
 }
 
