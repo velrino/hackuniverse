@@ -1,0 +1,786 @@
+{
+  "schemaVersion": 1,
+  "mode": "demo",
+  "rootId": "universe-demo-atlas",
+  "initialSystemId": "system-software",
+  "hierarchy": [
+    {
+      "id": "universe-demo-atlas",
+      "kind": "universe",
+      "parentId": null,
+      "name": "Demo Atlas",
+      "description": "A synthetic constellation of fifty website discoveries, arranged for exploration.",
+      "seed": 3983766564
+    },
+    {
+      "id": "galaxy-discovery",
+      "kind": "galaxy",
+      "parentId": "universe-demo-atlas",
+      "name": "Discovery Reach",
+      "description": "Explore living worlds, distant skies, and the stories people tell.",
+      "seed": 1342884558
+    },
+    {
+      "id": "galaxy-creation",
+      "kind": "galaxy",
+      "parentId": "universe-demo-atlas",
+      "name": "Creation Expanse",
+      "description": "Find tools, ideas, and everyday discoveries for making something new.",
+      "seed": 3882586477
+    },
+    {
+      "id": "cloud-living-worlds",
+      "kind": "cloud",
+      "parentId": "galaxy-discovery",
+      "name": "Living Worlds",
+      "description": "Ecology, oceans, and astronomy share one field of curiosity.",
+      "seed": 3571434318
+    },
+    {
+      "id": "cloud-human-stories",
+      "kind": "cloud",
+      "parentId": "galaxy-discovery",
+      "name": "Human Stories",
+      "description": "Archives and creative practice connect the past with new perspectives.",
+      "seed": 3046394246
+    },
+    {
+      "id": "cloud-digital-craft",
+      "kind": "cloud",
+      "parentId": "galaxy-creation",
+      "name": "Digital Craft",
+      "description": "Software, design, and open learning become useful building materials.",
+      "seed": 2400706368
+    },
+    {
+      "id": "cloud-everyday-horizons",
+      "kind": "cloud",
+      "parentId": "galaxy-creation",
+      "name": "Everyday Horizons",
+      "description": "Explore places and thoughtful habits through small daily discoveries.",
+      "seed": 1700058361
+    },
+    {
+      "id": "system-ecology",
+      "kind": "system",
+      "parentId": "cloud-living-worlds",
+      "name": "Ecology",
+      "description": "Field guides and systems for understanding the living planet.",
+      "seed": 3000762621
+    },
+    {
+      "id": "system-oceans",
+      "kind": "system",
+      "parentId": "cloud-living-worlds",
+      "name": "Ocean Signals",
+      "description": "Follow marine habitats and the rhythms of coastal environments.",
+      "seed": 3417934172
+    },
+    {
+      "id": "system-astronomy",
+      "kind": "system",
+      "parentId": "cloud-living-worlds",
+      "name": "Distant Skies",
+      "description": "A small observatory of orbits, moonlight, and cosmic questions.",
+      "seed": 3741509159
+    },
+    {
+      "id": "system-history",
+      "kind": "system",
+      "parentId": "cloud-human-stories",
+      "name": "Shared Histories",
+      "description": "Meet archives, artifacts, and the maps that preserve collective memory.",
+      "seed": 3871389661
+    },
+    {
+      "id": "system-arts",
+      "kind": "system",
+      "parentId": "cloud-human-stories",
+      "name": "Creative Practice",
+      "description": "Discover color, sound, movement, writing, and performance.",
+      "seed": 262634481
+    },
+    {
+      "id": "system-software",
+      "kind": "system",
+      "parentId": "cloud-digital-craft",
+      "name": "Web Intelligence",
+      "description": "Explore crawling, extraction, indexing, and searchable website collections.",
+      "seed": 254744170
+    },
+    {
+      "id": "system-design",
+      "kind": "system",
+      "parentId": "cloud-digital-craft",
+      "name": "Interface Observatory",
+      "description": "Study patterns, typography, accessibility, and useful forms.",
+      "seed": 3389755793
+    },
+    {
+      "id": "system-learning",
+      "kind": "system",
+      "parentId": "cloud-digital-craft",
+      "name": "Open Learning",
+      "description": "Collect explanations, questions, research, and working notes.",
+      "seed": 187783689
+    },
+    {
+      "id": "system-travel",
+      "kind": "system",
+      "parentId": "cloud-everyday-horizons",
+      "name": "Places & Paths",
+      "description": "Look at cities, trails, and slower ways to discover a place.",
+      "seed": 3057066887
+    },
+    {
+      "id": "system-wellbeing",
+      "kind": "system",
+      "parentId": "cloud-everyday-horizons",
+      "name": "Everyday Balance",
+      "description": "Explore gentle routines, movement, food, and reflection.",
+      "seed": 1423029542
+    }
+  ],
+  "searchBatches": [
+    {
+      "id": "demo-search-ecology",
+      "systemId": "system-ecology",
+      "query": "synthetic ecology field guides",
+      "mapping": [
+        {
+          "planetId": "planet-canopy-atlas",
+          "seed": 313609228,
+          "position": 1
+        },
+        {
+          "planetId": "planet-seed-and-soil",
+          "seed": 858149977,
+          "position": 2
+        },
+        {
+          "planetId": "planet-wildlife-notebook",
+          "seed": 712416298,
+          "position": 3
+        },
+        {
+          "planetId": "planet-field-station",
+          "seed": 2514746863,
+          "position": 4
+        },
+        {
+          "planetId": "planet-carbon-commons",
+          "seed": 2012000504,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://canopy-atlas.example/",
+              "title": "Canopy Atlas",
+              "description": "A fictional field guide to forest layers, tree communities, and biodiversity."
+            },
+            {
+              "url": "https://seed-and-soil.example/",
+              "title": "Seed & Soil",
+              "description": "Synthetic notes on seed saving, soil structure, and community growing."
+            },
+            {
+              "url": "https://wildlife-notebook.example/",
+              "title": "Wildlife Notebook",
+              "description": "An invented observation journal for habitats, species, and seasonal change."
+            },
+            {
+              "url": "https://field-station.example/",
+              "title": "Field Station",
+              "description": "A fictional collection of field methods for curious amateur naturalists."
+            },
+            {
+              "url": "https://carbon-commons.example/",
+              "title": "Carbon Commons",
+              "description": "An illustrative library explaining ecosystems and the carbon cycle."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-oceans",
+      "systemId": "system-oceans",
+      "query": "synthetic ocean discovery resources",
+      "mapping": [
+        {
+          "planetId": "planet-tide-observatory",
+          "seed": 39198355,
+          "position": 1
+        },
+        {
+          "planetId": "planet-reef-library",
+          "seed": 2740682490,
+          "position": 2
+        },
+        {
+          "planetId": "planet-blue-current",
+          "seed": 3914791498,
+          "position": 3
+        },
+        {
+          "planetId": "planet-deepwater-journal",
+          "seed": 1161179657,
+          "position": 4
+        },
+        {
+          "planetId": "planet-coastal-signals",
+          "seed": 2761374445,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://tide-observatory.example/",
+              "title": "Tide Observatory",
+              "description": "A fictional visual notebook about tides, estuaries, and shoreline patterns."
+            },
+            {
+              "url": "https://reef-library.example/",
+              "title": "Reef Library",
+              "description": "Synthetic guides to coral habitats and the communities living around them."
+            },
+            {
+              "url": "https://blue-current.example/",
+              "title": "Blue Current",
+              "description": "An invented introduction to ocean currents and their global connections."
+            },
+            {
+              "url": "https://deepwater-journal.example/",
+              "title": "Deepwater Journal",
+              "description": "Illustrative stories about deep-sea exploration and marine environments."
+            },
+            {
+              "url": "https://coastal-signals.example/",
+              "title": "Coastal Signals",
+              "description": "A fictional archive of coastal landscapes, weather, and observation methods."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-astronomy",
+      "systemId": "system-astronomy",
+      "query": "synthetic astronomy learning websites",
+      "mapping": [
+        {
+          "planetId": "planet-orbit-almanac",
+          "seed": 2760730316,
+          "position": 1
+        },
+        {
+          "planetId": "planet-night-sky-notes",
+          "seed": 1614921188,
+          "position": 2
+        },
+        {
+          "planetId": "planet-photon-observatory",
+          "seed": 2323408109,
+          "position": 3
+        },
+        {
+          "planetId": "planet-lunar-field-guide",
+          "seed": 2124724642,
+          "position": 4
+        },
+        {
+          "planetId": "planet-cosmic-archive",
+          "seed": 2207834095,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://orbit-almanac.example/",
+              "title": "Orbit Almanac",
+              "description": "An invented guide to orbital motion, celestial mechanics, and observation."
+            },
+            {
+              "url": "https://night-sky-notes.example/",
+              "title": "Night Sky Notes",
+              "description": "A fictional starter notebook for identifying constellations and sky events."
+            },
+            {
+              "url": "https://photon-observatory.example/",
+              "title": "Photon Observatory",
+              "description": "Synthetic lessons connecting light, telescopes, and distant objects."
+            },
+            {
+              "url": "https://lunar-field-guide.example/",
+              "title": "Lunar Field Guide",
+              "description": "An illustrative atlas of lunar phases, terrain, and observing techniques."
+            },
+            {
+              "url": "https://cosmic-archive.example/",
+              "title": "Cosmic Archive",
+              "description": "A fictional collection of stories about stars, galaxies, and deep time."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-history",
+      "systemId": "system-history",
+      "query": "synthetic history archive examples",
+      "mapping": [
+        {
+          "planetId": "planet-timewalk-archive",
+          "seed": 3751026233,
+          "position": 1
+        },
+        {
+          "planetId": "planet-artifact-almanac",
+          "seed": 2092210834,
+          "position": 2
+        },
+        {
+          "planetId": "planet-maproom-stories",
+          "seed": 3943094131,
+          "position": 3
+        },
+        {
+          "planetId": "planet-common-past",
+          "seed": 1366549114,
+          "position": 4
+        },
+        {
+          "planetId": "planet-chronicle-studio",
+          "seed": 260891420,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://timewalk-archive.example/",
+              "title": "Timewalk Archive",
+              "description": "An invented archive of timelines and everyday historical perspectives."
+            },
+            {
+              "url": "https://artifact-almanac.example/",
+              "title": "Artifact Almanac",
+              "description": "A fictional cabinet of objects and the contexts that give them meaning."
+            },
+            {
+              "url": "https://maproom-stories.example/",
+              "title": "Maproom Stories",
+              "description": "Synthetic explorations of historical maps, routes, and changing boundaries."
+            },
+            {
+              "url": "https://common-past.example/",
+              "title": "Common Past",
+              "description": "An illustrative collection of community memory and local-history methods."
+            },
+            {
+              "url": "https://chronicle-studio.example/",
+              "title": "Chronicle Studio",
+              "description": "A fictional workshop for assembling accessible historical narratives."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-arts",
+      "systemId": "system-arts",
+      "query": "synthetic creative arts resource sites",
+      "mapping": [
+        {
+          "planetId": "planet-color-field",
+          "seed": 4114248364,
+          "position": 1
+        },
+        {
+          "planetId": "planet-sound-cartography",
+          "seed": 986195084,
+          "position": 2
+        },
+        {
+          "planetId": "planet-motion-notes",
+          "seed": 4021627948,
+          "position": 3
+        },
+        {
+          "planetId": "planet-wordsmith-library",
+          "seed": 4030379839,
+          "position": 4
+        },
+        {
+          "planetId": "planet-open-stage",
+          "seed": 546356853,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://color-field.example/",
+              "title": "Color Field",
+              "description": "An invented visual notebook about color relationships and artistic process."
+            },
+            {
+              "url": "https://sound-cartography.example/",
+              "title": "Sound Cartography",
+              "description": "A fictional collection mapping soundscapes, listening, and musical ideas."
+            },
+            {
+              "url": "https://motion-notes.example/",
+              "title": "Motion Notes",
+              "description": "Synthetic studies of gesture, movement, and visual storytelling."
+            },
+            {
+              "url": "https://wordsmith-library.example/",
+              "title": "Wordsmith Library",
+              "description": "An illustrative shelf of writing prompts and narrative techniques."
+            },
+            {
+              "url": "https://open-stage.example/",
+              "title": "Open Stage",
+              "description": "A fictional guide to collaborative performance and small creative experiments."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-software",
+      "systemId": "system-software",
+      "query": "firecrawl web scraping",
+      "mapping": [
+        {
+          "planetId": "planet-code-harbor",
+          "seed": 1658161104,
+          "position": 1
+        },
+        {
+          "planetId": "planet-api-fieldbook",
+          "seed": 2493380798,
+          "position": 2
+        },
+        {
+          "planetId": "planet-runtime-notes",
+          "seed": 368331682,
+          "position": 3
+        },
+        {
+          "planetId": "planet-buildroom",
+          "seed": 2558747569,
+          "position": 4
+        },
+        {
+          "planetId": "planet-version-atlas",
+          "seed": 2098156864,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://code-harbor.example/",
+              "title": "Firecrawl Field Lab (Fictional)",
+              "description": "A fictional Firecrawl-inspired workspace for exploring web scraping and structured extraction. This reserved demo site does not call a provider."
+            },
+            {
+              "url": "https://api-fieldbook.example/",
+              "title": "Crawl API Fieldbook",
+              "description": "A fictional field guide to bounded website crawls, URL discovery, and dependable extraction contracts."
+            },
+            {
+              "url": "https://runtime-notes.example/",
+              "title": "Extraction Runtime Notes",
+              "description": "Synthetic notes on parsing page content, handling crawl failures, and preserving source metadata."
+            },
+            {
+              "url": "https://buildroom.example/",
+              "title": "Index Builder Lab",
+              "description": "An illustrative workshop about turning discovered pages into small, searchable website indexes."
+            },
+            {
+              "url": "https://version-atlas.example/",
+              "title": "Web Snapshot Atlas",
+              "description": "A fictional guide to content snapshots, crawl provenance, and changes across website refreshes."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-design",
+      "systemId": "system-design",
+      "query": "synthetic interface design learning resources",
+      "mapping": [
+        {
+          "planetId": "planet-pattern-observatory",
+          "seed": 1726307833,
+          "position": 1
+        },
+        {
+          "planetId": "planet-interface-field-guide",
+          "seed": 2681792077,
+          "position": 2
+        },
+        {
+          "planetId": "planet-type-workshop",
+          "seed": 1939690492,
+          "position": 3
+        },
+        {
+          "planetId": "planet-form-and-function",
+          "seed": 317227211,
+          "position": 4
+        },
+        {
+          "planetId": "planet-accessible-by-design",
+          "seed": 3203445555,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://pattern-observatory.example/",
+              "title": "Pattern Observatory",
+              "description": "An invented catalog of interaction patterns and their practical tradeoffs."
+            },
+            {
+              "url": "https://interface-field-guide.example/",
+              "title": "Interface Field Guide",
+              "description": "A fictional handbook for readable, responsive, and helpful interfaces."
+            },
+            {
+              "url": "https://type-workshop.example/",
+              "title": "Type Workshop",
+              "description": "Synthetic studies of typography, hierarchy, and expressive lettering."
+            },
+            {
+              "url": "https://form-and-function.example/",
+              "title": "Form & Function",
+              "description": "An illustrative notebook connecting visual structure with user intent."
+            },
+            {
+              "url": "https://accessible-by-design.example/",
+              "title": "Accessible by Design",
+              "description": "A fictional resource about inclusive controls, navigation, and feedback."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-learning",
+      "systemId": "system-learning",
+      "query": "synthetic open learning knowledge websites",
+      "mapping": [
+        {
+          "planetId": "planet-learning-commons",
+          "seed": 3689408707,
+          "position": 1
+        },
+        {
+          "planetId": "planet-research-shelf",
+          "seed": 1414677198,
+          "position": 2
+        },
+        {
+          "planetId": "planet-concept-atlas",
+          "seed": 4228980956,
+          "position": 3
+        },
+        {
+          "planetId": "planet-question-garden",
+          "seed": 4170463196,
+          "position": 4
+        },
+        {
+          "planetId": "planet-open-notebook",
+          "seed": 1229673640,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://learning-commons.example/",
+              "title": "Learning Commons",
+              "description": "An invented learning hub organized around approachable explanations."
+            },
+            {
+              "url": "https://research-shelf.example/",
+              "title": "Research Shelf",
+              "description": "A fictional collection of reading methods and research organization ideas."
+            },
+            {
+              "url": "https://concept-atlas.example/",
+              "title": "Concept Atlas",
+              "description": "Synthetic maps connecting scientific, technical, and creative concepts."
+            },
+            {
+              "url": "https://question-garden.example/",
+              "title": "Question Garden",
+              "description": "An illustrative space for turning questions into small learning projects."
+            },
+            {
+              "url": "https://open-notebook.example/",
+              "title": "Open Notebook",
+              "description": "A fictional guide to clear working notes and shared learning practices."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-travel",
+      "systemId": "system-travel",
+      "query": "synthetic travel discovery websites",
+      "mapping": [
+        {
+          "planetId": "planet-trail-ledger",
+          "seed": 599708120,
+          "position": 1
+        },
+        {
+          "planetId": "planet-city-sketchbook",
+          "seed": 310058129,
+          "position": 2
+        },
+        {
+          "planetId": "planet-journey-compass",
+          "seed": 1692610471,
+          "position": 3
+        },
+        {
+          "planetId": "planet-quiet-routes",
+          "seed": 1765579931,
+          "position": 4
+        },
+        {
+          "planetId": "planet-local-horizons",
+          "seed": 2304576252,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://trail-ledger.example/",
+              "title": "Trail Ledger",
+              "description": "An invented journal of walking routes and landscape observation."
+            },
+            {
+              "url": "https://city-sketchbook.example/",
+              "title": "City Sketchbook",
+              "description": "A fictional collection of urban details, architecture, and neighborhood walks."
+            },
+            {
+              "url": "https://journey-compass.example/",
+              "title": "Journey Compass",
+              "description": "Synthetic ideas for planning thoughtful trips and documenting discoveries."
+            },
+            {
+              "url": "https://quiet-routes.example/",
+              "title": "Quiet Routes",
+              "description": "An illustrative guide to slower journeys and less hurried exploration."
+            },
+            {
+              "url": "https://local-horizons.example/",
+              "title": "Local Horizons",
+              "description": "A fictional notebook for noticing interesting places close to home."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-search-wellbeing",
+      "systemId": "system-wellbeing",
+      "query": "synthetic everyday wellbeing resource examples",
+      "mapping": [
+        {
+          "planetId": "planet-restful-rhythm",
+          "seed": 2126863334,
+          "position": 1
+        },
+        {
+          "planetId": "planet-movement-fieldbook",
+          "seed": 1216410251,
+          "position": 2
+        },
+        {
+          "planetId": "planet-everyday-balance",
+          "seed": 4226124264,
+          "position": 3
+        },
+        {
+          "planetId": "planet-kitchen-almanac",
+          "seed": 4050484348,
+          "position": 4
+        },
+        {
+          "planetId": "planet-mindful-minutes",
+          "seed": 3575807381,
+          "position": 5
+        }
+      ],
+      "response": {
+        "success": true,
+        "data": {
+          "web": [
+            {
+              "url": "https://restful-rhythm.example/",
+              "title": "Restful Rhythm",
+              "description": "An invented journal about rest, daily routines, and unhurried moments."
+            },
+            {
+              "url": "https://movement-fieldbook.example/",
+              "title": "Movement Fieldbook",
+              "description": "A fictional notebook of approachable movement and outdoor activity ideas."
+            },
+            {
+              "url": "https://everyday-balance.example/",
+              "title": "Everyday Balance",
+              "description": "Synthetic reflections on making room for work, play, and recovery."
+            },
+            {
+              "url": "https://kitchen-almanac.example/",
+              "title": "Kitchen Almanac",
+              "description": "An illustrative collection of cooking ideas and seasonal kitchen experiments."
+            },
+            {
+              "url": "https://mindful-minutes.example/",
+              "title": "Mindful Minutes",
+              "description": "A fictional collection of short attention and reflection exercises."
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
