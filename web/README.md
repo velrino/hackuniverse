@@ -16,11 +16,32 @@ The design module owns adapters, state controllers, pure UI, feature composition
 
 ## Universe home
 
-The home is a minimal, mobile-first 3D map with 408 planets: 400 fictional websites plus eight Solar System objects, organized into 41 systems, 13 stellar clouds, five galaxies and a universe. The original systems contain 5–20 planets; the Solar System contains eight. Existing fictional seeds retain their 100-color palette and surface profiles; Mercury adds one curated gray exception. Earth is the initial target. Planet selection zooms the camera while preserving the whole system. One hamburger menu contains the searchable atlas, view options, flight controls and language settings; the other pages keep their normal application header. The atlas searches the whole catalog and displays 24 results per page.
+The home is a minimal, mobile-first 3D map with 458 planets across 51 systems, 13 stellar clouds and five galaxies: 400 fictional websites, eight Solar System planets and 50 illustrative bodies around ten real-named neighbors. Solar Neighborhood membership and spacing are illustrative. The original colors/seeds remain stable, and Earth is the initial target. Planet selection preserves the system; central-star clicks or keyboard labels frame the intact system and open star details. One hamburger contains the searchable atlas, view options, flight controls and language settings. The atlas displays 24 results per page.
 
 Edit the [canonical demo JSON](src/modules/universe/data/demo-universe.json) to change its content and groupings. Counts come from that data. `DemoUniverseHost` selects the bundled catalog; reusable `UniverseHost` accepts an already validated catalog. Import canonical types and `parseUniverseCatalog` from `@/modules/universe/domain`, and keep supplier normalization in separate adapters. URLless objects and empty universes are supported. [The data guide](../docs/UNIVERSE-DATA.md) owns the full contract and adapter examples; [the explorer guide](../docs/UNIVERSE-EXPLORER.md) documents camera ownership, optional system-bound flight, performance budgets and validation limits. The Space Jump presentation is temporarily disabled. The [starter spacecraft credits](../docs/ASSET-CREDITS.md) identify its creator and CC BY 4.0 license.
 
 `DemoUniverseHost` also supplies the guided Earth-to-universe tour as presentation configuration. It waits for scene readiness and the global intro, runs automatically once, and can be replayed from View. Its `hackuniverse.demo-tour.v1.seen` flag is independent of the welcome flag below; interaction and reduced-motion rules are defined in the explorer guide.
+
+All bundled entities explicitly carry optional `type: "demo"`; catalog `mode` never assigns that classification. A hide-demo feature is not implemented. The [data guide](../docs/UNIVERSE-DATA.md) owns classification, star metadata and future filtering rules. Detailed system previews require a projected extent of at least 28 pixels and are limited to four at scene widths below 640 pixels, eight otherwise; other systems remain light proxies.
+
+## Typewriter text
+
+Use the shared span inside the caller's heading or paragraph:
+
+```tsx
+import { TypewriterText } from "@/components/ui/typewriter-text";
+
+export function ObjectCopy({ id, name, description }: { id: string; name: string; description: string }) {
+  return <>
+    <h2><TypewriterText text={name} replayKey={id} /></h2>
+    <p><TypewriterText text={description} replayKey={id} /></p>
+  </>;
+}
+```
+
+`text` is required; optional props are `className`, `delayMs` (25), `maxDurationMs` (3500), `replayKey` and `enabled` (true). A text or replay-key change restarts the writing; `enabled={false}` shows the full text. Elapsed-time updates are batched about every 32 ms, with timer cleanup on replacement/unmount. Unicode graphemes, reduced motion and a full-text layout reserve keep the effect readable and stable. Screen readers receive the full text once; visual typing is hidden from them. There is no loop, deletion, shuffle, cursor or speech output.
+
+The current application uses this effect only for planet/star panel names and descriptions. Facts, demo markers, source links and actions remain immediate. Keep these same limits when reusing the component; [the visual guide](../docs/DESIGN-SYSTEM.md#detail-text-reveal) records the interaction standard.
 
 ## First-visit welcome
 

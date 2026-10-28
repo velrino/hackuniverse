@@ -20,11 +20,11 @@ Use these shared components and tokens when building new pages. The [visual refe
 
 ## Universe demo
 
-The home provides a mobile-first, full-screen 3D demo with [408 planets](web/src/modules/universe/data/demo-universe.json): 400 fictional websites plus the eight familiar Solar System planets, across 41 systems, 13 stellar clouds and five galaxies. The original systems contain 5–20 planets; the Solar System adds eight. Fictional planets retain their stable 100-color palette; the Solar System adds one curated gray Mercury preset.
+The home provides a mobile-first, full-screen 3D demo with [458 planets and 528 total entities](web/src/modules/universe/data/demo-universe.json): 400 fictional websites, eight familiar Solar System planets and 50 illustrative bodies around ten real-named neighbors. Its hierarchy contains 51 systems, 13 stellar clouds and five galaxies. The Solar Neighborhood is a visual grouping, not a measured distance map or confirmed exoplanet inventory. Existing IDs and visual seeds remain stable.
 
-Start on Earth, watch the first-visit tour widen to the universe, or replay it from View. Selecting a planet preserves its whole system; one hamburger opens the atlas and options. Optional third-person flight stays inside the active system. The Space Jump cutscene remains temporarily disabled. Tour timing, cancellation and accessibility are documented in the explorer guide.
+Start on Earth, watch the first-visit tour widen to the universe, or replay it from View. Selecting a planet preserves its whole system; selecting a central star frames that system and opens its details. Planet/star names and descriptions use the shared accessible writing effect while facts and actions appear immediately. One hamburger opens the atlas and options. Optional third-person flight stays inside the active system, and the Space Jump cutscene remains temporarily disabled.
 
-The default JSON is already canonical. The reusable host also accepts validated catalogs with optional references, URLless objects and an empty root. See the [explorer guide](docs/UNIVERSE-EXPLORER.md), [catalog contract and adapter examples](docs/UNIVERSE-DATA.md) and [spacecraft credits](docs/ASSET-CREDITS.md). This synthetic demo does not create real account content or make provider requests.
+The default JSON is canonical, and every bundled entity is explicitly marked `type: "demo"`. This optional object classification is independent of catalog mode; a future hide-demo filter is not implemented. The reusable host also accepts validated catalogs with optional references, URLless objects and an empty root. See the [explorer guide](docs/UNIVERSE-EXPLORER.md), [catalog contract and adapter examples](docs/UNIVERSE-DATA.md) and [spacecraft credits](docs/ASSET-CREDITS.md). This demo does not create real account content or make provider requests.
 
 ## Run the web app
 
