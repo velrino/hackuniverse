@@ -1,7 +1,8 @@
-import type { UniverseSceneView } from "../domain/types";
+import type { NavigationTarget, UniverseSceneView } from "../domain/types";
 import type { ShipFlightInput } from "./flight";
 
 export type UniverseFlightStatus = "idle" | "loading" | "ready" | "error";
+export type UniverseTourCameraStep = { token: string; target: NavigationTarget };
 
 export type UniverseSceneProps = {
   view: UniverseSceneView;
@@ -24,6 +25,9 @@ export type UniverseSceneProps = {
   hasParentView?: boolean;
   onScaleOut?: () => void;
   onScaleIn?: (id: string) => void;
+  tourStep?: UniverseTourCameraStep | null;
+  onTourArrive?: (token: string) => void;
+  onInteraction?: () => void;
   onSelect: (id: string) => void;
   onReady: () => void;
   onUnavailable: () => void;

@@ -4,19 +4,20 @@ import type { SceneNode, UniverseSceneView } from "../domain/types";
 import { getPlanetAppearance, type PlanetAppearance } from "../domain/planet-appearance";
 import { glowTexture, planetTexture, seededRandom, starSurfaceTexture, starCoronaTexture, nebulaTexture } from "./textures";
 import { createShipPilot, type ShipFlightInput } from "./flight";
-import type { UniverseFlightStatus } from "./types";
+import type { UniverseFlightStatus, UniverseTourCameraStep } from "./types";
 import { createSemanticZoomGate } from "./semantic-zoom";
 import { clusterPosition, clusterScale, nodeGeometrySignature, orbitalAngle, orbitalSpeed, planetRadius, previewScale, systemOrbit, systemRadius } from "./layout";
 import { createSpatialBackground } from "./background";
+import { createDestinationHover } from "./destination-hover";
 
-type Callbacks = { onSelect: (id: string) => void; onReady: () => void; onUnavailable: () => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void };
+type Callbacks = { onSelect: (id: string) => void; onReady: () => void; onUnavailable: () => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onInteraction: () => void };
 type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[]; dust?: THREE.Points; core?: THREE.Sprite; haze?: { primary: THREE.Sprite; secondary: THREE.Sprite } };
 type Label = { element: HTMLElement; body?: Body; position?: THREE.Vector3; width: number };
 type CameraPose = { position: THREE.Vector3; target: THREE.Vector3 };
 type CameraTween = { from: CameraPose; to: CameraPose; started: number; duration: number; fromFraming: number; toFraming: number; onComplete?: () => void };
 type FlightMapPose = CameraPose & { framing: number; focusPosition: THREE.Vector3 | null };
 type FadeMaterial = { material: THREE.Material; opacity: number; transparent: boolean; depthWrite: boolean };
-type WorldTransition = { outgoing: THREE.Group; incomingMaterials: FadeMaterial[]; outgoingMaterials: FadeMaterial[]; from: CameraPose; to: CameraPose; started: number; cameraOwned: boolean; fromFraming: number; far: number; minDistance: number; maxDistance: number; fromLightPosition: THREE.Vector3; fromIntensity: number; toIntensity: number };
+type WorldTransition = { outgoing: THREE.Group; incomingMaterials: FadeMaterial[]; outgoingMaterials: FadeMaterial[]; from: CameraPose; to: CameraPose; started: number; duration: number; cameraOwned: boolean; fromFraming: number; far: number; minDistance: number; maxDistance: number; fromLightPosition: THREE.Vector3; fromIntensity: number; toIntensity: number };
 const LABEL_BUDGET = 32;
 
 export function createUniverseController(container: HTMLElement, callbacks: Callbacks) {
@@ -97,6 +98,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   let signature = "";
   let selectedId: string | null = null;
   let focusedId: string | null = null;
+  let tourStep: UniverseTourCameraStep | null = null;
+  let arrivedTourToken: string | null = null;
   let overviewPose: CameraPose | null = null;
   let cameraTween: CameraTween | null = null;
   let worldTransition: WorldTransition | null = null;
@@ -195,9 +198,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     disposeObjects(transition.outgoing, true);
     transition.outgoing.clear();
     const distance = camera.position.distanceTo(controls.target);
-    // An interrupted overlap keeps its exact camera pose instead of clamping it.
+    // Preserve interrupted poses within the current level's navigation bounds.
     controls.minDistance = Math.min(transition.minDistance, distance);
-    controls.maxDistance = Math.max(transition.maxDistance, distance);
+    controls.maxDistance = zoomOutLimit(Math.max(transition.maxDistance, distance));
     camera.far = Math.max(transition.far, controls.maxDistance + sceneRadius * 4);
     camera.updateProjectionMatrix();
     sunLight.position.set(0, 0, 0);
@@ -259,6 +262,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     element.style.width = `${labelWidth}px`;
     if (body) {
       (element as HTMLButtonElement).type = "button";
+      element.dataset.destinationId = body.node.id;
       element.addEventListener("click", () => {
         requestSelection(body.node.id);
       });
@@ -347,6 +351,12 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     parent.add(new THREE.Points(geometry, material));
   }
 
+  function zoomOutLimit(proposed: number) {
+    // The root overview is the end of the map; narrower levels must still reach
+    // their outward hierarchy threshold through wheel or pinch.
+    return currentView?.key.startsWith("universe:") ? overviewDistance : proposed;
+  }
+
   function fit() {
     controls.autoRotate = false;
     cameraTween = null;
@@ -364,7 +374,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     camera.position.set(...(portrait && currentView?.mode !== "planet" ? [0.12, 0.82, 0.55] : [0.16, 0.5, 0.85]) as [number, number, number]).normalize().multiplyScalar(cameraDistance);
     controls.target.set(0, 0, 0);
     controls.minDistance = currentView?.mode === "planet" ? 8 : 7;
-    controls.maxDistance = Math.max(180, distance * 3);
+    controls.maxDistance = zoomOutLimit(Math.max(180, distance * 3));
     camera.far = Math.max(1600, cameraDistance * 5 + sceneRadius * 4);
     camera.updateProjectionMatrix();
     controls.update();
@@ -458,6 +468,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       return;
     }
     finishWorldTransition();
+    destinationHover.clear();
     if (pilot.isActive() || flightMapPose) stopFlight();
     const previousView = currentView;
     const previousPose = pose();
@@ -583,7 +594,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       const minDistance = controls.minDistance;
       const maxDistance = controls.maxDistance;
       controls.minDistance = Math.min(minDistance, camera.position.distanceTo(controls.target) * 0.8);
-      controls.maxDistance = Math.max(controls.maxDistance, camera.position.distanceTo(controls.target) * 1.2);
+      controls.maxDistance = zoomOutLimit(Math.max(controls.maxDistance, camera.position.distanceTo(controls.target) * 1.2));
       const far = camera.far;
       camera.far = Math.max(far, previousFar * scale, camera.position.length() + previousRadius * scale * 4 + translation.length());
       camera.updateProjectionMatrix();
@@ -593,7 +604,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       const toIntensity = sunLight.intensity;
       sunLight.position.copy(fromLightPosition);
       sunLight.intensity = previousIntensity;
-      worldTransition = { outgoing, incomingMaterials, outgoingMaterials, from, to, started: performance.now(), cameraOwned: true, fromFraming: previousFraming, far, minDistance, maxDistance, fromLightPosition, fromIntensity: previousIntensity, toIntensity };
+      worldTransition = { outgoing, incomingMaterials, outgoingMaterials, from, to, started: performance.now(), duration: 720, cameraOwned: true, fromFraming: previousFraming, far, minDistance, maxDistance, fromLightPosition, fromIntensity: previousIntensity, toIntensity };
       labelLayer.style.opacity = "0";
       labelLayer.inert = true;
     }
@@ -616,6 +627,34 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     requestRender();
   }
 
+  function setTourStep(step: UniverseTourCameraStep | null) {
+    if (step?.token === tourStep?.token) return;
+    const previous = tourStep;
+    tourStep = step;
+    arrivedTourToken = null;
+    if (!step) {
+      if (previous && (cameraTween || worldTransition)) cancelCameraTween();
+      requestRender();
+      return;
+    }
+    clearZoomIntent();
+    destinationHover.clear();
+    interactionUntil = 0;
+    if (step.target.kind === "planet") {
+      const body = bodies.find((candidate) => candidate.node.id === step.target.id);
+      if (!body) return;
+      focusBody(body);
+    } else if (currentView?.key === `${step.target.kind}:${step.target.id}`) {
+      if (worldTransition) worldTransition.duration = step.target.kind === "universe" ? 2200 : 1800;
+      else {
+        const direction = camera.position.clone().sub(controls.target).normalize();
+        beginCameraTween({ position: direction.multiplyScalar(overviewDistance), target: new THREE.Vector3() }, 0);
+        if (cameraTween) cameraTween.duration = 1800;
+      }
+    }
+    requestRender();
+  }
+
   function updateLabelSelection() {
     const id = pilot.isActive() ? flightTargetId : selectedId;
     labels.forEach(({ element, body }) => {
@@ -625,6 +664,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function resize() {
+    destinationHover.clear();
     finishWorldTransition();
     const rect = container.getBoundingClientRect();
     const previousAspect = camera.aspect;
@@ -657,7 +697,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         cameraTween.from.position.sub(cameraTween.from.target).multiplyScalar(factor).add(cameraTween.from.target);
         cameraTween.to.position.sub(cameraTween.to.target).multiplyScalar(factor).add(cameraTween.to.target);
       }
-      controls.maxDistance = Math.max(controls.maxDistance, camera.position.length() * 2);
+      controls.maxDistance = zoomOutLimit(Math.max(controls.maxDistance, camera.position.length() * 2));
     }
     camera.far = Math.max(camera.far, controls.maxDistance + sceneRadius * 4);
     camera.updateProjectionMatrix();
@@ -723,7 +763,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       previousFocusPosition.copy(focused.object.position);
     }
     if (!piloting && worldTransition) {
-      const progress = Math.min(1, (time - worldTransition.started) / 720);
+      const progress = Math.min(1, (time - worldTransition.started) / worldTransition.duration);
       const eased = progress * progress * (3 - 2 * progress);
       if (worldTransition.cameraOwned) {
         camera.position.lerpVectors(worldTransition.from.position, worldTransition.to.position, eased);
@@ -782,6 +822,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       selection.lookAt(camera.position);
     }
     try {
+      destinationHover.update({ enabled: playing && !piloting && !worldTransition && !cameraTween && !tourStep, dragging: activePointers.size > 0 });
       renderer.render(scene, camera);
       const placed: { left: number; top: number; right: number; bottom: number }[] = [];
       let guideVisible = false;
@@ -825,6 +866,10 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         element.hidden = !visible;
       });
       if (!ready && currentView) { ready = true; callbacks.onReady(); }
+      if (tourStep && arrivedTourToken !== tourStep.token && !cameraTween && !worldTransition && playing) {
+        arrivedTourToken = tourStep.token;
+        callbacks.onTourArrive(tourStep.token);
+      }
     } catch {
       unavailable = true;
       stopFlight();
@@ -834,9 +879,10 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     if (animate || interacting || cameraTween || worldTransition || semanticZoom.hasPending() || (piloting && !flightPaused)) requestRender();
   }
 
-  function onControlStart() { controls.autoRotate = false; cancelCameraTween(true); interactionUntil = performance.now() + 60000; canvas.style.cursor = "grabbing"; requestRender(); }
+  function onControlStart() { callbacks.onInteraction(); controls.autoRotate = false; cancelCameraTween(true); interactionUntil = performance.now() + 60000; canvas.style.cursor = "grabbing"; requestRender(); }
   function onControlEnd() { interactionUntil = performance.now() + 450; canvas.style.cursor = "grab"; requestRender(); }
   function onPointerDown(event: PointerEvent) {
+    callbacks.onInteraction();
     clearZoomIntent();
     activePointers.add(event.pointerId);
     if (event.pointerType === "touch") {
@@ -901,7 +947,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     onWheel(event);
   }
   function evaluateSemanticZoom(time: number) {
-    if (!currentView) return;
+    if (!currentView || tourStep) return;
     camera.updateMatrixWorld();
     let nearestGroup: { id: string; screenDistance: number } | undefined;
     let nearestDistance = Infinity;
@@ -937,7 +983,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     }
   }
   function stopFrame() { if (frame !== null) cancelAnimationFrame(frame); frame = null; previousTime = performance.now(); }
-  function onVisibility() { pageVisible = !document.hidden; if (!pageVisible) { guideButton.hidden = true; clearZoomIntent(); } pilot.setPaused(flightPaused || !pageVisible || !intersecting); stopFrame(); if (pageVisible) requestRender(); }
+  function onVisibility() { pageVisible = !document.hidden; if (!pageVisible) { destinationHover.clear(); guideButton.hidden = true; clearZoomIntent(); } pilot.setPaused(flightPaused || !pageVisible || !intersecting); stopFrame(); if (pageVisible) requestRender(); }
   function onMotion() {
     reducedMotion = motionQuery.matches;
     if (reducedMotion && worldTransition) {
@@ -960,7 +1006,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     controls.enableDamping = !reducedMotion && !cameraTween;
     requestRender();
   }
-  function onContextLost(event: Event) { event.preventDefault(); if (!unavailable) { unavailable = true; stopFlight(); stopFrame(); callbacks.onUnavailable(); } }
+  function onContextLost(event: Event) { event.preventDefault(); if (!unavailable) { destinationHover.clear(); unavailable = true; stopFlight(); stopFrame(); callbacks.onUnavailable(); } }
 
   function restoreMapCamera() {
     const saved = flightMapPose;
@@ -1023,6 +1069,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     if (!enabled) { stopFlight(); return; }
     if (destroyed || unavailable || currentView?.mode !== "system") { callbacks.onFlightStatus("idle"); return; }
     if (pilot.isActive()) return;
+    destinationHover.clear();
     clearZoomIntent();
     finishWorldTransition();
     flightReady = false;
@@ -1083,6 +1130,16 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
   guideButton.addEventListener("click", onGuideClick);
 
+  const destinationHover = createDestinationHover({
+    scene, camera, canvas, labelLayer, map: glowMap,
+    getHitTargets: () => hitTargets,
+    resolve: (id) => {
+      const body = bodies.find((candidate) => candidate.node.id === id);
+      return body ? { position: body.object.position, extent: currentView?.mode === "cluster" ? body.extent : body.radius } : null;
+    },
+    requestRender,
+  });
+
   controls.addEventListener("start", onControlStart);
   controls.addEventListener("end", onControlEnd);
   controls.addEventListener("change", requestRender);
@@ -1099,7 +1156,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   resizeObserver.observe(container);
   const intersectionObserver = new IntersectionObserver(([entry]) => {
     intersecting = entry.isIntersecting;
-    if (!intersecting) { guideButton.hidden = true; clearZoomIntent(); }
+    if (!intersecting) { destinationHover.clear(); guideButton.hidden = true; clearZoomIntent(); }
     pilot.setPaused(flightPaused || !pageVisible || !intersecting);
     stopFrame();
     if (intersecting) requestRender();
@@ -1110,9 +1167,11 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   return {
     setView,
     setSelected,
+    setTourStep,
     setAriaLabel(value: string) { canvas.setAttribute("aria-label", value); },
     setAutoOrbit(value: boolean) { autoOrbit = value; if (!value) controls.autoRotate = false; requestRender(); },
     setPlaying(value: boolean) {
+      if (!value) destinationHover.clear();
       if (!value) clearZoomIntent();
       if (!value) finishWorldTransition();
       if (!value && cameraTween?.onComplete) cancelCameraTween();
@@ -1159,6 +1218,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     },
     destroy() {
       destroyed = true;
+      destinationHover.dispose();
       finishWorldTransition();
       flightGeneration++;
       pilot.dispose();

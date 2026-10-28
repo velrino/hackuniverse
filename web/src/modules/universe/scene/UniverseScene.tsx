@@ -5,14 +5,14 @@ import { createUniverseController } from "./controller";
 import type { UniverseSceneProps } from "./types";
 import "./labels.css";
 
-export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit = true, resetToken, zoomAction, ariaLabel, onSelect, onReady, onUnavailable, flightEnabled = false, flightPaused = false, flightInput, onFlightStatus, flightTargetId, guideActionLabel, onGuideRequest, autopilotTargetId, onAutopilotEnd, hasParentView = false, onScaleOut, onScaleIn }: UniverseSceneProps) {
+export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit = true, resetToken, zoomAction, ariaLabel, onSelect, onReady, onUnavailable, flightEnabled = false, flightPaused = false, flightInput, onFlightStatus, flightTargetId, guideActionLabel, onGuideRequest, autopilotTargetId, onAutopilotEnd, hasParentView = false, onScaleOut, onScaleIn, tourStep = null, onTourArrive, onInteraction }: UniverseSceneProps) {
   const host = useRef<HTMLDivElement>(null);
   const controller = useRef<ReturnType<typeof createUniverseController> | null>(null);
-  const callbacks = useRef({ onSelect, onReady, onUnavailable, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn });
+  const callbacks = useRef({ onSelect, onReady, onUnavailable, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onInteraction });
   const zoomDirection = zoomAction?.direction;
   const zoomToken = zoomAction?.token;
 
-  useEffect(() => { callbacks.current = { onSelect, onReady, onUnavailable, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn }; }, [onSelect, onReady, onUnavailable, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn]);
+  useEffect(() => { callbacks.current = { onSelect, onReady, onUnavailable, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onInteraction }; }, [onSelect, onReady, onUnavailable, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onInteraction]);
 
   useEffect(() => {
     if (!host.current) return;
@@ -26,6 +26,8 @@ export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit
         onAutopilotEnd: () => callbacks.current.onAutopilotEnd?.(),
         onScaleOut: () => callbacks.current.onScaleOut?.(),
         onScaleIn: (id) => callbacks.current.onScaleIn?.(id),
+        onTourArrive: (token) => callbacks.current.onTourArrive?.(token),
+        onInteraction: () => callbacks.current.onInteraction?.(),
       });
     } catch {
       callbacks.current.onUnavailable();
@@ -55,6 +57,7 @@ export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit
   useEffect(() => { controller.current?.setGuideActionLabel(guideActionLabel ?? ""); }, [guideActionLabel]);
   useEffect(() => { controller.current?.setAutopilotTarget(autopilotTargetId ?? null); }, [autopilotTargetId, flightEnabled]);
   useEffect(() => { controller.current?.setHasParentView(hasParentView); }, [hasParentView]);
+  useEffect(() => { controller.current?.setTourStep?.(tourStep); }, [tourStep, view]);
 
   return <div ref={host} className="universe-scene" style={{ position: "absolute", inset: 0 }} />;
 }

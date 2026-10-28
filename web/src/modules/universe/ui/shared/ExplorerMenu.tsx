@@ -29,11 +29,13 @@ export type ExplorerMenuProps = {
   flightAvailable: boolean;
   flightStatus: "idle" | "loading" | "ready" | "error";
   onToggleFlight: () => void;
+  tourAvailable: boolean;
+  onStartTour: () => void;
   LanguagePicker: ComponentType;
   DesignLink: ComponentType<{ children: ReactNode; className?: string }>;
 };
 
-export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, currentId, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, LanguagePicker, DesignLink }: ExplorerMenuProps) {
+export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, currentId, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, tourAvailable, onStartTour, LanguagePicker, DesignLink }: ExplorerMenuProps) {
   const [tab, setTab] = useState("atlas");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
@@ -111,6 +113,10 @@ export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, cu
           </TabsContent>
 
           <TabsContent value="view" className="universe-menu-panel universe-menu-options">
+            {tourAvailable && <>
+              <Button type="button" variant="outline" className="hud-button universe-menu-action" onClick={onStartTour}><Orbit aria-hidden="true" />{copy.tourTitle}</Button>
+              <p>{copy.tourDescription}</p>
+            </>}
             <Button type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={showOrbits} onClick={onToggleOrbits}>
               <Orbit aria-hidden="true" />{showOrbits ? copy.hideOrbits : copy.orbits}
             </Button>

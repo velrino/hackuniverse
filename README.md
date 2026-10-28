@@ -20,7 +20,9 @@ Use these shared components and tokens when building new pages. The [visual refe
 
 ## Universe demo
 
-The home now provides a mobile-first, full-screen 3D demo backed by [400 synthetic website records](web/src/modules/universe/data/demo-universe.json), across 40 systems, 12 stellar clouds and four galaxies. Systems contain 5–20 planets with varied surfaces and stable colors drawn from a 100-color palette. Selecting a planet zooms within its existing system; a compact hamburger opens the atlas and options. Optional third-person flight stays inside the active system. The Space Jump cutscene is temporarily disabled; changing systems has no presentation delay.
+The home provides a mobile-first, full-screen 3D demo with [408 planets](web/src/modules/universe/data/demo-universe.json): 400 fictional websites plus the eight familiar Solar System planets, across 41 systems, 13 stellar clouds and five galaxies. The original systems contain 5–20 planets; the Solar System adds eight. Fictional planets retain their stable 100-color palette; the Solar System adds one curated gray Mercury preset.
+
+Start on Earth, watch the first-visit tour widen to the universe, or replay it from View. Selecting a planet preserves its whole system; one hamburger opens the atlas and options. Optional third-person flight stays inside the active system. The Space Jump cutscene remains temporarily disabled. Tour timing, cancellation and accessibility are documented in the explorer guide.
 
 The default JSON is already canonical. The reusable host also accepts validated catalogs with optional references, URLless objects and an empty root. See the [explorer guide](docs/UNIVERSE-EXPLORER.md), [catalog contract and adapter examples](docs/UNIVERSE-DATA.md) and [spacecraft credits](docs/ASSET-CREDITS.md). This synthetic demo does not create real account content or make provider requests.
 
