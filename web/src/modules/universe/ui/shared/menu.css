@@ -145,7 +145,7 @@
 .universe-menu-planets button[aria-current] { border-color: var(--hud-accent); background: var(--accent); }
 .universe-menu-planets button:focus-visible { outline: 2px solid var(--hud-accent); outline-offset: -2px; }
 .universe-menu-planets button > svg { flex-shrink: 0; margin-left: auto; color: var(--hud-accent); }
-.universe-menu-planet-orb { width: 28px; height: 28px; flex: 0 0 28px; border: 1px solid var(--hud-line); border-radius: 50%; background: radial-gradient(circle at 30% 25%, hsl(var(--planet-hue) 40% 75%), hsl(var(--planet-hue) 45% 35%) 40%, var(--background) 85%); }
+.universe-menu-planet-orb { width: 28px; height: 28px; flex: 0 0 28px; border: 1px solid var(--hud-line); border-radius: 50%; background: radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--planet-color) 75%, white), var(--planet-color) 40%, var(--background) 85%); }
 .universe-menu-planet-text { display: grid; min-width: 0; gap: 4px; }
 .universe-menu-planet-text strong { overflow: hidden; font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .universe-menu-planet-text small { color: var(--hud-muted); font-size: 11px; line-height: 1.5; }

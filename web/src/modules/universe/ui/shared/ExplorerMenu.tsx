@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState, type ComponentType, type CSSProperties, type ReactNode } from "react";
-import { ArrowUpRight, ChevronLeft, ChevronRight, Menu, Orbit, Rocket, RotateCcw, Search } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, Menu, Orbit, Rocket, RotateCcw, RotateCw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getBreadcrumbs, searchPlanets } from "../../domain/catalog";
 import type { UniverseCatalog } from "../../domain/types";
+import { getPlanetAppearance } from "../../domain/planet-appearance";
 import type { UniverseCopy } from "../../messages";
 import "./menu.css";
 
@@ -21,6 +22,8 @@ export type ExplorerMenuProps = {
   currentId: string;
   showOrbits: boolean;
   onToggleOrbits: () => void;
+  autoOrbit: boolean;
+  onToggleAutoOrbit: () => void;
   onResetCamera: () => void;
   flightEnabled: boolean;
   flightAvailable: boolean;
@@ -30,7 +33,7 @@ export type ExplorerMenuProps = {
   DesignLink: ComponentType<{ children: ReactNode; className?: string }>;
 };
 
-export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, currentId, showOrbits, onToggleOrbits, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, LanguagePicker, DesignLink }: ExplorerMenuProps) {
+export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, currentId, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, LanguagePicker, DesignLink }: ExplorerMenuProps) {
   const [tab, setTab] = useState("atlas");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
@@ -90,7 +93,7 @@ export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, cu
                 {visibleResults.map((planet) => (
                   <li key={planet.id}>
                     <button type="button" onClick={() => navigate(planet.id)} aria-current={planet.id === currentId ? "location" : undefined}>
-                      <span className="universe-menu-planet-orb" style={{ "--planet-hue": `${planet.seed % 360}` } as CSSProperties} aria-hidden="true" />
+                      <span className="universe-menu-planet-orb" style={{ "--planet-color": getPlanetAppearance(planet.seed).color } as CSSProperties} aria-hidden="true" />
                       <span className="universe-menu-planet-text"><strong>{planet.name}</strong><small>{getBreadcrumbs(catalog, planet.id).filter((entity) => entity.kind === "cloud" || entity.kind === "system").map((entity) => entity.name).join(" / ")}</small></span>
                       <ArrowUpRight size={16} aria-hidden="true" />
                     </button>
@@ -110,6 +113,9 @@ export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, cu
           <TabsContent value="view" className="universe-menu-panel universe-menu-options">
             <Button type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={showOrbits} onClick={onToggleOrbits}>
               <Orbit aria-hidden="true" />{showOrbits ? copy.hideOrbits : copy.orbits}
+            </Button>
+            <Button type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={autoOrbit} onClick={onToggleAutoOrbit}>
+              <RotateCw aria-hidden="true" />{copy.autoOrbit}
             </Button>
             <Button type="button" variant="outline" className="hud-button universe-menu-action" onClick={() => { onResetCamera(); onOpenChange(false); }}>
               <RotateCcw aria-hidden="true" />{copy.reset}
