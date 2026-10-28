@@ -3,6 +3,7 @@ const en = {
     title: "Design system",
     description: "The shared visual language of HackUniverse. Real components, live states and reusable defaults.",
     navigation: "Design system sections",
+    viewMode: { label: "Catalog view", page: "Single page", tabs: "Tabs" },
     sections: {
       principles: "Principles",
       colors: "Colors",

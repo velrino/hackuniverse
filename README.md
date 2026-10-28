@@ -1,10 +1,26 @@
 # HackUniverse
 
-Turn websites into planets and organize them into galaxies and universes.
+https://github.com/user-attachments/assets/71ee72c3-f5f6-4b40-8359-383dcdcb93ad
 
-The explorer uses a provider-neutral catalog contract. A separate Firecrawl search adapter demonstrates supplier normalization; live imports and persistence remain planned work. New accounts will start with zero planets.
+**TL;DR:** Turn websites into planets and organize them into systems, galaxies and universes. The working 3D demo includes smooth exploration, a searchable atlas, planet/star details and optional flight. It uses a local, provider-neutral catalog; a Firecrawl search adapter demonstrates normalization. Live ingestion, accounts, persistence and the Go API remain planned. New accounts will start with zero planets.
 
-Production web: [hackuniverse.vercel.app](https://hackuniverse.vercel.app/).
+[Explore the live demo](https://hackuniverse.vercel.app/) · [Run locally](#run-the-web-app) · [Download the demo (MP4)](assets/demo/video/demo.mp4)
+
+## Product tour
+
+Select any screenshot below to open it at full resolution. The catalog and astronomical layouts are illustrative demo data.
+
+| Explore the map | Inspect and navigate |
+|:---:|:---:|
+| **Focus Earth within its intact system**<br><a href="assets/demo/images/02-earth-planet-details.png"><img src="assets/demo/images/02-earth-planet-details.png" alt="Earth selected in the Solar System with its planet details panel" width="100%" /></a> | **Find planets in the searchable atlas**<br><a href="assets/demo/images/03-mission-controls-atlas.png"><img src="assets/demo/images/03-mission-controls-atlas.png" alt="Mission Controls showing atlas search, planet results and hierarchy breadcrumbs" width="100%" /></a> |
+| **See the universe at a glance**<br><a href="assets/demo/images/04-universe-galaxy-overview.png"><img src="assets/demo/images/04-universe-galaxy-overview.png" alt="Universe overview with five labeled spiral galaxies" width="100%" /></a> | **Explore the illustrative Milky Way**<br><a href="assets/demo/images/05-milky-way-galaxy-overview.png"><img src="assets/demo/images/05-milky-way-galaxy-overview.png" alt="Milky Way overview showing Solar Neighborhood and seven fictional demo sectors" width="100%" /></a> |
+| **Zoom into a stellar cloud**<br><a href="assets/demo/images/06-mosaic-fold-cloud-overview.png"><img src="assets/demo/images/06-mosaic-fold-cloud-overview.png" alt="Mosaic Fold stellar cloud with neighboring star-system previews" width="100%" /></a> | **Inspect a procedural star system**<br><a href="assets/demo/images/07-ochre-cadence-star-system.png"><img src="assets/demo/images/07-ochre-cadence-star-system.png" alt="Ochre Cadence demo system with varied planets, rings and cyan orbital paths" width="100%" /></a> |
+
+**Preview the shared planetary loader** — This `/design` example uses simulated progress; no website is being imported.
+
+<p align="center">
+  <a href="assets/demo/images/01-loading-screen-demo.png"><img src="assets/demo/images/01-loading-screen-demo.png" alt="Cyan wireframe planetary loading demo showing simulated progress and a Stop preview action" width="100%" /></a>
+</p>
 
 ## Project structure
 
@@ -14,7 +30,7 @@ Production web: [hackuniverse.vercel.app](https://hackuniverse.vercel.app/).
 
 ## Design system
 
-Explore the live reference at [/design?lang=en](https://hackuniverse.vercel.app/design?lang=en). It documents the shared cyan sci-fi HUD defaults: colors, typography, buttons, inputs, dialogs, branding and the full-screen planetary loading component, with interactive examples.
+Explore the live reference at [/design?lang=en](https://hackuniverse.vercel.app/design?lang=en). It documents the shared cyan sci-fi HUD defaults: colors, typography, buttons, inputs, dialogs, branding and the full-screen planetary loading component, with interactive examples. Switch between Single page with section anchors and Tabs to inspect one category at a time; examples retain their state across mode and language changes.
 
 Use these shared components and tokens when building new pages. The [visual reference guide](docs/DESIGN-SYSTEM.md) explains the design direction, and [the web guide](web/README.md) covers component usage and module structure. The `lang=en` query parameter opens the interface in English; the global language dialog can switch to Brazilian Portuguese without reloading.
 

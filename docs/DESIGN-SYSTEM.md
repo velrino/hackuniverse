@@ -28,7 +28,7 @@ Every galaxy, cloud, system, central star and planet uses its own stable native-
 
 Galaxies have two brightness states: a visibly luminous baseline with seeded multicolor spiral particles and a stronger hover state. A shared neutral white-alpha mask preserves particle hues, and hover applies a neutral brightness gain. Switching between these states reuses the current core and particle geometry without additional draw calls; keep the 640-particle bound and five-CSS-pixel circular particle cap. Surrounding spiral particles and bounded sibling points preserve visual continuity across zoom levels. The retained core appears only in galaxy detail, and cloud haze belongs to distant galaxy-view markers. Shared factories, transforms and the three-draw context budget are defined in [the explorer guide](UNIVERSE-EXPLORER.md#scene-detail-and-scale). Their colors illustrate the map and do not encode astronomical measurements. Separate foreground nebula wisps remain removed.
 
-Selected planets and central stars share a minimal cyan selection ring at 50% opacity, with normalized inner/outer radii of `1` and `1.008`.
+Selected planets and central stars share a minimal cyan selection ring at 50% opacity, with normalized inner/outer radii of `1` and `1.008`. Its inner edge sits 2.5% outside the projected sphere silhouette, following perspective as the camera moves; hide it when the camera reaches the surface or enters the sphere.
 
 Manual tour replay approaches its configured start from the visible camera pose through adjacent hierarchy views. Preserve this continuity and begin its one-second hold only after arrival; the automatic first-visit Earth hold remains three seconds. [The tour contract](UNIVERSE-EXPLORER.md#guided-demo-tour) owns the sequence and cancellation rules.
 
@@ -41,6 +41,10 @@ Central-star labels are keyboard-operable destinations. Their detail panel keeps
 Use shared `TypewriterText` only for the current planet/star panel name and description. It is a span within the caller's heading or paragraph; facts, classifications, links and actions appear immediately. Defaults are 25 ms per grapheme with a 3,500 ms cap, no loop/deletion/cursor/speech, and replay when text or the explicit replay key changes. The final text reserves layout from the start, screen readers receive one full copy, and reduced motion bypasses the visual writing. Long unbroken text must wrap without widening the panel. See [the public component usage](../web/README.md#typewriter-text).
 
 ## Implementation and local assets
+
+The `/design` catalog keeps its application header fixed, reserves its measured responsive height and offsets section anchors by that height plus 24 pixels.
+
+The catalog opens in Single page mode, with native smooth anchors for all eight sections. Tabs mode shows one section at a time with keyboard navigation and a horizontally scrolling tab strip on narrow screens. Switching modes or languages preserves the same mounted examples and their input state. Section fragments continue to work in either presentation; the URL remains the source of language selection.
 
 `/design` is the live component reference. Its previews use the same primitives and tokens as the application. Add future defaults to those shared components before documenting them here. The loading preview is a labeled simulation; real use supplies operation progress to the reusable full-screen loader.
 

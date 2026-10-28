@@ -10,6 +10,8 @@ The interface uses a cyan science-fiction HUD theme. `src/styles/hud.css` owns t
 
 Open `/design` for the live defaults and interactive component previews. Barlow is bundled locally with its OFL license. The [visual reference guide](../docs/DESIGN-SYSTEM.md) records how the seven reference images informed the system.
 
+The catalog defaults to Single page with smooth section anchors and offers Tabs for one section at a time. Both modes share the same mounted examples, preserving input across presentation and language changes. Section fragments remain usable in either mode, and the tab strip scrolls horizontally on small screens.
+
 Every shared UI component has its own folder under `src/components/ui/`, with a public `index.ts` and its implementation. Keep component-specific styles and meaningful types/hooks there as they grow. Application imports use `@/components/ui/button`, `@/components/ui/dialog`, and the other public entries. The Dialog primitive owns the default cyan HUD frame and enabled buttons use a pointer cursor globally.
 
 The design module owns adapters, state controllers, pure UI, feature composition and message catalogs. Its host bridge supplies localization and application components; core module code does not import Next.js or the concrete global language picker. The route mounts the public host entry.

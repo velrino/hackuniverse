@@ -2,6 +2,9 @@ export const sectionOrder = [
   "principles", "colors", "typography", "buttons", "inputs", "dialogs", "loading", "brand",
 ] as const;
 
+export type ShowcaseSectionId = (typeof sectionOrder)[number];
+export type ShowcaseMode = "page" | "tabs";
+
 export const colorTokens = [
   { key: "accent", variable: "--hud-accent" },
   { key: "surface", variable: "--hud-surface" },
