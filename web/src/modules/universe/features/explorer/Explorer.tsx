@@ -7,9 +7,10 @@ import { useUniverseAdapters } from "../../adapters/hooks/use-universe-adapters"
 import { useUniverseNavigation } from "../../hooks/use-universe-navigation";
 import { useUniverseTour, type UniverseTourStep } from "../../hooks/use-universe-tour";
 import type { UniverseTourCameraStep } from "../../scene/types";
-import { getEntity, getParent } from "../../domain/catalog";
+import { getEntity, getParent, getPlanetCount, getSystemStar } from "../../domain/catalog";
 import type { ShipFlightInput } from "../../scene/flight/types";
 import { PlanetDetails } from "../../ui/shared/PlanetDetails";
+import { StarDetails } from "../../ui/shared/StarDetails";
 import { ExplorerMenu } from "../../ui/shared/ExplorerMenu";
 import { FlightControls } from "../../ui/shared/FlightControls";
 
@@ -17,7 +18,7 @@ const neutralInput: ShipFlightInput = { throttle: 0, turn: 0, lift: 0, boost: fa
 const noTourSteps: readonly UniverseTourStep[] = [];
 
 export function Explorer() {
-  const { catalog, copy, tour: tourDefinition, presentationReady = true, autoTour = true, components: { Scene, BrandLogo, LanguagePicker, DesignLink } } = useUniverseAdapters();
+  const { catalog, copy, tour: tourDefinition, presentationReady = true, autoTour = true, formatNumber, components: { Scene, BrandLogo, LanguagePicker, DesignLink } } = useUniverseAdapters();
   const { current, parent, view, navigate, planet } = useUniverseNavigation(catalog);
   const activeSystem = current.kind === "system" ? current : current.kind === "planet" ? getParent(catalog, current.id) : undefined;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -31,6 +32,10 @@ export function Explorer() {
   const [flightTargetId, setFlightTargetId] = useState<string | null>(null);
   const [autopilotTargetId, setAutopilotTargetId] = useState<string | null>(null);
   const [tourCameraStep, setTourCameraStep] = useState<UniverseTourCameraStep | null>(null);
+  const [selectedStarSystemId, setSelectedStarSystemId] = useState<string | null>(null);
+  const [starFocusToken, setStarFocusToken] = useState(0);
+  const starSelected = current.kind === "system" && selectedStarSystemId === current.id;
+  const selectedStar = starSelected ? getSystemStar(catalog, current.id) ?? { name: view.starName ?? current.name, description: current.description } : undefined;
   const onReady = useCallback(() => setSceneStatus("ready"), []);
   const onUnavailable = useCallback(() => { setSceneStatus("unavailable"); setFlightEnabled(false); }, []);
   const onFlightStatus = useCallback((status: "idle" | "loading" | "ready" | "error") => setFlightStatus(status), []);
@@ -38,6 +43,7 @@ export function Explorer() {
   const blocked = menuOpen;
   const tourAvailable = useMemo(() => Boolean(tourDefinition?.steps.length && tourDefinition.steps.every((step) => getEntity(catalog, step.target))), [catalog, tourDefinition]);
   const onTourStep = useCallback((step: UniverseTourStep, token: string) => {
+    setSelectedStarSystemId(null);
     setFlightEnabled(false);
     setFlightTargetId(null);
     setAutopilotTargetId(null);
@@ -58,6 +64,7 @@ export function Explorer() {
     setMenuOpen(open);
   }, [cancelTour]);
   const startTour = () => {
+    setSelectedStarSystemId(null);
     setFlightEnabled(false);
     setMenuOpen(false);
     tour.start();
@@ -79,6 +86,7 @@ export function Explorer() {
 
   const goTo = (id: string) => {
     cancelTour();
+    setSelectedStarSystemId(null);
     setFlightEnabled(false);
     setFlightTargetId(null);
     setAutopilotTargetId(null);
@@ -93,6 +101,13 @@ export function Explorer() {
     }
     if (!flightEnabled) goTo(id);
   };
+  const selectStar = () => {
+    if (flightEnabled || activeSystem?.kind !== "system") return;
+    cancelTour();
+    navigate(activeSystem.id);
+    setSelectedStarSystemId(activeSystem.id);
+    setStarFocusToken((token) => token + 1);
+  };
   const guideTo = (id: string) => {
     const destination = getEntity(catalog, id);
     if (!flightEnabled || destination?.kind !== "planet" || destination.parentId !== activeSystem?.id) return;
@@ -100,6 +115,7 @@ export function Explorer() {
   };
   const goWider = () => { if (parent) goTo(parent.id); };
   const toggleFlight = () => {
+    setSelectedStarSystemId(null);
     setFlightTargetId(null);
     setAutopilotTargetId(null);
     if (flightEnabled) { setFlightEnabled(false); return; }
@@ -115,7 +131,7 @@ export function Explorer() {
   return (
     <main className="universe-page universe-minimal" aria-label={copy.title} data-scale={current.kind} data-flight={flightEnabled} data-flight-status={flightStatus} data-tour-phase={tour.phase}>
       <div className="universe-scene" aria-busy={sceneStatus === "loading"}>
-        <Scene view={view} selectedId={planet?.id ?? null} playing={!blocked} showOrbits={showOrbits} autoOrbit={tour.active || autoOrbit} resetToken={resetToken} zoomAction={null} onSelect={selectSceneNode} onReady={onReady} onUnavailable={onUnavailable} ariaLabel={copy.canvas} flightEnabled={flightEnabled} flightPaused={blocked} flightInput={flightInput} onFlightStatus={onFlightStatus} flightTargetId={flightEnabled ? flightTargetId : null} autopilotTargetId={flightEnabled ? autopilotTargetId : null} guideActionLabel={autopilotTargetId === flightTargetId && autopilotTargetId ? copy.cancelGuidance : copy.guideShip} onGuideRequest={guideTo} onAutopilotEnd={onAutopilotEnd} hasParentView={Boolean(parent)} onScaleOut={goWider} onScaleIn={goTo} tourStep={tour.active && tour.token === tourCameraStep?.token ? tourCameraStep : null} onTourArrive={tour.arrive} onInteraction={cancelTour} />
+        <Scene view={view} selectedId={planet?.id ?? null} playing={!blocked} showOrbits={showOrbits} autoOrbit={tour.active || autoOrbit} resetToken={resetToken} zoomAction={null} onSelect={selectSceneNode} onReady={onReady} onUnavailable={onUnavailable} ariaLabel={copy.canvas} flightEnabled={flightEnabled} flightPaused={blocked} flightInput={flightInput} onFlightStatus={onFlightStatus} flightTargetId={flightEnabled ? flightTargetId : null} autopilotTargetId={flightEnabled ? autopilotTargetId : null} guideActionLabel={autopilotTargetId === flightTargetId && autopilotTargetId ? copy.cancelGuidance : copy.guideShip} onGuideRequest={guideTo} onAutopilotEnd={onAutopilotEnd} hasParentView={Boolean(parent)} onScaleOut={goWider} onScaleIn={goTo} tourStep={tour.active && tour.token === tourCameraStep?.token ? tourCameraStep : null} onTourArrive={tour.arrive} onInteraction={cancelTour} starSelected={starSelected} starFocusToken={starFocusToken} onSelectStar={selectStar} />
       </div>
       <div className="universe-vignette" aria-hidden="true" />
       <header className="universe-topbar">
@@ -126,7 +142,8 @@ export function Explorer() {
       {(sceneStatus === "loading" || flightStatus === "loading") && <div className="universe-scene-state" role="status"><Orbit className="universe-loading-orbit" size={24} aria-hidden="true" /><p>{flightStatus === "loading" ? copy.flightLoading : copy.loading}</p></div>}
       {sceneStatus === "unavailable" && <section className="universe-scene-state universe-fallback" role="status"><h2>{copy.fallbackTitle}</h2><p>{copy.fallbackDescription}</p><Button className="hud-button" onClick={() => setMenuOpen(true)}>{copy.library}</Button></section>}
       {flightStatus === "error" && <button type="button" className="universe-flight-error" onClick={() => setMenuOpen(true)}>{copy.flightError}</button>}
-      {planet && !flightEnabled && !tour.active && <PlanetDetails planet={planet} copy={copy} onBack={goWider} demo={catalog.mode === "demo"} />}
+      {planet && !flightEnabled && !tour.active && <PlanetDetails planet={planet} copy={copy} onBack={goWider} demo={catalog.mode === "demo" || planet.type === "demo"} />}
+      {selectedStar && !flightEnabled && !tour.active && <StarDetails star={selectedStar} systemName={current.name} planetCount={getPlanetCount(catalog, current.id)} copy={copy} onClose={() => setSelectedStarSystemId(null)} formatNumber={formatNumber} demo={catalog.mode === "demo" || current.type === "demo"} />}
       {tour.active && <div className="universe-tour-status"><p role="status">{copy.tourTitle} · {current.name}</p><Button type="button" variant="outline" className="hud-button" onClick={cancelTour}>{copy.tourSkip}</Button></div>}
       {parent && <Button type="button" variant="outline" className="hud-button universe-scale-back" onClick={goWider} title={`${copy.wider}: ${copy.kinds[parent.kind]}`}><Layers3 aria-hidden="true" /><span>{copy.kinds[parent.kind]}</span></Button>}
       {flightEnabled && !blocked && <><FlightControls copy={copy} onInput={setFlightInput} /><Button type="button" variant="outline" className="hud-button universe-flight-exit" onClick={() => setFlightEnabled(false)}><ArrowLeft aria-hidden="true" />{copy.exitFlight}</Button></>}

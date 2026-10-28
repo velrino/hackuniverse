@@ -28,6 +28,9 @@ export type UniverseSceneProps = {
   tourStep?: UniverseTourCameraStep | null;
   onTourArrive?: (token: string) => void;
   onInteraction?: () => void;
+  starSelected?: boolean;
+  starFocusToken?: number;
+  onSelectStar?: () => void;
   onSelect: (id: string) => void;
   onReady: () => void;
   onUnavailable: () => void;

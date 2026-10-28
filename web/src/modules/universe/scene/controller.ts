@@ -12,9 +12,10 @@ import { createDestinationHover } from "./destination-hover";
 import { createDestinationHighlight } from "./destination-highlight";
 import { createTourDolly, type TourDolly } from "./tour-motion";
 
-type Callbacks = { onSelect: (id: string) => void; onReady: () => void; onUnavailable: () => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onInteraction: () => void };
-type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[]; dust?: THREE.Points; core?: THREE.Sprite; highlight?: (active: boolean) => void; haze?: { primary: THREE.Sprite; secondary: THREE.Sprite } };
-type Label = { element: HTMLElement; body?: Body; position?: THREE.Vector3; width: number };
+type Callbacks = { onSelect: (id: string) => void; onSelectStar: () => void; onReady: () => void; onUnavailable: () => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onInteraction: () => void };
+type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; previewPixels?: number; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[]; dust?: THREE.Points; core?: THREE.Sprite; highlight?: (active: boolean) => void; haze?: { primary: THREE.Sprite; secondary: THREE.Sprite } };
+type Label = { element: HTMLElement; body?: Body; position?: THREE.Vector3; width: number; star?: boolean };
+type CentralStar = { systemId: string; object: THREE.Mesh; highlight: (active: boolean) => void };
 type CameraPose = { position: THREE.Vector3; target: THREE.Vector3 };
 type TourCameraMotion = { dolly: TourDolly; fromDistance: number };
 type CameraTween = { from: CameraPose; to: CameraPose; started: number; duration: number; fromFraming: number; toFraming: number; onComplete?: () => void; tourMotion?: TourCameraMotion };
@@ -22,6 +23,9 @@ type FlightMapPose = CameraPose & { framing: number; focusPosition: THREE.Vector
 type FadeMaterial = { material: THREE.Material; opacity: number; transparent: boolean; depthWrite: boolean };
 type WorldTransition = { outgoing: THREE.Group; incomingMaterials: FadeMaterial[]; outgoingMaterials: FadeMaterial[]; from: CameraPose; to: CameraPose; started: number; duration: number; cameraOwned: boolean; fromFraming: number; far: number; minDistance: number; maxDistance: number; fromLightPosition: THREE.Vector3; fromIntensity: number; toIntensity: number; tourMotion?: TourCameraMotion };
 const LABEL_BUDGET = 32;
+const SYSTEM_PREVIEW_MIN_PIXELS = 28;
+const MOBILE_SYSTEM_PREVIEW_BUDGET = 4;
+const DESKTOP_SYSTEM_PREVIEW_BUDGET = 8;
 
 export function createUniverseController(container: HTMLElement, callbacks: Callbacks) {
   if (typeof ResizeObserver === "undefined" || typeof IntersectionObserver === "undefined") throw new Error("Scene observers unavailable");
@@ -95,6 +99,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   scene.add(selection);
 
   let bodies: Body[] = [];
+  let systemPreviews: Body[] = [];
+  let centralStar: CentralStar | null = null;
+  let starSelected = false;
   let labels: Label[] = [];
   let hitTargets: THREE.Object3D[] = [];
   let currentView: UniverseSceneView | null = null;
@@ -257,22 +264,24 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     return material;
   }
 
-  function addLabel(text: string, body?: Body, position?: THREE.Vector3) {
-    const element = document.createElement(body ? "button" : "span");
+  function addLabel(text: string, body?: Body, position?: THREE.Vector3, star = false) {
+    const element = document.createElement(body || star ? "button" : "span");
     element.className = "universe-node-label";
     element.textContent = text;
     element.title = text;
     const labelWidth = Math.min(140, Math.max(44, text.length * 6.2 + 14));
     element.style.width = `${labelWidth}px`;
-    if (body) {
+    if (body || star) {
       (element as HTMLButtonElement).type = "button";
-      element.dataset.destinationId = body.node.id;
+      element.dataset.destinationId = star ? centralStar!.systemId : body!.node.id;
+      if (star) element.dataset.star = "true";
       element.addEventListener("click", () => {
-        requestSelection(body.node.id);
+        if (star) requestStarSelection();
+        else requestSelection(body!.node.id);
       });
     } else element.style.pointerEvents = "none";
     labelLayer.appendChild(element);
-    labels.push({ element, body, position, width: labelWidth });
+    labels.push({ element, body, position, width: labelWidth, star });
   }
 
   function addCluster(body: Body) {
@@ -456,6 +465,11 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     });
   }
 
+  function requestStarSelection() {
+    if (!centralStar || currentView?.mode !== "system" || pilot.isActive() || !playing || worldTransition) return;
+    callbacks.onSelectStar();
+  }
+
   function setView(view: UniverseSceneView) {
     const nextSignature = `${view.key}|${view.mode}|${Boolean(view.starName)}|${view.nodes.map(nodeGeometrySignature).join("|")}`;
     if (signature === nextSignature) {
@@ -474,6 +488,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     }
     finishWorldTransition();
     destinationHover.clear();
+    centralStar = null;
+    starSelected = false;
     if (pilot.isActive() || flightMapPose) stopFlight();
     const previousView = currentView;
     const previousPose = pose();
@@ -516,6 +532,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     flightTargetId = null;
     autopilotTargetId = null;
     bodies = [];
+    systemPreviews = [];
     labels = [];
     hitTargets = [];
     selection.visible = false;
@@ -532,6 +549,13 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       star.scale.setScalar(3.4);
       viewGroup.add(star);
       addGlow(star, 8.6, 0xffffff, 0.75, coronaMap, false);
+      // Reuse the unique parent system ID, which cannot collide with child planets.
+      const systemId = view.key.slice("system:".length);
+      star.userData.id = systemId;
+      star.userData.star = true;
+      centralStar = { systemId, object: star, highlight: createDestinationHighlight(star) };
+      hitTargets.push(star);
+      addLabel(view.starName ?? "", undefined, new THREE.Vector3(), true);
     }
     view.nodes.forEach((node, index) => {
       const object = new THREE.Group();
@@ -565,6 +589,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       body.highlight = createDestinationHighlight(object);
       if (labels.length < LABEL_BUDGET) addLabel(node.name, body);
     });
+    systemPreviews = bodies.filter((body) => body.detail && body.proxy);
     if (!cluster && !focus) addOrbits(bodies.map((body) => body.orbit));
     fit();
     if (canTransition) {
@@ -618,6 +643,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
 
   function setSelected(id: string | null) {
     selectedId = id;
+    if (id) starSelected = false;
     updateLabelSelection();
     if (pilot.isActive()) { requestRender(); return; }
     const body = bodies.find((candidate) => candidate.node.id === id);
@@ -630,6 +656,22 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         if (overviewPose) beginCameraTween({ position: overviewPose.position.clone(), target: overviewPose.target.clone() }, 0);
       }
     }
+    requestRender();
+  }
+
+  function setStarSelected(value: boolean) {
+    starSelected = value && Boolean(centralStar) && currentView?.mode === "system" && !pilot.isActive();
+    updateLabelSelection();
+    if (starSelected) {
+      focusedId = null;
+      focusDistance = undefined;
+      selectedId = null;
+      overviewPose = null;
+      controls.minDistance = 7;
+      const direction = camera.position.clone().sub(controls.target).normalize();
+      beginCameraTween({ position: direction.multiplyScalar(overviewDistance), target: new THREE.Vector3() }, 1);
+    }
+    // Clearing is visual-only, so a new planet's focus tween keeps ownership.
     requestRender();
   }
 
@@ -683,8 +725,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   function updateLabelSelection() {
     const id = pilot.isActive() ? flightTargetId : selectedId;
     labels.forEach(({ element, body }) => {
-      element.dataset.selected = String(body?.node.id === id);
-      if (body) element.setAttribute("aria-pressed", String(body.node.id === id));
+      const selected = element.dataset.star === "true" ? starSelected : body?.node.id === id;
+      element.dataset.selected = String(selected);
+      if (body || element.dataset.star === "true") element.setAttribute("aria-pressed", String(selected));
     });
   }
 
@@ -756,7 +799,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         body.angle += delta * orbitalSpeed(body.orbit);
         body.object.position.set(Math.cos(body.angle) * body.orbit, 0, Math.sin(body.angle) * body.orbit);
       }
-      body.miniPlanets?.forEach((planet) => {
+      if (body.detail?.visible !== false) body.miniPlanets?.forEach((planet) => {
         const angle = orbitalAngle(planet.index, orbitalTime);
         planet.mesh.position.set(Math.cos(angle) * planet.orbit * planet.scale, 0, Math.sin(angle) * planet.orbit * planet.scale);
       });
@@ -839,18 +882,30 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       camera.far = backgroundFar * 1.02;
       camera.updateProjectionMatrix();
     }
-    for (const body of bodies) if (body.detail && body.proxy) {
-      const pixels = body.extent / camera.position.distanceTo(body.object.position) * height / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
-      body.detail.visible = pixels >= 13;
-      body.proxy.visible = !body.detail.visible;
+    camera.updateMatrixWorld();
+    for (const body of systemPreviews) {
+      projected.copy(body.object.position).project(camera);
+      const visible = projected.z >= -1 && projected.z <= 1 && Math.abs(projected.x) <= 1.2 && Math.abs(projected.y) <= 1.2;
+      body.previewPixels = visible ? body.extent / camera.position.distanceTo(body.object.position) * height / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))) : 0;
     }
+    systemPreviews.sort((a, b) => (b.previewPixels ?? 0) - (a.previewPixels ?? 0));
+    const previewBudget = width < 640 ? MOBILE_SYSTEM_PREVIEW_BUDGET : DESKTOP_SYSTEM_PREVIEW_BUDGET;
+    systemPreviews.forEach((body, index) => {
+      body.detail!.visible = index < previewBudget && (body.previewPixels ?? 0) >= SYSTEM_PREVIEW_MIN_PIXELS;
+      body.proxy!.visible = !body.detail!.visible;
+    });
     evaluateSemanticZoom(time);
     const effectiveSelectedId = piloting ? flightTargetId : selectedId;
     const selected = bodies.find((body) => body.node.id === effectiveSelectedId);
-    selection.visible = Boolean(selected) && !worldTransition;
+    selection.visible = Boolean(selected || starSelected && centralStar && !piloting) && !worldTransition;
     if (selected) {
       selection.position.copy(selected.object.position);
       selection.scale.setScalar(currentView?.mode === "cluster" ? selected.extent * 1.1 : selected.radius * 1.45);
+      selection.lookAt(camera.position);
+    }
+    else if (starSelected && centralStar && !piloting) {
+      selection.position.copy(centralStar.object.position);
+      selection.scale.setScalar(3.4 * 1.45);
       selection.lookAt(camera.position);
     }
     try {
@@ -873,14 +928,16 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         }
       }
       guideButton.hidden = !guideVisible;
-      const ordered = [...labels].sort((a, b) => Number(b.element === document.activeElement) - Number(a.element === document.activeElement) || Number(b.body?.node.id === effectiveSelectedId) - Number(a.body?.node.id === effectiveSelectedId) || Number(Boolean(b.body)) - Number(Boolean(a.body)));
-      ordered.forEach(({ element, body, position, width: labelWidth }) => {
+      const isSelectedLabel = (label: Label) => label.star ? starSelected : label.body?.node.id === effectiveSelectedId;
+      const ordered = [...labels].sort((a, b) => Number(b.element === document.activeElement) - Number(a.element === document.activeElement) || Number(isSelectedLabel(b)) - Number(isSelectedLabel(a)) || Number(Boolean(b.body)) - Number(Boolean(a.body)));
+      ordered.forEach(({ element, body, position, width: labelWidth, star }) => {
+        if (star) (element as HTMLButtonElement).disabled = piloting;
         labelPosition.copy(body?.object.position ?? position ?? new THREE.Vector3());
         projected.copy(labelPosition).project(camera);
         const projectedX = (projected.x * 0.5 + 0.5) * width;
         const x = THREE.MathUtils.clamp(projectedX, labelWidth / 2 + 8, width - labelWidth / 2 - 8);
         // The bottom-anchored 44px target centers its text 22px above this point.
-        const y = (-projected.y * 0.5 + 0.5) * height - (body ? 6 : 0);
+        const y = (-projected.y * 0.5 + 0.5) * height - (body || star ? 6 : 0);
         if (projected.z < -1 || projected.z > 1 || projectedX < 0 || projectedX > width || y < 0 || y > height) { element.hidden = true; return; }
         const minBottom = labelInsetTop + 44;
         const maxBottom = height - labelInsetBottom;
@@ -954,6 +1011,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     pointer.set((event.clientX - rect.left) / width * 2 - 1, -(event.clientY - rect.top) / height * 2 + 1);
     raycaster.setFromCamera(pointer, camera);
     const hit = raycaster.intersectObjects(hitTargets, false)[0];
+    if (hit?.object.userData.star) { requestStarSelection(); return; }
     if (hit && typeof hit.object.userData.id === "string") {
       const id = hit.object.userData.id;
       requestSelection(id);
@@ -1101,6 +1159,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     if (!enabled) { stopFlight(); return; }
     if (destroyed || unavailable || currentView?.mode !== "system") { callbacks.onFlightStatus("idle"); return; }
     if (pilot.isActive()) return;
+    starSelected = false;
     destinationHover.clear();
     clearZoomIntent();
     finishWorldTransition();
@@ -1166,6 +1225,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     camera, canvas, labelLayer,
     getHitTargets: () => hitTargets,
     resolve: (id) => {
+      if (centralStar?.systemId === id) return { highlight: centralStar.highlight };
       const body = bodies.find((candidate) => candidate.node.id === id);
       return body?.highlight ? { highlight: body.highlight } : null;
     },
@@ -1199,6 +1259,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   return {
     setView,
     setSelected,
+    setStarSelected,
     setTourStep,
     setAriaLabel(value: string) { canvas.setAttribute("aria-label", value); },
     setAutoOrbit(value: boolean) { autoOrbit = value; if (!value) controls.autoRotate = false; requestRender(); },
