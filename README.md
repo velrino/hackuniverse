@@ -1,10 +1,30 @@
 # HackUniverse
 
-Turn websites into planets and organize them into galaxies and universes.
+**[Watch the 8.9-second demo (MP4)](assets/demo/video/demo.mp4)** · [Explore the live demo](https://hackuniverse.vercel.app/) · [Run locally](#run-the-web-app)
 
-The explorer uses a provider-neutral catalog contract. A separate Firecrawl search adapter demonstrates supplier normalization; live imports and persistence remain planned work. New accounts will start with zero planets.
+**TL;DR:** Turn websites into planets and organize them into systems, galaxies and universes. The working 3D demo includes smooth exploration, a searchable atlas, planet/star details and optional flight. It uses a local, provider-neutral catalog; a Firecrawl search adapter demonstrates normalization. Live ingestion, accounts, persistence and the Go API remain planned. New accounts will start with zero planets.
 
-Production web: [hackuniverse.vercel.app](https://hackuniverse.vercel.app/).
+<p align="center">
+  <a href="assets/demo/video/demo.mp4"><img src="assets/demo/images/04-universe-galaxy-overview.png" alt="Watch the HackUniverse demo: five luminous galaxies in the universe overview" width="100%" /></a>
+</p>
+
+Select the preview to open the demo video.
+
+## Product tour
+
+Select any screenshot below to open it at full resolution. The catalog and astronomical layouts are illustrative demo data.
+
+| Explore the map | Inspect and navigate |
+|:---:|:---:|
+| **Focus Earth within its intact system**<br><a href="assets/demo/images/02-earth-planet-details.png"><img src="assets/demo/images/02-earth-planet-details.png" alt="Earth selected in the Solar System with its planet details panel" width="100%" /></a> | **Find planets in the searchable atlas**<br><a href="assets/demo/images/03-mission-controls-atlas.png"><img src="assets/demo/images/03-mission-controls-atlas.png" alt="Mission Controls showing atlas search, planet results and hierarchy breadcrumbs" width="100%" /></a> |
+| **See the universe at a glance**<br><a href="assets/demo/images/04-universe-galaxy-overview.png"><img src="assets/demo/images/04-universe-galaxy-overview.png" alt="Universe overview with five labeled spiral galaxies" width="100%" /></a> | **Explore the illustrative Milky Way**<br><a href="assets/demo/images/05-milky-way-galaxy-overview.png"><img src="assets/demo/images/05-milky-way-galaxy-overview.png" alt="Milky Way overview showing Solar Neighborhood and seven fictional demo sectors" width="100%" /></a> |
+| **Zoom into a stellar cloud**<br><a href="assets/demo/images/06-mosaic-fold-cloud-overview.png"><img src="assets/demo/images/06-mosaic-fold-cloud-overview.png" alt="Mosaic Fold stellar cloud with neighboring star-system previews" width="100%" /></a> | **Inspect a procedural star system**<br><a href="assets/demo/images/07-ochre-cadence-star-system.png"><img src="assets/demo/images/07-ochre-cadence-star-system.png" alt="Ochre Cadence demo system with varied planets, rings and cyan orbital paths" width="100%" /></a> |
+
+**Preview the shared planetary loader** — This `/design` example uses simulated progress; no website is being imported.
+
+<p align="center">
+  <a href="assets/demo/images/01-loading-screen-demo.png"><img src="assets/demo/images/01-loading-screen-demo.png" alt="Cyan wireframe planetary loading demo showing simulated progress and a Stop preview action" width="100%" /></a>
+</p>
 
 ## Project structure
 
