@@ -13,7 +13,8 @@
       "parentId": null,
       "name": "Demo Atlas",
       "description": "A synthetic constellation of four hundred website discoveries, arranged for exploration.",
-      "seed": 3983766564
+      "seed": 3983766564,
+      "type": "demo"
     },
     {
       "id": "galaxy-discovery",
@@ -21,7 +22,8 @@
       "parentId": "universe-demo-atlas",
       "name": "Discovery Reach",
       "description": "Explore living worlds, distant skies, and the stories people tell.",
-      "seed": 1342884558
+      "seed": 1342884558,
+      "type": "demo"
     },
     {
       "id": "galaxy-creation",
@@ -29,7 +31,8 @@
       "parentId": "universe-demo-atlas",
       "name": "Creation Expanse",
       "description": "Find tools, ideas, and everyday discoveries for making something new.",
-      "seed": 3882586477
+      "seed": 3882586477,
+      "type": "demo"
     },
     {
       "id": "cloud-living-worlds",
@@ -37,7 +40,8 @@
       "parentId": "galaxy-discovery",
       "name": "Living Worlds",
       "description": "Ecology, oceans, and astronomy share one field of curiosity.",
-      "seed": 3571434318
+      "seed": 3571434318,
+      "type": "demo"
     },
     {
       "id": "cloud-human-stories",
@@ -45,7 +49,8 @@
       "parentId": "galaxy-discovery",
       "name": "Human Stories",
       "description": "Archives and creative practice connect the past with new perspectives.",
-      "seed": 3046394246
+      "seed": 3046394246,
+      "type": "demo"
     },
     {
       "id": "cloud-digital-craft",
@@ -53,7 +58,8 @@
       "parentId": "galaxy-creation",
       "name": "Digital Craft",
       "description": "Software, design, and open learning become useful building materials.",
-      "seed": 2400706368
+      "seed": 2400706368,
+      "type": "demo"
     },
     {
       "id": "cloud-everyday-horizons",
@@ -61,7 +67,8 @@
       "parentId": "galaxy-creation",
       "name": "Everyday Horizons",
       "description": "Explore places and thoughtful habits through small daily discoveries.",
-      "seed": 1700058361
+      "seed": 1700058361,
+      "type": "demo"
     },
     {
       "id": "system-ecology",
@@ -69,7 +76,8 @@
       "parentId": "cloud-living-worlds",
       "name": "Ecology",
       "description": "Field guides and systems for understanding the living planet.",
-      "seed": 3000762621
+      "seed": 3000762621,
+      "type": "demo"
     },
     {
       "id": "system-oceans",
@@ -77,7 +85,8 @@
       "parentId": "cloud-living-worlds",
       "name": "Ocean Signals",
       "description": "Follow marine habitats and the rhythms of coastal environments.",
-      "seed": 3417934172
+      "seed": 3417934172,
+      "type": "demo"
     },
     {
       "id": "system-astronomy",
@@ -85,7 +94,8 @@
       "parentId": "cloud-living-worlds",
       "name": "Distant Skies",
       "description": "A small observatory of orbits, moonlight, and cosmic questions.",
-      "seed": 3741509159
+      "seed": 3741509159,
+      "type": "demo"
     },
     {
       "id": "system-history",
@@ -93,7 +103,8 @@
       "parentId": "cloud-human-stories",
       "name": "Shared Histories",
       "description": "Meet archives, artifacts, and the maps that preserve collective memory.",
-      "seed": 3871389661
+      "seed": 3871389661,
+      "type": "demo"
     },
     {
       "id": "system-arts",
@@ -101,7 +112,8 @@
       "parentId": "cloud-human-stories",
       "name": "Creative Practice",
       "description": "Discover color, sound, movement, writing, and performance.",
-      "seed": 262634481
+      "seed": 262634481,
+      "type": "demo"
     },
     {
       "id": "system-software",
@@ -109,7 +121,8 @@
       "parentId": "cloud-digital-craft",
       "name": "Web Intelligence",
       "description": "Explore crawling, extraction, indexing, and searchable website collections.",
-      "seed": 254744170
+      "seed": 254744170,
+      "type": "demo"
     },
     {
       "id": "system-design",
@@ -117,7 +130,8 @@
       "parentId": "cloud-digital-craft",
       "name": "Interface Observatory",
       "description": "Study patterns, typography, accessibility, and useful forms.",
-      "seed": 3389755793
+      "seed": 3389755793,
+      "type": "demo"
     },
     {
       "id": "system-learning",
@@ -125,7 +139,8 @@
       "parentId": "cloud-digital-craft",
       "name": "Open Learning",
       "description": "Collect explanations, questions, research, and working notes.",
-      "seed": 187783689
+      "seed": 187783689,
+      "type": "demo"
     },
     {
       "id": "system-travel",
@@ -133,7 +148,8 @@
       "parentId": "cloud-everyday-horizons",
       "name": "Places & Paths",
       "description": "Look at cities, trails, and slower ways to discover a place.",
-      "seed": 3057066887
+      "seed": 3057066887,
+      "type": "demo"
     },
     {
       "id": "system-wellbeing",
@@ -141,7 +157,8 @@
       "parentId": "cloud-everyday-horizons",
       "name": "Everyday Balance",
       "description": "Explore gentle routines, movement, food, and reflection.",
-      "seed": 1423029542
+      "seed": 1423029542,
+      "type": "demo"
     },
     {
       "id": "galaxy-inquiry",
@@ -149,7 +166,8 @@
       "parentId": "universe-demo-atlas",
       "name": "Inquiry Frontier",
       "description": "Follow matter, living systems, and the models used to ask better questions.",
-      "seed": 1808439429
+      "seed": 1808439429,
+      "type": "demo"
     },
     {
       "id": "galaxy-culture",
@@ -157,7 +175,8 @@
       "parentId": "universe-demo-atlas",
       "name": "Culture Meridian",
       "description": "Explore language, shared places, creative futures, and collective memory.",
-      "seed": 592520406
+      "seed": 592520406,
+      "type": "demo"
     },
     {
       "id": "cloud-measured-earth",
@@ -165,7 +184,8 @@
       "parentId": "galaxy-discovery",
       "name": "Measured Earth",
       "description": "Read rocks, weather, maps, and the energy systems shaping everyday landscapes.",
-      "seed": 3733752356
+      "seed": 3733752356,
+      "type": "demo"
     },
     {
       "id": "cloud-makers-frontier",
@@ -173,7 +193,8 @@
       "parentId": "galaxy-creation",
       "name": "Makers Frontier",
       "description": "Small circuits, machines, fabrication, and circular design meet hands-on curiosity.",
-      "seed": 1420384566
+      "seed": 1420384566,
+      "type": "demo"
     },
     {
       "id": "cloud-matter-and-motion",
@@ -181,7 +202,8 @@
       "parentId": "galaxy-inquiry",
       "name": "Matter & Motion",
       "description": "Explore physical laws, chemical transformations, and the structure of materials.",
-      "seed": 2164813609
+      "seed": 2164813609,
+      "type": "demo"
     },
     {
       "id": "cloud-life-and-mind",
@@ -189,7 +211,8 @@
       "parentId": "galaxy-inquiry",
       "name": "Life & Mind",
       "description": "Discover genetics, nervous systems, and the behavior of living communities.",
-      "seed": 964583454
+      "seed": 964583454,
+      "type": "demo"
     },
     {
       "id": "cloud-data-and-models",
@@ -197,7 +220,8 @@
       "parentId": "galaxy-inquiry",
       "name": "Data & Models",
       "description": "Connect mathematical ideas, statistical reasoning, simulations, and visual explanations.",
-      "seed": 4166254186
+      "seed": 4166254186,
+      "type": "demo"
     },
     {
       "id": "cloud-language-and-memory",
@@ -205,7 +229,8 @@
       "parentId": "galaxy-culture",
       "name": "Language & Memory",
       "description": "Literature, oral traditions, and translation preserve different ways of knowing.",
-      "seed": 1775719121
+      "seed": 1775719121,
+      "type": "demo"
     },
     {
       "id": "cloud-places-and-communities",
@@ -213,7 +238,8 @@
       "parentId": "galaxy-culture",
       "name": "Places & Communities",
       "description": "Architecture, urban life, and community archives reveal how places are made.",
-      "seed": 82642801
+      "seed": 82642801,
+      "type": "demo"
     },
     {
       "id": "cloud-future-commons",
@@ -221,7 +247,8 @@
       "parentId": "galaxy-culture",
       "name": "Future Commons",
       "description": "Public science, ethics, digital heritage, and speculative practice open shared questions.",
-      "seed": 3630419885
+      "seed": 3630419885,
+      "type": "demo"
     },
     {
       "id": "system-languages",
@@ -229,7 +256,8 @@
       "parentId": "cloud-human-stories",
       "name": "Living Languages",
       "description": "Language communities, writing systems, and everyday communication.",
-      "seed": 2538019410
+      "seed": 2538019410,
+      "type": "demo"
     },
     {
       "id": "system-geology",
@@ -237,7 +265,8 @@
       "parentId": "cloud-measured-earth",
       "name": "Stone & Strata",
       "description": "Read landscapes through minerals, rocks, and the passage of geological time.",
-      "seed": 2681559221
+      "seed": 2681559221,
+      "type": "demo"
     },
     {
       "id": "system-climate",
@@ -245,7 +274,8 @@
       "parentId": "cloud-measured-earth",
       "name": "Weather Patterns",
       "description": "Explore atmospheric observations and the methods behind climate explanations.",
-      "seed": 29534922
+      "seed": 29534922,
+      "type": "demo"
     },
     {
       "id": "system-mapping",
@@ -253,7 +283,8 @@
       "parentId": "cloud-measured-earth",
       "name": "Spatial Notebook",
       "description": "Maps, coordinates, and spatial stories reveal different views of a place.",
-      "seed": 2721660615
+      "seed": 2721660615,
+      "type": "demo"
     },
     {
       "id": "system-energy",
@@ -261,7 +292,8 @@
       "parentId": "cloud-measured-earth",
       "name": "Energy Pathways",
       "description": "Explore the movement, storage, and practical measurement of energy.",
-      "seed": 2073769359
+      "seed": 2073769359,
+      "type": "demo"
     },
     {
       "id": "system-food-craft",
@@ -269,7 +301,8 @@
       "parentId": "cloud-everyday-horizons",
       "name": "Kitchen Fieldnotes",
       "description": "Study ingredients, food traditions, and the small experiments of a kitchen.",
-      "seed": 3530250716
+      "seed": 3530250716,
+      "type": "demo"
     },
     {
       "id": "system-electronics",
@@ -277,7 +310,8 @@
       "parentId": "cloud-makers-frontier",
       "name": "Circuit Workshop",
       "description": "Build intuition for signals, components, and small electronic systems.",
-      "seed": 2388784726
+      "seed": 2388784726,
+      "type": "demo"
     },
     {
       "id": "system-robotics",
@@ -285,7 +319,8 @@
       "parentId": "cloud-makers-frontier",
       "name": "Motion Workshop",
       "description": "Explore sensing, actuation, and the coordination of simple machines.",
-      "seed": 223939326
+      "seed": 223939326,
+      "type": "demo"
     },
     {
       "id": "system-fabrication",
@@ -293,7 +328,8 @@
       "parentId": "cloud-makers-frontier",
       "name": "Material Workshop",
       "description": "Explore fabrication methods through models, tolerances, and tools.",
-      "seed": 253899491
+      "seed": 253899491,
+      "type": "demo"
     },
     {
       "id": "system-circular-design",
@@ -301,7 +337,8 @@
       "parentId": "cloud-makers-frontier",
       "name": "Circular Practice",
       "description": "Repair, reuse, and thoughtful material choices extend the life of objects.",
-      "seed": 4269492907
+      "seed": 4269492907,
+      "type": "demo"
     },
     {
       "id": "system-physics",
@@ -309,7 +346,8 @@
       "parentId": "cloud-matter-and-motion",
       "name": "Physical Questions",
       "description": "Build explanations of motion, waves, fields, and everyday physical effects.",
-      "seed": 1196828248
+      "seed": 1196828248,
+      "type": "demo"
     },
     {
       "id": "system-chemistry",
@@ -317,7 +355,8 @@
       "parentId": "cloud-matter-and-motion",
       "name": "Chemical Stories",
       "description": "Follow molecular structure, reactions, and the methods of chemical observation.",
-      "seed": 2930432571
+      "seed": 2930432571,
+      "type": "demo"
     },
     {
       "id": "system-materials",
@@ -325,7 +364,8 @@
       "parentId": "cloud-matter-and-motion",
       "name": "Material Signals",
       "description": "Study how structure and processing influence the behavior of materials.",
-      "seed": 3988738283
+      "seed": 3988738283,
+      "type": "demo"
     },
     {
       "id": "system-genetics",
@@ -333,7 +373,8 @@
       "parentId": "cloud-life-and-mind",
       "name": "Genetic Patterns",
       "description": "Explore inherited information and the methods used to study living systems.",
-      "seed": 4002933875
+      "seed": 4002933875,
+      "type": "demo"
     },
     {
       "id": "system-neuroscience",
@@ -341,7 +382,8 @@
       "parentId": "cloud-life-and-mind",
       "name": "Neural Questions",
       "description": "Study nervous systems through observation, models, and cautious explanations.",
-      "seed": 1866669392
+      "seed": 1866669392,
+      "type": "demo"
     },
     {
       "id": "system-animal-behavior",
@@ -349,7 +391,8 @@
       "parentId": "cloud-life-and-mind",
       "name": "Behavior Fieldnotes",
       "description": "Observe communication, movement, and cooperation across animal communities.",
-      "seed": 1374093416
+      "seed": 1374093416,
+      "type": "demo"
     },
     {
       "id": "system-mathematics",
@@ -357,7 +400,8 @@
       "parentId": "cloud-data-and-models",
       "name": "Mathematical Landscapes",
       "description": "Explore patterns, proofs, and the structures behind mathematical questions.",
-      "seed": 69047887
+      "seed": 69047887,
+      "type": "demo"
     },
     {
       "id": "system-statistics",
@@ -365,7 +409,8 @@
       "parentId": "cloud-data-and-models",
       "name": "Statistical Lens",
       "description": "Read data with attention to variation, uncertainty, and study design.",
-      "seed": 766525144
+      "seed": 766525144,
+      "type": "demo"
     },
     {
       "id": "system-simulation",
@@ -373,7 +418,8 @@
       "parentId": "cloud-data-and-models",
       "name": "Model Workshop",
       "description": "Explore simplified worlds and the limits of computational simulations.",
-      "seed": 1537208912
+      "seed": 1537208912,
+      "type": "demo"
     },
     {
       "id": "system-data-visualization",
@@ -381,7 +427,8 @@
       "parentId": "cloud-data-and-models",
       "name": "Visual Evidence",
       "description": "Build readable visual explanations without hiding uncertainty or context.",
-      "seed": 1632427302
+      "seed": 1632427302,
+      "type": "demo"
     },
     {
       "id": "system-literature",
@@ -389,7 +436,8 @@
       "parentId": "cloud-language-and-memory",
       "name": "Reading Constellations",
       "description": "Explore narrative, poetry, and the craft of reading with attention.",
-      "seed": 765061832
+      "seed": 765061832,
+      "type": "demo"
     },
     {
       "id": "system-oral-traditions",
@@ -397,7 +445,8 @@
       "parentId": "cloud-language-and-memory",
       "name": "Spoken Memory",
       "description": "Meet the methods and responsibilities of preserving spoken histories.",
-      "seed": 3352618747
+      "seed": 3352618747,
+      "type": "demo"
     },
     {
       "id": "system-translation",
@@ -405,7 +454,8 @@
       "parentId": "cloud-language-and-memory",
       "name": "Translation Bridges",
       "description": "Explore the choices involved in carrying meaning across languages.",
-      "seed": 3635241634
+      "seed": 3635241634,
+      "type": "demo"
     },
     {
       "id": "system-architecture",
@@ -413,7 +463,8 @@
       "parentId": "cloud-places-and-communities",
       "name": "Built Form",
       "description": "Explore buildings through materials, light, structure, and human use.",
-      "seed": 2543506544
+      "seed": 2543506544,
+      "type": "demo"
     },
     {
       "id": "system-urbanism",
@@ -421,7 +472,8 @@
       "parentId": "cloud-places-and-communities",
       "name": "City Patterns",
       "description": "Read cities through movement, public space, and everyday observations.",
-      "seed": 3712392852
+      "seed": 3712392852,
+      "type": "demo"
     },
     {
       "id": "system-community-archives",
@@ -429,7 +481,8 @@
       "parentId": "cloud-places-and-communities",
       "name": "Community Collections",
       "description": "Explore local collections and the choices involved in preserving shared records.",
-      "seed": 2712293296
+      "seed": 2712293296,
+      "type": "demo"
     },
     {
       "id": "system-public-science",
@@ -437,7 +490,8 @@
       "parentId": "cloud-future-commons",
       "name": "Science in Public",
       "description": "Explore how scientific questions are shared, discussed, and investigated together.",
-      "seed": 3997671169
+      "seed": 3997671169,
+      "type": "demo"
     },
     {
       "id": "system-ethics",
@@ -445,7 +499,8 @@
       "parentId": "cloud-future-commons",
       "name": "Thoughtful Systems",
       "description": "Examine values, responsibilities, and the consequences of design choices.",
-      "seed": 3792164595
+      "seed": 3792164595,
+      "type": "demo"
     },
     {
       "id": "system-digital-heritage",
@@ -453,7 +508,8 @@
       "parentId": "cloud-future-commons",
       "name": "Digital Heritage",
       "description": "Explore preservation methods for digital objects and their surrounding context.",
-      "seed": 3575877457
+      "seed": 3575877457,
+      "type": "demo"
     },
     {
       "id": "system-speculative-design",
@@ -461,7 +517,8 @@
       "parentId": "cloud-future-commons",
       "name": "Possible Futures",
       "description": "Use clearly fictional scenarios to question assumptions and imagine alternatives.",
-      "seed": 2980163611
+      "seed": 2980163611,
+      "type": "demo"
     },
     {
       "id": "planet-canopy-atlas",
@@ -476,7 +533,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-seed-and-soil",
@@ -491,7 +549,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-wildlife-notebook",
@@ -506,7 +565,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-field-station",
@@ -521,7 +581,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-carbon-commons",
@@ -536,7 +597,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-biome-mosaic",
@@ -551,7 +613,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-pollinator-pathways",
@@ -566,7 +629,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-wetland-ledger",
@@ -581,7 +645,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-grassland-window",
@@ -596,7 +661,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-forest-edge-lab",
@@ -611,7 +677,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-habitat-patchwork",
@@ -626,7 +693,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-root-network-journal",
@@ -641,7 +709,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-biodiversity-bench",
@@ -656,7 +725,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-meadow-signal-notes",
@@ -671,7 +741,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-riverbank-ecology",
@@ -686,7 +757,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-lichen-fieldbook",
@@ -701,7 +773,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-urban-habitat-desk",
@@ -716,7 +789,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-food-web-workshop",
@@ -731,7 +805,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-ecosystem-mosaic-lab",
@@ -746,7 +821,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-succession-sketchbook",
@@ -761,7 +837,8 @@
       },
       "tags": [
         "synthetic ecology field guides"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-tide-observatory",
@@ -776,7 +853,8 @@
       },
       "tags": [
         "synthetic ocean discovery resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-reef-library",
@@ -791,7 +869,8 @@
       },
       "tags": [
         "synthetic ocean discovery resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-blue-current",
@@ -806,7 +885,8 @@
       },
       "tags": [
         "synthetic ocean discovery resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-deepwater-journal",
@@ -821,7 +901,8 @@
       },
       "tags": [
         "synthetic ocean discovery resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-coastal-signals",
@@ -836,7 +917,8 @@
       },
       "tags": [
         "synthetic ocean discovery resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-estuary-notebook",
@@ -851,7 +933,8 @@
       },
       "tags": [
         "synthetic ocean discovery resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-plankton-window",
@@ -866,7 +949,8 @@
       },
       "tags": [
         "synthetic ocean discovery resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-seafloor-pattern-lab",
@@ -881,7 +965,8 @@
       },
       "tags": [
         "synthetic ocean discovery resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-orbit-almanac",
@@ -896,7 +981,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-night-sky-notes",
@@ -911,7 +997,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-photon-observatory",
@@ -926,7 +1013,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-lunar-field-guide",
@@ -941,7 +1029,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-cosmic-archive",
@@ -956,7 +1045,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-spectral-signal-studio",
@@ -971,7 +1061,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-meteor-trail-notes",
@@ -986,7 +1077,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-exoplanet-window",
@@ -1001,7 +1093,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-telescope-benchbook",
@@ -1016,7 +1109,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-comet-route-journal",
@@ -1031,7 +1125,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-solar-wind-fieldnotes",
@@ -1046,7 +1141,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-galactic-dust-library",
@@ -1061,7 +1157,8 @@
       },
       "tags": [
         "synthetic astronomy learning websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-timewalk-archive",
@@ -1076,7 +1173,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-artifact-almanac",
@@ -1091,7 +1189,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-maproom-stories",
@@ -1106,7 +1205,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-common-past",
@@ -1121,7 +1221,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-chronicle-studio",
@@ -1136,7 +1237,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-artifact-context-lab",
@@ -1151,7 +1253,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-port-chronicle",
@@ -1166,7 +1269,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-everyday-past-journal",
@@ -1181,7 +1285,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-manuscript-window",
@@ -1196,7 +1301,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-trade-route-sketchbook",
@@ -1211,7 +1317,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-civic-memory-notes",
@@ -1226,7 +1333,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-time-layer-studio",
@@ -1241,7 +1349,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-migration-story-desk",
@@ -1256,7 +1365,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-workshop-past-atlas",
@@ -1271,7 +1381,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-material-past-library",
@@ -1286,7 +1397,8 @@
       },
       "tags": [
         "synthetic history archive examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-color-field",
@@ -1301,7 +1413,8 @@
       },
       "tags": [
         "synthetic creative arts resource sites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-sound-cartography",
@@ -1316,7 +1429,8 @@
       },
       "tags": [
         "synthetic creative arts resource sites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-motion-notes",
@@ -1331,7 +1445,8 @@
       },
       "tags": [
         "synthetic creative arts resource sites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-wordsmith-library",
@@ -1346,7 +1461,8 @@
       },
       "tags": [
         "synthetic creative arts resource sites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-open-stage",
@@ -1361,7 +1477,8 @@
       },
       "tags": [
         "synthetic creative arts resource sites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-gesture-study-studio",
@@ -1376,7 +1493,8 @@
       },
       "tags": [
         "synthetic creative arts resource sites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-pigment-notebook",
@@ -1391,7 +1509,8 @@
       },
       "tags": [
         "synthetic creative arts resource sites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-composition-window",
@@ -1406,7 +1525,8 @@
       },
       "tags": [
         "synthetic creative arts resource sites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-sound-sketch-cabinet",
@@ -1421,7 +1541,8 @@
       },
       "tags": [
         "synthetic creative arts resource sites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-printmaking-fieldnotes",
@@ -1436,7 +1557,8 @@
       },
       "tags": [
         "synthetic creative arts resource sites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-code-harbor",
@@ -1451,7 +1573,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-api-fieldbook",
@@ -1466,7 +1589,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-runtime-notes",
@@ -1481,7 +1605,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-buildroom",
@@ -1496,7 +1621,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-version-atlas",
@@ -1511,7 +1637,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-crawl-boundary-notes",
@@ -1526,7 +1653,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-selector-pattern-lab",
@@ -1541,7 +1669,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-web-graph-workshop",
@@ -1556,7 +1685,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-content-delta-journal",
@@ -1571,7 +1701,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-link-frontier-atlas",
@@ -1586,7 +1717,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-extraction-schema-studio",
@@ -1601,7 +1733,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-crawler-queue-commons",
@@ -1616,7 +1749,8 @@
       },
       "tags": [
         "firecrawl web scraping"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-pattern-observatory",
@@ -1631,7 +1765,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-interface-field-guide",
@@ -1646,7 +1781,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-type-workshop",
@@ -1661,7 +1797,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-form-and-function",
@@ -1676,7 +1813,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-accessible-by-design",
@@ -1691,7 +1829,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-focus-ring-workshop",
@@ -1706,7 +1845,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-layout-rhythm-notes",
@@ -1721,7 +1861,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-component-state-atlas",
@@ -1736,7 +1877,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-contrast-window-lab",
@@ -1751,7 +1893,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-form-flow-studio",
@@ -1766,7 +1909,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-navigation-pattern-desk",
@@ -1781,7 +1925,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-type-scale-journal",
@@ -1796,7 +1941,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-motion-intent-lab",
@@ -1811,7 +1957,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-empty-state-garden",
@@ -1826,7 +1973,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-icon-meaning-workshop",
@@ -1841,7 +1989,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-responsive-pattern-notes",
@@ -1856,7 +2005,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-design-review-window",
@@ -1871,7 +2021,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-accessible-table-studio",
@@ -1886,7 +2037,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-interaction-detail-cabinet",
@@ -1901,7 +2053,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-content-hierarchy-lab",
@@ -1916,7 +2069,8 @@
       },
       "tags": [
         "synthetic interface design learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-learning-commons",
@@ -1931,7 +2085,8 @@
       },
       "tags": [
         "synthetic open learning knowledge websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-research-shelf",
@@ -1946,7 +2101,8 @@
       },
       "tags": [
         "synthetic open learning knowledge websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-concept-atlas",
@@ -1961,7 +2117,8 @@
       },
       "tags": [
         "synthetic open learning knowledge websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-question-garden",
@@ -1976,7 +2133,8 @@
       },
       "tags": [
         "synthetic open learning knowledge websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-open-notebook",
@@ -1991,7 +2149,8 @@
       },
       "tags": [
         "synthetic open learning knowledge websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-question-trail-studio",
@@ -2006,7 +2165,8 @@
       },
       "tags": [
         "synthetic open learning knowledge websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-learning-map-journal",
@@ -2021,7 +2181,8 @@
       },
       "tags": [
         "synthetic open learning knowledge websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-practice-reflection-desk",
@@ -2036,7 +2197,8 @@
       },
       "tags": [
         "synthetic open learning knowledge websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-concept-bridge-library",
@@ -2051,7 +2213,8 @@
       },
       "tags": [
         "synthetic open learning knowledge websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-research-reading-window",
@@ -2066,7 +2229,8 @@
       },
       "tags": [
         "synthetic open learning knowledge websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-trail-ledger",
@@ -2081,7 +2245,8 @@
       },
       "tags": [
         "synthetic travel discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-city-sketchbook",
@@ -2096,7 +2261,8 @@
       },
       "tags": [
         "synthetic travel discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-journey-compass",
@@ -2111,7 +2277,8 @@
       },
       "tags": [
         "synthetic travel discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-quiet-routes",
@@ -2126,7 +2293,8 @@
       },
       "tags": [
         "synthetic travel discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-local-horizons",
@@ -2141,7 +2309,8 @@
       },
       "tags": [
         "synthetic travel discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-station-walk-journal",
@@ -2156,7 +2325,8 @@
       },
       "tags": [
         "synthetic travel discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-landscape-route-notes",
@@ -2171,7 +2341,8 @@
       },
       "tags": [
         "synthetic travel discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-local-discovery-window",
@@ -2186,7 +2357,8 @@
       },
       "tags": [
         "synthetic travel discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-restful-rhythm",
@@ -2201,7 +2373,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-movement-fieldbook",
@@ -2216,7 +2389,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-everyday-balance",
@@ -2231,7 +2405,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-kitchen-almanac",
@@ -2246,7 +2421,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-mindful-minutes",
@@ -2261,7 +2437,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-gentle-movement-notebook",
@@ -2276,7 +2453,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-quiet-routine-journal",
@@ -2291,7 +2469,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-rest-window-notes",
@@ -2306,7 +2485,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-walking-reflection-desk",
@@ -2321,7 +2501,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-everyday-pace-studio",
@@ -2336,7 +2517,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-balanced-break-library",
@@ -2351,7 +2533,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-attention-garden-notes",
@@ -2366,7 +2549,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-comfort-space-journal",
@@ -2381,7 +2565,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-mindful-making-window",
@@ -2396,7 +2581,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-routine-reflection-atlas",
@@ -2411,7 +2597,8 @@
       },
       "tags": [
         "synthetic everyday wellbeing resource examples"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-word-weave-atlas",
@@ -2426,7 +2613,8 @@
       },
       "tags": [
         "synthetic language discovery"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-script-garden",
@@ -2441,7 +2629,8 @@
       },
       "tags": [
         "synthetic language discovery"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-dialect-window",
@@ -2456,7 +2645,8 @@
       },
       "tags": [
         "synthetic language discovery"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-speech-paths",
@@ -2471,7 +2661,8 @@
       },
       "tags": [
         "synthetic language discovery"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-lexicon-lantern",
@@ -2486,7 +2677,8 @@
       },
       "tags": [
         "synthetic language discovery"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-grammar-grove",
@@ -2501,7 +2693,8 @@
       },
       "tags": [
         "synthetic language discovery"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-strata-ledger",
@@ -2516,7 +2709,8 @@
       },
       "tags": [
         "synthetic geology field learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-mineral-window",
@@ -2531,7 +2725,8 @@
       },
       "tags": [
         "synthetic geology field learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-fault-line-notes",
@@ -2546,7 +2741,8 @@
       },
       "tags": [
         "synthetic geology field learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-stone-cycle-lab",
@@ -2561,7 +2757,8 @@
       },
       "tags": [
         "synthetic geology field learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-landform-archive",
@@ -2576,7 +2773,8 @@
       },
       "tags": [
         "synthetic geology field learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-pebble-pattern-desk",
@@ -2591,7 +2789,8 @@
       },
       "tags": [
         "synthetic geology field learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-volcanic-field-window",
@@ -2606,7 +2805,8 @@
       },
       "tags": [
         "synthetic geology field learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-sediment-story-lab",
@@ -2621,7 +2821,8 @@
       },
       "tags": [
         "synthetic geology field learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-crystal-habit-journal",
@@ -2636,7 +2837,8 @@
       },
       "tags": [
         "synthetic geology field learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-geological-time-walk",
@@ -2651,7 +2853,8 @@
       },
       "tags": [
         "synthetic geology field learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-cloud-layer-journal",
@@ -2666,7 +2869,8 @@
       },
       "tags": [
         "synthetic weather and climate learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-rainfall-ledger",
@@ -2681,7 +2885,8 @@
       },
       "tags": [
         "synthetic weather and climate learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-climate-thread",
@@ -2696,7 +2901,8 @@
       },
       "tags": [
         "synthetic weather and climate learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-wind-field-notes",
@@ -2711,7 +2917,8 @@
       },
       "tags": [
         "synthetic weather and climate learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-season-signal-lab",
@@ -2726,7 +2933,8 @@
       },
       "tags": [
         "synthetic weather and climate learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-atmosphere-pattern-desk",
@@ -2741,7 +2949,8 @@
       },
       "tags": [
         "synthetic weather and climate learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-dew-point-notebook",
@@ -2756,7 +2965,8 @@
       },
       "tags": [
         "synthetic weather and climate learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-weather-station-stories",
@@ -2771,7 +2981,8 @@
       },
       "tags": [
         "synthetic weather and climate learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-contour-workshop",
@@ -2786,7 +2997,8 @@
       },
       "tags": [
         "synthetic mapping and cartography resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-coordinate-commons",
@@ -2801,7 +3013,8 @@
       },
       "tags": [
         "synthetic mapping and cartography resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-map-margin-studio",
@@ -2816,7 +3029,8 @@
       },
       "tags": [
         "synthetic mapping and cartography resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-watershed-sketchbook",
@@ -2831,7 +3045,8 @@
       },
       "tags": [
         "synthetic mapping and cartography resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-spatial-story-atlas",
@@ -2846,7 +3061,8 @@
       },
       "tags": [
         "synthetic mapping and cartography resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-projection-choice-lab",
@@ -2861,7 +3077,8 @@
       },
       "tags": [
         "synthetic mapping and cartography resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-solar-yield-notes",
@@ -2876,7 +3093,8 @@
       },
       "tags": [
         "synthetic energy systems learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-grid-pattern-lab",
@@ -2891,7 +3109,8 @@
       },
       "tags": [
         "synthetic energy systems learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-storage-cell-journal",
@@ -2906,7 +3125,8 @@
       },
       "tags": [
         "synthetic energy systems learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-heat-flow-atlas",
@@ -2921,7 +3141,8 @@
       },
       "tags": [
         "synthetic energy systems learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-renewable-route",
@@ -2936,7 +3157,8 @@
       },
       "tags": [
         "synthetic energy systems learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-ferment-fieldbook",
@@ -2951,7 +3173,8 @@
       },
       "tags": [
         "synthetic food craft and ingredient learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-grain-table-archive",
@@ -2966,7 +3189,8 @@
       },
       "tags": [
         "synthetic food craft and ingredient learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-flavor-compass-lab",
@@ -2981,7 +3205,8 @@
       },
       "tags": [
         "synthetic food craft and ingredient learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-seasonal-pantry-notes",
@@ -2996,7 +3221,8 @@
       },
       "tags": [
         "synthetic food craft and ingredient learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-shared-recipe-journal",
@@ -3011,7 +3237,8 @@
       },
       "tags": [
         "synthetic food craft and ingredient learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-ingredient-story-cabinet",
@@ -3026,7 +3253,8 @@
       },
       "tags": [
         "synthetic food craft and ingredient learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-signal-bench-notes",
@@ -3041,7 +3269,8 @@
       },
       "tags": [
         "synthetic electronics and circuit learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-component-cabinet",
@@ -3056,7 +3285,8 @@
       },
       "tags": [
         "synthetic electronics and circuit learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-breadboard-orchard",
@@ -3071,7 +3301,8 @@
       },
       "tags": [
         "synthetic electronics and circuit learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-sensor-field-lab",
@@ -3086,7 +3317,8 @@
       },
       "tags": [
         "synthetic electronics and circuit learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-logic-gate-garden",
@@ -3101,7 +3333,8 @@
       },
       "tags": [
         "synthetic electronics and circuit learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-oscilloscope-window",
@@ -3116,7 +3349,8 @@
       },
       "tags": [
         "synthetic electronics and circuit learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-analog-signal-garden",
@@ -3131,7 +3365,8 @@
       },
       "tags": [
         "synthetic electronics and circuit learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-power-rail-notebook",
@@ -3146,7 +3381,8 @@
       },
       "tags": [
         "synthetic electronics and circuit learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-circuit-debug-desk",
@@ -3161,7 +3397,8 @@
       },
       "tags": [
         "synthetic electronics and circuit learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-embedded-bench-journal",
@@ -3176,7 +3413,8 @@
       },
       "tags": [
         "synthetic electronics and circuit learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-servo-sketchbook",
@@ -3191,7 +3429,8 @@
       },
       "tags": [
         "synthetic robotics and motion resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-robot-path-lab",
@@ -3206,7 +3445,8 @@
       },
       "tags": [
         "synthetic robotics and motion resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-gripper-field-notes",
@@ -3221,7 +3461,8 @@
       },
       "tags": [
         "synthetic robotics and motion resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-perception-desk",
@@ -3236,7 +3477,8 @@
       },
       "tags": [
         "synthetic robotics and motion resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-kinematic-compass",
@@ -3251,7 +3493,8 @@
       },
       "tags": [
         "synthetic robotics and motion resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-robot-balance-notes",
@@ -3266,7 +3509,8 @@
       },
       "tags": [
         "synthetic robotics and motion resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-actuator-window-lab",
@@ -3281,7 +3525,8 @@
       },
       "tags": [
         "synthetic robotics and motion resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-robot-task-sketchbook",
@@ -3296,7 +3541,8 @@
       },
       "tags": [
         "synthetic robotics and motion resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-layer-by-layer-studio",
@@ -3311,7 +3557,8 @@
       },
       "tags": [
         "synthetic digital fabrication learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-toolpath-notebook",
@@ -3326,7 +3573,8 @@
       },
       "tags": [
         "synthetic digital fabrication learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-tolerance-table",
@@ -3341,7 +3589,8 @@
       },
       "tags": [
         "synthetic digital fabrication learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-joinery-prototype-lab",
@@ -3356,7 +3605,8 @@
       },
       "tags": [
         "synthetic digital fabrication learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-fabrication-field-guide",
@@ -3371,7 +3621,8 @@
       },
       "tags": [
         "synthetic digital fabrication learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-prototype-fit-journal",
@@ -3386,7 +3637,8 @@
       },
       "tags": [
         "synthetic digital fabrication learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-repair-pattern-library",
@@ -3401,7 +3653,8 @@
       },
       "tags": [
         "synthetic repair and circular design resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-material-afterlife",
@@ -3416,7 +3669,8 @@
       },
       "tags": [
         "synthetic repair and circular design resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-disassembly-notes",
@@ -3431,7 +3685,8 @@
       },
       "tags": [
         "synthetic repair and circular design resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-reuse-route-atlas",
@@ -3446,7 +3701,8 @@
       },
       "tags": [
         "synthetic repair and circular design resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-durable-design-desk",
@@ -3461,7 +3717,8 @@
       },
       "tags": [
         "synthetic repair and circular design resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-inertia-notebook",
@@ -3476,7 +3733,8 @@
       },
       "tags": [
         "synthetic physics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-wave-window-lab",
@@ -3491,7 +3749,8 @@
       },
       "tags": [
         "synthetic physics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-field-line-studio",
@@ -3506,7 +3765,8 @@
       },
       "tags": [
         "synthetic physics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-thermal-puzzle-desk",
@@ -3521,7 +3781,8 @@
       },
       "tags": [
         "synthetic physics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-optics-walkthrough",
@@ -3536,7 +3797,8 @@
       },
       "tags": [
         "synthetic physics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-momentum-fieldnotes",
@@ -3551,7 +3813,8 @@
       },
       "tags": [
         "synthetic physics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-resonance-window",
@@ -3566,7 +3829,8 @@
       },
       "tags": [
         "synthetic physics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-gravity-model-desk",
@@ -3581,7 +3845,8 @@
       },
       "tags": [
         "synthetic physics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-molecule-mosaic",
@@ -3596,7 +3861,8 @@
       },
       "tags": [
         "synthetic chemistry concepts"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-reaction-route-lab",
@@ -3611,7 +3877,8 @@
       },
       "tags": [
         "synthetic chemistry concepts"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-periodic-pattern-notes",
@@ -3626,7 +3893,8 @@
       },
       "tags": [
         "synthetic chemistry concepts"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-solution-fieldbook",
@@ -3641,7 +3909,8 @@
       },
       "tags": [
         "synthetic chemistry concepts"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-bond-geometry-studio",
@@ -3656,7 +3925,8 @@
       },
       "tags": [
         "synthetic chemistry concepts"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-catalyst-context-lab",
@@ -3671,7 +3941,8 @@
       },
       "tags": [
         "synthetic chemistry concepts"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-molecular-motion-journal",
@@ -3686,7 +3957,8 @@
       },
       "tags": [
         "synthetic chemistry concepts"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-acidity-pattern-desk",
@@ -3701,7 +3973,8 @@
       },
       "tags": [
         "synthetic chemistry concepts"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-mixture-window-studio",
@@ -3716,7 +3989,8 @@
       },
       "tags": [
         "synthetic chemistry concepts"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-chemical-measurement-notes",
@@ -3731,7 +4005,8 @@
       },
       "tags": [
         "synthetic chemistry concepts"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-alloy-observatory",
@@ -3746,7 +4021,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-polymer-pathways",
@@ -3761,7 +4037,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-ceramic-window",
@@ -3776,7 +4053,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-fiber-structure-lab",
@@ -3791,7 +4069,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-surface-property-notes",
@@ -3806,7 +4085,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-fracture-pattern-atlas",
@@ -3821,7 +4101,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-microstructure-window",
@@ -3836,7 +4117,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-elastic-response-lab",
@@ -3851,7 +4133,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-glass-structure-notes",
@@ -3866,7 +4149,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-composite-layer-studio",
@@ -3881,7 +4165,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-porous-material-journal",
@@ -3896,7 +4181,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-texture-measurement-desk",
@@ -3911,7 +4197,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-corrosion-context-lab",
@@ -3926,7 +4213,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-thin-film-window",
@@ -3941,7 +4229,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-material-fatigue-notes",
@@ -3956,7 +4245,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-smart-surface-studio",
@@ -3971,7 +4261,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-foam-structure-atlas",
@@ -3986,7 +4277,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-conductive-path-journal",
@@ -4001,7 +4293,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-thermal-material-desk",
@@ -4016,7 +4309,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-material-process-library",
@@ -4031,7 +4325,8 @@
       },
       "tags": [
         "synthetic materials science learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-genome-garden-notes",
@@ -4046,7 +4341,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-trait-pattern-atlas",
@@ -4061,7 +4357,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-cell-signal-fieldbook",
@@ -4076,7 +4373,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-sequence-story-lab",
@@ -4091,7 +4389,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-gene-context-library",
@@ -4106,7 +4405,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-inheritance-window-lab",
@@ -4121,7 +4421,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-genome-annotation-desk",
@@ -4136,7 +4437,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-cell-division-notes",
@@ -4151,7 +4453,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-variation-pattern-studio",
@@ -4166,7 +4469,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-gene-expression-journal",
@@ -4181,7 +4485,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-sequence-alignment-workshop",
@@ -4196,7 +4501,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-biological-data-window",
@@ -4211,7 +4517,8 @@
       },
       "tags": [
         "synthetic genetics explanations"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-neuron-window",
@@ -4226,7 +4533,8 @@
       },
       "tags": [
         "synthetic neuroscience learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-sense-making-lab",
@@ -4241,7 +4549,8 @@
       },
       "tags": [
         "synthetic neuroscience learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-memory-map-notes",
@@ -4256,7 +4565,8 @@
       },
       "tags": [
         "synthetic neuroscience learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-brain-methods-desk",
@@ -4271,7 +4581,8 @@
       },
       "tags": [
         "synthetic neuroscience learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-neural-network-fieldbook",
@@ -4286,7 +4597,8 @@
       },
       "tags": [
         "synthetic neuroscience learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-synapse-story-desk",
@@ -4301,7 +4613,8 @@
       },
       "tags": [
         "synthetic neuroscience learning resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-migration-route-notes",
@@ -4316,7 +4629,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-animal-signal-atlas",
@@ -4331,7 +4645,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-foraging-fieldbook",
@@ -4346,7 +4661,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-social-species-journal",
@@ -4361,7 +4677,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-behavior-observation-lab",
@@ -4376,7 +4693,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-nest-pattern-journal",
@@ -4391,7 +4709,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-courtship-signal-notes",
@@ -4406,7 +4725,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-collective-motion-lab",
@@ -4421,7 +4741,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-territory-window",
@@ -4436,7 +4757,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-animal-learning-desk",
@@ -4451,7 +4773,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-nocturnal-fieldnotes",
@@ -4466,7 +4789,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-cooperation-pattern-atlas",
@@ -4481,7 +4805,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-camouflage-context-studio",
@@ -4496,7 +4821,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-habitat-choice-journal",
@@ -4511,7 +4837,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-animal-rhythm-window",
@@ -4526,7 +4853,8 @@
       },
       "tags": [
         "synthetic animal behavior field resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-proof-pathways",
@@ -4541,7 +4869,8 @@
       },
       "tags": [
         "synthetic mathematics discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-geometry-grove",
@@ -4556,7 +4885,8 @@
       },
       "tags": [
         "synthetic mathematics discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-number-pattern-desk",
@@ -4571,7 +4901,8 @@
       },
       "tags": [
         "synthetic mathematics discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-algebra-window",
@@ -4586,7 +4917,8 @@
       },
       "tags": [
         "synthetic mathematics discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-topology-sketchbook",
@@ -4601,7 +4933,8 @@
       },
       "tags": [
         "synthetic mathematics discovery websites"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-sample-space-journal",
@@ -4616,7 +4949,8 @@
       },
       "tags": [
         "synthetic statistics and uncertainty resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-uncertainty-workshop",
@@ -4631,7 +4965,8 @@
       },
       "tags": [
         "synthetic statistics and uncertainty resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-distribution-atlas",
@@ -4646,7 +4981,8 @@
       },
       "tags": [
         "synthetic statistics and uncertainty resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-study-design-notes",
@@ -4661,7 +4997,8 @@
       },
       "tags": [
         "synthetic statistics and uncertainty resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-inference-fieldbook",
@@ -4676,7 +5013,8 @@
       },
       "tags": [
         "synthetic statistics and uncertainty resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-bayesian-reasoning-garden",
@@ -4691,7 +5029,8 @@
       },
       "tags": [
         "synthetic statistics and uncertainty resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-statistical-power-desk",
@@ -4706,7 +5045,8 @@
       },
       "tags": [
         "synthetic statistics and uncertainty resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-regression-window-lab",
@@ -4721,7 +5061,8 @@
       },
       "tags": [
         "synthetic statistics and uncertainty resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-data-quality-fieldbook",
@@ -4736,7 +5077,8 @@
       },
       "tags": [
         "synthetic statistics and uncertainty resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-variation-story-studio",
@@ -4751,7 +5093,8 @@
       },
       "tags": [
         "synthetic statistics and uncertainty resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-model-boundary-lab",
@@ -4766,7 +5109,8 @@
       },
       "tags": [
         "synthetic simulation and modeling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-agent-pattern-studio",
@@ -4781,7 +5125,8 @@
       },
       "tags": [
         "synthetic simulation and modeling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-dynamics-sketchbook",
@@ -4796,7 +5141,8 @@
       },
       "tags": [
         "synthetic simulation and modeling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-simulation-noteshelf",
@@ -4811,7 +5157,8 @@
       },
       "tags": [
         "synthetic simulation and modeling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-scenario-window",
@@ -4826,7 +5173,8 @@
       },
       "tags": [
         "synthetic simulation and modeling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-feedback-loop-notebook",
@@ -4841,7 +5189,8 @@
       },
       "tags": [
         "synthetic simulation and modeling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-model-calibration-desk",
@@ -4856,7 +5205,8 @@
       },
       "tags": [
         "synthetic simulation and modeling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-simulation-boundary-window",
@@ -4871,7 +5221,8 @@
       },
       "tags": [
         "synthetic simulation and modeling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-chart-choice-library",
@@ -4886,7 +5237,8 @@
       },
       "tags": [
         "synthetic data visualization learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-axis-and-context",
@@ -4901,7 +5253,8 @@
       },
       "tags": [
         "synthetic data visualization learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-color-encoding-lab",
@@ -4916,7 +5269,8 @@
       },
       "tags": [
         "synthetic data visualization learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-annotation-workbench",
@@ -4931,7 +5285,8 @@
       },
       "tags": [
         "synthetic data visualization learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-visual-uncertainty-desk",
@@ -4946,7 +5301,8 @@
       },
       "tags": [
         "synthetic data visualization learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-legend-logic-workshop",
@@ -4961,7 +5317,8 @@
       },
       "tags": [
         "synthetic data visualization learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-marginalia-orchard",
@@ -4976,7 +5333,8 @@
       },
       "tags": [
         "synthetic literature and reading resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-narrative-thread-lab",
@@ -4991,7 +5349,8 @@
       },
       "tags": [
         "synthetic literature and reading resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-poetry-window-journal",
@@ -5006,7 +5365,8 @@
       },
       "tags": [
         "synthetic literature and reading resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-reading-route-library",
@@ -5021,7 +5381,8 @@
       },
       "tags": [
         "synthetic literature and reading resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-character-map-studio",
@@ -5036,7 +5397,8 @@
       },
       "tags": [
         "synthetic literature and reading resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-sentence-craft-studio",
@@ -5051,7 +5413,8 @@
       },
       "tags": [
         "synthetic literature and reading resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-reading-voice-journal",
@@ -5066,7 +5429,8 @@
       },
       "tags": [
         "synthetic literature and reading resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-literary-context-window",
@@ -5081,7 +5445,8 @@
       },
       "tags": [
         "synthetic literature and reading resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-story-setting-atlas",
@@ -5096,7 +5461,8 @@
       },
       "tags": [
         "synthetic literature and reading resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-close-reading-cabinet",
@@ -5111,7 +5477,8 @@
       },
       "tags": [
         "synthetic literature and reading resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-story-circle-archive",
@@ -5126,7 +5493,8 @@
       },
       "tags": [
         "synthetic oral history and storytelling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-oral-memory-notes",
@@ -5141,7 +5509,8 @@
       },
       "tags": [
         "synthetic oral history and storytelling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-voice-and-place",
@@ -5156,7 +5525,8 @@
       },
       "tags": [
         "synthetic oral history and storytelling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-listening-practice-lab",
@@ -5171,7 +5541,8 @@
       },
       "tags": [
         "synthetic oral history and storytelling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-narrator-fieldbook",
@@ -5186,7 +5557,8 @@
       },
       "tags": [
         "synthetic oral history and storytelling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-spoken-context-library",
@@ -5201,7 +5573,8 @@
       },
       "tags": [
         "synthetic oral history and storytelling resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-meaning-bridge-studio",
@@ -5216,7 +5589,8 @@
       },
       "tags": [
         "synthetic translation and multilingual practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-parallel-text-garden",
@@ -5231,7 +5605,8 @@
       },
       "tags": [
         "synthetic translation and multilingual practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-idiom-window",
@@ -5246,7 +5621,8 @@
       },
       "tags": [
         "synthetic translation and multilingual practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-translation-margin-notes",
@@ -5261,7 +5637,8 @@
       },
       "tags": [
         "synthetic translation and multilingual practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-multilingual-workbench",
@@ -5276,7 +5653,8 @@
       },
       "tags": [
         "synthetic translation and multilingual practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-register-bridge-lab",
@@ -5291,7 +5669,8 @@
       },
       "tags": [
         "synthetic translation and multilingual practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-translation-choice-journal",
@@ -5306,7 +5685,8 @@
       },
       "tags": [
         "synthetic translation and multilingual practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-terminology-window-desk",
@@ -5321,7 +5701,8 @@
       },
       "tags": [
         "synthetic translation and multilingual practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-section-line-studio",
@@ -5336,7 +5717,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-light-in-rooms",
@@ -5351,7 +5733,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-structure-and-shelter",
@@ -5366,7 +5749,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-material-detail-archive",
@@ -5381,7 +5765,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-adaptive-place-notes",
@@ -5396,7 +5781,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-facade-detail-journal",
@@ -5411,7 +5797,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-courtyard-pattern-lab",
@@ -5426,7 +5813,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-building-rhythm-notes",
@@ -5441,7 +5829,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-threshold-space-studio",
@@ -5456,7 +5845,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-roofline-window",
@@ -5471,7 +5861,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-stair-geometry-desk",
@@ -5486,7 +5877,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-housing-pattern-atlas",
@@ -5501,7 +5893,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-construction-sequence-lab",
@@ -5516,7 +5909,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-passive-space-notebook",
@@ -5531,7 +5925,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-building-model-cabinet",
@@ -5546,7 +5941,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-opening-detail-studio",
@@ -5561,7 +5957,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-place-reuse-journal",
@@ -5576,7 +5973,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-timber-structure-window",
@@ -5591,7 +5989,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-architectural-drawing-desk",
@@ -5606,7 +6005,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-shared-room-library",
@@ -5621,7 +6021,8 @@
       },
       "tags": [
         "synthetic architecture and built environment"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-street-scale-journal",
@@ -5636,7 +6037,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-public-space-window",
@@ -5651,7 +6053,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-transit-pattern-lab",
@@ -5666,7 +6069,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-neighborhood-fieldbook",
@@ -5681,7 +6085,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-city-time-atlas",
@@ -5696,7 +6101,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-crossing-pattern-notes",
@@ -5711,7 +6117,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-neighborhood-edge-studio",
@@ -5726,7 +6133,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-urban-shade-journal",
@@ -5741,7 +6149,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-street-furniture-window",
@@ -5756,7 +6165,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-city-access-desk",
@@ -5771,7 +6181,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-public-route-atlas",
@@ -5786,7 +6197,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-urban-observation-cabinet",
@@ -5801,7 +6213,8 @@
       },
       "tags": [
         "synthetic urbanism and public space"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-local-memory-cabinet",
@@ -5816,7 +6229,8 @@
       },
       "tags": [
         "synthetic community archives resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-archive-description-lab",
@@ -5831,7 +6245,8 @@
       },
       "tags": [
         "synthetic community archives resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-photograph-story-notes",
@@ -5846,7 +6261,8 @@
       },
       "tags": [
         "synthetic community archives resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-community-record-window",
@@ -5861,7 +6277,8 @@
       },
       "tags": [
         "synthetic community archives resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-collection-care-journal",
@@ -5876,7 +6293,8 @@
       },
       "tags": [
         "synthetic community archives resources"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-question-square",
@@ -5891,7 +6309,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-citizen-observation-lab",
@@ -5906,7 +6325,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-science-explainer-studio",
@@ -5921,7 +6341,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-evidence-conversation",
@@ -5936,7 +6357,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-research-window-notes",
@@ -5951,7 +6373,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-open-question-notebook",
@@ -5966,7 +6389,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-science-methods-window",
@@ -5981,7 +6405,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-evidence-path-journal",
@@ -5996,7 +6421,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-public-experiment-desk",
@@ -6011,7 +6437,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-community-inquiry-studio",
@@ -6026,7 +6453,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-research-context-atlas",
@@ -6041,7 +6469,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-science-dialogue-garden",
@@ -6056,7 +6485,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-observation-commons-lab",
@@ -6071,7 +6501,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-scientific-story-workshop",
@@ -6086,7 +6517,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-public-data-reading-room",
@@ -6101,7 +6533,8 @@
       },
       "tags": [
         "synthetic public science communication"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-ethics-case-garden",
@@ -6116,7 +6549,8 @@
       },
       "tags": [
         "synthetic ethics and technology learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-design-responsibility-notes",
@@ -6131,7 +6565,8 @@
       },
       "tags": [
         "synthetic ethics and technology learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-consent-and-context",
@@ -6146,7 +6581,8 @@
       },
       "tags": [
         "synthetic ethics and technology learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-value-question-lab",
@@ -6161,7 +6597,8 @@
       },
       "tags": [
         "synthetic ethics and technology learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-technology-dialogue-desk",
@@ -6176,7 +6613,8 @@
       },
       "tags": [
         "synthetic ethics and technology learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-responsibility-map-journal",
@@ -6191,7 +6629,8 @@
       },
       "tags": [
         "synthetic ethics and technology learning"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-format-memory-lab",
@@ -6206,7 +6645,8 @@
       },
       "tags": [
         "synthetic digital preservation and heritage"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-digital-object-atlas",
@@ -6221,7 +6661,8 @@
       },
       "tags": [
         "synthetic digital preservation and heritage"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-preservation-pathways",
@@ -6236,7 +6677,8 @@
       },
       "tags": [
         "synthetic digital preservation and heritage"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-version-history-journal",
@@ -6251,7 +6693,8 @@
       },
       "tags": [
         "synthetic digital preservation and heritage"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-access-copy-studio",
@@ -6266,7 +6709,8 @@
       },
       "tags": [
         "synthetic digital preservation and heritage"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-bitstream-context-lab",
@@ -6281,7 +6725,8 @@
       },
       "tags": [
         "synthetic digital preservation and heritage"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-emulation-notebook",
@@ -6296,7 +6741,8 @@
       },
       "tags": [
         "synthetic digital preservation and heritage"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-metadata-memory-desk",
@@ -6311,7 +6757,8 @@
       },
       "tags": [
         "synthetic digital preservation and heritage"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-digital-provenance-window",
@@ -6326,7 +6773,8 @@
       },
       "tags": [
         "synthetic digital preservation and heritage"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-preservation-decision-studio",
@@ -6341,7 +6789,8 @@
       },
       "tags": [
         "synthetic digital preservation and heritage"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-future-question-studio",
@@ -6356,7 +6805,8 @@
       },
       "tags": [
         "synthetic speculative design and futures practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-scenario-artifact-lab",
@@ -6371,7 +6821,8 @@
       },
       "tags": [
         "synthetic speculative design and futures practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-alternative-everyday",
@@ -6386,7 +6837,8 @@
       },
       "tags": [
         "synthetic speculative design and futures practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-design-fiction-notes",
@@ -6401,7 +6853,8 @@
       },
       "tags": [
         "synthetic speculative design and futures practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-possibility-map-workshop",
@@ -6416,7 +6869,8 @@
       },
       "tags": [
         "synthetic speculative design and futures practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-imagined-service-journal",
@@ -6431,7 +6885,8 @@
       },
       "tags": [
         "synthetic speculative design and futures practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-future-artifact-window",
@@ -6446,7 +6901,8 @@
       },
       "tags": [
         "synthetic speculative design and futures practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-scenario-debate-studio",
@@ -6461,7 +6917,8 @@
       },
       "tags": [
         "synthetic speculative design and futures practice"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "galaxy-milky-way",
@@ -6469,15 +6926,17 @@
       "parentId": "universe-demo-atlas",
       "name": "Milky Way",
       "description": "The familiar real-world exception among our fictional discoveries. Somehow, this galaxy already has a user base.",
-      "seed": 3500290604
+      "seed": 3500290604,
+      "type": "demo"
     },
     {
       "id": "cloud-local-interstellar",
       "kind": "cloud",
       "parentId": "galaxy-milky-way",
-      "name": "Local Interstellar Cloud",
-      "description": "Our local neighborhood, shown at the same illustrative map scale as everything else. No address verification required.",
-      "seed": 2328254348
+      "name": "Solar Neighborhood",
+      "description": "An illustrative visual grouping of the Solar System and named nearby objects. Membership, spacing, and orbital bodies do not model a physical interstellar cloud or measured distances.",
+      "seed": 2328254348,
+      "type": "demo"
     },
     {
       "id": "system-solar",
@@ -6485,7 +6944,20 @@
       "parentId": "cloud-local-interstellar",
       "name": "Solar System",
       "description": "Eight familiar planets around one Sun: the deliberately ordinary exception in this catalog. Sizes, spacing, and motion remain illustrative.",
-      "seed": 2283689132
+      "seed": 2283689132,
+      "star": {
+        "name": "Sun",
+        "description": "The Sun is the star at the center of the Solar System. Its light and warmth make our ordinary neighborhood feel like home.",
+        "spectralType": "G2 V",
+        "temperatureK": 5772,
+        "radiusKm": 695700,
+        "ageBillionYears": 4.6,
+        "reference": {
+          "label": "NASA",
+          "href": "https://science.nasa.gov/sun/facts/"
+        }
+      },
+      "type": "demo"
     },
     {
       "id": "planet-mercury",
@@ -6502,7 +6974,8 @@
         "Milky Way",
         "real planet",
         "terrestrial planet"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-venus",
@@ -6519,7 +6992,8 @@
         "Milky Way",
         "real planet",
         "terrestrial planet"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-earth",
@@ -6536,7 +7010,8 @@
         "Milky Way",
         "real planet",
         "terrestrial planet"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-mars",
@@ -6553,7 +7028,8 @@
         "Milky Way",
         "real planet",
         "terrestrial planet"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-jupiter",
@@ -6570,7 +7046,8 @@
         "Milky Way",
         "real planet",
         "gas giant"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-saturn",
@@ -6587,7 +7064,8 @@
         "Milky Way",
         "real planet",
         "gas giant"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-uranus",
@@ -6604,7 +7082,8 @@
         "Milky Way",
         "real planet",
         "ice giant"
-      ]
+      ],
+      "type": "demo"
     },
     {
       "id": "planet-neptune",
@@ -6621,6 +7100,987 @@
         "Milky Way",
         "real planet",
         "ice giant"
+      ],
+      "type": "demo"
+    },
+    {
+      "id": "system-alpha-centauri",
+      "kind": "system",
+      "parentId": "cloud-local-interstellar",
+      "name": "Alpha Centauri",
+      "description": "Alpha Centauri is represented by one map marker in this illustrative Solar Neighborhood. Its five orbital bodies are invented demo objects, not a confirmed exoplanet inventory.",
+      "seed": 1879014733,
+      "type": "demo",
+      "star": {
+        "name": "Alpha Centauri",
+        "description": "A single visual map marker for Alpha Centauri, not a physical model of this neighbor. The five displayed orbital bodies are invented demo illustrations, not a confirmed exoplanet inventory."
+      }
+    },
+    {
+      "id": "planet-alpha-centauri-lantern",
+      "kind": "planet",
+      "parentId": "system-alpha-centauri",
+      "name": "Alpha Centauri / Lantern",
+      "description": "Lantern is an invented demo orbital body beside the Alpha Centauri marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1423934525,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Alpha Centauri"
+      ]
+    },
+    {
+      "id": "planet-alpha-centauri-prism",
+      "kind": "planet",
+      "parentId": "system-alpha-centauri",
+      "name": "Alpha Centauri / Prism",
+      "description": "Prism is an invented demo orbital body beside the Alpha Centauri marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2568580204,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Alpha Centauri"
+      ]
+    },
+    {
+      "id": "planet-alpha-centauri-haven",
+      "kind": "planet",
+      "parentId": "system-alpha-centauri",
+      "name": "Alpha Centauri / Haven",
+      "description": "Haven is an invented demo orbital body beside the Alpha Centauri marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 729789145,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Alpha Centauri"
+      ]
+    },
+    {
+      "id": "planet-alpha-centauri-wayfinder",
+      "kind": "planet",
+      "parentId": "system-alpha-centauri",
+      "name": "Alpha Centauri / Wayfinder",
+      "description": "Wayfinder is an invented demo orbital body beside the Alpha Centauri marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 3866060054,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Alpha Centauri"
+      ]
+    },
+    {
+      "id": "planet-alpha-centauri-mosaic",
+      "kind": "planet",
+      "parentId": "system-alpha-centauri",
+      "name": "Alpha Centauri / Mosaic",
+      "description": "Mosaic is an invented demo orbital body beside the Alpha Centauri marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1977310635,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Alpha Centauri"
+      ]
+    },
+    {
+      "id": "system-barnards-star",
+      "kind": "system",
+      "parentId": "cloud-local-interstellar",
+      "name": "Barnard's Star",
+      "description": "Barnard's Star is represented by one map marker in this illustrative Solar Neighborhood. Its five orbital bodies are invented demo objects, not a confirmed exoplanet inventory.",
+      "seed": 4005782923,
+      "type": "demo",
+      "star": {
+        "name": "Barnard's Star",
+        "description": "A single visual map marker for Barnard's Star, not a physical model of this neighbor. The five displayed orbital bodies are invented demo illustrations, not a confirmed exoplanet inventory."
+      }
+    },
+    {
+      "id": "planet-barnards-star-ember",
+      "kind": "planet",
+      "parentId": "system-barnards-star",
+      "name": "Barnard's Star / Ember",
+      "description": "Ember is an invented demo orbital body beside the Barnard's Star marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 267723866,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Barnard's Star"
+      ]
+    },
+    {
+      "id": "planet-barnards-star-drift",
+      "kind": "planet",
+      "parentId": "system-barnards-star",
+      "name": "Barnard's Star / Drift",
+      "description": "Drift is an invented demo orbital body beside the Barnard's Star marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1413839506,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Barnard's Star"
+      ]
+    },
+    {
+      "id": "planet-barnards-star-keystone",
+      "kind": "planet",
+      "parentId": "system-barnards-star",
+      "name": "Barnard's Star / Keystone",
+      "description": "Keystone is an invented demo orbital body beside the Barnard's Star marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 3963986795,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Barnard's Star"
+      ]
+    },
+    {
+      "id": "planet-barnards-star-trellis",
+      "kind": "planet",
+      "parentId": "system-barnards-star",
+      "name": "Barnard's Star / Trellis",
+      "description": "Trellis is an invented demo orbital body beside the Barnard's Star marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1698789156,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Barnard's Star"
+      ]
+    },
+    {
+      "id": "planet-barnards-star-quietus",
+      "kind": "planet",
+      "parentId": "system-barnards-star",
+      "name": "Barnard's Star / Quietus",
+      "description": "Quietus is an invented demo orbital body beside the Barnard's Star marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 747189441,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Barnard's Star"
+      ]
+    },
+    {
+      "id": "system-luhman-16",
+      "kind": "system",
+      "parentId": "cloud-local-interstellar",
+      "name": "Luhman 16",
+      "description": "Luhman 16 is represented by one map marker in this illustrative Solar Neighborhood. Its five orbital bodies are invented demo objects, not a confirmed exoplanet inventory.",
+      "seed": 1254106520,
+      "type": "demo",
+      "star": {
+        "name": "Luhman 16",
+        "description": "A single visual map marker for Luhman 16, not a physical model of this neighbor. The five displayed orbital bodies are invented demo illustrations, not a confirmed exoplanet inventory."
+      }
+    },
+    {
+      "id": "planet-luhman-16-velvet",
+      "kind": "planet",
+      "parentId": "system-luhman-16",
+      "name": "Luhman 16 / Velvet",
+      "description": "Velvet is an invented demo orbital body beside the Luhman 16 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2575223752,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Luhman 16"
+      ]
+    },
+    {
+      "id": "planet-luhman-16-copperleaf",
+      "kind": "planet",
+      "parentId": "system-luhman-16",
+      "name": "Luhman 16 / Copperleaf",
+      "description": "Copperleaf is an invented demo orbital body beside the Luhman 16 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2560885871,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Luhman 16"
+      ]
+    },
+    {
+      "id": "planet-luhman-16-halcyon",
+      "kind": "planet",
+      "parentId": "system-luhman-16",
+      "name": "Luhman 16 / Halcyon",
+      "description": "Halcyon is an invented demo orbital body beside the Luhman 16 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 3733649662,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Luhman 16"
+      ]
+    },
+    {
+      "id": "planet-luhman-16-vesper",
+      "kind": "planet",
+      "parentId": "system-luhman-16",
+      "name": "Luhman 16 / Vesper",
+      "description": "Vesper is an invented demo orbital body beside the Luhman 16 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1635028039,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Luhman 16"
+      ]
+    },
+    {
+      "id": "planet-luhman-16-tandem",
+      "kind": "planet",
+      "parentId": "system-luhman-16",
+      "name": "Luhman 16 / Tandem",
+      "description": "Tandem is an invented demo orbital body beside the Luhman 16 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 3889940421,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Luhman 16"
+      ]
+    },
+    {
+      "id": "system-wise-0855-0714",
+      "kind": "system",
+      "parentId": "cloud-local-interstellar",
+      "name": "WISE 0855-0714",
+      "description": "WISE 0855-0714 is represented by one map marker in this illustrative Solar Neighborhood. Its five orbital bodies are invented demo objects, not a confirmed exoplanet inventory.",
+      "seed": 129573635,
+      "type": "demo",
+      "star": {
+        "name": "WISE 0855-0714",
+        "description": "A single visual map marker for WISE 0855-0714, not a physical model of this neighbor. The five displayed orbital bodies are invented demo illustrations, not a confirmed exoplanet inventory."
+      }
+    },
+    {
+      "id": "planet-wise-0855-0714-frostglass",
+      "kind": "planet",
+      "parentId": "system-wise-0855-0714",
+      "name": "WISE 0855-0714 / Frostglass",
+      "description": "Frostglass is an invented demo orbital body beside the WISE 0855-0714 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 367851699,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "WISE 0855-0714"
+      ]
+    },
+    {
+      "id": "planet-wise-0855-0714-lumen",
+      "kind": "planet",
+      "parentId": "system-wise-0855-0714",
+      "name": "WISE 0855-0714 / Lumen",
+      "description": "Lumen is an invented demo orbital body beside the WISE 0855-0714 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2949763962,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "WISE 0855-0714"
+      ]
+    },
+    {
+      "id": "planet-wise-0855-0714-stillwater",
+      "kind": "planet",
+      "parentId": "system-wise-0855-0714",
+      "name": "WISE 0855-0714 / Stillwater",
+      "description": "Stillwater is an invented demo orbital body beside the WISE 0855-0714 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1341486780,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "WISE 0855-0714"
+      ]
+    },
+    {
+      "id": "planet-wise-0855-0714-glimmer",
+      "kind": "planet",
+      "parentId": "system-wise-0855-0714",
+      "name": "WISE 0855-0714 / Glimmer",
+      "description": "Glimmer is an invented demo orbital body beside the WISE 0855-0714 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1467358932,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "WISE 0855-0714"
+      ]
+    },
+    {
+      "id": "planet-wise-0855-0714-snowcap",
+      "kind": "planet",
+      "parentId": "system-wise-0855-0714",
+      "name": "WISE 0855-0714 / Snowcap",
+      "description": "Snowcap is an invented demo orbital body beside the WISE 0855-0714 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 572659874,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "WISE 0855-0714"
+      ]
+    },
+    {
+      "id": "system-wolf-359",
+      "kind": "system",
+      "parentId": "cloud-local-interstellar",
+      "name": "Wolf 359",
+      "description": "Wolf 359 is represented by one map marker in this illustrative Solar Neighborhood. Its five orbital bodies are invented demo objects, not a confirmed exoplanet inventory.",
+      "seed": 3449652961,
+      "type": "demo",
+      "star": {
+        "name": "Wolf 359",
+        "description": "A single visual map marker for Wolf 359, not a physical model of this neighbor. The five displayed orbital bodies are invented demo illustrations, not a confirmed exoplanet inventory."
+      }
+    },
+    {
+      "id": "planet-wolf-359-cinder",
+      "kind": "planet",
+      "parentId": "system-wolf-359",
+      "name": "Wolf 359 / Cinder",
+      "description": "Cinder is an invented demo orbital body beside the Wolf 359 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 3707746990,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Wolf 359"
+      ]
+    },
+    {
+      "id": "planet-wolf-359-foxglove",
+      "kind": "planet",
+      "parentId": "system-wolf-359",
+      "name": "Wolf 359 / Foxglove",
+      "description": "Foxglove is an invented demo orbital body beside the Wolf 359 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1080446045,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Wolf 359"
+      ]
+    },
+    {
+      "id": "planet-wolf-359-bracken",
+      "kind": "planet",
+      "parentId": "system-wolf-359",
+      "name": "Wolf 359 / Bracken",
+      "description": "Bracken is an invented demo orbital body beside the Wolf 359 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2962153507,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Wolf 359"
+      ]
+    },
+    {
+      "id": "planet-wolf-359-rook",
+      "kind": "planet",
+      "parentId": "system-wolf-359",
+      "name": "Wolf 359 / Rook",
+      "description": "Rook is an invented demo orbital body beside the Wolf 359 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 3126944042,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Wolf 359"
+      ]
+    },
+    {
+      "id": "planet-wolf-359-kindle",
+      "kind": "planet",
+      "parentId": "system-wolf-359",
+      "name": "Wolf 359 / Kindle",
+      "description": "Kindle is an invented demo orbital body beside the Wolf 359 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1538184506,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Wolf 359"
+      ]
+    },
+    {
+      "id": "system-lalande-21185",
+      "kind": "system",
+      "parentId": "cloud-local-interstellar",
+      "name": "Lalande 21185",
+      "description": "Lalande 21185 is represented by one map marker in this illustrative Solar Neighborhood. Its five orbital bodies are invented demo objects, not a confirmed exoplanet inventory.",
+      "seed": 2813036774,
+      "type": "demo",
+      "star": {
+        "name": "Lalande 21185",
+        "description": "A single visual map marker for Lalande 21185, not a physical model of this neighbor. The five displayed orbital bodies are invented demo illustrations, not a confirmed exoplanet inventory."
+      }
+    },
+    {
+      "id": "planet-lalande-21185-marigold",
+      "kind": "planet",
+      "parentId": "system-lalande-21185",
+      "name": "Lalande 21185 / Marigold",
+      "description": "Marigold is an invented demo orbital body beside the Lalande 21185 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2695059357,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Lalande 21185"
+      ]
+    },
+    {
+      "id": "planet-lalande-21185-gossamer",
+      "kind": "planet",
+      "parentId": "system-lalande-21185",
+      "name": "Lalande 21185 / Gossamer",
+      "description": "Gossamer is an invented demo orbital body beside the Lalande 21185 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2782255941,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Lalande 21185"
+      ]
+    },
+    {
+      "id": "planet-lalande-21185-cairn",
+      "kind": "planet",
+      "parentId": "system-lalande-21185",
+      "name": "Lalande 21185 / Cairn",
+      "description": "Cairn is an invented demo orbital body beside the Lalande 21185 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2035048627,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Lalande 21185"
+      ]
+    },
+    {
+      "id": "planet-lalande-21185-aster",
+      "kind": "planet",
+      "parentId": "system-lalande-21185",
+      "name": "Lalande 21185 / Aster",
+      "description": "Aster is an invented demo orbital body beside the Lalande 21185 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2447366175,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Lalande 21185"
+      ]
+    },
+    {
+      "id": "planet-lalande-21185-meadow",
+      "kind": "planet",
+      "parentId": "system-lalande-21185",
+      "name": "Lalande 21185 / Meadow",
+      "description": "Meadow is an invented demo orbital body beside the Lalande 21185 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 4020164125,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Lalande 21185"
+      ]
+    },
+    {
+      "id": "system-sirius",
+      "kind": "system",
+      "parentId": "cloud-local-interstellar",
+      "name": "Sirius",
+      "description": "Sirius is represented by one map marker in this illustrative Solar Neighborhood. Its five orbital bodies are invented demo objects, not a confirmed exoplanet inventory.",
+      "seed": 736606926,
+      "type": "demo",
+      "star": {
+        "name": "Sirius",
+        "description": "A single visual map marker for Sirius, not a physical model of this neighbor. The five displayed orbital bodies are invented demo illustrations, not a confirmed exoplanet inventory."
+      }
+    },
+    {
+      "id": "planet-sirius-beacon",
+      "kind": "planet",
+      "parentId": "system-sirius",
+      "name": "Sirius / Beacon",
+      "description": "Beacon is an invented demo orbital body beside the Sirius marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2066989818,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Sirius"
+      ]
+    },
+    {
+      "id": "planet-sirius-opaline",
+      "kind": "planet",
+      "parentId": "system-sirius",
+      "name": "Sirius / Opaline",
+      "description": "Opaline is an invented demo orbital body beside the Sirius marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 532443330,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Sirius"
+      ]
+    },
+    {
+      "id": "planet-sirius-reverie",
+      "kind": "planet",
+      "parentId": "system-sirius",
+      "name": "Sirius / Reverie",
+      "description": "Reverie is an invented demo orbital body beside the Sirius marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1527298022,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Sirius"
+      ]
+    },
+    {
+      "id": "planet-sirius-silverthread",
+      "kind": "planet",
+      "parentId": "system-sirius",
+      "name": "Sirius / Silverthread",
+      "description": "Silverthread is an invented demo orbital body beside the Sirius marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1979143203,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Sirius"
+      ]
+    },
+    {
+      "id": "planet-sirius-daybreak",
+      "kind": "planet",
+      "parentId": "system-sirius",
+      "name": "Sirius / Daybreak",
+      "description": "Daybreak is an invented demo orbital body beside the Sirius marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1773250635,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Sirius"
+      ]
+    },
+    {
+      "id": "system-luyten-726-8",
+      "kind": "system",
+      "parentId": "cloud-local-interstellar",
+      "name": "Luyten 726-8",
+      "description": "Luyten 726-8 is represented by one map marker in this illustrative Solar Neighborhood. Its five orbital bodies are invented demo objects, not a confirmed exoplanet inventory.",
+      "seed": 2293511091,
+      "type": "demo",
+      "star": {
+        "name": "Luyten 726-8",
+        "description": "A single visual map marker for Luyten 726-8, not a physical model of this neighbor. The five displayed orbital bodies are invented demo illustrations, not a confirmed exoplanet inventory."
+      }
+    },
+    {
+      "id": "planet-luyten-726-8-echo",
+      "kind": "planet",
+      "parentId": "system-luyten-726-8",
+      "name": "Luyten 726-8 / Echo",
+      "description": "Echo is an invented demo orbital body beside the Luyten 726-8 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 3750912200,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Luyten 726-8"
+      ]
+    },
+    {
+      "id": "planet-luyten-726-8-counterpoint",
+      "kind": "planet",
+      "parentId": "system-luyten-726-8",
+      "name": "Luyten 726-8 / Counterpoint",
+      "description": "Counterpoint is an invented demo orbital body beside the Luyten 726-8 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1217282559,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Luyten 726-8"
+      ]
+    },
+    {
+      "id": "planet-luyten-726-8-cadence",
+      "kind": "planet",
+      "parentId": "system-luyten-726-8",
+      "name": "Luyten 726-8 / Cadence",
+      "description": "Cadence is an invented demo orbital body beside the Luyten 726-8 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 614208424,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Luyten 726-8"
+      ]
+    },
+    {
+      "id": "planet-luyten-726-8-arpeggio",
+      "kind": "planet",
+      "parentId": "system-luyten-726-8",
+      "name": "Luyten 726-8 / Arpeggio",
+      "description": "Arpeggio is an invented demo orbital body beside the Luyten 726-8 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2127877931,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Luyten 726-8"
+      ]
+    },
+    {
+      "id": "planet-luyten-726-8-overture",
+      "kind": "planet",
+      "parentId": "system-luyten-726-8",
+      "name": "Luyten 726-8 / Overture",
+      "description": "Overture is an invented demo orbital body beside the Luyten 726-8 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 3279908321,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Luyten 726-8"
+      ]
+    },
+    {
+      "id": "system-ross-154",
+      "kind": "system",
+      "parentId": "cloud-local-interstellar",
+      "name": "Ross 154",
+      "description": "Ross 154 is represented by one map marker in this illustrative Solar Neighborhood. Its five orbital bodies are invented demo objects, not a confirmed exoplanet inventory.",
+      "seed": 256932101,
+      "type": "demo",
+      "star": {
+        "name": "Ross 154",
+        "description": "A single visual map marker for Ross 154, not a physical model of this neighbor. The five displayed orbital bodies are invented demo illustrations, not a confirmed exoplanet inventory."
+      }
+    },
+    {
+      "id": "planet-ross-154-peregrine",
+      "kind": "planet",
+      "parentId": "system-ross-154",
+      "name": "Ross 154 / Peregrine",
+      "description": "Peregrine is an invented demo orbital body beside the Ross 154 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2980926750,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Ross 154"
+      ]
+    },
+    {
+      "id": "planet-ross-154-juniper",
+      "kind": "planet",
+      "parentId": "system-ross-154",
+      "name": "Ross 154 / Juniper",
+      "description": "Juniper is an invented demo orbital body beside the Ross 154 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2325582778,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Ross 154"
+      ]
+    },
+    {
+      "id": "planet-ross-154-saffron",
+      "kind": "planet",
+      "parentId": "system-ross-154",
+      "name": "Ross 154 / Saffron",
+      "description": "Saffron is an invented demo orbital body beside the Ross 154 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 2586773706,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Ross 154"
+      ]
+    },
+    {
+      "id": "planet-ross-154-harbor",
+      "kind": "planet",
+      "parentId": "system-ross-154",
+      "name": "Ross 154 / Harbor",
+      "description": "Harbor is an invented demo orbital body beside the Ross 154 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 4281307205,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Ross 154"
+      ]
+    },
+    {
+      "id": "planet-ross-154-talisman",
+      "kind": "planet",
+      "parentId": "system-ross-154",
+      "name": "Ross 154 / Talisman",
+      "description": "Talisman is an invented demo orbital body beside the Ross 154 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 3465889720,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Ross 154"
+      ]
+    },
+    {
+      "id": "system-ross-128",
+      "kind": "system",
+      "parentId": "cloud-local-interstellar",
+      "name": "Ross 128",
+      "description": "Ross 128 is represented by one map marker in this illustrative Solar Neighborhood. Its five orbital bodies are invented demo objects, not a confirmed exoplanet inventory.",
+      "seed": 291325982,
+      "type": "demo",
+      "star": {
+        "name": "Ross 128",
+        "description": "A single visual map marker for Ross 128, not a physical model of this neighbor. The five displayed orbital bodies are invented demo illustrations, not a confirmed exoplanet inventory."
+      }
+    },
+    {
+      "id": "planet-ross-128-solace",
+      "kind": "planet",
+      "parentId": "system-ross-128",
+      "name": "Ross 128 / Solace",
+      "description": "Solace is an invented demo orbital body beside the Ross 128 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 4266852015,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Ross 128"
+      ]
+    },
+    {
+      "id": "planet-ross-128-paperkite",
+      "kind": "planet",
+      "parentId": "system-ross-128",
+      "name": "Ross 128 / Paperkite",
+      "description": "Paperkite is an invented demo orbital body beside the Ross 128 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1847977343,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Ross 128"
+      ]
+    },
+    {
+      "id": "planet-ross-128-thimble",
+      "kind": "planet",
+      "parentId": "system-ross-128",
+      "name": "Ross 128 / Thimble",
+      "description": "Thimble is an invented demo orbital body beside the Ross 128 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 1429222897,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Ross 128"
+      ]
+    },
+    {
+      "id": "planet-ross-128-wanderlight",
+      "kind": "planet",
+      "parentId": "system-ross-128",
+      "name": "Ross 128 / Wanderlight",
+      "description": "Wanderlight is an invented demo orbital body beside the Ross 128 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 391130257,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Ross 128"
+      ]
+    },
+    {
+      "id": "planet-ross-128-aurora",
+      "kind": "planet",
+      "parentId": "system-ross-128",
+      "name": "Ross 128 / Aurora",
+      "description": "Aurora is an invented demo orbital body beside the Ross 128 marker. It illustrates the map and does not represent a confirmed exoplanet.",
+      "seed": 981792194,
+      "type": "demo",
+      "reference": {
+        "label": "Illustrative Solar Neighborhood"
+      },
+      "tags": [
+        "fictional demo",
+        "illustrative orbital body",
+        "Ross 128"
       ]
     }
   ]

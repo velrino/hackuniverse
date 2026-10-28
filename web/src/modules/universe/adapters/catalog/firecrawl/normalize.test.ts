@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getSceneView, searchPlanets } from "../../../domain/catalog";
+import { getSceneView, getSystemStar, searchPlanets } from "../../../domain/catalog";
 import { parseUniverseCatalog } from "../../../domain/parse-catalog";
 import type { UniverseCatalogDocument, UniverseGroup } from "../../../domain/types";
 import { normalizeFirecrawlSearch, type FirecrawlSearchInput } from "./index";
@@ -49,6 +49,39 @@ test("maps explicit application identity independently of provider order", () =>
   assert.deepEqual(catalog.planets[0].tags, ["planning resources"]);
   assert.equal(normalized.schemaVersion, 1);
   assert.equal(normalized.mode, "demo");
+  assert.ok(normalized.entities.every((entity) => !Object.hasOwn(entity, "type")), "mode does not infer entity markers");
+});
+
+test("demo markers come only from application group and mapping context", () => {
+  const supplied = input();
+  const markedGroups = supplied.groups.map((group) => group.kind === "system" ? { ...group, type: "demo" as const } : group);
+  const provider = response();
+  const raw = { ...provider, type: "demo", data: { web: provider.data.web.map((result) => ({ ...result, type: "demo", raw: "SYNTHETIC_ONLY_SECRET" })) } };
+  const actual = parseUniverseCatalog(normalizeFirecrawlSearch({
+    ...supplied, mode: "live", groups: markedGroups,
+    batches: [{ ...supplied.batches[0], response: raw, mapping: supplied.batches[0].mapping.map((row, index) => index === 0 ? { ...row, type: "demo" } : row) }],
+  }));
+  const expected: UniverseCatalogDocument = {
+    schemaVersion: 1, mode: "live", rootId: supplied.rootId, initialTarget: supplied.initialTarget,
+    entities: [
+      ...markedGroups,
+      { id: "planet:beta", kind: "planet", parentId: "system:main", name: "Beta notes", description: "", seed: 21, type: "demo", reference: { label: "docs.example", href: "https://docs.example/beta?topic=planning#details" }, tags: ["planning resources"] },
+      { id: "planet:alpha", kind: "planet", parentId: "system:main", name: "Alpha notes", description: "Readable source", seed: 20, reference: { label: "docs.example", href: "https://docs.example/alpha" }, tags: ["planning resources"] },
+    ],
+  };
+  assert.deepEqual(actual, parseUniverseCatalog(expected));
+  assert.equal(actual.entities.find(({ id }) => id === "system:main")?.type, "demo");
+  assert.equal(actual.planets[0].type, "demo");
+  assert.equal(Object.hasOwn(actual.planets[1], "type"), false, "provider marker is ignored");
+  assert.ok(!JSON.stringify(actual).includes("SYNTHETIC_ONLY_SECRET"));
+});
+
+test("rejects invalid application demo markers with redacted errors", () => {
+  const supplied = input();
+  for (const type of ["SYNTHETIC_ONLY_SECRET", "live", null, true]) {
+    assertRedactedFailure({ ...supplied, groups: supplied.groups.map((group) => ({ ...group, type })) } as unknown as FirecrawlSearchInput);
+    assertRedactedFailure({ ...supplied, batches: [{ ...supplied.batches[0], mapping: supplied.batches[0].mapping.map((row) => ({ ...row, type })) }] } as unknown as FirecrawlSearchInput);
+  }
 });
 
 test("accepts optional matching provider positions and empty result batches", () => {
@@ -99,6 +132,47 @@ test("provider-shaped and directly supplied neutral records produce the same cat
   const ticket = parseUniverseCatalog({ ...direct, entities: [...groups, { id: "ticket:42", kind: "planet", parentId: "system:main", name: "Planning ticket", description: "No public URL", seed: 20, tags: ["planning resources"] }] });
   assert.equal(searchPlanets(ticket, "planning")[0].id, "ticket:42");
   assert.equal(getSceneView(ticket, "ticket:42").mode, "system");
+});
+
+test("preserves application star context while projecting only canonical fields", () => {
+  const marker = "SYNTHETIC_ONLY_SECRET";
+  const star = {
+    name: "Sun", description: "Our local star.", spectralType: "G2 V", temperatureK: 5772,
+    radiusKm: 695700, ageBillionYears: 4.6, providerToken: marker,
+    reference: { label: "NASA", href: "https://SCIENCE.nasa.gov/sun/facts/", raw: marker },
+  };
+  const supplied = input();
+  const normalized = normalizeFirecrawlSearch({ ...supplied, groups: supplied.groups.map((group) => group.kind === "system" ? { ...group, star } : group) });
+  const expectedStar = {
+    name: "Sun", description: "Our local star.", spectralType: "G2 V", temperatureK: 5772,
+    radiusKm: 695700, ageBillionYears: 4.6,
+    reference: { label: "NASA", href: "https://SCIENCE.nasa.gov/sun/facts/" },
+  };
+  const projectedSystem = normalized.entities.find((entity) => entity.kind === "system");
+  assert.deepEqual(projectedSystem?.star, expectedStar);
+  assert.notEqual(projectedSystem?.star, star);
+  assert.notEqual(projectedSystem?.star?.reference, star.reference);
+  assert.ok(!JSON.stringify(normalized).includes(marker));
+  const direct = normalizeFirecrawlSearch(supplied);
+  const expected = parseUniverseCatalog({ ...direct, entities: direct.entities.map((entity) => entity.kind === "system" ? { ...entity, star: expectedStar } : entity) });
+  const actual = parseUniverseCatalog(normalized);
+  assert.deepEqual(actual, expected);
+  assert.equal(getSceneView(actual, "system:main").starName, "Sun");
+  assert.equal(getSystemStar(actual, "system:main")?.reference?.href, "https://science.nasa.gov/sun/facts/");
+  star.name = "Changed upstream";
+  star.reference.label = "Changed upstream";
+  assert.equal(getSystemStar(actual, "system:main")?.name, "Sun");
+  assert.equal(getSystemStar(actual, "system:main")?.reference?.label, "NASA");
+});
+
+test("keeps optional star fields absent and rejects star context on other groups", () => {
+  const supplied = input();
+  const normalized = normalizeFirecrawlSearch({ ...supplied, groups: supplied.groups.map((group) => group.kind === "system" ? { ...group, star: { name: "Local star", description: "" } } : group) });
+  assert.deepEqual(getSystemStar(parseUniverseCatalog(normalized), "system:main"), { name: "Local star", description: "" });
+  for (const kind of ["universe", "galaxy", "cloud"]) {
+    const invalidGroups = supplied.groups.map((group) => ({ ...group, ...(group.kind === kind ? { star: { name: "SYNTHETIC_ONLY_SECRET", description: "" } } : {}) })) as readonly UniverseGroup[];
+    assertRedactedFailure({ ...supplied, groups: invalidGroups });
+  }
 });
 
 test("rejects malformed provider success, envelopes and result fields", async (t) => {

@@ -2,6 +2,7 @@ import type {
   EntityKind,
   NavigationTarget,
   SceneNode,
+  SystemStar,
   UniverseCatalog,
   UniverseEntity,
   UniverseSceneView,
@@ -51,6 +52,11 @@ export function getBreadcrumbs(catalog: UniverseCatalog, target: EntityReference
 
 export function findPlanet(catalog: UniverseCatalog, id: string): UniversePlanet | undefined {
   return catalog.planets.find((planet) => planet.id === id);
+}
+
+export function getSystemStar(catalog: UniverseCatalog, systemId: string): SystemStar | undefined {
+  const entity = getEntity(catalog, systemId);
+  return entity?.kind === "system" ? entity.star : undefined;
 }
 
 /** Empty queries return all planets, in their stable catalog order. */
@@ -129,6 +135,6 @@ export function getSceneView(catalog: UniverseCatalog, target: EntityReference):
     key: `${entity.kind}:${entity.id}`,
     mode: entity.kind === "system" ? "system" : "cluster",
     nodes: (index.children.get(entity.id) ?? []).map((child) => sceneNode(index, child)),
-    ...(entity.kind === "system" ? { starName: entity.name } : {}),
+    ...(entity.kind === "system" ? { starName: entity.star?.name ?? entity.name } : {}),
   };
 }

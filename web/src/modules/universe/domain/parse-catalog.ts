@@ -1,4 +1,4 @@
-import type { EntityKind, NavigationTarget, UniverseCatalog, UniverseEntity, UniversePlanet } from "./types";
+import type { CatalogReference, EntityKind, NavigationTarget, SystemStar, UniverseCatalog, UniverseEntity, UniversePlanet } from "./types";
 
 type InputRecord = Record<string, unknown>;
 const kinds = new Set<EntityKind>(["universe", "galaxy", "cloud", "system", "planet"]);
@@ -46,7 +46,12 @@ function seed(value: unknown, field: string): number {
   return value;
 }
 
-function reference(value: unknown, field: string): NonNullable<UniversePlanet["reference"]> {
+function demoType(value: unknown, field: string): "demo" | undefined {
+  if (value !== undefined && value !== "demo") invalid(`${field} must be demo when supplied`);
+  return value;
+}
+
+function reference(value: unknown, field: string): CatalogReference {
   const input = record(value, field);
   const label = text(input.label, `${field}.label`, 160);
   if (input.href === undefined) return Object.freeze({ label });
@@ -62,15 +67,38 @@ function reference(value: unknown, field: string): NonNullable<UniversePlanet["r
   return Object.freeze({ label, href: url.href });
 }
 
+function positiveNumber(value: unknown, field: string, maximum: number): number {
+  if (typeof value !== "number" || !Number.isFinite(value) || value <= 0 || value > maximum) {
+    invalid(`${field} must be a finite positive number within its supported bound`);
+  }
+  return value;
+}
+
+function systemStar(value: unknown, field: string): SystemStar {
+  const input = record(value, field);
+  return Object.freeze({
+    name: text(input.name, `${field}.name`, 160),
+    description: text(input.description, `${field}.description`, 4000, true),
+    ...(input.spectralType === undefined ? {} : { spectralType: text(input.spectralType, `${field}.spectralType`, 80) }),
+    ...(input.temperatureK === undefined ? {} : { temperatureK: positiveNumber(input.temperatureK, `${field}.temperatureK`, 1_000_000) }),
+    ...(input.radiusKm === undefined ? {} : { radiusKm: positiveNumber(input.radiusKm, `${field}.radiusKm`, 10_000_000_000) }),
+    ...(input.ageBillionYears === undefined ? {} : { ageBillionYears: positiveNumber(input.ageBillionYears, `${field}.ageBillionYears`, 100) }),
+    ...(input.reference === undefined ? {} : { reference: reference(input.reference, `${field}.reference`) }),
+  });
+}
+
 function entity(value: unknown, index: number): UniverseEntity {
   const field = `entities[${index}]`;
   const input = record(value, field);
   const kind = entityKind(input.kind, `${field}.kind`);
+  const type = demoType(input.type, `${field}.type`);
+  if (input.star !== undefined && kind !== "system") invalid(`${field}.star is only supported on systems`);
   const common = {
     id: identifier(input.id, `${field}.id`),
     name: text(input.name, `${field}.name`, 160),
     description: text(input.description, `${field}.description`, 4000, true),
     seed: seed(input.seed, `${field}.seed`),
+    ...(type === undefined ? {} : { type }),
   };
   if (kind === "planet") {
     let tags: readonly string[] | undefined;
@@ -85,6 +113,10 @@ function entity(value: unknown, index: number): UniverseEntity {
       ...(tags === undefined ? {} : { tags }),
     });
   }
+  if (kind === "system") return Object.freeze({
+    ...common, kind, parentId: input.parentId === null ? null : identifier(input.parentId, `${field}.parentId`),
+    ...(input.star === undefined ? {} : { star: systemStar(input.star, `${field}.star`) }),
+  });
   return Object.freeze({ ...common, kind, parentId: input.parentId === null ? null : identifier(input.parentId, `${field}.parentId`) });
 }
 

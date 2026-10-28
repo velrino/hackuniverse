@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getBreadcrumbs, getEntity, getPlanetCount, getSceneView, searchPlanets } from "./catalog";
+import { getBreadcrumbs, getEntity, getPlanetCount, getSceneView, getSystemStar, searchPlanets } from "./catalog";
 import { parseUniverseCatalog } from "./parse-catalog";
 import type { UniverseCatalogDocument } from "./types";
 
@@ -55,6 +55,28 @@ test("URLless documents and tickets preserve identity, order and parent-system s
   assert.equal(getEntity(catalog, { kind: "galaxy", id: "ticket:42" }), undefined);
 });
 
+test("demo markers are explicit, optional and independent of catalog mode", () => {
+  const input = document();
+  const unmarkedDemo = parseUniverseCatalog({ ...input, mode: "demo" });
+  assert.ok(unmarkedDemo.entities.every((entity) => !Object.hasOwn(entity, "type")));
+  const mixed = parseUniverseCatalog({ ...input, entities: input.entities.map((entity, index) => index % 2 === 0 ? { ...entity, type: "demo", raw: "SYNTHETIC_ONLY_SECRET" } : entity) });
+  assert.equal(mixed.mode, "live");
+  assert.deepEqual(mixed.entities.map(({ type }) => type), ["demo", undefined, "demo", undefined, "demo", undefined]);
+  assert.ok(!JSON.stringify(mixed).includes("SYNTHETIC_ONLY_SECRET"));
+  const allKinds = parseUniverseCatalog({ ...input, entities: input.entities.map((entity) => ({ ...entity, type: "demo" })) });
+  assert.ok(allKinds.entities.every((entity) => entity.type === "demo" && Object.isFrozen(entity)));
+  assert.deepEqual(getSceneView(mixed, mixed.rootId), getSceneView(parseUniverseCatalog(input), input.rootId));
+});
+
+test("rejects unsupported entity demo markers without echoing their values", async (t) => {
+  for (const type of ["SYNTHETIC_ONLY_SECRET", "live", "", null, true, 42, {}]) {
+    await t.test(`unsupported ${typeof type} marker`, () => assertRedactedFailure(patchEntity("ticket:42", { type })));
+  }
+  for (const id of ["universe:main", "galaxy:main", "cloud:main", "system:main"]) {
+    await t.test(`invalid marker on ${id}`, () => assertRedactedFailure(patchEntity(id, { type: "SYNTHETIC_ONLY_SECRET" })));
+  }
+});
+
 test("search uses neutral text, tags and optional reference metadata", () => {
   const catalog = parseUniverseCatalog(patchEntity("ticket:42", { reference: { label: "Issue tracker", href: "https://tickets.example/items/42" } }));
   assert.deepEqual(searchPlanets(catalog, "ROADMAP notebook").map(({ id }) => id), ["7F:Document_Alpha.v1"]);
@@ -102,6 +124,62 @@ test("projection counts and scene outputs never leak between catalogs or calls",
   original.nodes[0].children = [];
   assert.equal(getSceneView(first, first.rootId).nodes[0].children?.length, 1);
   assert.equal(getPlanetCount(first, first.rootId), 2);
+});
+
+test("system stars are optional metadata and never add entities or planets", () => {
+  const plain = parseUniverseCatalog(document());
+  assert.equal(getSystemStar(plain, "system:main"), undefined);
+  assert.equal(getSceneView(plain, "system:main").starName, "Workspace");
+  const catalog = parseUniverseCatalog(patchEntity("system:main", { star: { name: "Local star", description: "" } }));
+  assert.deepEqual(getSystemStar(catalog, "system:main"), { name: "Local star", description: "" });
+  assert.equal(getSystemStar(catalog, "galaxy:main"), undefined);
+  assert.equal(getSystemStar(catalog, "ticket:42"), undefined);
+  assert.equal(getSystemStar(catalog, "missing"), undefined);
+  assert.equal(catalog.entities.length, plain.entities.length);
+  assert.equal(getPlanetCount(catalog, catalog.rootId), 2);
+  assert.equal(getSceneView(catalog, "system:main").starName, "Local star");
+  assert.deepEqual(getSceneView(catalog, "system:main").nodes, getSceneView(plain, "system:main").nodes);
+  assert.deepEqual(getSceneView(catalog, "ticket:42"), getSceneView(catalog, "system:main"));
+});
+
+test("star metadata and its reference are projected, owned and frozen", () => {
+  const marker = "SYNTHETIC_ONLY_SECRET";
+  const input = {
+    name: "Sun", description: "Our local star.", spectralType: "G2 V", temperatureK: 5772,
+    radiusKm: 695700, ageBillionYears: 4.6, raw: marker,
+    reference: { label: "NASA", href: "https://SCIENCE.nasa.gov/sun/facts/", token: marker },
+  };
+  const catalog = parseUniverseCatalog(patchEntity("system:main", { star: input }));
+  const star = getSystemStar(catalog, "system:main");
+  assert.deepEqual(star, {
+    name: "Sun", description: "Our local star.", spectralType: "G2 V", temperatureK: 5772,
+    radiusKm: 695700, ageBillionYears: 4.6,
+    reference: { label: "NASA", href: "https://science.nasa.gov/sun/facts/" },
+  });
+  assert.ok(Object.isFrozen(star) && Object.isFrozen(star?.reference));
+  input.name = "Changed upstream";
+  input.reference.label = "Changed reference";
+  assert.equal(star?.name, "Sun");
+  assert.equal(star?.reference?.label, "NASA");
+  assert.ok(!JSON.stringify(catalog).includes(marker));
+});
+
+test("rejects invalid or misplaced star metadata with redacted errors", async (t) => {
+  const star = { name: "Sun", description: "Our local star." };
+  for (const id of ["universe:main", "galaxy:main", "cloud:main", "ticket:42"]) {
+    await t.test(`metadata on ${id}`, () => assertRedactedFailure(patchEntity(id, { star })));
+  }
+  const invalid: [string, unknown][] = [
+    ["null", null], ["array", []], ["empty name", { ...star, name: "" }],
+    ["long name", { ...star, name: "x".repeat(161) }],
+    ["missing description", { name: "Sun" }], ["long description", { ...star, description: "x".repeat(4001) }],
+    ["empty spectral type", { ...star, spectralType: "" }], ["long spectral type", { ...star, spectralType: "x".repeat(81) }],
+    ["unsafe reference", { ...star, reference: { label: "Source", href: "https://SYNTHETIC_ONLY_SECRET:password@example.invalid/" } }],
+  ];
+  for (const [field, maximum] of [["temperatureK", 1_000_000], ["radiusKm", 10_000_000_000], ["ageBillionYears", 100]] as const) {
+    for (const value of [0, -1, NaN, Infinity, maximum + 1, "not-a-number"]) invalid.push([`${field} rejects ${String(value)}`, { ...star, [field]: value }]);
+  }
+  for (const [name, value] of invalid) await t.test(name, () => assertRedactedFailure(patchEntity("system:main", { star: value })));
 });
 
 test("HTTPS references normalize without prohibiting meaningful ports, queries or fragments", () => {

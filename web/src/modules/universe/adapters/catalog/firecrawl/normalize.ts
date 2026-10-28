@@ -1,4 +1,4 @@
-import type { NavigationTarget, UniverseCatalogDocument, UniverseEntity, UniverseGroup } from "../../../domain/types";
+import type { NavigationTarget, SystemStar, UniverseCatalogDocument, UniverseEntity, UniverseGroup } from "../../../domain/types";
 
 export type FirecrawlSearchInput = {
   mode: "demo" | "live";
@@ -10,7 +10,7 @@ export type FirecrawlSearchInput = {
     systemId: string;
     query: string;
     response: unknown;
-    mapping: readonly { planetId: string; seed: number; position: number }[];
+    mapping: readonly { planetId: string; seed: number; position: number; type?: "demo" }[];
   }[];
 };
 
@@ -52,6 +52,11 @@ function integer(value: unknown, field: string, minimum: number, maximum: number
   return value;
 }
 
+function demoType(value: unknown, field: string): "demo" | undefined {
+  if (value !== undefined && value !== "demo") fail(`${field} must be demo when supplied`);
+  return value;
+}
+
 function website(value: unknown): URL {
   const href = text(value, "result.url", 4096);
   if (controls.test(href)) fail("result.url must not contain control characters");
@@ -67,6 +72,24 @@ function website(value: unknown): URL {
   return url;
 }
 
+/** Application context is copied explicitly; canonical validation stays with the caller. */
+function starContext(star: SystemStar): SystemStar {
+  object(star, "group.star");
+  if (star.reference !== undefined) object(star.reference, "group.star.reference");
+  return {
+    name: star.name,
+    description: star.description,
+    ...(star.spectralType === undefined ? {} : { spectralType: star.spectralType }),
+    ...(star.temperatureK === undefined ? {} : { temperatureK: star.temperatureK }),
+    ...(star.radiusKm === undefined ? {} : { radiusKm: star.radiusKm }),
+    ...(star.ageBillionYears === undefined ? {} : { ageBillionYears: star.ageBillionYears }),
+    ...(star.reference === undefined ? {} : { reference: {
+      label: star.reference.label,
+      ...(star.reference.href === undefined ? {} : { href: star.reference.href }),
+    } }),
+  };
+}
+
 /** Projects one supplier format; the caller validates the resulting canonical tree. */
 export function normalizeFirecrawlSearch(input: FirecrawlSearchInput): UniverseCatalogDocument {
   object(input, "input");
@@ -74,11 +97,15 @@ export function normalizeFirecrawlSearch(input: FirecrawlSearchInput): UniverseC
   array(input.groups, "groups");
   array(input.batches, "batches");
   const entities: UniverseEntity[] = input.groups.map((group) => {
-    object(group, "group");
+    const context = object(group, "group");
+    const type = demoType(context.type, "group.type");
     if (!["universe", "galaxy", "cloud", "system"].includes(group.kind)) fail("groups may contain only grouping entities");
+    if (context.star !== undefined && group.kind !== "system") fail("star context is only supported on system groups");
     return {
       id: group.id, kind: group.kind, parentId: group.parentId,
       name: group.name, description: group.description, seed: group.seed,
+      ...(type === undefined ? {} : { type }),
+      ...(group.kind === "system" && group.star !== undefined ? { star: starContext(group.star) } : {}),
     };
   });
   const systems = new Set(input.groups.filter((group) => group.kind === "system").map((group) => group.id));
@@ -104,6 +131,7 @@ export function normalizeFirecrawlSearch(input: FirecrawlSearchInput): UniverseC
     // Mapping order is application-owned and is retained independently of ranking.
     for (const value of mapping) {
       const row = object(value, "mapping entry");
+      const type = demoType(row.type, "mapping.type");
       const position = integer(row.position, "mapping.position", 1, web.length);
       if (positions.has(position)) fail("mapping positions must be unique");
       positions.add(position);
@@ -121,6 +149,7 @@ export function normalizeFirecrawlSearch(input: FirecrawlSearchInput): UniverseC
         name: text(result.title, "result.title", 160),
         description: text(result.description, "result.description", 4000, true),
         seed, reference: { label: url.hostname, href: url.href }, tags: [query],
+        ...(type === undefined ? {} : { type }),
       });
     }
   }
