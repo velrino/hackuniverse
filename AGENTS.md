@@ -29,6 +29,7 @@ Read the nearest package guide before changing code. The current application liv
 - The approved logo and favicons are cyan. Preserve the canonical source under `assets/images/` and keep public derivatives consistent.
 - Loading progress is controlled by the real operation. Timed progress on `/design` is an explicitly labeled preview. Preserve cancellation semantics, timer cleanup and reduced-motion behavior.
 - Show the three-second welcome loader once per browser, on the first visited route. Persist its seen flag before opening; refresh, navigation and locale changes do not replay it. Keep this introductory animation separate from real operation progress and the manual design preview.
+- Keep the universe home immersive and minimal: one hamburger menu with tabs, no full navbar or permanent pause toolbar. Selecting a planet moves the camera within the intact parent system. Flight is optional and system-bound; wider views hide the ship. System changes use a cancellable/skippable three-second jump, independent of imports.
 - New accounts start with zero planets. One website is one planet; pages and refreshes do not create extra planets. Application localization does not translate imported website content.
 
 ## Working and validation
