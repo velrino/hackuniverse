@@ -12,6 +12,7 @@ export type UniverseAdapters = {
   tour?: UniverseTourDefinition;
   presentationReady?: boolean;
   autoTour?: boolean;
+  formatNumber?: (value: number) => string;
   components: {
     Scene: ComponentType<UniverseSceneProps>;
     LanguagePicker: ComponentType;

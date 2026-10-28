@@ -35,6 +35,10 @@
 .universe-details .hud-kicker { font-size: 9px; }
 .universe-details h2 { font-size: 24px; font-weight: 600; line-height: 1.12; }
 .universe-details-description { color: var(--hud-muted); font-size: 14px; line-height: 1.6; }
+.universe-star-facts { display: grid; gap: 8px; margin: 0; }
+.universe-star-facts > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: baseline; gap: 10px; }
+.universe-star-facts dt { color: var(--hud-muted); font-size: 12px; line-height: 1.5; }
+.universe-star-facts dd { min-width: 0; margin: 0; color: var(--hud-text); font: 12px/1.5 var(--font-mono); text-align: right; overflow-wrap: anywhere; }
 .universe-source { display: flex; min-width: 0; align-items: center; gap: 8px; padding-top: 12px; border-top: 1px solid var(--hud-line); color: var(--hud-accent); font-family: var(--font-mono); font-size: 11px; }
 .universe-source > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .universe-source-note { color: var(--hud-muted); font-size: 11px; line-height: 1.6; }
