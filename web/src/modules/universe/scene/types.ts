@@ -3,6 +3,7 @@ import type { ShipFlightInput } from "./flight";
 
 export type UniverseFlightStatus = "idle" | "loading" | "ready" | "error";
 export type UniverseTourCameraStep = { token: string; target: NavigationTarget; motion?: "approach" };
+export type UniverseSceneErrorOperation = "initialize" | "view" | "render" | "flight-load";
 
 export type UniverseSceneProps = {
   view: UniverseSceneView;
@@ -35,4 +36,5 @@ export type UniverseSceneProps = {
   onSelect: (id: string) => void;
   onReady: () => void;
   onUnavailable: () => void;
+  onError?: (error: unknown, operation: UniverseSceneErrorOperation) => void;
 };
