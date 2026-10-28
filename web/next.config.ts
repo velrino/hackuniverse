@@ -4,6 +4,7 @@ import { brandLogoSrc } from "./src/configs/brand";
 const brandLogoUrl = new URL(brandLogoSrc, "https://hackuniverse.invalid");
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["[::1]"],
   images: {
     localPatterns: [
       { pathname: brandLogoUrl.pathname, search: brandLogoUrl.search },
