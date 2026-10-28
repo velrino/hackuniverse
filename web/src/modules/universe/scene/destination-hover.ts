@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type Destination = { position: THREE.Vector3; extent: number };
+export type Destination = { position: THREE.Vector3; extent: number; highlight?: (active: boolean) => void };
 type HoverOptions = {
   scene: THREE.Scene;
   camera: THREE.Camera;
@@ -31,6 +31,14 @@ export function createDestinationHover({ scene, camera, canvas, labelLayer, map,
   let ownsCursor = false;
   let previousCursor = "";
   let disposed = false;
+  let activeHighlight: Destination["highlight"] | null = null;
+
+  function highlight(next: Destination["highlight"] = undefined) {
+    if (activeHighlight === (next ?? null)) return;
+    activeHighlight?.(false);
+    activeHighlight = next ?? null;
+    activeHighlight?.(true);
+  }
 
   function cursor(hovered: boolean) {
     if (hovered) {
@@ -45,6 +53,7 @@ export function createDestinationHover({ scene, camera, canvas, labelLayer, map,
   }
 
   function hide() {
+    highlight();
     aura.visible = false;
     cursor(false);
   }
@@ -134,9 +143,12 @@ export function createDestinationHover({ scene, camera, canvas, labelLayer, map,
         }
       }
       if (!destination || !Number.isFinite(destination.extent) || destination.extent <= 0) { hide(); return; }
-      aura.position.copy(destination.position);
-      aura.scale.setScalar(destination.extent * 4.2);
-      aura.visible = true;
+      highlight(destination.highlight);
+      aura.visible = !destination.highlight;
+      if (!destination.highlight) {
+        aura.position.copy(destination.position);
+        aura.scale.setScalar(destination.extent * 4.2);
+      }
       cursor(true);
     },
     clear,
