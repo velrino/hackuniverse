@@ -5,13 +5,11 @@ import { ArrowLeft, Layers3, Orbit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUniverseAdapters } from "../../adapters/hooks/use-universe-adapters";
 import { useUniverseNavigation } from "../../hooks/use-universe-navigation";
-import { useUniverseTravel } from "../../hooks/use-universe-travel";
 import { getEntity, getParent } from "../../domain/catalog";
 import type { ShipFlightInput } from "../../scene/flight/types";
 import { PlanetDetails } from "../../ui/shared/PlanetDetails";
 import { ExplorerMenu } from "../../ui/shared/ExplorerMenu";
 import { FlightControls } from "../../ui/shared/FlightControls";
-import { WarpCutscene } from "../../ui/shared/WarpCutscene";
 
 const neutralInput: ShipFlightInput = { throttle: 0, turn: 0, lift: 0, boost: false };
 
@@ -19,7 +17,6 @@ export function Explorer() {
   const { catalog, copy, components: { Scene, BrandLogo, LanguagePicker, DesignLink } } = useUniverseAdapters();
   const { current, parent, view, navigate, planet } = useUniverseNavigation(catalog);
   const activeSystem = current.kind === "system" ? current : current.kind === "planet" ? getParent(catalog, current.id) : undefined;
-  const travel = useUniverseTravel(catalog, navigate);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showOrbits, setShowOrbits] = useState(true);
   const [resetToken, setResetToken] = useState(0);
@@ -33,7 +30,7 @@ export function Explorer() {
   const onUnavailable = useCallback(() => { setSceneStatus("unavailable"); setFlightEnabled(false); }, []);
   const onFlightStatus = useCallback((status: "idle" | "loading" | "ready" | "error") => setFlightStatus(status), []);
   const onAutopilotEnd = useCallback(() => setAutopilotTargetId(null), []);
-  const blocked = menuOpen || Boolean(travel.pending);
+  const blocked = menuOpen;
 
   useEffect(() => {
     const onEscape = (event: KeyboardEvent) => {
@@ -47,7 +44,7 @@ export function Explorer() {
     setFlightEnabled(false);
     setFlightTargetId(null);
     setAutopilotTargetId(null);
-    travel.requestNavigation(id);
+    navigate(id);
   };
   const selectSceneNode = (id: string) => {
     const entity = getEntity(catalog, id);
@@ -92,9 +89,8 @@ export function Explorer() {
       {sceneStatus === "unavailable" && <section className="universe-scene-state universe-fallback" role="status"><h2>{copy.fallbackTitle}</h2><p>{copy.fallbackDescription}</p><Button className="hud-button" onClick={() => setMenuOpen(true)}>{copy.library}</Button></section>}
       {flightStatus === "error" && <button type="button" className="universe-flight-error" onClick={() => setMenuOpen(true)}>{copy.flightError}</button>}
       {planet && !flightEnabled && <PlanetDetails planet={planet} copy={copy} onBack={goWider} />}
-      {parent && <Button type="button" variant="outline" className="hud-button universe-scale-back" onClick={goWider} disabled={Boolean(travel.pending)} title={`${copy.wider}: ${copy.kinds[parent.kind]}`}><Layers3 aria-hidden="true" /><span>{copy.kinds[parent.kind]}</span></Button>}
+      {parent && <Button type="button" variant="outline" className="hud-button universe-scale-back" onClick={goWider} title={`${copy.wider}: ${copy.kinds[parent.kind]}`}><Layers3 aria-hidden="true" /><span>{copy.kinds[parent.kind]}</span></Button>}
       {flightEnabled && !blocked && <><FlightControls copy={copy} onInput={setFlightInput} /><Button type="button" variant="outline" className="hud-button universe-flight-exit" onClick={() => setFlightEnabled(false)}><ArrowLeft aria-hidden="true" />{copy.exitFlight}</Button></>}
-      {travel.pending && <WarpCutscene destination={travel.pending.name} copy={copy} onSkip={travel.complete} onCancel={travel.cancel} />}
     </main>
   );
 }
