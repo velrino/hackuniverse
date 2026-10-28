@@ -19,6 +19,12 @@ const ptBR = {
     hint: "Você pode mudar seu idioma a qualquer momento.",
   },
   designSystem: designSystemPtBR,
+  notFound: {
+    eyebrow: "Erro 404 / Rota não encontrada",
+    title: "Página não encontrada.",
+    description: "Esta página não existe ou mudou de endereço. Volte ao início para continuar explorando.",
+    home: "Voltar ao início",
+  },
   example: {
     eyebrow: "Uma nova perspectiva",
     title: "Seu universo começa aqui.",
