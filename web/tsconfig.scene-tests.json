@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noEmit": false,
+    "incremental": false,
+    "rootDir": "src/modules/universe",
+    "outDir": ".scene-tests",
+    "types": ["node"],
+    "plugins": []
+  },
+  "include": [
+    "src/modules/universe/scene/tour-motion.test.ts"
+  ]
+}

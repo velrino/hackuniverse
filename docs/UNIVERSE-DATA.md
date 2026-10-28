@@ -107,7 +107,7 @@ This is a local transformation, not a live integration: it performs no fetch, SD
 
 ## Selectors and scene projection
 
-[catalog.ts](../web/src/modules/universe/domain/catalog.ts) contains pure selectors. Entity, parent, children and breadcrumb lookups use the authoritative hierarchy. `findPlanet` resolves a canonical planet, and `getPlanetCount` counts planet descendants without adding a visual star. Search matches every whitespace-separated term against name, description, optional reference label/href and tags; an empty search returns all planets in stable order.
+[catalog.ts](../web/src/modules/universe/domain/catalog.ts) contains pure selectors. Entity, parent, children and breadcrumb lookups use the authoritative hierarchy. `findPlanet` resolves a canonical planet, and `getPlanetCount` counts planet descendants without adding a visual star. Scene projection builds local identity, children and count indexes once per call, avoiding repeated ancestor scans while retaining no shared cache between catalogs. Search matches every whitespace-separated term against name, description, optional reference label/href and tags; an empty search returns all planets in stable order.
 
 `getSceneView` projects only rendering fields: stable IDs, kinds, labels, counts, seeds, colors and nested descendants. Selecting a planet returns its complete parent-system view with the same scene key, mode, nodes and star name. The camera focuses within that world while siblings, geometry and orbital state survive. Group keys remain `${kind}:${id}`; suppliers do not replace them with request IDs or rankings. Empty groups yield empty nodes, and unknown targets yield an empty cluster view.
 
@@ -115,4 +115,4 @@ Interface localization does not translate or rewrite catalog content, labels, ta
 
 ## Validation
 
-From `web/`, run `npm run test:catalog`. The current 78 native Node tests cover canonical and supplier boundaries, URLless/empty catalogs, hierarchy and input failures, safe projection, immutability, derived identity, and adapter conversion. The runner compiles tests with the existing TypeScript dependency into ignored `.catalog-tests/` output. Fixture parity was also checked against the pre-migration 400-record dataset; no duplicate legacy fixture is committed.
+From `web/`, run `npm run test:catalog`. Native Node tests cover canonical and supplier boundaries, URLless/empty catalogs, hierarchy and input failures, safe projection, immutability, derived identity, adapter conversion and projection isolation. The runner compiles tests with the existing TypeScript dependency into ignored `.catalog-tests/` output. Fixture parity was also checked against the pre-migration 400-record dataset; no duplicate legacy fixture is committed. `npm run test:scene` separately checks tour continuity, distance bounds and shared orbital motion.

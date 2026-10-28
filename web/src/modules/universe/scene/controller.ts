@@ -9,18 +9,19 @@ import { createSemanticZoomGate } from "./semantic-zoom";
 import { clusterPosition, clusterScale, nodeGeometrySignature, orbitalAngle, orbitalSpeed, planetRadius, previewScale, systemOrbit, systemRadius } from "./layout";
 import { createSpatialBackground } from "./background";
 import { createDestinationHover } from "./destination-hover";
-import { createGalaxyHighlight } from "./galaxy-highlight";
+import { createDestinationHighlight } from "./destination-highlight";
+import { createTourDolly, type TourDolly } from "./tour-motion";
 
 type Callbacks = { onSelect: (id: string) => void; onReady: () => void; onUnavailable: () => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onInteraction: () => void };
 type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[]; dust?: THREE.Points; core?: THREE.Sprite; highlight?: (active: boolean) => void; haze?: { primary: THREE.Sprite; secondary: THREE.Sprite } };
 type Label = { element: HTMLElement; body?: Body; position?: THREE.Vector3; width: number };
 type CameraPose = { position: THREE.Vector3; target: THREE.Vector3 };
-type CameraTween = { from: CameraPose; to: CameraPose; started: number; duration: number; fromFraming: number; toFraming: number; onComplete?: () => void };
+type TourCameraMotion = { dolly: TourDolly; fromDistance: number };
+type CameraTween = { from: CameraPose; to: CameraPose; started: number; duration: number; fromFraming: number; toFraming: number; onComplete?: () => void; tourMotion?: TourCameraMotion };
 type FlightMapPose = CameraPose & { framing: number; focusPosition: THREE.Vector3 | null };
 type FadeMaterial = { material: THREE.Material; opacity: number; transparent: boolean; depthWrite: boolean };
-type WorldTransition = { outgoing: THREE.Group; incomingMaterials: FadeMaterial[]; outgoingMaterials: FadeMaterial[]; from: CameraPose; to: CameraPose; started: number; duration: number; cameraOwned: boolean; fromFraming: number; far: number; minDistance: number; maxDistance: number; fromLightPosition: THREE.Vector3; fromIntensity: number; toIntensity: number };
+type WorldTransition = { outgoing: THREE.Group; incomingMaterials: FadeMaterial[]; outgoingMaterials: FadeMaterial[]; from: CameraPose; to: CameraPose; started: number; duration: number; cameraOwned: boolean; fromFraming: number; far: number; minDistance: number; maxDistance: number; fromLightPosition: THREE.Vector3; fromIntensity: number; toIntensity: number; tourMotion?: TourCameraMotion };
 const LABEL_BUDGET = 32;
-const isGalaxy = (node: SceneNode) => node.kind === "galaxy" || node.kind === "universe";
 
 export function createUniverseController(container: HTMLElement, callbacks: Callbacks) {
   if (typeof ResizeObserver === "undefined" || typeof IntersectionObserver === "undefined") throw new Error("Scene observers unavailable");
@@ -142,6 +143,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   let interactionUntil = 0;
   const projected = new THREE.Vector3();
   const labelPosition = new THREE.Vector3();
+  const tourDirection = new THREE.Vector3();
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   const activePointers = new Set<number>();
@@ -337,11 +339,10 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       const core = addGlow(object, extent * 1.3, 0x8eb9df, 0.5);
       core.scale.y *= 0.6;
       body.core = core;
-      body.highlight = createGalaxyHighlight(object);
     }
     const hit = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false }));
     // The luminous core is the destination; the sparse outer dust is scenery.
-    hit.scale.setScalar(extent * (isGalaxy(node) ? 0.24 : 1));
+    hit.scale.setScalar(extent * 0.24);
     hit.userData.id = node.id;
     object.add(hit);
     hitTargets.push(hit);
@@ -561,6 +562,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       if (!cluster) hitTargets.push(mesh);
       if (cluster) addCluster(body);
       if (!cluster) addPlanetRings(object, radius, appearance);
+      body.highlight = createDestinationHighlight(object);
       if (labels.length < LABEL_BUDGET) addLabel(node.name, body);
     });
     if (!cluster && !focus) addOrbits(bodies.map((body) => body.orbit));
@@ -649,14 +651,33 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       if (!body) return;
       focusBody(body);
     } else if (currentView?.key === `${step.target.kind}:${step.target.id}`) {
-      if (worldTransition) worldTransition.duration = step.target.kind === "universe" ? 2200 : 1800;
+      if (worldTransition) configureTourMotion(worldTransition, false, step.target.kind === "universe");
       else {
         const direction = camera.position.clone().sub(controls.target).normalize();
         beginCameraTween({ position: direction.multiplyScalar(overviewDistance), target: new THREE.Vector3() }, 0);
-        if (cameraTween) cameraTween.duration = 1800;
+        if (cameraTween) configureTourMotion(cameraTween, step.target.kind === "system", step.target.kind === "universe");
       }
     }
     requestRender();
+  }
+
+  function configureTourMotion(animation: CameraTween | WorldTransition, start: boolean, end: boolean) {
+    const fromDistance = animation.from.position.distanceTo(animation.from.target);
+    const dolly = createTourDolly(fromDistance, animation.to.position.distanceTo(animation.to.target), { start, end });
+    if (!dolly) return;
+    animation.tourMotion = { dolly, fromDistance };
+    animation.duration = dolly.duration;
+  }
+
+  function moveTourCamera(animation: CameraTween | WorldTransition, elapsed: number, panProgress: number) {
+    const motion = animation.tourMotion!;
+    const sample = motion.dolly.sample(elapsed);
+    // Similarity remaps preserve apparent velocity. Resize may scale both poses.
+    tourDirection.subVectors(animation.from.position, animation.from.target);
+    const scale = tourDirection.length() / motion.fromDistance;
+    tourDirection.normalize();
+    controls.target.lerpVectors(animation.from.target, animation.to.target, panProgress);
+    camera.position.copy(controls.target).addScaledVector(tourDirection, sample.distance * scale);
   }
 
   function updateLabelSelection() {
@@ -770,8 +791,11 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       const progress = Math.min(1, (time - worldTransition.started) / worldTransition.duration);
       const eased = progress * progress * (3 - 2 * progress);
       if (worldTransition.cameraOwned) {
-        camera.position.lerpVectors(worldTransition.from.position, worldTransition.to.position, eased);
-        controls.target.lerpVectors(worldTransition.from.target, worldTransition.to.target, eased);
+        if (worldTransition.tourMotion) moveTourCamera(worldTransition, time - worldTransition.started, eased);
+        else {
+          camera.position.lerpVectors(worldTransition.from.position, worldTransition.to.position, eased);
+          controls.target.lerpVectors(worldTransition.from.target, worldTransition.to.target, eased);
+        }
       }
       focusFraming = worldTransition.fromFraming * (1 - eased);
       setFade(worldTransition.incomingMaterials, eased);
@@ -783,9 +807,13 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     }
     if (!piloting && cameraTween) {
       const progress = Math.min(1, (time - cameraTween.started) / cameraTween.duration);
-      const eased = progress < 0.5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
-      camera.position.lerpVectors(cameraTween.from.position, cameraTween.to.position, eased);
-      controls.target.lerpVectors(cameraTween.from.target, cameraTween.to.target, eased);
+      const eased = cameraTween.tourMotion ? progress * progress * (3 - 2 * progress)
+        : progress < 0.5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
+      if (cameraTween.tourMotion) moveTourCamera(cameraTween, time - cameraTween.started, eased);
+      else {
+        camera.position.lerpVectors(cameraTween.from.position, cameraTween.to.position, eased);
+        controls.target.lerpVectors(cameraTween.from.target, cameraTween.to.target, eased);
+      }
       focusFraming = THREE.MathUtils.lerp(cameraTween.fromFraming, cameraTween.toFraming, eased);
       updateFraming();
       if (progress === 1) {
@@ -847,14 +875,12 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       guideButton.hidden = !guideVisible;
       const ordered = [...labels].sort((a, b) => Number(b.element === document.activeElement) - Number(a.element === document.activeElement) || Number(b.body?.node.id === effectiveSelectedId) - Number(a.body?.node.id === effectiveSelectedId) || Number(Boolean(b.body)) - Number(Boolean(a.body)));
       ordered.forEach(({ element, body, position, width: labelWidth }) => {
-        const galaxyLabel = currentView?.mode === "cluster" && body && isGalaxy(body.node);
         labelPosition.copy(body?.object.position ?? position ?? new THREE.Vector3());
-        if (body && !galaxyLabel) labelPosition.y += currentView?.mode === "cluster" ? body.extent * 0.75 : body.radius + 0.8;
         projected.copy(labelPosition).project(camera);
         const projectedX = (projected.x * 0.5 + 0.5) * width;
         const x = THREE.MathUtils.clamp(projectedX, labelWidth / 2 + 8, width - labelWidth / 2 - 8);
         // The bottom-anchored 44px target centers its text 22px above this point.
-        const y = (-projected.y * 0.5 + 0.5) * height - (galaxyLabel ? 6 : 0);
+        const y = (-projected.y * 0.5 + 0.5) * height - (body ? 6 : 0);
         if (projected.z < -1 || projected.z > 1 || projectedX < 0 || projectedX > width || y < 0 || y > height) { element.hidden = true; return; }
         const minBottom = labelInsetTop + 44;
         const maxBottom = height - labelInsetBottom;
@@ -1137,11 +1163,11 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   guideButton.addEventListener("click", onGuideClick);
 
   const destinationHover = createDestinationHover({
-    scene, camera, canvas, labelLayer, map: glowMap,
+    camera, canvas, labelLayer,
     getHitTargets: () => hitTargets,
     resolve: (id) => {
       const body = bodies.find((candidate) => candidate.node.id === id);
-      return body ? { position: body.object.position, extent: currentView?.mode === "cluster" ? body.extent : body.radius, highlight: body.highlight } : null;
+      return body?.highlight ? { highlight: body.highlight } : null;
     },
     requestRender,
   });

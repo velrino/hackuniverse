@@ -35,7 +35,7 @@ npm install
 npm run dev
 ```
 
-Open [localhost:3000](http://localhost:3000). `npm run build` builds the production app; `npm start` serves that build. `npm run lint` runs ESLint. `npm run test:catalog` runs the canonical catalog and supplier-adapter contract tests; see [the data guide](../docs/UNIVERSE-DATA.md#validation).
+Open [localhost:3000](http://localhost:3000). `npm run build` builds the production app; `npm start` serves that build. `npm run lint` runs ESLint. `npm run test:catalog` runs the canonical catalog and supplier-adapter contract tests; `npm run test:scene` checks tour continuity and shared orbital motion. See [the data guide](../docs/UNIVERSE-DATA.md#validation).
 
 ## Production deployment
 

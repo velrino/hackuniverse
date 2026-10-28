@@ -35,6 +35,9 @@ export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit
     return () => { controller.current?.destroy(); controller.current = null; };
   }, []);
 
+  // Release the previous tour before a manual destination starts its own tween.
+  useEffect(() => { if (!tourStep) controller.current?.setTourStep?.(null); }, [tourStep]);
+
   useEffect(() => {
     try { controller.current?.setView(view); }
     catch {
@@ -57,7 +60,7 @@ export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit
   useEffect(() => { controller.current?.setGuideActionLabel(guideActionLabel ?? ""); }, [guideActionLabel]);
   useEffect(() => { controller.current?.setAutopilotTarget(autopilotTargetId ?? null); }, [autopilotTargetId, flightEnabled]);
   useEffect(() => { controller.current?.setHasParentView(hasParentView); }, [hasParentView]);
-  useEffect(() => { controller.current?.setTourStep?.(tourStep); }, [tourStep, view]);
+  useEffect(() => { if (tourStep) controller.current?.setTourStep?.(tourStep); }, [tourStep, view]);
 
   return <div ref={host} className="universe-scene" style={{ position: "absolute", inset: 0 }} />;
 }

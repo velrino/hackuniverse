@@ -142,10 +142,12 @@ export function useUniverseTour({ storageKey, steps, ready, enabled = true, auto
     const current = run.current;
     if (!mounted.current || !current || current.token !== token || current.phase !== "arriving") return;
     if (!latest.current.ready || !latest.current.enabled) { cancel(); return; }
+    const holdMs = current.steps[current.stepIndex].holdMs ?? 0;
     current.phase = "holding";
-    current.deadline = performance.now() + (current.steps[current.stepIndex].holdMs ?? 0);
-    setState(snapshot(current));
-  }, [cancel]);
+    current.deadline = performance.now() + holdMs;
+    if (holdMs === 0) advance(token);
+    else setState(snapshot(current));
+  }, [advance, cancel]);
 
   useEffect(() => {
     mounted.current = true;
