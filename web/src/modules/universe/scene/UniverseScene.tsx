@@ -5,7 +5,7 @@ import { createUniverseController } from "./controller";
 import type { UniverseSceneProps } from "./types";
 import "./labels.css";
 
-export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit = true, resetToken, zoomAction, ariaLabel, onSelect, onReady, onUnavailable, flightEnabled = false, flightPaused = false, flightInput, onFlightStatus, flightTargetId, guideActionLabel, onGuideRequest, autopilotTargetId, onAutopilotEnd, hasParentView = false, onScaleOut, onScaleIn, tourStep = null, onTourArrive, onInteraction, starSelected = false, starFocusToken = 0, onSelectStar }: UniverseSceneProps) {
+export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit = true, resetToken, zoomAction, ariaLabel, onSelect, onReady, onUnavailable, flightEnabled = false, flightPaused = false, flightInput, onFlightStatus, flightTargetId, guideActionLabel, onGuideRequest, autopilotTargetId, onAutopilotEnd, hasParentView = false, onScaleOut, onScaleIn, tourStep = null, tourPreparing = false, onTourArrive, onInteraction, starSelected = false, starFocusToken = 0, onSelectStar }: UniverseSceneProps) {
   const host = useRef<HTMLDivElement>(null);
   const controller = useRef<ReturnType<typeof createUniverseController> | null>(null);
   const callbacks = useRef({ onSelect, onReady, onUnavailable, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onInteraction, onSelectStar });
@@ -38,6 +38,7 @@ export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit
 
   // Release the previous tour before a manual destination starts its own tween.
   useEffect(() => { if (!tourStep) controller.current?.setTourStep?.(null); }, [tourStep]);
+  useEffect(() => { controller.current?.setTourPreparing?.(tourPreparing); }, [tourPreparing]);
 
   useEffect(() => {
     try { controller.current?.setView(view); }

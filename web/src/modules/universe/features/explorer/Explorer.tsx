@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useUniverseAdapters } from "../../adapters/hooks/use-universe-adapters";
 import { useUniverseNavigation } from "../../hooks/use-universe-navigation";
 import { useUniverseTour, type UniverseTourStep } from "../../hooks/use-universe-tour";
+import { buildManualUniverseTour } from "../../hooks/universe-tour-route";
 import type { UniverseTourCameraStep } from "../../scene/types";
 import { getEntity, getParent, getPlanetCount, getSystemStar } from "../../domain/catalog";
 import type { ShipFlightInput } from "../../scene/flight/types";
@@ -48,12 +49,12 @@ export function Explorer() {
     setFlightTargetId(null);
     setAutopilotTargetId(null);
     navigate(step.target.id);
-    setTourCameraStep({ target: step.target, token });
+    setTourCameraStep({ target: step.target, token, ...(step.motion ? { motion: step.motion } : {}) });
   }, [navigate]);
   const tour = useUniverseTour({
     storageKey: tourDefinition?.storageKey ?? null,
     steps: tourDefinition?.steps ?? noTourSteps,
-    ready: presentationReady && sceneStatus === "ready" && !menuOpen && !flightEnabled,
+    ready: presentationReady && sceneStatus === "ready" && !menuOpen && !flightEnabled && flightStatus === "idle",
     enabled: tourAvailable,
     autoStart: autoTour,
     onStep: onTourStep,
@@ -64,10 +65,15 @@ export function Explorer() {
     setMenuOpen(open);
   }, [cancelTour]);
   const startTour = () => {
+    const prepared = buildManualUniverseTour(catalog, { kind: current.kind, id: current.id }, tourDefinition?.steps ?? noTourSteps);
+    if (!prepared) return;
     setSelectedStarSystemId(null);
     setFlightEnabled(false);
+    setFlightTargetId(null);
+    setAutopilotTargetId(null);
+    setFlightInput(neutralInput);
     setMenuOpen(false);
-    tour.start();
+    tour.start(prepared);
   };
 
   useEffect(() => {
@@ -131,7 +137,7 @@ export function Explorer() {
   return (
     <main className="universe-page universe-minimal" aria-label={copy.title} data-scale={current.kind} data-flight={flightEnabled} data-flight-status={flightStatus} data-tour-phase={tour.phase}>
       <div className="universe-scene" aria-busy={sceneStatus === "loading"}>
-        <Scene view={view} selectedId={planet?.id ?? null} playing={!blocked} showOrbits={showOrbits} autoOrbit={tour.active || autoOrbit} resetToken={resetToken} zoomAction={null} onSelect={selectSceneNode} onReady={onReady} onUnavailable={onUnavailable} ariaLabel={copy.canvas} flightEnabled={flightEnabled} flightPaused={blocked} flightInput={flightInput} onFlightStatus={onFlightStatus} flightTargetId={flightEnabled ? flightTargetId : null} autopilotTargetId={flightEnabled ? autopilotTargetId : null} guideActionLabel={autopilotTargetId === flightTargetId && autopilotTargetId ? copy.cancelGuidance : copy.guideShip} onGuideRequest={guideTo} onAutopilotEnd={onAutopilotEnd} hasParentView={Boolean(parent)} onScaleOut={goWider} onScaleIn={goTo} tourStep={tour.active && tour.token === tourCameraStep?.token ? tourCameraStep : null} onTourArrive={tour.arrive} onInteraction={cancelTour} starSelected={starSelected} starFocusToken={starFocusToken} onSelectStar={selectStar} />
+        <Scene view={view} selectedId={planet?.id ?? null} playing={!blocked} showOrbits={showOrbits} autoOrbit={tour.active || autoOrbit} resetToken={resetToken} zoomAction={null} onSelect={selectSceneNode} onReady={onReady} onUnavailable={onUnavailable} ariaLabel={copy.canvas} flightEnabled={flightEnabled} flightPaused={blocked} flightInput={flightInput} onFlightStatus={onFlightStatus} flightTargetId={flightEnabled ? flightTargetId : null} autopilotTargetId={flightEnabled ? autopilotTargetId : null} guideActionLabel={autopilotTargetId === flightTargetId && autopilotTargetId ? copy.cancelGuidance : copy.guideShip} onGuideRequest={guideTo} onAutopilotEnd={onAutopilotEnd} hasParentView={Boolean(parent)} onScaleOut={goWider} onScaleIn={goTo} tourPreparing={tour.phase === "waiting" && tour.currentStep?.motion === "approach"} tourStep={tour.active && tour.token === tourCameraStep?.token ? tourCameraStep : null} onTourArrive={tour.arrive} onInteraction={cancelTour} starSelected={starSelected} starFocusToken={starFocusToken} onSelectStar={selectStar} />
       </div>
       <div className="universe-vignette" aria-hidden="true" />
       <header className="universe-topbar">

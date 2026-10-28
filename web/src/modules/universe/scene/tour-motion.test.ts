@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createTourDolly, type TourDolly } from "./tour-motion";
 import { orbitalAngle, orbitalSpeed, systemOrbit } from "./layout";
+import "../hooks/universe-tour-route.test";
 
 function motion(from: number, to: number, options = {}) {
   const result = createTourDolly(from, to, options);
