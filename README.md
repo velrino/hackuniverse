@@ -24,7 +24,7 @@ Select any screenshot below to open it at full resolution. The catalog and astro
 
 ## Project structure
 
-- `web/` — Next.js, React, TypeScript, and Tailwind CSS, with modular i18n and a shadcn/ui language dialog.
+- `web/` — Next.js, React, TypeScript, and Tailwind CSS, with modular i18n and shared [Velrino UI](https://github.com/velrino/velrino-ui) components.
 - `api/` — Planned Go API.
 - `evals/` — Planned Python evaluations.
 

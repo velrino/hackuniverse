@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
-import { HudPanel } from "@/components/ui/hud-panel";
+import { Panel } from "@/components/ui/panel";
 import { defaultLocale, localeFromSearchParams, withLocale, type Locale } from "@/i18n/config";
 import "./runtime-error.css";
 
@@ -50,7 +50,7 @@ export function RuntimeErrorPage({ retry, locale }: { retry: () => void; locale:
   const text = copy[locale];
   return (
     <main className="runtime-error-page" aria-labelledby="runtime-error-title" lang={locale}>
-      <HudPanel as="div" className="runtime-error-panel">
+      <Panel as="div" className="runtime-error-panel">
         <p className="hud-kicker">{text.eyebrow}</p>
         <h1 id="runtime-error-title" className="hud-title runtime-error-title">{text.title}</h1>
         <p className="runtime-error-description">{text.description}</p>
@@ -58,7 +58,7 @@ export function RuntimeErrorPage({ retry, locale }: { retry: () => void; locale:
           <Button type="button" variant="outline" className="hud-button" onClick={retry}>{text.retry}</Button>
           <Button asChild variant="ghost" className="hud-button"><a href={withLocale("/", locale)}>{text.home}</a></Button>
         </div>
-      </HudPanel>
+      </Panel>
     </main>
   );
 }

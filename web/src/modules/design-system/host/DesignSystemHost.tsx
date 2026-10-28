@@ -1,5 +1,7 @@
 "use client";
 
+import "@velrino/ui/showcase.css";
+
 import { useMemo } from "react";
 import { DesignSystemRoot, type DesignSystemAdapters } from "@/modules/design-system";
 import { BrandLogo } from "@/components/brand-logo";

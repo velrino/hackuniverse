@@ -1,14 +1,16 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
+
 import { useTranslations } from "@/i18n";
-import { HudPanel } from "@/components/ui/hud-panel";
+import { Panel } from "@/components/ui/panel";
 
 export function ExamplePage() {
   const copy = useTranslations("example");
 
   return (
     <main className="mx-auto max-w-4xl px-5 py-16 sm:px-8 sm:py-24">
-      <HudPanel className="px-6 py-9 sm:px-10 sm:py-12">
+      <Panel className="px-6 py-9 sm:px-10 sm:py-12">
         <div className="mb-7 flex items-center justify-between gap-4">
           <p className="hud-kicker">{copy.eyebrow}</p>
           <div aria-hidden="true" className="flex gap-1.5">
@@ -28,12 +30,12 @@ export function ExamplePage() {
           <label htmlFor="example-note" className="hud-kicker mb-3 block">
             {copy.noteLabel}
           </label>
-          <input
+          <Input
             id="example-note"
             type="text"
             placeholder={copy.notePlaceholder}
             aria-describedby="example-note-hint"
-            className="hud-input min-h-12 w-full px-4 py-3 text-base"
+            className="min-h-12 w-full px-4 py-3 text-base"
           />
           <p
             id="example-note-hint"
@@ -42,7 +44,7 @@ export function ExamplePage() {
             {copy.noteHint}
           </p>
         </div>
-      </HudPanel>
+      </Panel>
     </main>
   );
 }

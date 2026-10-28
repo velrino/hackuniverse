@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowUpRight, CircleDot, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { HudPanel } from "@/components/ui/hud-panel";
+import { Panel } from "@/components/ui/panel";
 import { TypewriterText } from "@/components/ui/typewriter-text";
 import type { SystemStar } from "../../domain/types";
 import type { UniverseCopy } from "../../messages";
@@ -32,7 +32,7 @@ export function StarDetails({ star, systemName, planetCount, copy, onClose, form
   const SourceIcon = reference?.href ? Link2 : CircleDot;
 
   return (
-    <HudPanel as="section" className="universe-details" aria-label={star.name}>
+    <Panel as="section" className="universe-details" aria-label={star.name}>
       <p className="hud-kicker">{copy.star} / {copy.details}{demo && <> / {copy.demoObject}</>}</p>
       <h2><TypewriterText text={star.name} replayKey={replayKey} /></h2>
       <p className="universe-details-description"><TypewriterText text={star.description.trim() || copy.starFallbackDescription} replayKey={replayKey} /></p>
@@ -44,6 +44,6 @@ export function StarDetails({ star, systemName, planetCount, copy, onClose, form
         <Button type="button" variant="outline" className="hud-button" onClick={onClose}><ArrowLeft aria-hidden="true" />{copy.starClose}</Button>
         {reference?.href && <Button asChild className="hud-button"><a href={reference.href} target="_blank" rel="noopener noreferrer" aria-label={`${copy.starSource}: ${reference.label}`}>{copy.starSource}<ArrowUpRight aria-hidden="true" /></a></Button>}
       </div>
-    </HudPanel>
+    </Panel>
   );
 }

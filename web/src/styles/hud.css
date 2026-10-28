@@ -54,200 +54,6 @@
   transform: skewX(-35deg);
 }
 
-/* Only decorative layers are clipped; content and focus rings remain intact. */
-.hud-panel {
-  isolation: isolate;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: var(--hud-text);
-}
-
-.hud-panel:where(:not([data-slot="dialog-content"])) {
-  position: relative;
-}
-
-.hud-panel::before,
-.hud-panel::after {
-  position: absolute;
-  pointer-events: none;
-  content: "";
-  clip-path: polygon(
-    var(--hud-cut) 0,
-    calc(100% - 12px) 0,
-    100% 12px,
-    100% calc(100% - var(--hud-cut)),
-    calc(100% - var(--hud-cut)) 100%,
-    12px 100%,
-    0 calc(100% - 12px),
-    0 var(--hud-cut)
-  );
-}
-
-.hud-panel::before {
-  z-index: -2;
-  inset: 0;
-  background: linear-gradient(
-    125deg,
-    var(--hud-accent),
-    rgb(66 232 244 / 30%) 30%,
-    rgb(66 232 244 / 38%) 70%,
-    var(--hud-accent)
-  );
-  filter: drop-shadow(0 0 5px rgb(66 232 244 / 12%));
-}
-
-.hud-panel::after {
-  z-index: -1;
-  inset: 1px;
-  background-color: var(--hud-surface);
-  background-image:
-    linear-gradient(130deg, rgb(0 198 222 / 9%), transparent 65%),
-    linear-gradient(rgb(66 232 244 / 4%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(66 232 244 / 4%) 1px, transparent 1px);
-  background-size: auto, 44px 44px, 44px 44px;
-}
-
-.hud-panel--dialog {
-  --hud-dialog-cut: 24px;
-  position: fixed;
-  overflow: visible;
-  box-shadow: 0 24px 90px rgb(0 0 0 / 65%), 0 0 55px rgb(66 232 244 / 5%);
-}
-
-/* Modal borders are canonical here; no consumer needs to redraw the frame. */
-.hud-panel--dialog::before,
-.hud-panel--dialog::after {
-  clip-path: polygon(
-    var(--hud-dialog-cut) 0,
-    calc(100% - 10px) 0,
-    100% 10px,
-    100% calc(100% - var(--hud-dialog-cut)),
-    calc(100% - var(--hud-dialog-cut)) 100%,
-    10px 100%,
-    0 calc(100% - 10px),
-    0 var(--hud-dialog-cut)
-  );
-}
-
-.hud-panel--dialog::before {
-  background: linear-gradient(
-    135deg,
-    var(--hud-accent) 0%,
-    rgb(66 232 244 / 65%) 23%,
-    rgb(66 232 244 / 38%) 50%,
-    rgb(66 232 244 / 65%) 78%,
-    var(--hud-accent) 100%
-  );
-}
-
-.hud-panel--dialog::after {
-  background-image:
-    linear-gradient(135deg, rgb(0 198 222 / 12%), transparent 60%),
-    linear-gradient(rgb(66 232 244 / 4%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(66 232 244 / 4%) 1px, transparent 1px);
-}
-
-.hud-dialog-frame {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  pointer-events: none;
-  color: var(--hud-accent);
-}
-
-.hud-dialog-frame > span,
-.hud-dialog-frame::before,
-.hud-dialog-frame::after {
-  position: absolute;
-  display: block;
-  pointer-events: none;
-  background: currentColor;
-}
-
-.hud-dialog-frame::before,
-.hud-dialog-frame::after {
-  width: var(--hud-dialog-cut);
-  height: var(--hud-dialog-cut);
-  content: "";
-  filter: drop-shadow(0 0 4px rgb(66 232 244 / 35%));
-}
-
-.hud-dialog-frame::before {
-  top: 0;
-  left: 0;
-  clip-path: polygon(0 100%, 0 calc(100% - 5px), calc(100% - 5px) 0, 100% 0);
-}
-
-.hud-dialog-frame::after {
-  right: 0;
-  bottom: 0;
-  clip-path: polygon(100% 0, 100% 5px, 5px 100%, 0 100%);
-}
-
-.hud-dialog-frame__top {
-  top: 0;
-  left: calc(var(--hud-dialog-cut) + 18px);
-  width: clamp(54px, 26%, 128px);
-  height: 4px;
-  clip-path: polygon(0 0, 100% 0, calc(100% - 5px) 100%, 5px 100%);
-  box-shadow: 0 0 12px rgb(66 232 244 / 20%);
-}
-
-.hud-dialog-frame__left {
-  top: 22%;
-  left: 0;
-  width: 4px;
-  height: min(23%, 84px);
-  clip-path: polygon(0 0, 100% 5px, 100% calc(100% - 5px), 0 100%);
-}
-
-.hud-dialog-frame__right {
-  top: 14%;
-  right: 0;
-  width: 3px;
-  height: min(15%, 54px);
-  clip-path: polygon(0 4px, 100% 0, 100% 100%, 0 calc(100% - 4px));
-}
-
-.hud-dialog-frame__bottom {
-  bottom: 0;
-  left: 18%;
-  width: 35%;
-  height: 5px;
-  clip-path: polygon(5px 0, calc(100% - 5px) 0, 100% 100%, 0 100%);
-}
-
-.hud-dialog-frame > .hud-dialog-frame__dots {
-  right: calc(var(--hud-dialog-cut) + 12px);
-  bottom: 10px;
-  width: 27px;
-  height: 8px;
-  background: radial-gradient(circle, currentColor 1px, transparent 1.3px) 0 0 / 6px 6px;
-  opacity: 0.65;
-}
-
-/* The dedicated loading screen already draws its own full-viewport reticle. */
-.hud-panel--dialog.full-screen-loader::before,
-.hud-panel--dialog.full-screen-loader::after,
-.hud-panel--dialog.full-screen-loader > .hud-dialog-frame {
-  display: none;
-}
-
-@media (forced-colors: active) {
-  .hud-panel--dialog:not(.full-screen-loader) {
-    border: 1px solid CanvasText;
-    background: Canvas;
-    color: CanvasText;
-  }
-
-  .hud-panel--dialog::before,
-  .hud-panel--dialog::after,
-  .hud-dialog-frame {
-    display: none;
-  }
-}
-
 .hud-title {
   font-family: var(--font-interface);
   font-weight: 800;
@@ -284,54 +90,13 @@
 }
 
 .hud-button,
-.hud-option,
-.hud-input {
-  border: 1px solid var(--hud-line);
+.hud-option {
   border-radius: 0;
-  background: rgb(3 17 25 / 85%);
-  color: var(--hud-text);
-  transition: border-color 150ms, background-color 150ms, box-shadow 150ms;
 }
-
-.hud-button:hover,
-.hud-option:hover {
-  border-color: var(--hud-accent);
-  background: rgb(66 232 244 / 8%);
-  color: var(--hud-text);
-}
-
 .hud-option[data-selected="true"] {
   border-color: var(--hud-accent);
-  background: rgb(66 232 244 / 11%);
+  background: color-mix(in srgb, var(--hud-accent) 11%, var(--hud-surface));
   box-shadow: inset 3px 0 var(--hud-accent);
-}
-
-.hud-button:focus-visible,
-.hud-option:focus-visible,
-.hud-input:focus-visible {
-  border-color: var(--hud-accent);
-  outline: 2px solid var(--hud-accent);
-  outline-offset: 4px;
-  box-shadow: 0 0 0 5px rgb(66 232 244 / 8%);
-}
-
-.hud-input::placeholder {
-  color: var(--hud-muted);
-}
-
-.hud-input[aria-invalid="true"] {
-  border-color: var(--destructive);
-}
-
-.hud-input[aria-invalid="true"]:focus-visible {
-  outline-color: var(--destructive);
-}
-
-.hud-input:disabled {
-  cursor: not-allowed;
-  border-style: dashed;
-  color: var(--hud-muted);
-  opacity: 0.65;
 }
 
 .hud-nav-link {
@@ -354,8 +119,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hud-button,
-  .hud-option,
-  .hud-input {
+  .hud-option {
     transition: none;
   }
 }
@@ -372,4 +136,18 @@ html {
   html {
     scroll-behavior: auto;
   }
+}
+
+/* The application owns its palette; shared components resolve these tokens. */
+:root {
+  --vui-accent: var(--hud-accent);
+  --vui-text-accent: var(--hud-accent);
+  --vui-on-accent: var(--primary-foreground);
+  --vui-background: var(--background);
+  --vui-surface: var(--hud-surface);
+  --vui-text: var(--hud-text);
+  --vui-muted: var(--hud-muted);
+  --vui-secondary: var(--secondary);
+  --vui-line: var(--hud-line);
+  --vui-font: var(--font-interface);
 }

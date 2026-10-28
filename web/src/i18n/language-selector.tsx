@@ -39,7 +39,7 @@ export function LanguageSelector() {
       </DialogTrigger>
       <DialogContent
         closeLabel={common.close}
-        className="hud-panel hud-panel--dialog gap-0 rounded-none p-0 sm:max-w-[500px] [&>[data-slot=dialog-close]]:top-2 [&>[data-slot=dialog-close]]:right-2 [&>[data-slot=dialog-close]]:grid [&>[data-slot=dialog-close]]:size-11 [&>[data-slot=dialog-close]]:place-items-center [&>[data-slot=dialog-close]]:text-[var(--hud-accent)]"
+        className="gap-0 rounded-none p-0 sm:max-w-[500px] [&>[data-slot=dialog-close]]:top-2 [&>[data-slot=dialog-close]]:right-2 [&>[data-slot=dialog-close]]:grid [&>[data-slot=dialog-close]]:size-11 [&>[data-slot=dialog-close]]:place-items-center [&>[data-slot=dialog-close]]:text-[var(--hud-accent)]"
         onOpenAutoFocus={(event) => {
           event.preventDefault();
           selectedOptionRef.current?.focus();

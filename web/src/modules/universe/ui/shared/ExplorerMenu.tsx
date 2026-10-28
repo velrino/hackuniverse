@@ -1,5 +1,7 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
+
 import { useEffect, useId, useMemo, useRef, useState, type ComponentType, type CSSProperties, type ReactNode } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Menu, Orbit, Rocket, RotateCcw, RotateCw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -87,7 +89,7 @@ export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, cu
             <div className="universe-menu-search">
               <label htmlFor={searchId} className="sr-only">{copy.searchLabel}</label>
               <Search size={18} aria-hidden="true" />
-              <input id={searchId} className="hud-input" value={query} onChange={(event) => { setQuery(event.target.value); setPage(0); }} placeholder={copy.searchPlaceholder} autoComplete="off" />
+              <Input id={searchId} className="w-full" value={query} onChange={(event) => { setQuery(event.target.value); setPage(0); }} placeholder={copy.searchPlaceholder} autoComplete="off" />
             </div>
             <p className="universe-menu-result-count" role="status">{copy.results}: {results.length} / {catalog.planets.length}</p>
             {results.length === 0 ? <p className="universe-menu-empty">{copy.noResults}</p> : (
