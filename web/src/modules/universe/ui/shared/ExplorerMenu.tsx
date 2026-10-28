@@ -1,7 +1,7 @@
 "use client";
 
-import { useId, useMemo, useState, type ComponentType, type CSSProperties, type ReactNode } from "react";
-import { ArrowUpRight, ChevronRight, Menu, Orbit, Rocket, RotateCcw, Search } from "lucide-react";
+import { useEffect, useId, useMemo, useRef, useState, type ComponentType, type CSSProperties, type ReactNode } from "react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, Menu, Orbit, Rocket, RotateCcw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,6 +9,8 @@ import { getBreadcrumbs, searchPlanets } from "../../domain/catalog";
 import type { UniverseCatalog } from "../../domain/types";
 import type { UniverseCopy } from "../../messages";
 import "./menu.css";
+
+const ATLAS_PAGE_SIZE = 24;
 
 export type ExplorerMenuProps = {
   catalog: UniverseCatalog;
@@ -31,10 +33,17 @@ export type ExplorerMenuProps = {
 export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, currentId, showOrbits, onToggleOrbits, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, LanguagePicker, DesignLink }: ExplorerMenuProps) {
   const [tab, setTab] = useState("atlas");
   const [query, setQuery] = useState("");
+  const [page, setPage] = useState(0);
+  const resultsList = useRef<HTMLUListElement>(null);
   const id = useId();
   const searchId = `${id}-search`;
+  const resultsId = `${id}-results`;
   const flightHintId = `${id}-flight-hint`;
   const results = useMemo(() => searchPlanets(catalog, query), [catalog, query]);
+  const pageCount = Math.max(1, Math.ceil(results.length / ATLAS_PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount - 1);
+  const visibleResults = results.slice(currentPage * ATLAS_PAGE_SIZE, (currentPage + 1) * ATLAS_PAGE_SIZE);
+  useEffect(() => { if (resultsList.current) resultsList.current.scrollTop = 0; }, [currentPage, query]);
   const breadcrumbs = getBreadcrumbs(catalog, currentId);
   const navigate = (targetId: string) => { onNavigate(targetId); onOpenChange(false); };
 
@@ -73,12 +82,12 @@ export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, cu
             <div className="universe-menu-search">
               <label htmlFor={searchId} className="sr-only">{copy.searchLabel}</label>
               <Search size={18} aria-hidden="true" />
-              <input id={searchId} className="hud-input" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.searchPlaceholder} autoComplete="off" />
+              <input id={searchId} className="hud-input" value={query} onChange={(event) => { setQuery(event.target.value); setPage(0); }} placeholder={copy.searchPlaceholder} autoComplete="off" />
             </div>
             <p className="universe-menu-result-count" role="status">{copy.results}: {results.length} / {catalog.planets.length}</p>
             {results.length === 0 ? <p className="universe-menu-empty">{copy.noResults}</p> : (
-              <ul className="universe-menu-planets">
-                {results.map((planet) => (
+              <ul ref={resultsList} id={resultsId} className="universe-menu-planets">
+                {visibleResults.map((planet) => (
                   <li key={planet.id}>
                     <button type="button" onClick={() => navigate(planet.id)} aria-current={planet.id === currentId ? "location" : undefined}>
                       <span className="universe-menu-planet-orb" style={{ "--planet-hue": `${planet.seed % 360}` } as CSSProperties} aria-hidden="true" />
@@ -88,6 +97,13 @@ export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, cu
                   </li>
                 ))}
               </ul>
+            )}
+            {pageCount > 1 && (
+              <nav className="universe-menu-pagination" aria-label={copy.atlasPages}>
+                <Button type="button" variant="outline" className="hud-button" disabled={currentPage === 0} aria-controls={resultsId} onClick={() => setPage(currentPage - 1)}><ChevronLeft aria-hidden="true" />{copy.previousPage}</Button>
+                <p aria-live="polite">{copy.page} {currentPage + 1} / {pageCount}</p>
+                <Button type="button" variant="outline" className="hud-button" disabled={currentPage === pageCount - 1} aria-controls={resultsId} onClick={() => setPage(currentPage + 1)}>{copy.nextPage}<ChevronRight aria-hidden="true" /></Button>
+              </nav>
             )}
           </TabsContent>
 

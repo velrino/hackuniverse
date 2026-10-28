@@ -117,6 +117,7 @@
 
 .universe-menu-planets {
   display: grid;
+  flex: 1 1 0;
   min-height: 0;
   gap: 6px;
   margin: 0;
@@ -148,6 +149,10 @@
 .universe-menu-planet-text { display: grid; min-width: 0; gap: 4px; }
 .universe-menu-planet-text strong { overflow: hidden; font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .universe-menu-planet-text small { color: var(--hud-muted); font-size: 11px; line-height: 1.5; }
+
+.universe-menu-pagination { display: flex; flex-shrink: 0; align-items: center; justify-content: space-between; gap: 8px; }
+.universe-menu-pagination p { color: var(--hud-muted); font-size: 12px; white-space: nowrap; }
+.universe-menu-pagination [data-slot="button"] { min-height: 44px; gap: 4px; padding: 8px; font-size: 12px; }
 
 .universe-menu-options { display: flex; flex-direction: column; gap: 18px; padding: 3px; }
 .universe-menu-panel[hidden] { display: none; }

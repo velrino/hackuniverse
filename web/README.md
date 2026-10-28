@@ -16,7 +16,7 @@ The design module owns adapters, state controllers, pure UI, feature composition
 
 ## Universe home
 
-The home is a minimal, mobile-first 3D map with 50 fictional websites organized into systems, stellar clouds, galaxies and a universe. Planet selection zooms the camera while preserving the whole system. One hamburger menu contains the searchable atlas, view options, flight controls and language settings; the other pages keep their normal application header.
+The home is a minimal, mobile-first 3D map with 200 fictional websites organized into 40 systems, 12 stellar clouds, four galaxies and a universe. Planet selection zooms the camera while preserving the whole system. One hamburger menu contains the searchable atlas, view options, flight controls and language settings; the other pages keep their normal application header. The atlas searches the whole catalog and displays 24 results per page.
 
 Edit the [demo JSON](src/modules/universe/data/demo-universe.json) to change its content and groupings. Counts come from that data. [The data guide](../docs/UNIVERSE-DATA.md) explains provider-shaped records; [the explorer guide](../docs/UNIVERSE-EXPLORER.md) documents camera ownership, optional system-bound flight, three-second jumps, performance budgets and validation limits. The [starter spacecraft credits](../docs/ASSET-CREDITS.md) identify its creator and CC BY 4.0 license.
 
