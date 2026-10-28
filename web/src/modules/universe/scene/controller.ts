@@ -94,7 +94,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   scene.add(viewGroup, orbitGroup);
 
   const background = createSpatialBackground(scene);
-  const selection = new THREE.Mesh(new THREE.RingGeometry(1, 1.035, 64), new THREE.MeshBasicMaterial({ color: 0x48e9ff, transparent: true, opacity: 0.85, side: THREE.DoubleSide, depthWrite: false }));
+  const selection = new THREE.Mesh(new THREE.RingGeometry(1, 1.008, 64), new THREE.MeshBasicMaterial({ color: 0x48e9ff, transparent: true, opacity: 0.5, side: THREE.DoubleSide, depthWrite: false }));
   selection.visible = false;
   scene.add(selection);
 
