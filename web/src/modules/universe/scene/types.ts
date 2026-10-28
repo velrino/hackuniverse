@@ -8,6 +8,7 @@ export type UniverseSceneProps = {
   selectedId: string | null;
   playing: boolean;
   showOrbits: boolean;
+  autoOrbit?: boolean;
   resetToken: number;
   zoomAction: { direction: "in" | "out"; token: number } | null;
   ariaLabel: string;

@@ -36,6 +36,7 @@ const ptBR = {
   reducedMotion: "Movimento reduzido ativado",
   orbits: "Mostrar órbitas",
   hideOrbits: "Ocultar órbitas",
+  autoOrbit: "Orbitar planeta automaticamente",
   nearby: "Neste sistema",
   source: "Site de origem",
   demoUrl: "URL ilustrativa · resultado de busca sintético",

@@ -34,6 +34,7 @@ const en = {
   reducedMotion: "Reduced motion enabled",
   orbits: "Show orbits",
   hideOrbits: "Hide orbits",
+  autoOrbit: "Automatically orbit the planet",
   nearby: "In this system",
   source: "Website source",
   demoUrl: "Illustrative URL · synthetic search result",

@@ -19,6 +19,7 @@ export function Explorer() {
   const activeSystem = current.kind === "system" ? current : current.kind === "planet" ? getParent(catalog, current.id) : undefined;
   const [menuOpen, setMenuOpen] = useState(false);
   const [showOrbits, setShowOrbits] = useState(true);
+  const [autoOrbit, setAutoOrbit] = useState(true);
   const [resetToken, setResetToken] = useState(0);
   const [sceneStatus, setSceneStatus] = useState<"loading" | "ready" | "unavailable">("loading");
   const [flightEnabled, setFlightEnabled] = useState(false);
@@ -77,13 +78,13 @@ export function Explorer() {
   return (
     <main className="universe-page universe-minimal" aria-label={copy.title} data-scale={current.kind} data-flight={flightEnabled} data-flight-status={flightStatus}>
       <div className="universe-scene" aria-busy={sceneStatus === "loading"}>
-        <Scene view={view} selectedId={planet?.id ?? null} playing={!blocked} showOrbits={showOrbits} resetToken={resetToken} zoomAction={null} onSelect={selectSceneNode} onReady={onReady} onUnavailable={onUnavailable} ariaLabel={copy.canvas} flightEnabled={flightEnabled} flightPaused={blocked} flightInput={flightInput} onFlightStatus={onFlightStatus} flightTargetId={flightEnabled ? flightTargetId : null} autopilotTargetId={flightEnabled ? autopilotTargetId : null} guideActionLabel={autopilotTargetId === flightTargetId && autopilotTargetId ? copy.cancelGuidance : copy.guideShip} onGuideRequest={guideTo} onAutopilotEnd={onAutopilotEnd} hasParentView={Boolean(parent)} onScaleOut={goWider} onScaleIn={goTo} />
+        <Scene view={view} selectedId={planet?.id ?? null} playing={!blocked} showOrbits={showOrbits} autoOrbit={autoOrbit} resetToken={resetToken} zoomAction={null} onSelect={selectSceneNode} onReady={onReady} onUnavailable={onUnavailable} ariaLabel={copy.canvas} flightEnabled={flightEnabled} flightPaused={blocked} flightInput={flightInput} onFlightStatus={onFlightStatus} flightTargetId={flightEnabled ? flightTargetId : null} autopilotTargetId={flightEnabled ? autopilotTargetId : null} guideActionLabel={autopilotTargetId === flightTargetId && autopilotTargetId ? copy.cancelGuidance : copy.guideShip} onGuideRequest={guideTo} onAutopilotEnd={onAutopilotEnd} hasParentView={Boolean(parent)} onScaleOut={goWider} onScaleIn={goTo} />
       </div>
       <div className="universe-vignette" aria-hidden="true" />
       <header className="universe-topbar">
         <div className="universe-brand universe-brand-static"><BrandLogo size={32} eager /><span>HackUniverse<small>{copy.demo}</small></span></div>
         <div className="universe-context" aria-live="polite"><span>{copy.kinds[current.kind]}</span><h1>{current.name}</h1></div>
-        <ExplorerMenu catalog={catalog} copy={copy} open={menuOpen} onOpenChange={setMenuOpen} currentId={current.id} onNavigate={goTo} showOrbits={showOrbits} onToggleOrbits={() => setShowOrbits((value) => !value)} onResetCamera={() => setResetToken((value) => value + 1)} flightEnabled={flightEnabled} flightAvailable={Boolean(activeSystem) && sceneStatus === "ready"} flightStatus={flightStatus} onToggleFlight={toggleFlight} LanguagePicker={LanguagePicker} DesignLink={DesignLink} />
+        <ExplorerMenu catalog={catalog} copy={copy} open={menuOpen} onOpenChange={setMenuOpen} currentId={current.id} onNavigate={goTo} showOrbits={showOrbits} onToggleOrbits={() => setShowOrbits((value) => !value)} autoOrbit={autoOrbit} onToggleAutoOrbit={() => setAutoOrbit((value) => !value)} onResetCamera={() => setResetToken((value) => value + 1)} flightEnabled={flightEnabled} flightAvailable={Boolean(activeSystem) && sceneStatus === "ready"} flightStatus={flightStatus} onToggleFlight={toggleFlight} LanguagePicker={LanguagePicker} DesignLink={DesignLink} />
       </header>
       {(sceneStatus === "loading" || flightStatus === "loading") && <div className="universe-scene-state" role="status"><Orbit className="universe-loading-orbit" size={24} aria-hidden="true" /><p>{flightStatus === "loading" ? copy.flightLoading : copy.loading}</p></div>}
       {sceneStatus === "unavailable" && <section className="universe-scene-state universe-fallback" role="status"><h2>{copy.fallbackTitle}</h2><p>{copy.fallbackDescription}</p><Button className="hud-button" onClick={() => setMenuOpen(true)}>{copy.library}</Button></section>}
