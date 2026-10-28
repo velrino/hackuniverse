@@ -62,6 +62,8 @@ Open [localhost:3000](http://localhost:3000). `npm run build` builds the product
 
 ## Production deployment
 
+Global PostHog analytics and exception tracking are optional and environment-configured. See [web observability](../docs/OBSERVABILITY.md) for setup, application event prefixes, error coverage and payload policy. No ingestion or personal API credential is committed; copy [`.env.example`](.env.example) to ignored `.env.local` for local configuration.
+
 The web app is deployed to [hackuniverse.vercel.app](https://hackuniverse.vercel.app) in the Vercel project `hackuniverse`, under the `velrino` scope. The first production deployment uses source commit `5761874`, with the Next.js preset, the default `npm run build` command and Node.js 24.x. The current UI requires no application environment variables.
 
 Run the production deployment from this `web/` directory:
