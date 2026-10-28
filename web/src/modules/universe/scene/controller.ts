@@ -4,7 +4,7 @@ import type { SceneNode, UniverseSceneView } from "../domain/types";
 import { getPlanetAppearance, type PlanetAppearance } from "../domain/planet-appearance";
 import { glowTexture, planetTexture, starSurfaceTexture, starCoronaTexture, nebulaTexture } from "./textures";
 import { createShipPilot, type ShipFlightInput } from "./flight";
-import type { UniverseFlightStatus, UniverseTourCameraStep } from "./types";
+import type { UniverseFlightStatus, UniverseSceneErrorOperation, UniverseTourCameraStep } from "./types";
 import { createSemanticZoomGate } from "./semantic-zoom";
 import { clusterPosition, clusterScale, nodeGeometrySignature, orbitalAngle, orbitalSpeed, planetRadius, previewScale, systemOrbit, systemRadius } from "./layout";
 import { createSpatialBackground } from "./background";
@@ -15,7 +15,7 @@ import { galaxyParticleTexture } from "./galaxy-particles";
 import { createCloudHaze, createGalaxyVisual, createGlow, createRoundPointMaterial, updateCloudHaze, updateGalaxyVisual } from "./cluster-visuals";
 import { createSurroundingContext } from "./surrounding-context";
 
-type Callbacks = { onSelect: (id: string) => void; onSelectStar: () => void; onReady: () => void; onUnavailable: () => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onInteraction: () => void };
+type Callbacks = { onSelect: (id: string) => void; onSelectStar: () => void; onReady: () => void; onUnavailable: () => void; onError?: (error: unknown, operation: UniverseSceneErrorOperation) => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onInteraction: () => void };
 type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; previewPixels?: number; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[]; dust?: THREE.Points; core?: THREE.Sprite; highlight?: (active: boolean) => void; haze?: { primary: THREE.Sprite; secondary: THREE.Sprite } };
 type Label = { element: HTMLElement; body?: Body; position?: THREE.Vector3; width: number; star?: boolean };
 type CentralStar = { systemId: string; object: THREE.Mesh; highlight: (active: boolean) => void };
@@ -31,6 +31,10 @@ const MOBILE_SYSTEM_PREVIEW_BUDGET = 4;
 const DESKTOP_SYSTEM_PREVIEW_BUDGET = 8;
 
 export function createUniverseController(container: HTMLElement, callbacks: Callbacks) {
+  function reportError(error: unknown, operation: UniverseSceneErrorOperation) {
+    try { callbacks.onError?.(error, operation); } catch { /* Diagnostics must not interrupt scene recovery. */ }
+  }
+
   if (typeof ResizeObserver === "undefined" || typeof IntersectionObserver === "undefined") throw new Error("Scene observers unavailable");
   const glowMap = glowTexture();
   const starMap = starSurfaceTexture();
@@ -968,7 +972,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         arrivedTourToken = tourStep.token;
         callbacks.onTourArrive(tourStep.token);
       }
-    } catch {
+    } catch (error) {
+      reportError(error, "render");
       unavailable = true;
       stopFlight();
       callbacks.onUnavailable();
@@ -1216,8 +1221,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         callbacks.onFlightStatus("ready");
         requestRender();
       }
-    }).catch(() => {
+    }).catch((error: unknown) => {
       if (destroyed || generation !== flightGeneration) return;
+      reportError(error, "flight-load");
       restoreMapCamera();
       callbacks.onFlightStatus("error");
       requestRender();
