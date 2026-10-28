@@ -18,11 +18,11 @@ The design module owns adapters, state controllers, pure UI, feature composition
 
 The home is a minimal, mobile-first 3D map with 400 fictional websites organized into 40 systems, 12 stellar clouds, four galaxies and a universe. Each mock system contains 5–20 planets; seeds select stable colors from a 100-color palette and varied surface profiles. Planet selection zooms the camera while preserving the whole system. One hamburger menu contains the searchable atlas, view options, flight controls and language settings; the other pages keep their normal application header. The atlas searches the whole catalog and displays 24 results per page.
 
-Edit the [demo JSON](src/modules/universe/data/demo-universe.json) to change its content and groupings. Counts come from that data. [The data guide](../docs/UNIVERSE-DATA.md) explains provider-shaped records; [the explorer guide](../docs/UNIVERSE-EXPLORER.md) documents camera ownership, optional system-bound flight, performance budgets and validation limits. The Space Jump presentation is temporarily disabled. The [starter spacecraft credits](../docs/ASSET-CREDITS.md) identify its creator and CC BY 4.0 license.
+Edit the [canonical demo JSON](src/modules/universe/data/demo-universe.json) to change its content and groupings. Counts come from that data. `DemoUniverseHost` selects the bundled catalog; reusable `UniverseHost` accepts an already validated catalog. Import canonical types and `parseUniverseCatalog` from `@/modules/universe/domain`, and keep supplier normalization in separate adapters. URLless objects and empty universes are supported. [The data guide](../docs/UNIVERSE-DATA.md) owns the full contract and adapter examples; [the explorer guide](../docs/UNIVERSE-EXPLORER.md) documents camera ownership, optional system-bound flight, performance budgets and validation limits. The Space Jump presentation is temporarily disabled. The [starter spacecraft credits](../docs/ASSET-CREDITS.md) identify its creator and CC BY 4.0 license.
 
 ## First-visit welcome
 
-The shared `ApplicationIntro` displays the full-screen planetary loader for three seconds on the first visit to any route. It persists `hackuniverse.intro.v1.seen` in browser local storage before opening, so refreshes, later visits and page navigation do not replay it. This is an introductory animation with indeterminate progress, not a measure of network or Firecrawl work. Locale preference remains exclusively URL-driven.
+The shared `ApplicationIntro` displays the full-screen planetary loader for three seconds on the first visit to any route. It persists `hackuniverse.intro.v1.seen` in browser local storage before opening, so refreshes, later visits and page navigation do not replay it. This is an introductory animation with indeterminate progress, not a measure of network or provider work. Locale preference remains exclusively URL-driven.
 
 The intro is mounted once inside the application provider. It keeps its deadline across effect replay, cleans up timers on unmount and falls back to a document guard when storage is unavailable. The five-second manual preview on `/design` remains available independently.
 
@@ -33,7 +33,7 @@ npm install
 npm run dev
 ```
 
-Open [localhost:3000](http://localhost:3000). `npm run build` builds the production app; `npm start` serves that build. `npm run lint` runs ESLint.
+Open [localhost:3000](http://localhost:3000). `npm run build` builds the production app; `npm start` serves that build. `npm run lint` runs ESLint. `npm run test:catalog` runs the canonical catalog and supplier-adapter contract tests; see [the data guide](../docs/UNIVERSE-DATA.md#validation).
 
 ## Production deployment
 

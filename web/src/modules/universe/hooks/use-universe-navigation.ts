@@ -3,8 +3,8 @@ import { findPlanet, getBreadcrumbs, getChildren, getEntity, getParent, getPlane
 import type { NavigationTarget, UniverseCatalog } from "../domain/types";
 
 export function useUniverseNavigation(catalog: UniverseCatalog) {
-  const [target, setTarget] = useState<NavigationTarget>({ kind: "system", id: catalog.initialSystemId });
-  const current = getEntity(catalog, target) ?? getEntity(catalog, catalog.initialSystemId)!;
+  const [target, setTarget] = useState<NavigationTarget>(catalog.initialTarget);
+  const current = getEntity(catalog, target) ?? getEntity(catalog, catalog.initialTarget) ?? getEntity(catalog, catalog.rootId)!;
   const resolvedTarget = useMemo<NavigationTarget>(() => ({ kind: current.kind, id: current.id }), [current]);
   const parent = getParent(catalog, resolvedTarget);
   const view = useMemo(() => getSceneView(catalog, resolvedTarget), [catalog, resolvedTarget]);

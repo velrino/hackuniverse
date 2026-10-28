@@ -1,37 +1,42 @@
 export type EntityKind = "universe" | "galaxy" | "cloud" | "system" | "planet";
 
-export type NavigationTarget = { kind: EntityKind; id: string };
+export type NavigationTarget = Readonly<{ kind: EntityKind; id: string }>;
 
-export type UniverseEntity = {
+type EntityFields = Readonly<{
   id: string;
-  kind: EntityKind;
-  parentId: string | null;
   name: string;
   description: string;
   seed: number;
-};
+}>;
 
-export type WebsitePlanet = UniverseEntity & {
+export type UniverseGroup = EntityFields & Readonly<{
+  kind: Exclude<EntityKind, "planet">;
+  parentId: string | null;
+}>;
+
+export type PlanetReference = Readonly<{ label: string; href?: string }>;
+
+export type UniversePlanet = EntityFields & Readonly<{
   kind: "planet";
   parentId: string;
-  source: {
-    url: string;
-    title: string;
-    description: string;
-    provider: "firecrawl";
-    operation: "search";
-    query: string;
-    position: number;
-  };
-};
+  reference?: PlanetReference;
+  tags?: readonly string[];
+}>;
 
-export type UniverseCatalog = {
-  mode: "demo";
+export type UniverseEntity = UniverseGroup | UniversePlanet;
+
+export type UniverseCatalogDocument = Readonly<{
+  schemaVersion: 1;
+  mode: "demo" | "live";
   rootId: string;
-  initialSystemId: string;
-  entities: UniverseEntity[];
-  planets: WebsitePlanet[];
-};
+  initialTarget?: NavigationTarget;
+  entities: readonly UniverseEntity[];
+}>;
+
+export type UniverseCatalog = Readonly<Omit<UniverseCatalogDocument, "initialTarget"> & {
+  initialTarget: NavigationTarget;
+  planets: readonly UniversePlanet[];
+}>;
 
 export type SceneNode = {
   id: string;

@@ -5,7 +5,7 @@ import type {
   UniverseCatalog,
   UniverseEntity,
   UniverseSceneView,
-  WebsitePlanet,
+  UniversePlanet,
 } from "./types";
 import { getPlanetAppearance } from "./planet-appearance";
 
@@ -49,15 +49,15 @@ export function getBreadcrumbs(catalog: UniverseCatalog, target: EntityReference
   return breadcrumbs;
 }
 
-export function findPlanet(catalog: UniverseCatalog, id: string): WebsitePlanet | undefined {
+export function findPlanet(catalog: UniverseCatalog, id: string): UniversePlanet | undefined {
   return catalog.planets.find((planet) => planet.id === id);
 }
 
-/** Empty queries return all demo planets, in their stable catalog order. */
-export function searchPlanets(catalog: UniverseCatalog, query: string): WebsitePlanet[] {
+/** Empty queries return all planets, in their stable catalog order. */
+export function searchPlanets(catalog: UniverseCatalog, query: string): UniversePlanet[] {
   const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
   return catalog.planets.filter((planet) => {
-    const text = [planet.name, planet.description, planet.source.url, planet.source.query]
+    const text = [planet.name, planet.description, planet.reference?.label, planet.reference?.href, ...(planet.tags ?? [])]
       .join(" ").toLowerCase();
     return terms.every((term) => text.includes(term));
   });
@@ -80,7 +80,7 @@ function sceneNode(catalog: UniverseCatalog, entity: UniverseEntity, depth = 0):
     id: entity.id,
     kind: entity.kind,
     name: entity.name,
-    subtitle: planet ? new URL(planet.source.url).hostname : entity.description,
+    subtitle: planet?.reference?.label || entity.description,
     count: getPlanetCount(catalog, entity.id),
     seed: entity.seed,
     color: entity.kind === "planet" ? getPlanetAppearance(entity.seed).color : groupColors[entity.kind],

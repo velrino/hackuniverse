@@ -2,7 +2,7 @@
 
 Turn websites into planets and organize them into galaxies and universes.
 
-The initial proof of concept will use Firecrawl to import website content. New accounts will start with zero planets.
+The explorer uses a provider-neutral catalog contract. A separate Firecrawl search adapter demonstrates supplier normalization; live imports and persistence remain planned work. New accounts will start with zero planets.
 
 Production web: [hackuniverse.vercel.app](https://hackuniverse.vercel.app/).
 
@@ -22,7 +22,7 @@ Use these shared components and tokens when building new pages. The [visual refe
 
 The home now provides a mobile-first, full-screen 3D demo backed by [400 synthetic website records](web/src/modules/universe/data/demo-universe.json), across 40 systems, 12 stellar clouds and four galaxies. Systems contain 5–20 planets with varied surfaces and stable colors drawn from a 100-color palette. Selecting a planet zooms within its existing system; a compact hamburger opens the atlas and options. Optional third-person flight stays inside the active system. The Space Jump cutscene is temporarily disabled; changing systems has no presentation delay.
 
-See the [explorer guide](docs/UNIVERSE-EXPLORER.md), [JSON contract](docs/UNIVERSE-DATA.md) and [spacecraft credits](docs/ASSET-CREDITS.md). This synthetic demo does not create real account content or call Firecrawl.
+The default JSON is already canonical. The reusable host also accepts validated catalogs with optional references, URLless objects and an empty root. See the [explorer guide](docs/UNIVERSE-EXPLORER.md), [catalog contract and adapter examples](docs/UNIVERSE-DATA.md) and [spacecraft credits](docs/ASSET-CREDITS.md). This synthetic demo does not create real account content or make provider requests.
 
 ## Run the web app
 

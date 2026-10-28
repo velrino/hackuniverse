@@ -139,7 +139,7 @@ export function ExplorerMenu({ catalog, copy, open, onOpenChange, onNavigate, cu
             <div className="universe-menu-language"><LanguagePicker /></div>
             <DesignLink className="universe-menu-design-link">{copy.design}<ArrowUpRight size={16} aria-hidden="true" /></DesignLink>
             <p className="universe-menu-credit"><a href="https://sketchfab.com/3d-models/space-ship-356a3acb00164c698d657146caa5ebf3" target="_blank" rel="noopener noreferrer">{copy.shipCredit}</a> <a href="https://sketchfab.com/yanix" target="_blank" rel="noopener noreferrer">yanix</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p>
-            <p>{copy.demoHint}</p>
+            {catalog.mode === "demo" && <p>{copy.demoHint}</p>}
           </TabsContent>
         </Tabs>
       </DialogContent>

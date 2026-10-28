@@ -1,10 +1,10 @@
 # Immersive universe demo
 
-The home route is an explicitly synthetic, full-viewport 3D explorer. It currently reads 400 fictional website records from [the editable catalog](../web/src/modules/universe/data/demo-universe.json). The 40 systems contain 5–20 planets each; the initial system has 12. See [the data contract](UNIVERSE-DATA.md) for the Firecrawl-shaped envelopes and app-owned grouping. This creates no accounts, persisted planets, jobs, or provider requests.
+The home route is an explicitly synthetic, full-viewport 3D explorer. It currently reads 400 fictional website records from [the editable canonical catalog](../web/src/modules/universe/data/demo-universe.json). The 40 systems contain 5–20 planets each; the initial system has 12. [The data contract](UNIVERSE-DATA.md) separates application-owned objects from optional supplier adapters. This creates no accounts, persisted planets, jobs, or provider requests.
 
 ## Interaction contract
 
-- A planet is a website. Systems and stellar clouds are additional visual groupings in this demo, under galaxies and a universe. The rendered star is a system anchor, not another website record. These view groupings do not silently change the planned persistent account/catalog model.
+- Each bundled demo planet represents a fictional website. The canonical contract also supports URLless objects, such as documents or tickets, with optional reference metadata. Systems and stellar clouds are visual groupings under galaxies and a universe. The rendered star is a system anchor, not another catalog record. These view groupings do not silently change the planned persistent account/catalog model.
 - Selecting a planet moves the camera smoothly within its existing system over 900 ms. The star, sibling planets, orbits, geometry identities and orbital state remain intact. Clicking a group also animates the approach before entering its detail; interacting with the camera cancels the pending approach. Returning to the system restores the saved overview rather than rebuilding a one-object scene.
 - Selected planets enable a gentle automatic camera orbit by default. The View tab can disable it without changing selection or language. Manual gestures briefly suspend the orbit; menus, flight, hierarchy/camera transitions and reduced motion suppress it. Its elapsed-time update keeps speed independent of the render budget.
 - The unobtrusive hamburger opens one bounded, tabbed modal: Atlas, View, Controls and Settings. Search reaches every catalog planet regardless of camera scale; 24 results render per page, with accessible previous/next controls. Language changes preserve the current scene, menu tab, page and query. Escape opens the menu and pauses active flight; there is no standalone pause toolbar.
@@ -34,7 +34,9 @@ During flight, selecting a planet keeps the pilot active and exposes a localized
 
 ## Module boundaries
 
-`UniverseHost` supplies the catalog, localization, branding, navigation links and a dynamically imported renderer. Core adapters are consumer-owned; feature composition uses the navigation hook and pure UI. Provider-shaped mock data is parsed once by the catalog adapter. The renderer owns only scene/camera/input lifecycles and does not start imports or create catalog data.
+`UniverseHost` receives a validated canonical catalog and supplies localization, branding, navigation links and a dynamically imported renderer. `DemoUniverseHost` chooses the default dataset for the home route; the generic host does not import it. Core adapters are consumer-owned, and feature composition uses the navigation hook and pure UI. Supplier normalization stays outside the domain and renderer; the default JSON is already canonical. See [the data guide](UNIVERSE-DATA.md) for the parser, public import boundary and optional Firecrawl adapter.
+
+The renderer owns scene/camera/input lifecycles and receives a provider-free scene projection. Detail UI uses canonical name/description and optional reference metadata, including objects without URLs. Demo mode controls illustrative labels and suppresses outbound reference actions; it is not inferred from a supplier name. No view starts imports or creates catalog data.
 
 Three.js and OrbitControls load only for the home renderer. GLTFLoader and the starter spacecraft load only after an explicit flight request. The ship helper owns the chase camera while loading or flying; the map controller suspends its own camera writers until that ownership ends. Stale model loads are aborted or disposed, and all GPU resources, observers, input listeners and animation frames are cleaned up on disposal.
 
