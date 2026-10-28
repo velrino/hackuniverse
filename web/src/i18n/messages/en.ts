@@ -17,6 +17,12 @@ const en = {
     hint: "You can change your language at any time.",
   },
   designSystem: designSystemEn,
+  notFound: {
+    eyebrow: "Error 404 / Route not found",
+    title: "Page not found.",
+    description: "This page does not exist or has moved. Return home to continue exploring.",
+    home: "Return home",
+  },
   example: {
     eyebrow: "A new perspective",
     title: "Your universe starts here.",

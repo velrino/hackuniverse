@@ -1,0 +1,1 @@
+export { NotFoundHost } from "./component";
