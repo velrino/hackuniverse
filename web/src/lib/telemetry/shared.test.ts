@@ -163,11 +163,9 @@ test("cyclic and oversized exception metadata cannot cause unbounded serializati
   assert.doesNotThrow(() => JSON.stringify(result));
 });
 
-test("native companion events have prefixed names without repeating native exception payloads", () => {
+test("only native exceptions produce prefixed companions; pageviews stay native", () => {
   const page = companionEvent(transport({ event: "$pageview", properties: { $current_url: "https://app.example/design?lang=en&token=hackuniverse-private", source: "hackuniverse-check" } }));
-  assert.equal(page?.event, "hackuniverse-pageview");
-  assert.equal(page?.properties.native_event, "$pageview");
-  assert.equal((page?.properties as Record<string, unknown> | undefined)?.$current_url, "https://app.example/design?lang=en");
+  assert.equal(page, null);
   const exception = companionEvent(transport({ event: "$exception", properties: {
     exception_id: "hackuniverse-error-id", $exception_list: [{ type: "TypeError", value: "Failed token=hackuniverse-private", stacktrace: { frames: [] } }],
   } }));

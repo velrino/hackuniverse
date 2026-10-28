@@ -22,12 +22,13 @@ Every event receives `app: "hackuniverse"`, `app_name: "hackuniverse-web"`, `eve
 
 | Event | Purpose |
 | --- | --- |
-| `hackuniverse-pageview` | Application-scoped companion to one native pageview. |
 | `hackuniverse-exception` | Application-scoped exception summary, with a correlation ID. |
-| `$pageview` | Native PostHog web analytics event. |
+| `$pageview` | The single pageview event, scoped by application properties. |
 | `$exception` | Native PostHog Error Tracking event with SDK-generated exception structure. |
 
-Native names remain intact because PostHog depends on them. Companions do not recursively generate events. Choose either the prefixed family or the native family with an application filter when counting activity; summing both would count the same occurrence twice. A tab or anchor change on `/design` is not a pageview; changing the global language query is.
+Page visits use only native `$pageview`, filtered by `app_name: "hackuniverse-web"`; no prefixed pageview companion is emitted. The SDK is the only pageview owner. A tab or anchor change on `/design` is not a pageview; changing the global language query is. Custom product events retain the `hackuniverse-*` prefix.
+
+Native `$exception` remains intact for PostHog Error Tracking, with one prefixed exception summary. Companions do not recursively generate events. Count either native exceptions with an application filter or their prefixed summaries; summing both would count the same exception twice.
 
 For future browser events, import the shared application API rather than the SDK:
 
