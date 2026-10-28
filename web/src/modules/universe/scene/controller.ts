@@ -93,7 +93,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   let orbitGroup = new THREE.Group();
   scene.add(viewGroup, orbitGroup);
 
-  const background = createSpatialBackground(scene, nebulaMap, glowMap);
+  const background = createSpatialBackground(scene);
   const selection = new THREE.Mesh(new THREE.RingGeometry(1, 1.035, 64), new THREE.MeshBasicMaterial({ color: 0x48e9ff, transparent: true, opacity: 0.85, side: THREE.DoubleSide, depthWrite: false }));
   selection.visible = false;
   scene.add(selection);
@@ -877,11 +877,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       controls.update(delta);
     }
     sky.position.copy(camera.position);
-    const backgroundFar = background.update(camera, height, renderer.getPixelRatio(), orbitalTime);
-    if (backgroundFar > camera.far) {
-      camera.far = backgroundFar * 1.02;
-      camera.updateProjectionMatrix();
-    }
+    background.update(camera, height, renderer.getPixelRatio());
     camera.updateMatrixWorld();
     for (const body of systemPreviews) {
       projected.copy(body.object.position).project(camera);

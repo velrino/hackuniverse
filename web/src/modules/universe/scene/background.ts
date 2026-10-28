@@ -20,7 +20,7 @@ export function canonicalBackgroundScale(view: UniverseSceneView, sceneRadius: n
 }
 
 /** Finite decorative space, independent of catalog markers and picking. */
-export function createSpatialBackground(scene: THREE.Scene, nebulaMap: THREE.Texture, maskMap: THREE.Texture) {
+export function createSpatialBackground(scene: THREE.Scene) {
   const root = new THREE.Group();
   root.name = "spatial-background";
   root.scale.setScalar(40);
@@ -111,26 +111,6 @@ export function createSpatialBackground(scene: THREE.Scene, nebulaMap: THREE.Tex
   stars.renderOrder = -90;
   root.add(stars);
 
-  const wispMaterials: { material: THREE.SpriteMaterial; opacity: number }[] = [];
-  const wispMotion: { sprite: THREE.Sprite; x: number; y: number; rotation: number; phase: number }[] = [];
-  let localRadius = 0;
-  const wisps = [
-    { position: [-9, 3, -16], size: [40, 20], color: 0x7eb8d4, opacity: 0.42, rotation: 0.35 },
-    { position: [14, -6, -35], size: [70, 25], color: 0x8a85bd, opacity: 0.32, rotation: -0.45 },
-    { position: [-40, 14, 55], size: [130, 75], color: 0x6eb7c4, opacity: 0.24, rotation: 0.7 },
-  ];
-  wisps.forEach(({ position, size, color, opacity, rotation }) => {
-    const wispMaterial = new THREE.SpriteMaterial({ map: nebulaMap, alphaMap: maskMap, color, opacity, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, rotation });
-    const wisp = new THREE.Sprite(wispMaterial);
-    wisp.position.set(position[0], position[1], position[2]);
-    wisp.scale.set(size[0], size[1], 1);
-    wisp.renderOrder = -80;
-    root.add(wisp);
-    wispMotion.push({ sprite: wisp, x: position[0], y: position[1], rotation, phase: wispMotion.length * 2.4 });
-    wispMaterials.push({ material: wispMaterial, opacity });
-    localRadius = Math.max(localRadius, Math.hypot(...position) + Math.hypot(...size) * 0.5 + 1.5);
-  });
-
   return {
     reset(sceneRadius: number, view?: UniverseSceneView) {
       root.position.set(0, 0, 0);
@@ -140,7 +120,7 @@ export function createSpatialBackground(scene: THREE.Scene, nebulaMap: THREE.Tex
       root.position.multiplyScalar(scale).add(translation);
       root.scale.multiplyScalar(scale);
     },
-    update(camera: THREE.PerspectiveCamera, height: number, pixelRatio: number, elapsed = 0) {
+    update(camera: THREE.PerspectiveCamera, height: number, pixelRatio: number) {
       const scale = Math.abs(root.scale.x);
       const physicalDistance = camera.position.distanceTo(root.position) / Math.max(0.001, scale);
       const zoom = Math.log2(Math.max(1, physicalDistance / 4));
@@ -149,19 +129,11 @@ export function createSpatialBackground(scene: THREE.Scene, nebulaMap: THREE.Tex
       uniforms.uPixelRatio.value = pixelRatio;
       uniforms.uDensity.value = THREE.MathUtils.clamp(0.5 + zoom * 0.13, 0.45, 1);
       uniforms.uIntensity.value = THREE.MathUtils.clamp(0.82 + zoom * 0.08, 0.8, 1.2);
-      wispMaterials.forEach(({ material: wispMaterial, opacity }) => { wispMaterial.opacity = opacity * THREE.MathUtils.clamp(0.85 + zoom * 0.08, 0.8, 1.2); });
-      for (const { sprite, x, y, rotation, phase } of wispMotion) {
-        sprite.position.x = x + Math.sin(elapsed * 0.07 + phase) * 0.8;
-        sprite.position.y = y + Math.cos(elapsed * 0.05 + phase) * 0.5;
-        sprite.material.rotation = rotation + Math.sin(elapsed * 0.04 + phase) * 0.08;
-      }
-      return camera.position.distanceTo(root.position) + localRadius * scale;
     },
     dispose() {
       scene.remove(root);
       geometry.dispose();
       material.dispose();
-      wispMaterials.forEach(({ material: wispMaterial }) => wispMaterial.dispose());
       root.clear();
     },
   };
