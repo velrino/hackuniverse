@@ -6,7 +6,7 @@ The approved transparent logo is stored at `../assets/images/logo.png`, served f
 
 ## Visual system
 
-The interface uses a cyan science-fiction HUD theme. `src/styles/hud.css` owns the application `--hud-*` tokens and maps them to `--vui-*`; `src/app/globals.css` imports the compiled package styles. Barlow and the approved cyan logo remain application assets.
+The interface uses a cyan science-fiction HUD theme. `src/styles/hud.css` owns the application `--hud-*` tokens and maps them to `--vui-*`; `src/app/layout.tsx` imports the compiled package stylesheet explicitly before application styles, so it remains a tracked dependency of the production bundle. Barlow and the approved cyan logo remain application assets.
 
 The reusable implementations live in [Velrino UI](https://github.com/velrino/velrino-ui), pinned to its compiled `v0.0.3` GitHub release asset. `src/components/ui/<component>/index.ts` preserves application import paths through thin package exports. Use `Panel` for content grouping and `Dialog` for modal behavior. Standard surfaces are the package default; the application opts into chamfered frames once through `UIProvider appearance="sci-fi"`. Decorative layers are clipped; content and focus rings are not.
 
@@ -57,6 +57,10 @@ npm run dev
 ```
 
 Open [localhost:3000](http://localhost:3000). `npm run build` builds the production app; `npm start` serves that build. `npm run lint` runs ESLint. `npm run test:catalog` runs the canonical catalog and supplier-adapter contract tests; `npm run test:scene` checks tour continuity and shared orbital motion. See [the data guide](../docs/UNIVERSE-DATA.md#validation).
+
+## Browser verification
+
+After `npm run build`, run `npx playwright install chromium` and `npm run test:browser`. Desktop/mobile checks open the actual explorer dialog, switch tabs and verify safe new-tab documentation navigation while retaining the canvas. External documentation responses are substituted locally in CI; the published gallery has its own browser suite. CI installs Chromium and runs these checks against the production build with software WebGL. These checks do not measure physical-device performance.
 
 ## Production deployment
 
