@@ -1,1 +1,2 @@
-export { DesignSystemRoot, type DesignSystemAdapters, type DesignSystemBrandLogoProps } from "@velrino/ui/showcase";
+export { DesignSystemLink } from "./design-system-link";
+export { designSystemUrl } from "./design-system-url";
