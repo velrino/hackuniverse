@@ -1,1 +1,0 @@
-export { DesignSystemHost } from "./DesignSystemHost";

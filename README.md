@@ -16,7 +16,7 @@ Select any screenshot below to open it at full resolution. The catalog and astro
 | **See the universe at a glance**<br><a href="assets/demo/images/04-universe-galaxy-overview.png"><img src="assets/demo/images/04-universe-galaxy-overview.png" alt="Universe overview with five labeled spiral galaxies" width="100%" /></a> | **Explore the illustrative Milky Way**<br><a href="assets/demo/images/05-milky-way-galaxy-overview.png"><img src="assets/demo/images/05-milky-way-galaxy-overview.png" alt="Milky Way overview showing Solar Neighborhood and seven fictional demo sectors" width="100%" /></a> |
 | **Zoom into a stellar cloud**<br><a href="assets/demo/images/06-mosaic-fold-cloud-overview.png"><img src="assets/demo/images/06-mosaic-fold-cloud-overview.png" alt="Mosaic Fold stellar cloud with neighboring star-system previews" width="100%" /></a> | **Inspect a procedural star system**<br><a href="assets/demo/images/07-ochre-cadence-star-system.png"><img src="assets/demo/images/07-ochre-cadence-star-system.png" alt="Ochre Cadence demo system with varied planets, rings and cyan orbital paths" width="100%" /></a> |
 
-**Preview the shared planetary loader** — This `/design` example uses simulated progress; no website is being imported.
+**Preview the shared planetary loader** — This component-gallery example uses simulated progress; no website is being imported.
 
 <p align="center">
   <a href="assets/demo/images/01-loading-screen-demo.png"><img src="assets/demo/images/01-loading-screen-demo.png" alt="Cyan wireframe planetary loading demo showing simulated progress and a Stop preview action" width="100%" /></a>
@@ -30,7 +30,7 @@ Select any screenshot below to open it at full resolution. The catalog and astro
 
 ## Design system
 
-Explore the live reference at [/design?lang=en](https://hackuniverse.vercel.app/design?lang=en). It documents the shared cyan sci-fi HUD defaults: colors, typography, buttons, inputs, dialogs, branding and the full-screen planetary loading component, with interactive examples. Switch between Single page with section anchors and Tabs to inspect one category at a time; examples retain their state across mode and language changes.
+Explore the [shared Velrino UI gallery](https://velrino.github.io/velrino-ui/?theme=cyan&appearance=sci-fi) for colors, typography and interactive components. Design-system links open it in a new tab with the active language, keeping the universe open. Search components from Go to and adjust language, colors and surfaces in Settings. Existing `/design` bookmarks redirect there.
 
 Use these shared components and tokens when building new pages. The [visual reference guide](docs/DESIGN-SYSTEM.md) explains the design direction, and [the web guide](web/README.md) covers component usage and module structure. The `lang=en` query parameter opens the interface in English; the global language dialog can switch to Brazilian Portuguese without reloading.
 

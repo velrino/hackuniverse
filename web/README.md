@@ -8,15 +8,11 @@ The approved transparent logo is stored at `../assets/images/logo.png`, served f
 
 The interface uses a cyan science-fiction HUD theme. `src/styles/hud.css` owns the application `--hud-*` tokens and maps them to `--vui-*`; `src/app/globals.css` imports the compiled package styles. Barlow and the approved cyan logo remain application assets.
 
-The reusable implementations live in [Velrino UI](https://github.com/velrino/velrino-ui), pinned to its compiled `v0.0.2` GitHub release asset. `src/components/ui/<component>/index.ts` preserves application import paths through thin package exports. Use `Panel` for content grouping and `Dialog` for modal behavior. Standard surfaces are the package default; the application opts into chamfered frames once through `UIProvider appearance="sci-fi"`. Decorative layers are clipped; content and focus rings are not.
+The reusable implementations live in [Velrino UI](https://github.com/velrino/velrino-ui), pinned to its compiled `v0.0.3` GitHub release asset. `src/components/ui/<component>/index.ts` preserves application import paths through thin package exports. Use `Panel` for content grouping and `Dialog` for modal behavior. Standard surfaces are the package default; the application opts into chamfered frames once through `UIProvider appearance="sci-fi"`. Decorative layers are clipped; content and focus rings are not.
 
-The color catalog shows resolved HEX/RGBA values that follow the host theme. Mobile colors use one row each, with Button/Sheet examples centered one per line.
+[Open the shared component gallery](https://velrino.github.io/velrino-ui/?theme=cyan&appearance=sci-fi) for all 15 interactive sections. Application header and universe menu links open it in a new tab with the active language and cyan sci-fi presentation, leaving the current universe open. `/design` redirects existing bookmarks to that site, including valid language selection and section fragments.
 
-Open `/design` for all 15 interactive catalog sections, including buttons, panels, inputs, dialogs, tabs, accordion, dropdown menus, sheets, sliders, links, typewriter text and loading. Import application primitives rather than showcase internals into product modules. See the [visual reference guide](../docs/DESIGN-SYSTEM.md) for the application's design direction.
-
-Single page and Tabs share mounted examples, preserving input across presentation and language changes. Section fragments remain usable in either mode, and the tab strip scrolls horizontally on small screens. The fixed application header supplies its measured anchor offset.
-
-The package owns the framework-independent gallery, its typed dictionaries and behavior. `src/modules/design-system/host` supplies the application's localization, brand logo and language picker; the route mounts that host. Routing, first-visit intro, provider adapters, scene state and analytics stay in this application. See the package's [adoption guide](https://github.com/velrino/velrino-ui/blob/main/docs/adoption.md) for styling and dependency updates.
+`src/modules/design-system` now owns only the link and URL adapter. Gallery copy, examples and showcase CSS are no longer bundled in this application. Product modules import application primitives, keeping routing, first-visit intro, providers, scene state and analytics local. See the [visual reference guide](../docs/DESIGN-SYSTEM.md) and [package adoption guide](https://github.com/velrino/velrino-ui/blob/main/docs/adoption.md).
 
 ## Universe home
 
@@ -51,7 +47,7 @@ The current application uses this effect only for planet/star panel names and de
 
 The shared `ApplicationIntro` displays the full-screen planetary loader for three seconds on the first visit to any route. It persists `hackuniverse.intro.v1.seen` in browser local storage before opening, so refreshes, later visits and page navigation do not replay it. This is an introductory animation with indeterminate progress, not a measure of network or provider work. Locale preference remains exclusively URL-driven.
 
-The intro is mounted once inside the application provider. It keeps its deadline across effect replay, cleans up timers on unmount and falls back to a document guard when storage is unavailable. The five-second manual preview on `/design` remains available independently.
+The intro is mounted once inside the application provider. It keeps its deadline across effect replay, cleans up timers on unmount and falls back to a document guard when storage is unavailable. The manual loading preview lives on the shared documentation site and remains independent of this application intro.
 
 ## Run locally
 
