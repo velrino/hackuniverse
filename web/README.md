@@ -8,7 +8,9 @@ The approved transparent logo is stored at `../assets/images/logo.png`, served f
 
 The interface uses a cyan science-fiction HUD theme. `src/styles/hud.css` owns the application `--hud-*` tokens and maps them to `--vui-*`; `src/app/globals.css` imports the compiled package styles. Barlow and the approved cyan logo remain application assets.
 
-The reusable implementations live in [Velrino UI](https://github.com/velrino/velrino-ui), pinned to its compiled `v0.0.1` GitHub release asset. `src/components/ui/<component>/index.ts` preserves application import paths through thin package exports. Use `Panel` for content grouping and `Dialog` for modal behavior. Standard surfaces are the package default; the application opts into chamfered frames once through `UIProvider appearance="sci-fi"`. Decorative layers are clipped; content and focus rings are not.
+The reusable implementations live in [Velrino UI](https://github.com/velrino/velrino-ui), pinned to its compiled `v0.0.2` GitHub release asset. `src/components/ui/<component>/index.ts` preserves application import paths through thin package exports. Use `Panel` for content grouping and `Dialog` for modal behavior. Standard surfaces are the package default; the application opts into chamfered frames once through `UIProvider appearance="sci-fi"`. Decorative layers are clipped; content and focus rings are not.
+
+The color catalog shows resolved HEX/RGBA values that follow the host theme. Mobile colors use one row each, with Button/Sheet examples centered one per line.
 
 Open `/design` for all 15 interactive catalog sections, including buttons, panels, inputs, dialogs, tabs, accordion, dropdown menus, sheets, sliders, links, typewriter text and loading. Import application primitives rather than showcase internals into product modules. See the [visual reference guide](../docs/DESIGN-SYSTEM.md) for the application's design direction.
 
