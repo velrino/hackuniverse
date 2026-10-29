@@ -6,7 +6,7 @@ These seven local images define visual principles, not production assets. Their 
 
 Use a dark blue-black background, cyan interaction accents, thin technical outlines, restrained glow and cut-corner panels. Pale text carries primary information; muted blue-gray supports secondary information. The approved HackUniverse logo uses the cyan metallic palette. Preserve its silhouette, proportions and transparent margins. The earlier gold version is retained as an archived asset, not the interface default.
 
-Application tokens live in `web/src/styles/hud.css`; reusable Panel, Button, Dialog and other primitives come from [Velrino UI](https://github.com/velrino/velrino-ui). Current base tokens include `#020a10` background, `#06131e` surface, `#42e8f4` accent and `#e5fbff` text. Consume semantic tokens rather than copying colors into each screen. `/design` must demonstrate those actual defaults, including hover, focus, selected, disabled, loading and validation states.
+Application tokens live in `web/src/styles/hud.css`; reusable Panel, Button, Dialog and other primitives come from [Velrino UI](https://github.com/velrino/velrino-ui). Current base tokens include `#020a10` background, `#06131e` surface, `#42e8f4` accent and `#e5fbff` text. Consume semantic tokens rather than copying colors into each screen. The central [Velrino UI gallery](https://velrino.github.io/velrino-ui/?theme=cyan&appearance=sci-fi) demonstrates the cyan palette and live hover, focus, selected, disabled, loading and validation states.
 
 ## Reference decisions
 
@@ -42,13 +42,9 @@ Use shared `TypewriterText` only for the current planet/star panel name and desc
 
 ## Implementation and local assets
 
-The `/design` catalog keeps its application header fixed, reserves its measured responsive height and offsets section anchors by that height plus 24 pixels.
+The canonical gallery is hosted by Velrino UI on GitHub Pages. Application navigation opens it in a new tab, forwarding the active language and cyan sci-fi preferences. `/design` redirects legacy links; the application no longer mounts gallery examples, translated catalogs or their optional stylesheet. Its navigation adapter lives in `web/src/modules/design-system`.
 
-The catalog opens in Single page mode, with native smooth anchors for all eight sections. Tabs mode shows one section at a time with keyboard navigation and a horizontally scrolling tab strip on narrow screens. Switching modes or languages preserves the same mounted examples and their input state. Section fragments continue to work in either presentation; the URL remains the source of language selection.
-
-`/design` is the live component reference. Its previews use the same primitives and tokens as the application. Add future defaults to those shared components before documenting them here. The loading preview is a labeled simulation; real use supplies operation progress to the reusable full-screen loader.
-
-The compiled package owns components, styles, behavior and the reusable gallery. Thin application exports retain individual component folders and public `index.ts` entries. The design-system host injects localization and branding. `Panel` groups content; `Dialog` provides modal behavior. The application opts into sci-fi appearance through `UIProvider` and maps its cyan tokens to package variables; other consumers can choose standard surfaces and their own palettes.
+The package owns accessible components and decorative styling. Thin application exports retain individual component folders and public `index.ts` entries. `Panel` groups content; `Dialog` provides modal behavior. `UIProvider` selects sci-fi appearance and the application's cyan HUD tokens map to package variables. Other consumers can choose standard surfaces and their own palettes. Loading previews are labeled simulations on the shared site; real application use supplies operation progress.
 
 Barlow 400, 600, 700 and 800 are bundled locally under `web/src/styles/fonts/` through `next/font/local`, with their [SIL Open Font License](../web/src/styles/fonts/OFL.txt). Files come from [Google Fonts](https://fonts.google.com/specimen/Barlow); build and runtime do not fetch fonts externally.
 
