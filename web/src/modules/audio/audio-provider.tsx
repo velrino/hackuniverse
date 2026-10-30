@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
+import { useEffect, useMemo, useSyncExternalStore, type ReactNode } from "react";
 import { createBrowserAudioPorts } from "./adapters/browser-audio";
 import { createAudioController } from "./domain/controller";
 import { AudioContext } from "./hooks/use-audio";
@@ -9,7 +9,8 @@ import { audioToggleCue, audioToggleState } from "./domain/ui-cue";
 
 /** Global UI cues are click-only; keyboard activation naturally produces the same click. */
 export function AudioProvider({ children }: { children: ReactNode }) {
-  const [controller] = useState(() => createAudioController(createBrowserAudioPorts()));
+  // Fast Refresh recalculates memos; effect cleanup replaces the previous controller.
+  const controller = useMemo(() => createAudioController(createBrowserAudioPorts()), []);
   const snapshot = useSyncExternalStore(controller.subscribe, controller.getSnapshot, controller.getServerSnapshot);
   useEffect(() => {
     controller.mount(!document.hidden);

@@ -17,6 +17,7 @@
     "src/modules/universe/scene/tour-motion.test.ts",
     "src/modules/universe/scene/entity-transition.test.ts",
     "src/modules/universe/scene/zoom-intent.test.ts",
+    "src/modules/universe/scene/camera-input-time.test.ts",
     "src/modules/universe/scene/orbit-intent.test.ts",
     "src/modules/universe/scene/destination-hover-intent.test.ts",
     "src/modules/universe/scene/planet-presentation.test.ts",

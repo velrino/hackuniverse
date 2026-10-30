@@ -73,6 +73,7 @@ export function createAudioController(ports: AudioPorts) {
     if ((motion !== "orbit" && motion !== "zoom") || !effectsReady() || !effects) return;
     const now = ports.now();
     if (!Number.isFinite(now)) return;
+    const holdSeconds = motion === "zoom" ? 0.18 : 0.12;
     const cue: AudioCue = motion === "orbit" ? "camera-orbit" : direction === "out" ? "zoom-out" : "zoom-in";
     let state = motions.get(motion);
     if (!state) { state = { revision: 0 }; motions.set(motion, state); }
@@ -81,9 +82,20 @@ export function createAudioController(ports: AudioPorts) {
     const revision = state.revision;
     state.timer = ports.later(() => {
       if (motions.get(motion) === owned && owned.revision === revision) stopCameraMotion(motion);
-    }, 120);
-    if (state.playback?.voice && state.playback.cue === cue) return;
+    }, holdSeconds * 1000);
     try {
+      const current = state.playback;
+      if (current?.voice) {
+        if (current.voice.renew(holdSeconds, 0.02)) {
+          if (current.cue === cue) return;
+        } else {
+          // The audio clock may already have stopped it while this thread was
+          // blocked, before either ended or the JS lease callback could run.
+          state.playback = undefined;
+          voices.delete(current.voice);
+          current.voice.stop();
+        }
+      }
       let delay = 0;
       if (state.playback?.voice) { retire(motion, state.playback, 0.008); delay = 0.008; }
       else {
@@ -106,7 +118,11 @@ export function createAudioController(ports: AudioPorts) {
         if (retiring.get(motion) === playback) retiring.delete(motion);
       }, delay);
       playback.voice = voice;
-      if (!ended) voices.add(voice);
+      if (!ended && voice.renew(holdSeconds, 0.02)) voices.add(voice);
+      else {
+        owned.playback = undefined; if (!ended) voice.stop();
+        motions.delete(motion); cancelLease(owned);
+      }
       lastCueAt = now;
     } catch { stopVoices(); publish({ effectsStatus: "error", effectsError: "load" }); }
   }
