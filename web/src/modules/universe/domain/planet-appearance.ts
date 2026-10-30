@@ -33,11 +33,12 @@ export const planetPalette: readonly string[] = Object.freeze(Array.from({ lengt
   hslHex(index * 137.50776405003785 % 360, 0.5 + index % 5 * 0.065, 0.42 + Math.floor(index / 5) % 4 * 0.065),
 ));
 
-// One reserved visual seed gives the deliberately ordinary Solar System example
-// a neutral Mercury. The fictional catalog retains its 100-color palette; the
-// renderer never needs to recognize a planet ID or supplier to choose a surface.
-const curatedSolarSystemPresets: Readonly<Partial<Record<number, Readonly<{ color: string }>>>> = Object.freeze({
+// Reserved visual seeds keep the deliberately ordinary Solar System example
+// recognizable without teaching the renderer about catalog IDs or suppliers.
+type SolarSystemPreset = Readonly<{ color?: string; rings?: NonNullable<PlanetAppearance["rings"]> }>;
+const curatedSolarSystemPresets: Readonly<Partial<Record<number, SolarSystemPreset>>> = Object.freeze({
   195956: Object.freeze({ color: "#9b9790" }),
+  105756: Object.freeze({ rings: Object.freeze({ color: "#8fa7bc", inner: 1.7, outer: 2.55, opacity: 0.24 }) }),
 });
 
 const sizes: Record<PlanetKind, readonly [number, number]> = {
@@ -66,8 +67,8 @@ export function getPlanetAppearance(seed: number): PlanetAppearance {
     tilt: (hash(seed ^ 0x27d4eb2f) / 0xffffffff - 0.5) * 1.2,
     roughness: roughness[kind],
     metalness: metalness[kind],
-    rings: ringChance < (gas ? 0.7 : kind === "ice" ? 0.24 : 0.07) ? {
+    rings: curatedSolarSystemPresets[seed]?.rings ?? (ringChance < (gas ? 0.7 : kind === "ice" ? 0.24 : 0.07) ? {
       color: ringColor(color), inner: 1.3 + variation * 0.12, outer: 1.75 + variation * 0.25, opacity: 0.32 + variation * 0.2,
-    } : null,
+    } : null),
   };
 }

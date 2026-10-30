@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noEmit": false,
+    "incremental": false,
+    "rootDir": "src/modules/audio",
+    "outDir": ".audio-tests",
+    "types": ["node"],
+    "plugins": []
+  },
+  "include": ["src/modules/audio/domain/*.test.ts", "src/modules/audio/adapters/*.test.ts"]
+}

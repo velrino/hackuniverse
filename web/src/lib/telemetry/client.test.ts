@@ -116,6 +116,69 @@ test("native pageviews and exceptions pass through without creating custom compa
   assert.equal(sdk.subscribe.mock.callCount(), 0);
 });
 
+test("camera-only history changes send one native pageview for the sanitized page", (t) => {
+  const sdk = setup(t); initializeClientTelemetry();
+  const beforeSend = sdk.configuration().before_send;
+  if (typeof beforeSend !== "function") throw new Error("hackuniverse-test missing transport hook");
+  const pageview = (url: string) => beforeSend({ uuid: "synthetic-pageview", event: "$pageview", properties: { $current_url: url } });
+  const first = pageview("https://app.example/?lang=en&target=earth&camera=1,2,3,0,0,0&source=demo#first");
+  assert.ok(first);
+  assert.equal(first.event, "$pageview");
+  assert.equal(first.properties.$current_url, "https://app.example/?lang=en");
+  for (const url of [
+    "https://app.example/?lang=en&target=neptune&camera=4,5,6,0,0,0&source=demo#second",
+    "https://app.example/?source=local&camera=7,8,9,0,0,0&target=other&lang=en",
+    "https://app.example/?lang=en",
+  ]) assert.equal(pageview(url), null);
+  assert.equal(sdk.capture.mock.callCount(), 0, "dedup does not create a custom pageview companion");
+  assert.equal(sdk.subscribe.mock.callCount(), 0, "the SDK remains the only navigation observer");
+});
+
+test("pageview dedup preserves language, route changes and a later return to the same page", (t) => {
+  const sdk = setup(t); initializeClientTelemetry();
+  const beforeSend = sdk.configuration().before_send;
+  if (typeof beforeSend !== "function") throw new Error("hackuniverse-test missing transport hook");
+  for (const url of ["https://app.example/?lang=en", "https://app.example/?lang=pt-BR", "https://app.example/example?lang=pt-BR", "https://app.example/?lang=en"]) {
+    assert.ok(beforeSend({ uuid: "synthetic-navigation", event: "$pageview", properties: { $current_url: url } }), url);
+  }
+});
+
+test("exceptions and product events remain independent from consecutive pageview dedup", (t) => {
+  const sdk = setup(t); initializeClientTelemetry();
+  const beforeSend = sdk.configuration().before_send;
+  if (typeof beforeSend !== "function") throw new Error("hackuniverse-test missing transport hook");
+  const properties = { $current_url: "https://app.example/?lang=en&camera=1,2,3,0,0,0" };
+  assert.ok(beforeSend({ uuid: "synthetic-first-pageview", event: "$pageview", properties }));
+  for (const event of ["$exception", "$exception", "hackuniverse-location-shared"]) {
+    const captured = beforeSend({ uuid: "synthetic-other-event", event, properties });
+    assert.ok(captured); assert.equal(captured.event, event);
+  }
+  assert.equal(beforeSend({ uuid: "synthetic-repeated-pageview", event: "$pageview", properties }), null);
+});
+
+test("a fresh document accepts its initial pageview even when the previous document used the same URL", (t) => {
+  const sdk = setup(t); initializeClientTelemetry();
+  const previousSend = sdk.configuration().before_send;
+  if (typeof previousSend !== "function") throw new Error("hackuniverse-test missing transport hook");
+  const event = { uuid: "synthetic-refresh", event: "$pageview", properties: { $current_url: "https://app.example/?lang=en" } };
+  assert.ok(previousSend(event)); assert.equal(previousSend(event), null);
+  // A document refresh replaces the global object; setup removes only this app's state.
+  delete root[stateKey]; initializeClientTelemetry();
+  const nextSend = sdk.configuration().before_send;
+  if (typeof nextSend !== "function") throw new Error("hackuniverse-test missing transport hook");
+  assert.ok(nextSend(event));
+});
+
+test("unkeyed pageviews are not collapsed into a guessed URL", (t) => {
+  const sdk = setup(t); initializeClientTelemetry();
+  const beforeSend = sdk.configuration().before_send;
+  if (typeof beforeSend !== "function") throw new Error("hackuniverse-test missing transport hook");
+  const valid = { uuid: "synthetic-url", event: "$pageview", properties: { $current_url: "https://app.example/?lang=en" } };
+  assert.ok(beforeSend(valid));
+  assert.ok(beforeSend({ uuid: "synthetic-no-url", event: "$pageview", properties: {} }));
+  assert.ok(beforeSend(valid));
+});
+
 test("development replacement removes an older companion listener exactly once", (t) => {
   const sdk = setup(t);
   let unsubscriptions = 0;

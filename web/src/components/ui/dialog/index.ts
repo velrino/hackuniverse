@@ -10,3 +10,4 @@ export {
   DialogTitle,
   DialogTrigger,
 } from "./component";
+export { useDialogReturnFocus } from "./use-dialog-return-focus";

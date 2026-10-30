@@ -1,4 +1,5 @@
 import { universeEn } from "@/modules/universe/messages";
+import { identityEn } from "@/modules/identity/messages";
 const en = {
   common: {
     home: "Home",
@@ -17,9 +18,10 @@ const en = {
     hint: "You can change your language at any time.",
   },
   universe: universeEn,
+  identity: identityEn,
   applicationIntro: {
     label: "Welcome to HackUniverse",
-    detail: "Your universe starts here.",
+    detail: "Welcome animation · 3 seconds.",
   },
   notFound: {
     eyebrow: "Error 404 / Route not found",

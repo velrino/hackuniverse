@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noEmit": false,
+    "incremental": false,
+    "rootDir": "src",
+    "outDir": ".workspace-tests",
+    "types": [
+      "node"
+    ],
+    "plugins": []
+  },
+  "include": [
+    "src/modules/universe-workspace/domain/*.test.ts",
+    "src/modules/universe-workspace/adapters/*.test.ts",
+    "src/modules/universe-workspace/configs/*.test.ts",
+    "src/components/ui/json-editor/*.test.ts"
+  ]
+}

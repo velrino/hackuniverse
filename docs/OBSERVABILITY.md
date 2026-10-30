@@ -25,7 +25,7 @@ Every event receives `app: "hackuniverse"`, `app_name: "hackuniverse-web"`, `eve
 | `$pageview` | The single pageview event, scoped by application properties. |
 | `$exception` | Native PostHog Error Tracking event with SDK-generated exception structure. |
 
-Page visits use native `$pageview`, and failures use native `$exception`, both filtered by `app_name: "hackuniverse-web"`. There are no mirrored custom events or event-capture subscriptions that resend native events. The SDK is the only pageview owner. A tab or anchor change on `/design` is not a pageview; changing the global language query is.
+Page visits use native `$pageview`, and failures use native `$exception`, both filtered by `app_name: "hackuniverse-web"`. There are no mirrored custom events or event-capture subscriptions that resend native events. The SDK is the only pageview owner. Before transport, consecutive pageviews with the same sanitized URL are discarded within the document. Camera, target, source, hash and other non-language query changes therefore do not count as visits; route or global `lang` changes, including a return to a previous route, do. A document refresh starts a new deduplication state. Exceptions and product events do not change this pageview state.
 
 The `hackuniverse-*` prefix is reserved for actual product events, such as an import starting. Native exception names and SDK-generated structure remain intact for PostHog Error Tracking.
 
