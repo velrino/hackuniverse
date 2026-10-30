@@ -15,15 +15,15 @@ import { createTourDolly, type TourDolly } from "./tour-motion";
 import { galaxyParticleTexture } from "./galaxy-particles";
 import { createCloudHaze, createGalaxyVisual, createGlow, createRoundPointMaterial, updateCloudHaze, updateGalaxyVisual } from "./cluster-visuals";
 import { createSurroundingContext, type ContextLabel } from "./surrounding-context";
-import { createZoomIntentGate } from "./zoom-intent";
-import { createOrbitIntentGate } from "./orbit-intent";
+import { isManualZoomSample } from "./zoom-intent";
+import { isManualOrbitSample } from "./orbit-intent";
 import { createPlanetSelection } from "./planet-selection";
 import { createOrbitGuides } from "./orbit-guides";
 import { createPlanetRings } from "./planet-rings";
 import { isCameraPose, type UniverseCameraPose } from "../domain/camera-link";
 import type { UniverseCameraRestore } from "./types";
 
-type Callbacks = { onSelect: (id: string) => void; onSelectStar: () => void; onReady: () => void; onUnavailable: () => void; onError?: (error: unknown, operation: UniverseSceneErrorOperation) => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onEntityTransitionEnd?: (token: string) => void; onInteraction: () => void; onZoomIntent?: (direction: "in" | "out") => void; onOrbitIntent?: () => void; onDestinationHover?: (id: string) => void; onCameraChange?: (pose: UniverseCameraPose, reason: "manual" | "navigation") => void; onCameraRestored?: (token: string, success: boolean) => void };
+type Callbacks = { onSelect: (id: string) => void; onSelectStar: () => void; onReady: () => void; onUnavailable: () => void; onError?: (error: unknown, operation: UniverseSceneErrorOperation) => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onEntityTransitionEnd?: (token: string) => void; onInteraction: () => void; onZoomIntent?: (direction: "in" | "out") => void; onOrbitIntent?: () => void; onCameraGestureEnd?: (motion: "zoom" | "orbit") => void; onDestinationHover?: (id: string) => void; onCameraChange?: (pose: UniverseCameraPose, reason: "manual" | "navigation") => void; onCameraRestored?: (token: string, success: boolean) => void };
 type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; previewPixels?: number; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[]; dust?: THREE.Points; core?: THREE.Sprite; highlight?: (active: boolean) => void; haze?: { primary: THREE.Sprite; secondary: THREE.Sprite } };
 type Label = { element: HTMLElement; body?: Body; position?: THREE.Vector3; width: number; star?: boolean; context?: ContextLabel };
 type CentralStar = { systemId: string; object: THREE.Mesh; highlight: (active: boolean) => void };
@@ -170,12 +170,13 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   let pinchDistance = 0;
   const touchPoints = new Map<number, { x: number; y: number }>();
   const semanticZoom = createSemanticZoomGate();
-  const acceptZoomFeedback = createZoomIntentGate();
-  const acceptOrbitFeedback = createOrbitIntentGate();
   let orbitPointer: number | null = null;
-  let orbitPointerMoved = false;
   let orbitPointerPosition: { x: number; y: number } | null = null;
-  let orbitInputAt = -Infinity;
+  let gestureGeneration = 0;
+  let orbitFeedbackActive = false;
+  let zoomFeedbackActive = false;
+  const wheelDistances = new WeakMap<WheelEvent, number>();
+  const pointerMotionSamples = new WeakMap<PointerEvent, () => void>();
   let frame: number | null = null;
   let ready = false;
   let previousTime = performance.now();
@@ -346,6 +347,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     clearCameraReport();
     let success = false;
     if (isCameraPose(command.pose)) {
+      suppressCameraGestures();
       finishWorldTransition(); cancelCameraTween(); clearZoomIntent();
       controls.autoRotate = false;
       const anchor = planet?.object.position;
@@ -494,6 +496,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function fit() {
+    suppressCameraGestures();
     controls.autoRotate = false;
     cameraTween = null;
     focusFraming = 0;
@@ -536,6 +539,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function beginCameraTween(to: CameraPose, toFraming: number, onComplete?: () => void) {
+    suppressCameraGestures();
     clearZoomIntent();
     controls.autoRotate = false;
     finishWorldTransition();
@@ -626,6 +630,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       requestRender();
       return;
     }
+    suppressCameraGestures();
     // Keep only one bounded snapshot for deletion after the projection is rebuilt.
     previousEntityViewKey = currentView?.key;
     previousEntityAnchors = new Map();
@@ -836,7 +841,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function setTourStep(step: UniverseTourCameraStep | null) {
-    if (step) clearCameraReport();
+    if (step) { clearCameraReport(); suppressCameraGestures(); }
     if (step?.token === tourStep?.token) return;
     const previous = tourStep;
     tourStep = step;
@@ -946,6 +951,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function clearZoomIntent() {
+    endCameraGesture("zoom");
     userZoom = null;
     semanticZoom.cancelPending();
   }
@@ -1055,7 +1061,6 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       camera.updateProjectionMatrix();
     }
     camera.updateMatrixWorld();
-    reportManualOrbit(performance.now());
     if (cameraReport && time >= cameraReportAfter && !cameraTween && !worldTransition && !tourStep && !tourPreparing && !piloting && activePointers.size === 0) {
       const reason = cameraReport;
       clearCameraReport();
@@ -1165,29 +1170,46 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     if (animate || interacting || cameraTween || worldTransition || entityTransition || semanticZoom.hasPending() || (piloting && !flightPaused)) requestRender();
   }
 
-  function reportZoomIntent(direction: "in" | "out", gesture = false) {
-    if (gesture && !acceptZoomFeedback(direction, performance.now())) return;
+  function endCameraGesture(motion: "zoom" | "orbit") {
+    // Invalidate an input's queued after-dispatch sample before notifying the host.
+    gestureGeneration++;
+    if (motion === "zoom" ? !zoomFeedbackActive : !orbitFeedbackActive) return;
+    if (motion === "zoom") zoomFeedbackActive = false;
+    else orbitFeedbackActive = false;
+    try { callbacks.onCameraGestureEnd?.(motion); } catch { /* Optional feedback cannot own camera input. */ }
+  }
+
+  function suppressCameraGestures() {
+    endCameraGesture("zoom");
+    endCameraGesture("orbit");
+    orbitPointer = null;
+    orbitPointerPosition = null;
+  }
+
+  function manualCameraAvailable() {
+    return !destroyed && !unavailable && pageVisible && intersecting && controls.enabled && playing &&
+      !pilot.isActive() && !cameraTween && !worldTransition?.cameraOwned && !tourStep && !tourPreparing;
+  }
+
+  function reportZoomIntent(direction: "in" | "out") {
+    if (!manualCameraAvailable()) return;
+    zoomFeedbackActive = true;
     try { callbacks.onZoomIntent?.(direction); } catch { /* Optional feedback must not interrupt navigation. */ }
   }
 
-  function reportManualOrbit(time: number) {
-    const manual = orbitPointer !== null && orbitPointerMoved && activePointers.size === 1 && playing && !pilot.isActive() && !cameraTween && !worldTransition && !tourStep && !tourPreparing;
-    if (acceptOrbitFeedback({ now: time, azimuth: controls.getAzimuthalAngle(), polar: controls.getPolarAngle(), manual, inputRecent: time - orbitInputAt < 120 })) {
-      try { callbacks.onOrbitIntent?.(); } catch { /* Optional audio cannot interrupt camera movement. */ }
-    }
-  }
-
   function onControlStart() { callbacks.onInteraction(); controls.autoRotate = false; cancelCameraTween(true); interactionUntil = performance.now() + 60000; canvas.style.cursor = "grabbing"; requestRender(); }
-  function onControlEnd() { interactionUntil = performance.now() + 450; canvas.style.cursor = "grab"; requestCameraReport("manual"); requestRender(); }
+  function onControlEnd() { endCameraGesture("orbit"); interactionUntil = performance.now() + 450; canvas.style.cursor = "grab"; requestCameraReport("manual"); requestRender(); }
   function onPointerDown(event: PointerEvent) {
     callbacks.onInteraction();
     clearZoomIntent();
+    endCameraGesture("orbit");
     activePointers.add(event.pointerId);
+    // OrbitControls installs its document listener in its earlier pointerdown
+    // handler. Reappend ours after it, including the start of each new gesture.
+    document.removeEventListener("pointermove", onAfterControlPointerMove);
+    document.addEventListener("pointermove", onAfterControlPointerMove);
     orbitPointer = event.isTrusted && activePointers.size === 1 && event.button === 0 ? event.pointerId : null;
-    orbitPointerMoved = false;
     orbitPointerPosition = orbitPointer !== null ? { x: event.clientX, y: event.clientY } : null;
-    orbitInputAt = -Infinity;
-    acceptOrbitFeedback({ now: performance.now(), azimuth: controls.getAzimuthalAngle(), polar: controls.getPolarAngle(), manual: false });
     if (event.pointerType === "touch") {
       touchPoints.set(event.pointerId, { x: event.clientX, y: event.clientY });
       if (touchPoints.size === 2) {
@@ -1197,42 +1219,74 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     }
     pointerStart = activePointers.size === 1 ? { id: event.pointerId, x: event.clientX, y: event.clientY, time: performance.now(), dragged: false } : null;
   }
+  function onAfterControlPointerMove(event: PointerEvent) {
+    const sample = pointerMotionSamples.get(event);
+    pointerMotionSamples.delete(event);
+    sample?.();
+  }
   function onPointerMove(event: PointerEvent) {
-    if (event.isTrusted && orbitPointer === event.pointerId && activePointers.size === 1 && orbitPointerPosition && Math.hypot(event.clientX - orbitPointerPosition.x, event.clientY - orbitPointerPosition.y) > 0.25) {
-      orbitPointerMoved = true;
+    if (event.isTrusted && orbitPointer === event.pointerId && activePointers.size === 1 && orbitPointerPosition && event.buttons !== 0 &&
+      Math.hypot(event.clientX - orbitPointerPosition.x, event.clientY - orbitPointerPosition.y) > 0) {
+      const before = { azimuth: controls.getAzimuthalAngle(), polar: controls.getPolarAngle() };
+      const generation = gestureGeneration;
       orbitPointerPosition = { x: event.clientX, y: event.clientY };
-      orbitInputAt = performance.now();
-      // OrbitControls installs its move listener after ours. Read its actual
-      // angles after dispatch, including a short flick released before the next frame.
-      queueMicrotask(() => { if (!destroyed && pageVisible) reportManualOrbit(performance.now()); });
+      // Consume after OrbitControls handles this exact event on document.
+      // A microtask here runs too early for native event listener checkpoints.
+      pointerMotionSamples.set(event, () => {
+        if (generation !== gestureGeneration || destroyed) return;
+        const manual = orbitPointer === event.pointerId && activePointers.size === 1 && manualCameraAvailable();
+        if (!isManualOrbitSample({ before, after: { azimuth: controls.getAzimuthalAngle(), polar: controls.getPolarAngle() }, manual, inputMoved: true })) { endCameraGesture("orbit"); return; }
+        orbitFeedbackActive = true;
+        try { callbacks.onOrbitIntent?.(); } catch { /* Optional audio cannot interrupt camera movement. */ }
+      });
+    } else if (orbitPointer === event.pointerId && event.buttons === 0) {
+      endCameraGesture("orbit");
+      orbitPointer = null; orbitPointerPosition = null;
     }
     if (touchPoints.has(event.pointerId)) {
       touchPoints.set(event.pointerId, { x: event.clientX, y: event.clientY });
       if (event.isTrusted && touchPoints.size === 2 && controls.enabled && playing && !pilot.isActive()) {
         const [a, b] = [...touchPoints.values()];
         const distance = Math.hypot(a.x - b.x, a.y - b.y);
-        if (Math.abs(distance - pinchDistance) > 2) {
+        if (distance > 0 && distance !== pinchDistance) {
           cancelCameraTween(true);
-          const rect = canvas.getBoundingClientRect();
-          userZoom = { direction: distance > pinchDistance ? "in" : "out", at: performance.now(), x: ((a.x + b.x) / 2 - rect.left) / width * 2 - 1, y: -((a.y + b.y) / 2 - rect.top) / height * 2 + 1 };
-          reportZoomIntent(userZoom.direction, true);
+          const before = controls.getDistance();
+          const generation = gestureGeneration;
+          const x = (a.x + b.x) / 2; const y = (a.y + b.y) / 2;
           pinchDistance = distance;
-          requestRender();
+          pointerMotionSamples.set(event, () => {
+            if (generation !== gestureGeneration || destroyed) return;
+            const after = controls.getDistance();
+            if (!isManualZoomSample(before, after, touchPoints.size === 2 && manualCameraAvailable())) { endCameraGesture("zoom"); return; }
+            const rect = canvas.getBoundingClientRect();
+            userZoom = { direction: after < before ? "in" : "out", at: performance.now(), x: (x - rect.left) / width * 2 - 1, y: -(y - rect.top) / height * 2 + 1 };
+            reportZoomIntent(userZoom.direction);
+            requestRender();
+          });
         }
       }
     }
     if (pointerStart && Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y) > 7) pointerStart.dragged = true;
   }
+  function promoteRemainingTouch(event: PointerEvent) {
+    if (!event.isTrusted || event.pointerType !== "touch" || activePointers.size !== 1 || touchPoints.size !== 1) return;
+    const id = [...activePointers][0];
+    const position = touchPoints.get(id);
+    if (!position) return;
+    // OrbitControls also changes back to one-finger rotation. Wait for the next
+    // physical move before comparing angles or renewing any audio.
+    orbitPointer = id;
+    orbitPointerPosition = position;
+  }
   function onPointerUp(event: PointerEvent) {
-    if (orbitPointer === event.pointerId) { orbitPointer = null; orbitPointerMoved = false; }
+    const pinching = touchPoints.size >= 2 && touchPoints.has(event.pointerId);
+    endCameraGesture("orbit");
+    if (pinching) endCameraGesture("zoom");
+    if (orbitPointer === event.pointerId) { orbitPointer = null; orbitPointerPosition = null; }
     activePointers.delete(event.pointerId);
     touchPoints.delete(event.pointerId);
-    if (event.isTrusted && event.pointerType === "touch" && activePointers.size === 1) {
-      orbitPointer = [...activePointers][0]; orbitPointerMoved = false;
-      orbitPointerPosition = touchPoints.get(orbitPointer) ?? null;
-      orbitInputAt = -Infinity;
-      acceptOrbitFeedback({ now: performance.now(), azimuth: controls.getAzimuthalAngle(), polar: controls.getPolarAngle(), manual: false });
-    }
+    if (activePointers.size === 0) document.removeEventListener("pointermove", onAfterControlPointerMove);
+    promoteRemainingTouch(event);
     const start = pointerStart;
     pointerStart = null;
     if (pilot.isActive() && (!flightReady || flightPaused)) return;
@@ -1247,13 +1301,17 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       requestSelection(id);
     }
   }
-  function onPointerCancel(event: PointerEvent) { orbitPointer = null; orbitPointerMoved = false; activePointers.delete(event.pointerId); touchPoints.delete(event.pointerId); pointerStart = null; clearZoomIntent(); }
-  function onWheel(event: WheelEvent) {
+  function onPointerCancel(event: PointerEvent) { suppressCameraGestures(); activePointers.delete(event.pointerId); touchPoints.delete(event.pointerId); if (activePointers.size === 0) document.removeEventListener("pointermove", onAfterControlPointerMove); pointerStart = null; clearZoomIntent(); promoteRemainingTouch(event); }
+  function onLostPointerCapture(event: PointerEvent) { if (activePointers.has(event.pointerId)) onPointerCancel(event); }
+  function onWindowBlur() { suppressCameraGestures(); activePointers.clear(); touchPoints.clear(); document.removeEventListener("pointermove", onAfterControlPointerMove); pointerStart = null; clearZoomIntent(); }
+  function onWheelCapture(event: WheelEvent) { if (event.isTrusted) wheelDistances.set(event, controls.getDistance()); }
+  function onWheel(event: WheelEvent, before = wheelDistances.get(event)) {
     if (!event.isTrusted || !event.deltaY || !controls.enabled || !playing || pilot.isActive()) return;
     cancelCameraTween(true);
     const rect = canvas.getBoundingClientRect();
     userZoom = { direction: event.deltaY < 0 ? "in" : "out", at: performance.now(), x: (event.clientX - rect.left) / width * 2 - 1, y: -(event.clientY - rect.top) / height * 2 + 1 };
-    reportZoomIntent(userZoom.direction, true);
+    if (before !== undefined && isManualZoomSample(before, controls.getDistance(), manualCameraAvailable())) reportZoomIntent(userZoom.direction);
+    else endCameraGesture("zoom");
     requestCameraReport("manual");
     requestRender();
   }
@@ -1261,12 +1319,13 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     if (!event.isTrusted || !event.deltaY || !controls.enabled || !playing || pilot.isActive()) return;
     event.preventDefault();
     event.stopPropagation();
+    const before = controls.getDistance();
     // Labels are canvas siblings: forward the optical dolly, retaining native intent.
     canvas.dispatchEvent(new WheelEvent("wheel", {
       clientX: event.clientX, clientY: event.clientY, deltaX: event.deltaX, deltaY: event.deltaY, deltaZ: event.deltaZ, deltaMode: event.deltaMode,
       ctrlKey: event.ctrlKey, shiftKey: event.shiftKey, altKey: event.altKey, metaKey: event.metaKey, cancelable: true,
     }));
-    onWheel(event);
+    onWheel(event, before);
   }
   function evaluateSemanticZoom(time: number) {
     if (!currentView || tourStep) return;
@@ -1305,8 +1364,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     }
   }
   function stopFrame() { if (frame !== null) cancelAnimationFrame(frame); frame = null; previousTime = performance.now(); }
-  function onVisibility() { pageVisible = !document.hidden; if (!pageVisible) { orbitPointer = null; orbitPointerMoved = false; destinationHover.clear(); guideButton.hidden = true; clearZoomIntent(); } pilot.setPaused(flightPaused || !pageVisible || !intersecting); stopFrame(); if (pageVisible) requestRender(); }
+  function onVisibility() { pageVisible = !document.hidden; if (!pageVisible) { onWindowBlur(); destinationHover.clear(); guideButton.hidden = true; } pilot.setPaused(flightPaused || !pageVisible || !intersecting); stopFrame(); if (pageVisible) requestRender(); }
   function onMotion() {
+    suppressCameraGestures();
     reducedMotion = motionQuery.matches;
     if (reducedMotion) finishEntityTransition();
     if (reducedMotion && worldTransition) {
@@ -1329,7 +1389,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     controls.enableDamping = !reducedMotion && !cameraTween;
     requestRender();
   }
-  function onContextLost(event: Event) { event.preventDefault(); if (!unavailable) { destinationHover.clear(); unavailable = true; stopFlight(); stopFrame(); callbacks.onUnavailable(); } }
+  function onContextLost(event: Event) { event.preventDefault(); if (!unavailable) { suppressCameraGestures(); destinationHover.clear(); unavailable = true; stopFlight(); stopFrame(); callbacks.onUnavailable(); } }
 
   function restoreMapCamera() {
     let saved = flightMapPose;
@@ -1416,6 +1476,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     if (!enabled) { stopFlight(); return; }
     if (destroyed || unavailable || currentView?.mode !== "system") { callbacks.onFlightStatus("idle"); return; }
     if (pilot.isActive()) return;
+    suppressCameraGestures();
     starSelected = false;
     destinationHover.clear();
     clearZoomIntent();
@@ -1498,16 +1559,19 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   canvas.addEventListener("pointermove", onPointerMove);
   canvas.addEventListener("pointerup", onPointerUp);
   canvas.addEventListener("pointercancel", onPointerCancel);
+  canvas.addEventListener("lostpointercapture", onLostPointerCapture);
+  canvas.addEventListener("wheel", onWheelCapture, true);
   canvas.addEventListener("wheel", onWheel, { passive: true });
   labelLayer.addEventListener("wheel", onLabelWheel, { passive: false });
   canvas.addEventListener("webglcontextlost", onContextLost);
   document.addEventListener("visibilitychange", onVisibility);
+  window.addEventListener("blur", onWindowBlur);
   motionQuery.addEventListener("change", onMotion);
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(container);
   const intersectionObserver = new IntersectionObserver(([entry]) => {
     intersecting = entry.isIntersecting;
-    if (!intersecting) { destinationHover.clear(); guideButton.hidden = true; clearZoomIntent(); }
+    if (!intersecting) { suppressCameraGestures(); destinationHover.clear(); guideButton.hidden = true; clearZoomIntent(); }
     pilot.setPaused(flightPaused || !pageVisible || !intersecting);
     stopFrame();
     if (intersecting) requestRender();
@@ -1523,10 +1587,11 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     setStarSelected,
     setTourStep,
     setEntityTransition,
-    setTourPreparing(value: boolean) { tourPreparing = value; if (value) clearCameraReport(); },
+    setTourPreparing(value: boolean) { tourPreparing = value; if (value) { suppressCameraGestures(); clearCameraReport(); } },
     setAriaLabel(value: string) { canvas.setAttribute("aria-label", value); },
     setAutoOrbit(value: boolean) { autoOrbit = value; if (!value) controls.autoRotate = false; requestRender(); },
     setPlaying(value: boolean) {
+      if (!value) suppressCameraGestures();
       if (!value) destinationHover.clear();
       if (!value) clearZoomIntent();
       if (!value) finishWorldTransition();
@@ -1569,13 +1634,14 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       cancelCameraTween();
       const offset = camera.position.clone().sub(controls.target);
       const distance = THREE.MathUtils.clamp(offset.length() * (direction === "in" ? 0.82 : 1.22), controls.minDistance, controls.maxDistance);
-      if (Math.abs(distance - offset.length()) > 0.001) reportZoomIntent(direction, true);
+      if (isManualZoomSample(offset.length(), distance, true)) reportZoomIntent(direction);
       camera.position.copy(controls.target).add(offset.setLength(distance));
       controls.update();
       requestCameraReport("manual");
       requestRender();
     },
     destroy() {
+      suppressCameraGestures();
       destroyed = true;
       clearCameraReport();
       finishEntityTransition(false);
@@ -1591,6 +1657,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("blur", onWindowBlur);
       motionQuery.removeEventListener("change", onMotion);
       controls.removeEventListener("start", onControlStart);
       controls.removeEventListener("end", onControlEnd);
@@ -1598,8 +1665,11 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       controls.dispose();
       canvas.removeEventListener("pointerdown", onPointerDown);
       canvas.removeEventListener("pointermove", onPointerMove);
+      document.removeEventListener("pointermove", onAfterControlPointerMove);
       canvas.removeEventListener("pointerup", onPointerUp);
       canvas.removeEventListener("pointercancel", onPointerCancel);
+      canvas.removeEventListener("lostpointercapture", onLostPointerCapture);
+      canvas.removeEventListener("wheel", onWheelCapture, true);
       canvas.removeEventListener("wheel", onWheel);
       labelLayer.removeEventListener("wheel", onLabelWheel);
       canvas.removeEventListener("webglcontextlost", onContextLost);

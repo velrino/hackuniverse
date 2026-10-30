@@ -70,6 +70,6 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       controller.dispose();
     };
   }, [controller]);
-  const value = useMemo(() => ({ ...snapshot, playCue: controller.playCue, setMusicEnabled: controller.setMusicEnabled, setEffectsEnabled: controller.setEffectsEnabled, enableMusic: controller.enableMusic, enableEffects: controller.enableEffects, setMusicVolume: controller.setMusicVolume, setEffectsVolume: controller.setEffectsVolume, retry: controller.retry }), [snapshot, controller]);
+  const value = useMemo(() => ({ ...snapshot, playCue: controller.playCue, cameraMotion: controller.cameraMotion, stopCameraMotion: controller.stopCameraMotion, setMusicEnabled: controller.setMusicEnabled, setEffectsEnabled: controller.setEffectsEnabled, enableMusic: controller.enableMusic, enableEffects: controller.enableEffects, setMusicVolume: controller.setMusicVolume, setEffectsVolume: controller.setEffectsVolume, retry: controller.retry }), [snapshot, controller]);
   return <AudioContext value={value}>{children}</AudioContext>;
 }

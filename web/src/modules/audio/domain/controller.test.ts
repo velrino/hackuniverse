@@ -25,6 +25,8 @@ function fixture(saved: unknown = null) {
   let effectsPlayFails = false;
   let synchronousEnd = false;
   let deferredStopEnd = false;
+  let timerSequence = 0;
+  const timers = new Map<number, { at: number; run: () => void }>();
   let musicEvents: Parameters<AudioPorts["createMusic"]>[0] | undefined;
   let interrupted: (() => void) | undefined;
   type Voice = { cue: AudioCue; stop(fadeSeconds?: number): void; finish(): void; stopFades: (number | undefined)[] };
@@ -34,6 +36,8 @@ function fixture(saved: unknown = null) {
     readPreferences: () => { calls.push("read-preferences"); if (readFails) throw new Error("Unavailable"); return saved; },
     writePreferences: (preferences) => { calls.push("persist"); if (storageFails) throw new Error("Unavailable"); saved = { schemaVersion: 1, ...preferences }; },
     now: () => now,
+    later(run, milliseconds) { const id = ++timerSequence; timers.set(id, { at: now + milliseconds, run }); return id; },
+    cancel(timer) { timers.delete(timer as number); },
     createMusic(events) {
       calls.push("create-music"); musicEvents = events;
       return {
@@ -76,6 +80,17 @@ function fixture(saved: unknown = null) {
     controller, calls, voices, liveVoices,
     get saved() { return saved; },
     clock(value: number) { now = value; },
+    advance(milliseconds: number) {
+      const end = now + milliseconds;
+      while (true) {
+        const entry = [...timers].filter(([, timer]) => timer.at <= end).sort((a, b) => a[1].at - b[1].at)[0];
+        if (!entry) break;
+        now = entry[1].at; timers.delete(entry[0]); entry[1].run();
+      }
+      now = end;
+    },
+    get pendingTimers() { return timers.size; },
+    get scheduledCallbacks() { return [...timers.values()].map((timer) => timer.run); },
     storageFailure() { storageFails = true; },
     readFailure() { readFails = true; },
     playWith(operation: () => Promise<void>) { musicPlay = operation; },
@@ -378,52 +393,104 @@ test("ordinary UI cue bursts keep their global and per-cue cooldowns and three-v
   assert.equal(instance.voices.length, 4);
 });
 
-test("continuous zoom feedback replaces its previous voice with a short fade instead of going silent", async () => {
+test("continuous movement samples renew one voice, then inactivity stops the long file", async () => {
+  const instance = fixture(); instance.controller.mount(); await flush(); instance.delayStopEnds();
+  instance.controller.cameraMotion("zoom", "in");
+  for (let time = 16; time <= 2000; time += 16) { instance.advance(16); instance.controller.cameraMotion("zoom", "in"); }
+  assert.equal(instance.voices.length, 1, "same-direction movement never restarts the recording");
+  assert.equal(instance.pendingTimers, 1);
+  instance.advance(119); assert.equal(instance.liveVoices.size, 1);
+  instance.advance(1); assert.equal(instance.liveVoices.size, 0);
+  assert.deepEqual(instance.voices[0].stopFades, [0.02]);
+  assert.equal(instance.pendingTimers, 0);
+  instance.advance(10_000); assert.equal(instance.voices.length, 1, "expiration never queues another playback");
+  instance.controller.cameraMotion("zoom", "in");
+  instance.voices[0].finish();
+  assert.equal(instance.liveVoices.size, 1, "a fading old voice cannot orphan the new motion");
+  instance.controller.stopCameraMotion(); assert.equal(instance.liveVoices.size, 0);
+});
+
+test("a naturally completed file restarts only on the next real movement sample", async () => {
   const instance = fixture(); instance.controller.mount(); await flush();
-  instance.delayStopEnds();
-  for (const time of [0, 500, 1000, 1500]) {
-    instance.clock(time); instance.controller.playCue("zoom-in");
-    assert.equal(instance.liveVoices.size, 1);
-    assert.equal([...instance.liveVoices][0], instance.voices.at(-1));
-  }
-  assert.deepEqual(instance.voices.map((voice) => voice.cue), ["zoom-in", "zoom-in", "zoom-in", "zoom-in"]);
-  for (const voice of instance.voices.slice(0, -1)) assert.deepEqual(voice.stopFades, [0.008]);
-  for (const voice of instance.voices.slice(0, -1)) voice.finish();
-  assert.equal(instance.liveVoices.size, 1, "late end notifications do not release the replacement");
-  instance.voices.at(-1)!.finish();
-  instance.clock(2000); instance.controller.playCue("zoom-out");
-  assert.equal(instance.voices.at(-1)!.cue, "zoom-out");
+  instance.controller.cameraMotion("orbit");
+  instance.advance(80); instance.controller.cameraMotion("orbit");
+  instance.voices[0].finish();
+  instance.advance(40); assert.equal(instance.voices.length, 1);
+  instance.controller.cameraMotion("orbit");
+  assert.equal(instance.voices.length, 2);
+  instance.advance(120); assert.equal(instance.liveVoices.size, 0);
+  instance.advance(5000); assert.equal(instance.voices.length, 2);
+});
+
+test("a stale cancelled lease cannot stop newer movement", async () => {
+  const instance = fixture(); instance.controller.mount(); await flush();
+  instance.controller.cameraMotion("zoom", "in");
+  const stale = instance.scheduledCallbacks[0];
+  instance.advance(60); instance.controller.cameraMotion("zoom", "in");
+  stale();
   assert.equal(instance.liveVoices.size, 1);
+  assert.equal(instance.pendingTimers, 1);
+  instance.advance(119); assert.equal(instance.liveVoices.size, 1);
+  instance.advance(1); assert.equal(instance.liveVoices.size, 0);
+  assert.equal(instance.pendingTimers, 0);
 });
 
-test("reversing zoom after 120 ms replaces the old direction without waiting for its sound to end", async () => {
-  const instance = fixture(); instance.controller.mount(); await flush();
-  instance.controller.playCue("zoom-in");
-  instance.clock(120); instance.controller.playCue("zoom-out");
-  assert.deepEqual(instance.voices.map((voice) => voice.cue), ["zoom-in", "zoom-out"]);
-  assert.deepEqual(instance.voices[0].stopFades, [0.008]);
-  assert.deepEqual([...instance.liveVoices].map((voice) => voice.cue), ["zoom-out"]);
+test("OFF, zero volume, hiding and disposal clear leases and both live and fading movement", async () => {
+  for (const stop of ["off", "zero", "hidden", "dispose"] as const) {
+    const instance = fixture(); instance.controller.mount(); await flush(); instance.delayStopEnds();
+    instance.controller.cameraMotion("zoom", "in");
+    instance.controller.cameraMotion("orbit");
+    instance.advance(30); instance.controller.cameraMotion("zoom", "out");
+    if (stop === "off") instance.controller.setEffectsEnabled(false);
+    else if (stop === "zero") instance.controller.setEffectsVolume(0);
+    else if (stop === "hidden") instance.controller.setVisible(false);
+    else instance.controller.dispose();
+    assert.equal(instance.pendingTimers, 0, stop);
+    assert.equal(instance.liveVoices.size, 0, stop);
+    assert.ok(instance.voices[0].stopFades.includes(undefined), "the retired direction is cancelled immediately too");
+    instance.advance(5000);
+    if (stop === "off") instance.controller.setEffectsEnabled(true);
+    else if (stop === "zero") instance.controller.setEffectsVolume(0.5);
+    else if (stop === "hidden") instance.controller.setVisible(true);
+    else instance.controller.mount();
+    await flush();
+    assert.equal(instance.voices.length, 3, "recovery does not replay old movement");
+    instance.controller.cameraMotion("zoom", "out");
+    assert.equal(instance.voices.length, 4);
+    instance.controller.dispose();
+  }
 });
 
-test("zoom bypasses a recent UI cue while its own 100 ms gate bounds raw gesture bursts", async () => {
+test("direction changes hand off briefly and explicit gesture end stops immediately without stopping UI", async () => {
   const instance = fixture(); instance.controller.mount(); await flush();
   instance.controller.playCue("ui-select");
-  instance.clock(10); instance.controller.playCue("zoom-in");
+  instance.controller.cameraMotion("zoom", "in");
+  instance.advance(60); instance.controller.cameraMotion("zoom", "out");
+  assert.deepEqual(instance.voices.map((voice) => voice.cue), ["ui-select", "zoom-in", "zoom-out"]);
+  assert.deepEqual(instance.voices[1].stopFades, [0.008]);
+  instance.controller.stopCameraMotion("zoom");
+  assert.deepEqual(instance.voices[2].stopFades, [0.02]);
+  assert.deepEqual([...instance.liveVoices].map((voice) => voice.cue), ["ui-select"]);
+  assert.equal(instance.pendingTimers, 0);
+  assert.equal(instance.controller.getSnapshot().musicStatus, "playing");
+  instance.advance(5000); assert.equal(instance.voices.length, 3);
+});
+
+test("zoom starts after a UI cue and raw sample bursts maintain its voice instead of creating a storm", async () => {
+  const instance = fixture(); instance.controller.mount(); await flush();
+  instance.controller.playCue("ui-select");
+  instance.advance(10); instance.controller.playCue("zoom-in");
+  for (let time = 15; time <= 300; time += 15) { instance.advance(15); instance.controller.playCue("zoom-in"); }
   assert.deepEqual(instance.voices.map((voice) => voice.cue), ["ui-select", "zoom-in"]);
-  for (let time = 25; time <= 310; time += 15) {
-    instance.clock(time); instance.controller.playCue("zoom-in");
-    assert.equal([...instance.liveVoices].filter((voice) => voice.cue.startsWith("zoom-")).length, 1);
-    assert.ok(instance.liveVoices.size <= 3);
-  }
-  assert.equal(instance.voices.filter((voice) => voice.cue === "zoom-in").length, 3);
-  instance.clock(1000); await flush();
-  assert.equal(instance.voices.length, 4, "rejected raw input is never replayed from a queue");
-  instance.controller.playCue("zoom-out");
+  instance.advance(120);
+  assert.deepEqual([...instance.liveVoices].map((voice) => voice.cue), ["ui-select"]);
+  instance.advance(5000); assert.equal(instance.voices.length, 2);
+  instance.controller.cameraMotion("zoom", "out");
   assert.equal(instance.voices.at(-1)!.cue, "zoom-out");
   assert.equal(instance.liveVoices.size, 2);
 });
 
-test("zoom admits priority feedback at the voice cap by fading only the oldest active voice", async () => {
+test("zoom admits priority feedback at the voice cap by stopping only the oldest ordinary voice", async () => {
   const instance = fixture(); instance.controller.mount(); await flush();
   instance.delayStopEnds();
   instance.controller.playCue("menu-open");
@@ -432,7 +499,7 @@ test("zoom admits priority feedback at the voice cap by fading only the oldest a
   assert.equal(instance.liveVoices.size, 3);
   instance.clock(410); instance.controller.playCue("zoom-in");
   assert.equal(instance.liveVoices.size, 3);
-  assert.deepEqual(instance.voices[0].stopFades, [0.008]);
+  assert.deepEqual(instance.voices[0].stopFades, [undefined]);
   assert.deepEqual(instance.voices[1].stopFades, []);
   assert.deepEqual(instance.voices[2].stopFades, []);
   assert.deepEqual([...instance.liveVoices].map((voice) => voice.cue), ["ui-select", "menu-close", "zoom-in"]);
@@ -452,50 +519,40 @@ test("ordinary UI feedback can play alongside zoom replacements without being in
   assert.deepEqual([...instance.liveVoices].map((voice) => voice.cue), ["ui-select", "zoom-in"]);
 });
 
-test("orbit feedback bypasses recent UI and replaces only its own layer every 1500 ms", async () => {
+test("orbit samples sustain their own long voice until pointer release", async () => {
   const instance = fixture(); instance.controller.mount(); await flush();
-  instance.delayStopEnds();
   instance.controller.playCue("ui-select");
-  instance.clock(10); instance.controller.playCue("camera-orbit");
+  instance.advance(10); instance.controller.cameraMotion("orbit");
+  for (let time = 50; time <= 3000; time += 50) { instance.advance(50); instance.controller.cameraMotion("orbit"); }
   assert.deepEqual(instance.voices.map((voice) => voice.cue), ["ui-select", "camera-orbit"]);
-  instance.clock(1510); instance.controller.playCue("camera-orbit");
   assert.deepEqual(instance.voices[0].stopFades, []);
-  assert.deepEqual(instance.voices[1].stopFades, [0.008]);
-  assert.equal([...instance.liveVoices].filter((voice) => voice.cue === "camera-orbit").length, 1);
-  instance.voices[1].finish();
-  instance.clock(3010); instance.controller.playCue("camera-orbit");
-  assert.deepEqual(instance.voices[2].stopFades, [0.008], "a stale end must not orphan the current orbit layer");
-  assert.deepEqual([...instance.liveVoices].map((voice) => voice.cue), ["ui-select", "camera-orbit"]);
-  instance.controller.dispose();
-  assert.equal(instance.liveVoices.size, 0);
+  instance.controller.stopCameraMotion("orbit");
+  assert.deepEqual(instance.voices[1].stopFades, [0.02]);
+  assert.equal(instance.pendingTimers, 0);
+  assert.deepEqual([...instance.liveVoices].map((voice) => voice.cue), ["ui-select"]);
 });
 
-test("zoom and orbit coexist while movement priority evicts UI instead of the other movement layer", async () => {
-  const instance = fixture(); instance.controller.mount(); await flush();
-  instance.delayStopEnds();
-  instance.controller.playCue("camera-orbit");
-  instance.clock(200); instance.controller.playCue("ui-select");
-  instance.clock(400); instance.controller.playCue("menu-open");
-  instance.clock(410); instance.controller.playCue("zoom-in");
+test("zoom and orbit leases coexist, and priority and explicit stops preserve unrelated voices", async () => {
+  const instance = fixture(); instance.controller.mount(); await flush(); instance.delayStopEnds();
+  instance.controller.cameraMotion("orbit");
+  instance.advance(100); instance.controller.cameraMotion("orbit");
+  instance.advance(100); instance.controller.cameraMotion("orbit"); instance.controller.playCue("ui-select");
+  instance.advance(100); instance.controller.cameraMotion("orbit");
+  instance.advance(100); instance.controller.cameraMotion("orbit"); instance.controller.playCue("menu-open");
+  instance.advance(10); instance.controller.cameraMotion("zoom", "in");
+  assert.deepEqual(instance.voices[0].stopFades, []);
+  assert.deepEqual(instance.voices[1].stopFades, [undefined]);
   assert.equal(instance.liveVoices.size, 3);
-  assert.deepEqual(instance.voices[0].stopFades, [], "the older orbit layer keeps playing");
-  assert.deepEqual(instance.voices[1].stopFades, [0.008], "priority evicts the oldest UI voice");
-  assert.deepEqual([...instance.liveVoices].map((voice) => voice.cue), ["camera-orbit", "menu-open", "zoom-in"]);
-  instance.clock(560); instance.controller.playCue("camera-orbit");
-  assert.deepEqual(instance.voices[0].stopFades, [0.008]);
-  assert.deepEqual(instance.voices[3].stopFades, [], "replacing orbit leaves zoom intact");
-  instance.clock(710); instance.controller.playCue("zoom-out");
+  instance.advance(50); instance.controller.cameraMotion("orbit");
+  instance.advance(50); instance.controller.cameraMotion("zoom", "out");
+  assert.deepEqual(instance.voices[0].stopFades, []);
   assert.deepEqual(instance.voices[3].stopFades, [0.008]);
-  assert.deepEqual(instance.voices[4].stopFades, [], "replacing zoom leaves orbit intact");
-  instance.voices[0].finish(); instance.voices[3].finish();
-  instance.clock(860); instance.controller.playCue("camera-orbit");
-  instance.clock(1010); instance.controller.playCue("zoom-in");
-  assert.deepEqual(instance.voices[4].stopFades, [0.008]);
-  assert.deepEqual(instance.voices[5].stopFades, [0.008]);
-  assert.equal(instance.liveVoices.size, 3);
-  assert.equal([...instance.liveVoices].filter((voice) => voice.cue === "camera-orbit").length, 1);
-  assert.equal([...instance.liveVoices].filter((voice) => voice.cue.startsWith("zoom-")).length, 1);
-  assert.deepEqual(instance.voices[2].stopFades, [], "the remaining UI voice is not interrupted by layer replacements");
+  instance.controller.stopCameraMotion("zoom");
+  assert.deepEqual([...instance.liveVoices].map((voice) => voice.cue), ["camera-orbit", "menu-open"]);
+  instance.controller.stopCameraMotion();
+  assert.deepEqual([...instance.liveVoices].map((voice) => voice.cue), ["menu-open"]);
+  assert.equal(instance.pendingTimers, 0);
+  instance.advance(5000); assert.equal(instance.voices.length, 5);
 });
 
 test("orbit input received while effects load is discarded rather than replayed when ready", async () => {

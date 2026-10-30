@@ -9,7 +9,6 @@ import { useUniverseTour, type UniverseTourStep } from "../../hooks/use-universe
 import { buildManualUniverseTour } from "../../hooks/universe-tour-route";
 import type { UniverseTourCameraStep } from "../../scene/types";
 import { getEntity, getParent, getPlanetCount, getSystemStar } from "../../domain/catalog";
-import { entityHierarchy } from "../../domain/hierarchy";
 import type { ShipFlightInput } from "../../scene/flight/types";
 import { PlanetDetails } from "../../ui/shared/PlanetDetails";
 import { StarDetails } from "../../ui/shared/StarDetails";
@@ -115,6 +114,9 @@ export function Explorer() {
   const orbitFeedback = useCallback(() => {
     try { audio?.onOrbitIntent?.(); } catch { /* Optional feedback cannot block navigation. */ }
   }, [audio]);
+  const stopCameraFeedback = useCallback((motion: "zoom" | "orbit") => {
+    try { audio?.onCameraGestureEnd?.(motion); } catch { /* Optional feedback cannot block navigation. */ }
+  }, [audio]);
   const hoverFeedback = useCallback((id: string) => {
     try { audio?.onDestinationHover?.(id); } catch { /* Optional feedback cannot block navigation. */ }
   }, [audio]);
@@ -145,10 +147,6 @@ export function Explorer() {
   }, [cancelTour]);
 
   const goTo = (id: string) => {
-    const destination = getEntity(catalog, id);
-    if (destination && id !== current.id) {
-      zoomFeedback(entityHierarchy.indexOf(destination.kind) < entityHierarchy.indexOf(current.kind) ? "out" : "in");
-    }
     cancelTour();
     setSelectedStarSystemId(null);
     setFlightEnabled(false);
@@ -203,7 +201,7 @@ export function Explorer() {
   return (
     <main className="universe-page universe-minimal" aria-label={copy.title} data-scale={current.kind} data-flight={flightEnabled} data-flight-status={flightStatus} data-tour-phase={tour.phase} data-tour-active={tour.active}>
       <div className="universe-scene" aria-busy={sceneStatus === "loading"}>
-        <Scene view={view} selectedId={planet?.id ?? null} playing={!blocked} showOrbits={showOrbits} autoOrbit={tour.active || autoOrbit} resetToken={resetToken} zoomAction={null} onSelect={selectSceneNode} onReady={onReady} onUnavailable={onUnavailable} ariaLabel={copy.canvas} flightEnabled={flightEnabled} flightPaused={blocked} flightInput={flightInput} onFlightStatus={onFlightStatus} flightTargetId={flightEnabled ? flightTargetId : null} autopilotTargetId={flightEnabled ? autopilotTargetId : null} guideActionLabel={autopilotTargetId === flightTargetId && autopilotTargetId ? copy.cancelGuidance : copy.guideShip} onGuideRequest={guideTo} onAutopilotEnd={onAutopilotEnd} hasParentView={Boolean(parent)} onScaleOut={goWider} onScaleIn={goTo} tourPreparing={tour.phase === "waiting" && tour.currentStep?.motion === "approach"} tourStep={tour.active && tour.token === tourCameraStep?.token ? tourCameraStep : null} onTourArrive={tour.arrive} onInteraction={cancelTour} onZoomIntent={zoomFeedback} onOrbitIntent={orbitFeedback} onDestinationHover={hoverFeedback} starSelected={starSelected} starFocusToken={starFocusToken} onSelectStar={selectStar} entityTransition={management?.entityTransition} onEntityTransitionEnd={management?.onEntityTransitionEnd} />
+        <Scene view={view} selectedId={planet?.id ?? null} playing={!blocked} showOrbits={showOrbits} autoOrbit={tour.active || autoOrbit} resetToken={resetToken} zoomAction={null} onSelect={selectSceneNode} onReady={onReady} onUnavailable={onUnavailable} ariaLabel={copy.canvas} flightEnabled={flightEnabled} flightPaused={blocked} flightInput={flightInput} onFlightStatus={onFlightStatus} flightTargetId={flightEnabled ? flightTargetId : null} autopilotTargetId={flightEnabled ? autopilotTargetId : null} guideActionLabel={autopilotTargetId === flightTargetId && autopilotTargetId ? copy.cancelGuidance : copy.guideShip} onGuideRequest={guideTo} onAutopilotEnd={onAutopilotEnd} hasParentView={Boolean(parent)} onScaleOut={goWider} onScaleIn={goTo} tourPreparing={tour.phase === "waiting" && tour.currentStep?.motion === "approach"} tourStep={tour.active && tour.token === tourCameraStep?.token ? tourCameraStep : null} onTourArrive={tour.arrive} onInteraction={cancelTour} onZoomIntent={zoomFeedback} onOrbitIntent={orbitFeedback} onCameraGestureEnd={stopCameraFeedback} onDestinationHover={hoverFeedback} starSelected={starSelected} starFocusToken={starFocusToken} onSelectStar={selectStar} entityTransition={management?.entityTransition} onEntityTransitionEnd={management?.onEntityTransitionEnd} />
       </div>
       <div className="universe-vignette" aria-hidden="true" />
       <div ref={hud} className="universe-hud" hidden={tour.active}>

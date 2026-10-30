@@ -11,6 +11,7 @@ export type UniverseActionContext = { target: NavigationTarget; onInteraction: (
 export type UniverseAudio = {
   onZoomIntent?: (direction: "in" | "out") => void;
   onOrbitIntent?: () => void;
+  onCameraGestureEnd?: (motion: "zoom" | "orbit") => void;
   onDestinationHover?: (id: string) => void;
   onMenuOpenChange?: (open: boolean) => void;
   Controls?: ComponentType;

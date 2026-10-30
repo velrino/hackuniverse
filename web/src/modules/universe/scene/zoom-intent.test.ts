@@ -1,32 +1,23 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createZoomIntentGate } from "./zoom-intent";
+import { isManualZoomSample } from "./zoom-intent";
 
-test("continuous manual zoom emits a bounded heartbeat for the full gesture", () => {
-  const accept = createZoomIntentGate();
-  const cues: number[] = [];
-  for (let now = 0; now <= 3200; now += 16) if (accept("in", now)) cues.push(now);
-  assert.deepEqual(cues, [0, 512, 1024, 1536, 2048, 2560, 3072]);
-  assert.equal(accept("in", 3450), true, "a separate gesture starts immediately after an idle gap");
+test("each real wheel or pinch distance change renews sound, including immediate reversals", () => {
+  for (const [before, after] of [[100, 99], [99, 98], [98, 99], [99, 100], [0.01, 0.009]]) {
+    assert.equal(isManualZoomSample(before, after, true), true);
+  }
 });
 
-test("a reversal survives jitter rejection and the next accepted input uses the latest direction", () => {
-  const accept = createZoomIntentGate();
-  assert.equal(accept("in", 0), true);
-  assert.equal(accept("out", 15), false);
-  assert.equal(accept("out", 110), true);
-  assert.equal(accept("in", 125), false);
-  assert.equal(accept("in", 230), true);
-  for (let now = 245; now < 730; now += 15) assert.equal(accept("in", now), false);
-  assert.equal(accept("in", 735), true);
+test("limits, zero movement and automatic camera changes cannot create manual zoom sound", () => {
+  assert.equal(isManualZoomSample(100, 100, true), false);
+  assert.equal(isManualZoomSample(100, 90, false), false);
+  assert.equal(isManualZoomSample(100, 100 + 1e-12, true), false);
 });
 
-test("separate scene instances do not share gestures and an invalid timestamp cannot poison the gate", () => {
-  const first = createZoomIntentGate();
-  const second = createZoomIntentGate();
-  assert.equal(first("in", 100), true);
-  assert.equal(first("out", NaN), false);
-  assert.equal(first("in", 110), false);
-  assert.equal(second("in", 110), true);
-  assert.equal(first("in", 0), true);
+test("invalid optical distances are rejected without state that could affect a later sample", () => {
+  for (const value of [0, -1, NaN, Infinity, -Infinity]) {
+    assert.equal(isManualZoomSample(value, 100, true), false);
+    assert.equal(isManualZoomSample(100, value, true), false);
+  }
+  assert.equal(isManualZoomSample(100, 90, true), true);
 });

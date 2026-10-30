@@ -1,5 +1,6 @@
 export const audioCues = ["menu-open", "menu-close", "ui-select", "zoom-in", "zoom-out", "camera-orbit", "toggle-on", "toggle-off", "destination-hover"] as const;
 export type AudioCue = (typeof audioCues)[number];
+export type CameraMotion = "orbit" | "zoom";
 export type AudioPreferences = Readonly<{
   musicEnabled: boolean;
   effectsEnabled: boolean;
@@ -39,4 +40,6 @@ export type AudioPorts = {
   readPreferences(): unknown;
   writePreferences(preferences: AudioPreferences): void;
   now(): number;
+  later(run: () => void, milliseconds: number): unknown;
+  cancel(timer: unknown): void;
 };

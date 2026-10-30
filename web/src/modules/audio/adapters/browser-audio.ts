@@ -38,6 +38,8 @@ function resumeContext(context: AudioContext, signal: AbortSignal, isCurrent: ()
 export function createBrowserAudioPorts(): AudioPorts {
   return {
     now: () => performance.now(),
+    later: (run, milliseconds) => window.setTimeout(run, milliseconds),
+    cancel: (timer) => window.clearTimeout(timer as number),
     readPreferences() {
       const value = browserStorage.getItem(preferencesKey);
       if (value === null) return null;
@@ -159,9 +161,11 @@ export function createBrowserAudioPorts(): AudioPorts {
             stopped = true; sources.delete(source); source.disconnect(); level.disconnect(); ended();
           };
           source.onended = cleanup;
+          const delay = Number.isFinite(delaySeconds) ? Math.max(0, Math.min(0.02, delaySeconds)) : 0;
+          const startsAt = context.currentTime + delay;
           const voice: EffectVoice = { stop(fadeSeconds = 0) {
             if (stopped) return;
-            const fade = context.state === "running" && Number.isFinite(fadeSeconds) ? Math.max(0, Math.min(0.02, fadeSeconds)) : 0;
+            const fade = context.state === "running" && context.currentTime >= startsAt && Number.isFinite(fadeSeconds) ? Math.max(0, Math.min(0.02, fadeSeconds)) : 0;
             try {
               if (fade) {
                 level.gain.cancelScheduledValues(context.currentTime);
@@ -173,8 +177,7 @@ export function createBrowserAudioPorts(): AudioPorts {
             if (!fade) cleanup();
           } };
           sources.set(source, voice);
-          const delay = Number.isFinite(delaySeconds) ? Math.max(0, Math.min(0.02, delaySeconds)) : 0;
-          try { source.start(context.currentTime + delay); } catch (error) { cleanup(); throw error; }
+          try { source.start(startsAt); } catch (error) { cleanup(); throw error; }
           return voice;
         },
         dispose() {
