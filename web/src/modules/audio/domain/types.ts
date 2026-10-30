@@ -24,7 +24,11 @@ export type MusicPort = {
   setVolume(value: number): void;
   dispose(): void;
 };
-export type EffectVoice = { stop(fadeSeconds?: number): void };
+export type EffectVoice = {
+  /** Extend this live source's audio-thread deadline; expired sources cannot revive. */
+  renew(holdSeconds: number, fadeSeconds: number): boolean;
+  stop(fadeSeconds?: number): void;
+};
 export type EffectsPort = {
   resume(signal: AbortSignal): Promise<void>;
   suspend(): Promise<void>;

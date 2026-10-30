@@ -16,6 +16,7 @@ const mutedPreferences = { schemaVersion: 1, musicEnabled: false, effectsEnabled
 function fixture(saved: unknown = null) {
   const calls: string[] = [];
   let now = 0;
+  let audioNow = 0;
   let running = false;
   let storageFails = false;
   let readFails = false;
@@ -29,7 +30,7 @@ function fixture(saved: unknown = null) {
   const timers = new Map<number, { at: number; run: () => void }>();
   let musicEvents: Parameters<AudioPorts["createMusic"]>[0] | undefined;
   let interrupted: (() => void) | undefined;
-  type Voice = { cue: AudioCue; stop(fadeSeconds?: number): void; finish(): void; stopFades: (number | undefined)[] };
+  type Voice = { cue: AudioCue; renew(holdSeconds: number, fadeSeconds: number): boolean; stop(fadeSeconds?: number): void; finish(): void; stopFades: (number | undefined)[]; renewals: { hold: number; fade: number }[]; deadline?: number; ended: boolean };
   const voices: Voice[] = [];
   const liveVoices = new Set<Voice>();
   const ports: AudioPorts = {
@@ -60,12 +61,18 @@ function fixture(saved: unknown = null) {
           calls.push(`cue:${cue}`);
           if (effectsPlayFails) throw new Error("Sound could not start");
           const voice: Voice = {
-            cue, stopFades: [],
+            cue, stopFades: [], renewals: [], ended: false,
+            renew(hold, fade) {
+              if (voice.ended || voice.deadline !== undefined && audioNow >= voice.deadline) { liveVoices.delete(voice); return false; }
+              voice.renewals.push({ hold, fade }); voice.deadline = audioNow + (hold + fade) * 1000;
+              return true;
+            },
             stop(fadeSeconds) {
               calls.push("stop-voice"); voice.stopFades.push(fadeSeconds); liveVoices.delete(voice);
-              if (!deferredStopEnd) ended();
+              voice.deadline = audioNow + (fadeSeconds ?? 0) * 1000;
+              if (!deferredStopEnd) { voice.ended = true; ended(); }
             },
-            finish() { liveVoices.delete(voice); ended(); },
+            finish() { voice.ended = true; liveVoices.delete(voice); ended(); },
           };
           voices.push(voice);
           liveVoices.add(voice);
@@ -85,9 +92,13 @@ function fixture(saved: unknown = null) {
       while (true) {
         const entry = [...timers].filter(([, timer]) => timer.at <= end).sort((a, b) => a[1].at - b[1].at)[0];
         if (!entry) break;
-        now = entry[1].at; timers.delete(entry[0]); entry[1].run();
+        audioNow += entry[1].at - now; now = entry[1].at; timers.delete(entry[0]); entry[1].run();
       }
-      now = end;
+      audioNow += end - now; now = end;
+    },
+    stall(milliseconds: number) {
+      now += milliseconds; audioNow += milliseconds;
+      for (const voice of liveVoices) if (voice.deadline !== undefined && audioNow >= voice.deadline) liveVoices.delete(voice);
     },
     get pendingTimers() { return timers.size; },
     get scheduledCallbacks() { return [...timers.values()].map((timer) => timer.run); },
@@ -399,7 +410,7 @@ test("continuous movement samples renew one voice, then inactivity stops the lon
   for (let time = 16; time <= 2000; time += 16) { instance.advance(16); instance.controller.cameraMotion("zoom", "in"); }
   assert.equal(instance.voices.length, 1, "same-direction movement never restarts the recording");
   assert.equal(instance.pendingTimers, 1);
-  instance.advance(119); assert.equal(instance.liveVoices.size, 1);
+  instance.advance(179); assert.equal(instance.liveVoices.size, 1);
   instance.advance(1); assert.equal(instance.liveVoices.size, 0);
   assert.deepEqual(instance.voices[0].stopFades, [0.02]);
   assert.equal(instance.pendingTimers, 0);
@@ -430,9 +441,45 @@ test("a stale cancelled lease cannot stop newer movement", async () => {
   stale();
   assert.equal(instance.liveVoices.size, 1);
   assert.equal(instance.pendingTimers, 1);
-  instance.advance(119); assert.equal(instance.liveVoices.size, 1);
+  instance.advance(179); assert.equal(instance.liveVoices.size, 1);
   instance.advance(1); assert.equal(instance.liveVoices.size, 0);
   assert.equal(instance.pendingTimers, 0);
+});
+
+test("fourteen zoom ticks at 140 ms sustain one native-deadlined source, while orbit keeps its 120 ms lease", async () => {
+  const instance = fixture(); instance.controller.mount(); await flush();
+  instance.controller.cameraMotion("zoom", "out");
+  for (let tick = 1; tick < 14; tick++) { instance.advance(140); instance.controller.cameraMotion("zoom", "out"); }
+  assert.equal(instance.voices.length, 1);
+  assert.equal(instance.voices[0].renewals.length, 14);
+  assert.ok(instance.voices[0].renewals.every((renewal) => renewal.hold === 0.18 && renewal.fade === 0.02));
+  instance.controller.cameraMotion("orbit");
+  assert.deepEqual(instance.voices[1].renewals, [{ hold: 0.12, fade: 0.02 }]);
+  instance.advance(120);
+  assert.deepEqual(instance.voices[1].stopFades, [0.02]);
+  assert.equal(instance.liveVoices.has(instance.voices[0]), true);
+  instance.advance(59); assert.equal(instance.liveVoices.has(instance.voices[0]), true);
+  instance.advance(1); assert.equal(instance.liveVoices.size, 0);
+  assert.equal(instance.pendingTimers, 0);
+});
+
+test("native expiry during a main-thread stall cannot revive an old source or let stale callbacks stop the replacement", async () => {
+  const instance = fixture(); instance.controller.mount(); await flush(); instance.delayStopEnds();
+  instance.controller.cameraMotion("zoom", "in");
+  const oldLease = instance.scheduledCallbacks[0];
+  const old = instance.voices[0];
+  instance.stall(300);
+  assert.equal(instance.liveVoices.size, 0, "the audio clock cut the source without running any JS deadline or ended callback");
+  assert.equal(old.ended, false);
+  assert.equal(instance.pendingTimers, 1);
+  instance.controller.cameraMotion("zoom", "in");
+  assert.equal(old.renewals.length, 1, "the expired source is never renewed");
+  assert.equal(instance.voices.length, 2, "only the new input creates a replacement");
+  oldLease(); old.finish();
+  assert.equal(instance.liveVoices.size, 1);
+  instance.advance(179); assert.equal(instance.liveVoices.size, 1);
+  instance.advance(1); assert.equal(instance.liveVoices.size, 0);
+  instance.advance(10_000); assert.equal(instance.voices.length, 2);
 });
 
 test("OFF, zero volume, hiding and disposal clear leases and both live and fading movement", async () => {
@@ -482,7 +529,7 @@ test("zoom starts after a UI cue and raw sample bursts maintain its voice instea
   instance.advance(10); instance.controller.playCue("zoom-in");
   for (let time = 15; time <= 300; time += 15) { instance.advance(15); instance.controller.playCue("zoom-in"); }
   assert.deepEqual(instance.voices.map((voice) => voice.cue), ["ui-select", "zoom-in"]);
-  instance.advance(120);
+  instance.advance(180);
   assert.deepEqual([...instance.liveVoices].map((voice) => voice.cue), ["ui-select"]);
   instance.advance(5000); assert.equal(instance.voices.length, 2);
   instance.controller.cameraMotion("zoom", "out");

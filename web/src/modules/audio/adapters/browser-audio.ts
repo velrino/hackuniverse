@@ -156,6 +156,7 @@ export function createBrowserAudioPorts(): AudioPorts {
           source.buffer = buffer;
           source.connect(level); level.connect(gain);
           let stopped = false;
+          let stopping = false;
           const cleanup = () => {
             if (stopped) return;
             stopped = true; sources.delete(source); source.disconnect(); level.disconnect(); ended();
@@ -163,16 +164,50 @@ export function createBrowserAudioPorts(): AudioPorts {
           source.onended = cleanup;
           const delay = Number.isFinite(delaySeconds) ? Math.max(0, Math.min(0.02, delaySeconds)) : 0;
           const startsAt = context.currentTime + delay;
-          const voice: EffectVoice = { stop(fadeSeconds = 0) {
+          const naturalEnd = startsAt + buffer.duration;
+          let scheduledDeadline = Infinity;
+          const releaseGain = (now: number) => {
+            const current = level.gain.value;
+            if (typeof level.gain.cancelAndHoldAtTime === "function") level.gain.cancelAndHoldAtTime(now);
+            else { level.gain.cancelScheduledValues(now); level.gain.setValueAtTime(current, now); }
+          };
+          const voice: EffectVoice = { renew(holdSeconds, fadeSeconds) {
+            const now = context.currentTime;
+            if (stopped || stopping || context.state !== "running" || now >= Math.min(naturalEnd, scheduledDeadline)) { cleanup(); return false; }
+            if (!Number.isFinite(holdSeconds) || holdSeconds < 0 || !Number.isFinite(fadeSeconds) || fadeSeconds < 0) {
+              voice.stop(); return false;
+            }
+            const fade = Math.min(0.02, fadeSeconds);
+            const deadline = Math.min(naturalEnd, now + holdSeconds + fade);
+            const holdUntil = Math.min(deadline, now + holdSeconds);
+            try {
+              releaseGain(now);
+              // Restore from a partly released envelope without a discontinuous jump.
+              level.gain.linearRampToValueAtTime(1, Math.min(holdUntil, now + 0.004));
+              level.gain.setValueAtTime(1, holdUntil);
+              if (fade) level.gain.linearRampToValueAtTime(0, deadline);
+              else level.gain.setValueAtTime(0, deadline);
+              if (context.currentTime >= Math.min(naturalEnd, scheduledDeadline)) { cleanup(); return false; }
+              // Web Audio replaces a pending stop time on this same source. It
+              // still takes effect while JS/rendering or onended delivery stalls.
+              source.stop(deadline);
+              scheduledDeadline = deadline;
+              return true;
+            } catch { voice.stop(); return false; }
+          }, stop(fadeSeconds = 0) {
             if (stopped) return;
-            const fade = context.state === "running" && context.currentTime >= startsAt && Number.isFinite(fadeSeconds) ? Math.max(0, Math.min(0.02, fadeSeconds)) : 0;
+            const now = context.currentTime;
+            if (now >= Math.min(naturalEnd, scheduledDeadline)) { cleanup(); return; }
+            stopping = true;
+            const fade = context.state === "running" && now >= startsAt && Number.isFinite(fadeSeconds) ? Math.max(0, Math.min(0.02, fadeSeconds)) : 0;
+            const deadline = Math.min(naturalEnd, scheduledDeadline, now + fade);
             try {
               if (fade) {
-                level.gain.cancelScheduledValues(context.currentTime);
-                level.gain.setValueAtTime(level.gain.value, context.currentTime);
-                level.gain.linearRampToValueAtTime(0, context.currentTime + fade);
+                releaseGain(now);
+                level.gain.linearRampToValueAtTime(0, deadline);
               }
-              source.stop(context.currentTime + fade);
+              source.stop(deadline);
+              scheduledDeadline = deadline;
             } catch { cleanup(); }
             if (!fade) cleanup();
           } };

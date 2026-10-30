@@ -10,10 +10,12 @@ function browser(t: TestContext) {
   let play = () => Promise.resolve();
   let resume = () => Promise.resolve();
   let disconnects = 0;
+  let effectDuration = 0.6065;
   const contexts: Context[] = [];
   const players: Player[] = [];
   const effectSources: { starts: number[]; stops: number[]; onended: (() => void) | null }[] = [];
   const ramps: { value: number; at: number }[] = [];
+  const envelopes: { type: "cancel" | "set" | "ramp"; value?: number; at: number }[] = [];
   class Player extends EventTarget {
     preload = "";
     loop = false;
@@ -36,9 +38,9 @@ function browser(t: TestContext) {
     resume() { return resume().then(() => { this.state = "running"; this.dispatchEvent(new Event("statechange")); }); }
     suspend() { this.state = "suspended"; this.dispatchEvent(new Event("statechange")); return Promise.resolve(); }
     close() { this.state = "closed"; return Promise.resolve(); }
-    createGain() { return { ...node(), gain: { value: 1, setTargetAtTime(value: number) { gains.push(value); }, cancelScheduledValues() {}, setValueAtTime(value: number) { this.value = value; }, linearRampToValueAtTime(value: number, at: number) { ramps.push({ value, at }); } } }; }
+    createGain() { return { ...node(), gain: { value: 1, setTargetAtTime(value: number) { gains.push(value); }, cancelScheduledValues(at: number) { envelopes.push({ type: "cancel", at }); }, setValueAtTime(value: number, at: number) { this.value = value; envelopes.push({ type: "set", value, at }); }, linearRampToValueAtTime(value: number, at: number) { ramps.push({ value, at }); envelopes.push({ type: "ramp", value, at }); } } }; }
     createMediaElementSource(player: Player) { assert.ok(players.includes(player)); return node(); }
-    decodeAudioData() { return Promise.resolve({ duration: 0.6065, numberOfChannels: 2 }); }
+    decodeAudioData() { return Promise.resolve({ duration: effectDuration, numberOfChannels: 2 }); }
     createBufferSource() {
       const source = { ...node(), buffer: null, starts: [] as number[], stops: [] as number[], onended: null as (() => void) | null,
         start(at = 0) { source.starts.push(at); },
@@ -53,7 +55,7 @@ function browser(t: TestContext) {
     Object.defineProperty(globalThis, key, { configurable: true, writable: true, value });
     t.after(() => { if (original) Object.defineProperty(globalThis, key, original); else Reflect.deleteProperty(globalThis, key); });
   }
-  return { gains, contexts, players, effectSources, ramps, disconnects: () => disconnects, playWith(operation: () => Promise<void>) { play = operation; }, resumeWith(operation: () => Promise<void>) { resume = operation; } };
+  return { gains, contexts, players, effectSources, ramps, envelopes, disconnects: () => disconnects, playWith(operation: () => Promise<void>) { play = operation; }, resumeWith(operation: () => Promise<void>) { resume = operation; }, effectDuration(value: number) { effectDuration = value; } };
 }
 
 test("music stays a lazy streamed loop and volume uses gain instead of media volume", async (t) => {
@@ -177,5 +179,85 @@ test("releasing before a handoff starts cancels its scheduled voice instead of p
   assert.deepEqual(fake.effectSources[0].stops, [0]);
   assert.deepEqual(fake.ramps, [], "a recording that has not started has no audible tail to fade");
   assert.equal(ended, 1);
+  effects.dispose();
+});
+
+test("fourteen movement samples renew one source's native deadline even when JavaScript timers never run", async (t) => {
+  const fake = browser(t); fake.effectDuration(5);
+  t.mock.method(globalThis, "fetch", async () => new Response(new ArrayBuffer(8), { status: 200 }));
+  const effects = createBrowserAudioPorts().createEffects(() => {});
+  const signal = new AbortController().signal;
+  await effects.resume(signal); await effects.load(signal);
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  let ended = 0;
+  const voice = effects.play("zoom-in", () => ended++);
+  const context = fake.contexts[0];
+  for (let sample = 0; sample < 14; sample++) {
+    context.currentTime = sample * 0.14;
+    assert.equal(voice.renew(0.18, 0.02), true);
+    assert.ok(Math.abs(fake.effectSources[0].stops.at(-1)! - (context.currentTime + 0.2)) < 1e-10);
+  }
+  assert.equal(fake.effectSources.length, 1);
+  assert.deepEqual(fake.effectSources[0].starts, [0]);
+  assert.equal(fake.effectSources[0].stops.length, 14);
+  assert.equal(ended, 0);
+  const deadline = fake.effectSources[0].stops.at(-1)!;
+  const attackRamps = fake.envelopes.filter((entry) => entry.type === "ramp" && entry.value === 1);
+  assert.equal(attackRamps.length, 14);
+  attackRamps.forEach((entry, index) => assert.ok(entry.at - index * 0.14 <= 0.004 + 1e-10));
+  // Audio time progresses independently of the frozen JS timer queue and a delayed onended callback.
+  context.currentTime = deadline + 3;
+  assert.equal(voice.renew(0.18, 0.02), false);
+  assert.equal(fake.effectSources[0].stops.length, 14, "an expired source must not receive a new native stop time");
+  assert.equal(ended, 1);
+  fake.effectSources[0].onended?.();
+  assert.equal(ended, 1);
+  effects.dispose();
+});
+
+test("renewal replaces the previous release envelope and an explicit stop cannot extend its deadline", async (t) => {
+  const fake = browser(t); fake.effectDuration(5);
+  t.mock.method(globalThis, "fetch", async () => new Response(new ArrayBuffer(8), { status: 200 }));
+  const effects = createBrowserAudioPorts().createEffects(() => {});
+  const signal = new AbortController().signal;
+  await effects.resume(signal); await effects.load(signal);
+  let ended = 0;
+  const voice = effects.play("camera-orbit", () => ended++);
+  const context = fake.contexts[0];
+  assert.equal(voice.renew(0.12, 0.02), true);
+  context.currentTime = 0.13;
+  assert.equal(voice.renew(0.12, 0.02), true, "a new sample can recover a not-yet-ended release");
+  assert.ok(fake.envelopes.some((entry) => entry.type === "cancel" && entry.at === 0.13));
+  assert.ok(fake.envelopes.some((entry) => entry.type === "ramp" && entry.value === 1 && entry.at <= 0.134));
+  context.currentTime = 0.265;
+  voice.stop(0.02);
+  assert.ok(Math.abs(fake.effectSources[0].stops.at(-1)! - 0.27) < 1e-10, "release cannot postpone an existing earlier audio deadline");
+  const stops = fake.effectSources[0].stops.length;
+  assert.equal(voice.renew(0.12, 0.02), false, "an explicit stop cannot be undone by stale input");
+  assert.equal(fake.effectSources[0].stops.length, stops);
+  assert.equal(ended, 1);
+  effects.dispose();
+});
+
+test("natural completion and scheduled cancellation reject renewal before delayed ended delivery", async (t) => {
+  const fake = browser(t);
+  t.mock.method(globalThis, "fetch", async () => new Response(new ArrayBuffer(8), { status: 200 }));
+  const effects = createBrowserAudioPorts().createEffects(() => {});
+  const signal = new AbortController().signal;
+  await effects.resume(signal); await effects.load(signal);
+  let ended = 0;
+  const natural = effects.play("zoom-in", () => ended++);
+  assert.equal(natural.renew(5, 0.02), true);
+  assert.equal(fake.effectSources[0].stops.at(-1), 0.6065);
+  fake.contexts[0].currentTime = 0.607;
+  assert.equal(natural.renew(0.18, 0.02), false);
+  assert.equal(fake.effectSources[0].stops.length, 1);
+  assert.equal(ended, 1);
+  const scheduled = effects.play("zoom-out", () => ended++, 0.008);
+  assert.equal(scheduled.renew(0.18, 0.02), true);
+  scheduled.stop(0.02);
+  assert.equal(fake.effectSources[1].stops.at(-1), 0.607);
+  assert.equal(scheduled.renew(0.18, 0.02), false);
+  assert.equal(ended, 2);
   effects.dispose();
 });

@@ -17,6 +17,7 @@ import { createCloudHaze, createGalaxyVisual, createGlow, createRoundPointMateri
 import { createSurroundingContext, type ContextLabel } from "./surrounding-context";
 import { isManualZoomSample } from "./zoom-intent";
 import { isManualOrbitSample } from "./orbit-intent";
+import { isFreshCameraInput } from "./camera-input-time";
 import { createPlanetSelection } from "./planet-selection";
 import { createOrbitGuides } from "./orbit-guides";
 import { createPlanetRings } from "./planet-rings";
@@ -175,6 +176,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   let gestureGeneration = 0;
   let orbitFeedbackActive = false;
   let zoomFeedbackActive = false;
+  let semanticZoomContinuation: { viewKey: string; expiresAt: number } | null = null;
   const wheelDistances = new WeakMap<WheelEvent, number>();
   const pointerMotionSamples = new WeakMap<PointerEvent, () => void>();
   let frame: number | null = null;
@@ -496,7 +498,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function fit() {
-    suppressCameraGestures();
+    suppressCameraGestures(true);
     controls.autoRotate = false;
     cameraTween = null;
     focusFraming = 0;
@@ -539,8 +541,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function beginCameraTween(to: CameraPose, toFraming: number, onComplete?: () => void) {
-    suppressCameraGestures();
-    clearZoomIntent();
+    suppressCameraGestures(true);
+    clearZoomIntent(true);
     controls.autoRotate = false;
     finishWorldTransition();
     if (reducedMotion) {
@@ -583,6 +585,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     if (worldTransition) return;
     const body = bodies.find((candidate) => candidate.node.id === id);
     if (!body) return;
+    suppressCameraGestures();
     if (pilot.isActive()) {
       if (flightReady && !flightPaused && body.node.kind === "planet") callbacks.onSelect(id);
       return;
@@ -600,6 +603,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
 
   function requestStarSelection() {
     if (!centralStar || currentView?.mode !== "system" || pilot.isActive() || !playing || worldTransition) return;
+    suppressCameraGestures();
     callbacks.onSelectStar();
   }
 
@@ -630,7 +634,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       requestRender();
       return;
     }
-    suppressCameraGestures();
+    suppressCameraGestures(true, view.key);
     // Keep only one bounded snapshot for deletion after the projection is rebuilt.
     previousEntityViewKey = currentView?.key;
     previousEntityAnchors = new Map();
@@ -805,6 +809,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function setSelected(id: string | null) {
+    // A semantic crossing never selects a different planet. Explicit selection
+    // must not borrow the previous gesture's short continuation.
+    if (id && semanticZoomContinuation) suppressCameraGestures();
     if (selectedId !== id) requestCameraReport("navigation");
     selectedId = id;
     if (id) starSelected = false;
@@ -820,6 +827,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         if (overviewPose) beginCameraTween({ position: overviewPose.position.clone(), target: overviewPose.target.clone() }, 0);
       }
     }
+    semanticZoomContinuation = null;
     requestRender();
   }
 
@@ -950,8 +958,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     if (frame === null && !destroyed && !unavailable && pageVisible && intersecting) frame = requestAnimationFrame(render);
   }
 
-  function clearZoomIntent() {
-    endCameraGesture("zoom");
+  function clearZoomIntent(continueSemanticZoom = false) {
+    if (!continueSemanticZoom || !canContinueSemanticZoom()) endCameraGesture("zoom");
     userZoom = null;
     semanticZoom.cancelPending();
   }
@@ -1173,14 +1181,19 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   function endCameraGesture(motion: "zoom" | "orbit") {
     // Invalidate an input's queued after-dispatch sample before notifying the host.
     gestureGeneration++;
+    if (motion === "zoom") semanticZoomContinuation = null;
     if (motion === "zoom" ? !zoomFeedbackActive : !orbitFeedbackActive) return;
     if (motion === "zoom") zoomFeedbackActive = false;
     else orbitFeedbackActive = false;
     try { callbacks.onCameraGestureEnd?.(motion); } catch { /* Optional feedback cannot own camera input. */ }
   }
 
-  function suppressCameraGestures() {
-    endCameraGesture("zoom");
+  function canContinueSemanticZoom(viewKey = currentView?.key) {
+    return Boolean(semanticZoomContinuation && zoomFeedbackActive && semanticZoomContinuation.viewKey === viewKey && performance.now() < semanticZoomContinuation.expiresAt);
+  }
+
+  function suppressCameraGestures(continueSemanticZoom = false, viewKey = currentView?.key) {
+    if (!continueSemanticZoom || !canContinueSemanticZoom(viewKey)) endCameraGesture("zoom");
     endCameraGesture("orbit");
     orbitPointer = null;
     orbitPointerPosition = null;
@@ -1191,8 +1204,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       !pilot.isActive() && !cameraTween && !worldTransition?.cameraOwned && !tourStep && !tourPreparing;
   }
 
-  function reportZoomIntent(direction: "in" | "out") {
-    if (!manualCameraAvailable()) return;
+  function reportZoomIntent(direction: "in" | "out", inputTime?: number) {
+    if (inputTime !== undefined && !isFreshCameraInput(inputTime, performance.now())) return;
+    if (!manualCameraAvailable()) { endCameraGesture("zoom"); return; }
     zoomFeedbackActive = true;
     try { callbacks.onZoomIntent?.(direction); } catch { /* Optional feedback must not interrupt navigation. */ }
   }
@@ -1234,6 +1248,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       // A microtask here runs too early for native event listener checkpoints.
       pointerMotionSamples.set(event, () => {
         if (generation !== gestureGeneration || destroyed) return;
+        if (!isFreshCameraInput(event.timeStamp, performance.now())) return;
         const manual = orbitPointer === event.pointerId && activePointers.size === 1 && manualCameraAvailable();
         if (!isManualOrbitSample({ before, after: { azimuth: controls.getAzimuthalAngle(), polar: controls.getPolarAngle() }, manual, inputMoved: true })) { endCameraGesture("orbit"); return; }
         orbitFeedbackActive = true;
@@ -1260,7 +1275,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
             if (!isManualZoomSample(before, after, touchPoints.size === 2 && manualCameraAvailable())) { endCameraGesture("zoom"); return; }
             const rect = canvas.getBoundingClientRect();
             userZoom = { direction: after < before ? "in" : "out", at: performance.now(), x: (x - rect.left) / width * 2 - 1, y: -(y - rect.top) / height * 2 + 1 };
-            reportZoomIntent(userZoom.direction);
+            reportZoomIntent(userZoom.direction, event.timeStamp);
             requestRender();
           });
         }
@@ -1310,7 +1325,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     cancelCameraTween(true);
     const rect = canvas.getBoundingClientRect();
     userZoom = { direction: event.deltaY < 0 ? "in" : "out", at: performance.now(), x: (event.clientX - rect.left) / width * 2 - 1, y: -(event.clientY - rect.top) / height * 2 + 1 };
-    if (before !== undefined && isManualZoomSample(before, controls.getDistance(), manualCameraAvailable())) reportZoomIntent(userZoom.direction);
+    if (before !== undefined && isManualZoomSample(before, controls.getDistance(), manualCameraAvailable())) reportZoomIntent(userZoom.direction, event.timeStamp);
     else endCameraGesture("zoom");
     requestCameraReport("manual");
     requestRender();
@@ -1358,6 +1373,12 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       moving: Boolean(cameraTween || worldTransition) || pilot.isActive() || !playing,
     });
     if (decision) {
+      const destination = decision.type === "in" ? bodies.find((body) => body.node.id === decision.id)?.node
+        : focusedId ? currentView.anchor : currentView.ancestors?.at(-1);
+      // Preserve only the live manual gesture through its own adjacent view
+      // setup. This token never renews sound; the audio-thread lease still ends it.
+      semanticZoomContinuation = destination && userZoom && zoomFeedbackActive && time - userZoom.at < 180
+        ? { viewKey: `${destination.kind}:${destination.id}`, expiresAt: userZoom.at + 180 } : null;
       userZoom = null;
       if (decision.type === "out") callbacks.onScaleOut();
       else callbacks.onScaleIn(decision.id);
@@ -1621,6 +1642,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     },
     setFlightInput(value: ShipFlightInput) { pilot.setInput(value); requestRender(); },
     reset() {
+      suppressCameraGestures();
       requestCameraReport("manual");
       if (pilot.isActive()) return;
       finishWorldTransition();

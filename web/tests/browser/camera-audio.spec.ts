@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
-type CameraVoice = { duration: number; started: number; stopped: number | null; fadeMs: number | null };
-type ProbedWindow = Window & { cameraAudioProbe: CameraVoice[] };
+type CameraVoice = { duration: number; started: number; stopped: number | null; fadeMs: number | null; ended: number | null; startContext: number; stopContext: number | null };
+type ProbedWindow = Window & { cameraAudioProbe: CameraVoice[]; cameraWheelProbe: number[]; cameraPointerInput: number | null; cameraAudioClock: () => number };
 
 async function voices(page: Page) {
   return page.evaluate(() => (window as unknown as ProbedWindow).cameraAudioProbe);
@@ -13,23 +13,34 @@ async function prepareCamera(page: Page) {
     localStorage.setItem("hackuniverse.audio.v1", JSON.stringify({ schemaVersion: 1, musicEnabled: false, effectsEnabled: true, musicVolume: 0.35, effectsVolume: 0.5 }));
     const records: CameraVoice[] = [];
     (window as unknown as ProbedWindow).cameraAudioProbe = records;
+    (window as unknown as ProbedWindow).cameraWheelProbe = [];
+    (window as unknown as ProbedWindow).cameraPointerInput = null;
+    document.addEventListener("wheel", (event) => {
+      if (event.isTrusted) (window as unknown as ProbedWindow).cameraWheelProbe.push(performance.now());
+    }, true);
+    document.addEventListener("pointermove", (event) => {
+      if (event.isTrusted && event.buttons !== 0) (window as unknown as ProbedWindow).cameraPointerInput = performance.now();
+    }, true);
     const tracked = new WeakMap<AudioBufferSourceNode, CameraVoice>();
     const start = AudioBufferSourceNode.prototype.start;
     const stop = AudioBufferSourceNode.prototype.stop;
     // Observe actual Web Audio resource lifetime, without replacing the engine.
     AudioBufferSourceNode.prototype.start = function (when, offset, duration) {
       if (this.buffer && this.buffer.duration > 2 && this.buffer.duration < 6) {
-        const record = { duration: this.buffer.duration, started: performance.now(), stopped: null, fadeMs: null };
+        const record: CameraVoice = { duration: this.buffer.duration, started: performance.now(), stopped: null, fadeMs: null, ended: null, startContext: Math.max(when ?? this.context.currentTime, this.context.currentTime), stopContext: null };
         records.push(record); tracked.set(this, record);
+        (window as unknown as ProbedWindow).cameraAudioClock = () => this.context.currentTime;
+        this.addEventListener("ended", () => { record.ended = performance.now(); }, { once: true });
       }
       return start.call(this, when, offset, duration);
     };
     AudioBufferSourceNode.prototype.stop = function (when) {
       const record = tracked.get(this);
-      if (record && record.stopped === null) {
+      if (record) {
         record.stopped = performance.now();
         record.fadeMs = Math.max(0, ((when ?? this.context.currentTime) - this.context.currentTime) * 1000);
       }
+      if (record) record.stopContext = Math.max(when ?? this.context.currentTime, this.context.currentTime);
       return stop.call(this, when);
     };
   });
@@ -54,28 +65,135 @@ test("camera sound expires while holding still, stops on release, and stays sile
   await page.mouse.down();
   await page.mouse.move(point.x + 45, point.y + 20, { steps: 4 });
   await expect.poll(async () => (await voices(page)).length).toBeGreaterThan(0);
-  await expect.poll(async () => (await voices(page))[0].stopped).not.toBeNull();
-  const first = (await voices(page))[0];
-  expect(first.stopped! - first.started).toBeLessThan(400);
-  expect(first.fadeMs).toBeLessThanOrEqual(30);
+  await expect.poll(async () => (await voices(page)).every((voice) => voice.ended !== null)).toBe(true);
+  const firstMovement = await voices(page);
+  const lastMovement = await page.evaluate(() => (window as unknown as ProbedWindow).cameraPointerInput);
+  expect(lastMovement).not.toBeNull();
+  // Delivery gaps or an angular clamp can end a source before the final DOM
+  // input. Check the final audible tail, without assuming one orbit source.
+  expect(Math.max(...firstMovement.map((voice) => voice.ended!)) - lastMovement!).toBeLessThan(230);
+  const beforeResume = firstMovement.length;
   await page.mouse.move(point.x + 75, point.y + 30, { steps: 2 });
-  await expect.poll(async () => (await voices(page)).length).toBeGreaterThan(1);
+  await expect.poll(async () => (await voices(page)).length).toBeGreaterThan(beforeResume);
   const released = await page.evaluate(() => performance.now());
   await page.mouse.up();
-  await expect.poll(async () => (await voices(page))[1].stopped).not.toBeNull();
-  expect((await voices(page))[1].stopped! - released).toBeLessThan(250);
+  await expect.poll(async () => (await voices(page)).every((voice) => voice.ended !== null)).toBe(true);
+  const resumed = (await voices(page)).slice(beforeResume);
+  expect(resumed.at(-1)!.ended! - released).toBeLessThan(250);
 
   await page.mouse.wheel(0, 100);
   await expect.poll(async () => (await voices(page)).some((voice) => voice.duration > 5)).toBe(true);
-  await expect.poll(async () => (await voices(page)).find((voice) => voice.duration > 5)?.stopped).not.toBeNull();
+  await expect.poll(async () => (await voices(page)).find((voice) => voice.duration > 5)?.ended).not.toBeNull();
   const zoom = (await voices(page)).find((voice) => voice.duration > 5)!;
-  expect(zoom.stopped! - zoom.started).toBeLessThan(350);
+  expect(zoom.ended! - zoom.started).toBeLessThan(350);
   const beforeNavigation = (await voices(page)).length;
   const beforeScale = await page.locator("main").getAttribute("data-scale");
   await page.locator("button.universe-scale-back").click();
   await expect(page.locator("main")).not.toHaveAttribute("data-scale", beforeScale!);
   await page.waitForTimeout(400);
   expect((await voices(page)).length).toBe(beforeNavigation);
+});
+
+test("fourteen wheel ticks over two seconds end actual zoom sources after input stops in either direction", async ({ page }, testInfo) => {
+  const point = await prepareCamera(page);
+  await page.mouse.move(point.x, point.y);
+  const measurements: object[] = [];
+  for (const [direction, delta] of [["out", 100], ["in", -100]] as const) {
+    await test.step(`14 ${direction} ticks, followed by complete silence`, async () => {
+      const before = (await voices(page)).length;
+      const beforeWheels = await page.evaluate(() => (window as unknown as ProbedWindow).cameraWheelProbe.length);
+      const started = Date.now();
+      for (let index = 0; index < 14; index++) {
+        const remaining = started + index * 140 - Date.now();
+        if (remaining > 0) await page.waitForTimeout(remaining);
+        await page.mouse.wheel(0, delta);
+      }
+      const wheelTimes = await page.evaluate((offset) => (window as unknown as ProbedWindow).cameraWheelProbe.slice(offset), beforeWheels);
+      expect(wheelTimes).toHaveLength(14);
+      const lastInput = wheelTimes.at(-1)!;
+      const now = await page.evaluate(() => performance.now());
+      await page.waitForTimeout(Math.max(0, lastInput + 230 - now));
+      const zooms = (await voices(page)).slice(before).filter((voice) => voice.duration > 5);
+      const gaps = wheelTimes.slice(1).map((time, index) => time - wheelTimes[index]);
+      const inputSegments = 1 + gaps.filter((gap) => gap >= 180).length;
+      await testInfo.attach(`fourteen-wheel-${direction}-raw-timing`, {
+        body: JSON.stringify({ direction, wheelTimes, gaps, inputSegments, zooms }, null, 2),
+        contentType: "application/json",
+      });
+      expect(zooms.length).toBeGreaterThan(0);
+      expect(zooms.length).toBeLessThanOrEqual(inputSegments);
+      if (inputSegments === 1) expect(zooms).toHaveLength(1);
+      expect(zooms.every((voice) => voice.stopped !== null && voice.ended !== null)).toBe(true);
+      expect(Math.max(...zooms.map((voice) => voice.ended!)) - lastInput).toBeLessThan(230);
+
+      let longestOverlapMs = 0;
+      for (let index = 1; index < zooms.length; index++) {
+        const previous = zooms[index - 1];
+        expect(previous.stopContext).not.toBeNull();
+        longestOverlapMs = Math.max(longestOverlapMs, (previous.stopContext! - zooms[index].startContext) * 1000);
+      }
+      // Browser delivery can pause beyond the 180 ms lease during a scale
+      // change. Only such a real input gap may permit a fresh source.
+      expect(longestOverlapMs).toBeLessThanOrEqual(25);
+      const completed = (await voices(page)).length;
+      await page.waitForTimeout(400);
+      expect((await voices(page)).length).toBe(completed);
+      measurements.push({ direction, wheelEvents: wheelTimes.length, inputDurationMs: wheelTimes.at(-1)! - wheelTimes[0], inputSegments, sourceCount: zooms.length, lastActualEndAfterInputMs: Math.max(...zooms.map((voice) => voice.ended!)) - lastInput, longestOverlapMs });
+    });
+  }
+  await testInfo.attach("fourteen-wheel-audio-lifetime", { body: JSON.stringify(measurements, null, 2), contentType: "application/json" });
+});
+
+test("the native audio deadline expires while JavaScript and its ended callbacks are blocked", async ({ page }, testInfo) => {
+  const point = await prepareCamera(page);
+  await page.mouse.move(point.x, point.y);
+  await page.mouse.wheel(0, 100);
+  await expect.poll(async () => (await voices(page)).filter((voice) => voice.duration > 5).length).toBe(1);
+  // Renew just before blocking, rather than spending the lease waiting for the
+  // browser to deliver the initial wheel event and publish its first source.
+  await page.mouse.wheel(0, 100);
+  const measured = await page.evaluate(() => {
+    const probe = window as unknown as ProbedWindow;
+    const record = probe.cameraAudioProbe.find((voice) => voice.duration > 5);
+    if (!record || record.stopContext === null) throw new Error("The native camera audio deadline was not armed");
+    const before = probe.cameraAudioClock();
+    const deadline = record.stopContext;
+    const started = performance.now();
+    while (performance.now() - started < 700) { /* Simulate a busy rendering/application task. */ }
+    return { before, after: probe.cameraAudioClock(), deadline, endedWhileBlocked: record.ended, blockedMs: performance.now() - started };
+  });
+  expect(measured.deadline - measured.before).toBeGreaterThan(0);
+  expect(measured.deadline - measured.before).toBeLessThan(0.23);
+  expect(measured.after).toBeGreaterThan(measured.deadline + 0.3);
+  expect(measured.endedWhileBlocked).toBeNull();
+  await expect.poll(async () => (await voices(page)).filter((voice) => voice.duration > 5).every((voice) => voice.ended !== null)).toBe(true);
+  expect((await voices(page)).filter((voice) => voice.duration > 5)).toHaveLength(1);
+  await testInfo.attach("native-clock-cutoff-during-js-stall", { body: JSON.stringify(measured, null, 2), contentType: "application/json" });
+});
+
+test("a trusted wheel event delivered two seconds late cannot restart camera sound", async ({ page, context }) => {
+  const point = await prepareCamera(page);
+  await page.mouse.move(point.x, point.y);
+  const before = (await voices(page)).length;
+  const beforeWheels = await page.evaluate(() => (window as unknown as ProbedWindow).cameraWheelProbe.length);
+  const cdp = await context.newCDPSession(page);
+  try {
+    const pageAge = await page.evaluate(() => performance.now());
+    if (pageAge < 2200) await page.waitForTimeout(2200 - pageAge);
+    await cdp.send("Input.dispatchMouseEvent", {
+      type: "mouseWheel", x: point.x, y: point.y,
+      deltaX: 0, deltaY: 100, timestamp: Date.now() / 1000 - 2,
+    });
+    // This probe records isTrusted events only: the old event really reaches
+    // the application, rather than merely being rejected by a synthetic test.
+    await expect.poll(() => page.evaluate(() => (window as unknown as ProbedWindow).cameraWheelProbe.length)).toBe(beforeWheels + 1);
+    await page.waitForTimeout(250);
+    expect((await voices(page)).slice(before).filter((voice) => voice.duration > 5)).toHaveLength(0);
+
+    await page.mouse.wheel(0, 100);
+    await expect.poll(async () => (await voices(page)).slice(before).filter((voice) => voice.duration > 5).length).toBeGreaterThan(0);
+    await expect.poll(async () => (await voices(page)).slice(before).every((voice) => voice.ended !== null)).toBe(true);
+  } finally { await cdp.detach(); }
 });
 
 test("touch pinch cancellation and finger release stop only their camera feedback", async ({ page, context }) => {
@@ -88,9 +206,9 @@ test("touch pinch cancellation and finger release stop only their camera feedbac
   await expect.poll(async () => (await voices(page)).some((voice) => voice.duration > 5)).toBe(true);
   const cancelled = await page.evaluate(() => performance.now());
   await cdp.send("Input.dispatchTouchEvent", { type: "touchCancel", touchPoints: [] });
-  await expect.poll(async () => (await voices(page)).every((voice) => voice.stopped !== null)).toBe(true);
+  await expect.poll(async () => (await voices(page)).every((voice) => voice.ended !== null)).toBe(true);
   expect((await voices(page)).every((voice) => voice.duration > 5)).toBe(true);
-  expect((await voices(page)).every((voice) => voice.stopped! - cancelled < 250)).toBe(true);
+  expect((await voices(page)).every((voice) => voice.ended! - cancelled < 250)).toBe(true);
 
   const beforeSecondPinch = (await voices(page)).length;
   await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: fingers(35) });
@@ -98,15 +216,15 @@ test("touch pinch cancellation and finger release stop only their camera feedbac
   await expect.poll(async () => (await voices(page)).length).toBeGreaterThan(beforeSecondPinch);
   // Lift finger 1; finger 0 retains its identity for the following rotation.
   await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [{ id: 1, x: point.x + 65, y: point.y }] });
-  await expect.poll(async () => (await voices(page)).every((voice) => voice.stopped !== null)).toBe(true);
+  await expect.poll(async () => (await voices(page)).every((voice) => voice.ended !== null)).toBe(true);
   const beforeDrag = (await voices(page)).length;
   await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ id: 0, x: point.x + 40, y: point.y + 15 }] });
   await expect.poll(async () => (await voices(page)).length).toBeGreaterThan(beforeDrag);
   const released = await page.evaluate(() => performance.now());
   await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
-  await expect.poll(async () => (await voices(page)).every((voice) => voice.stopped !== null)).toBe(true);
+  await expect.poll(async () => (await voices(page)).every((voice) => voice.ended !== null)).toBe(true);
   const drag = (await voices(page))[beforeDrag];
   expect(drag.duration).toBeLessThan(3);
-  expect(drag.stopped! - released).toBeLessThan(250);
+  expect(drag.ended! - released).toBeLessThan(250);
   await cdp.detach();
 });
