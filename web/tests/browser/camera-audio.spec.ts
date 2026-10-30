@@ -1,7 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 
 type CameraVoice = { duration: number; started: number; stopped: number | null; fadeMs: number | null; ended: number | null; startContext: number; stopContext: number | null };
-type ProbedWindow = Window & { cameraAudioProbe: CameraVoice[]; cameraWheelProbe: number[]; cameraWheelAudioProbe: (number | null)[]; cameraAudioQuantumMs: number; cameraPointerInput: number | null; cameraAudioClock: () => number };
+type TouchPointer = { pointerId: number; startX: number; startY: number; x: number; y: number };
+type TouchPointerEvent = { type: string; pointerId: number; x: number; y: number };
+type TouchProbe = { active: TouchPointer[]; events: TouchPointerEvent[] };
+type ProbedWindow = Window & { cameraAudioProbe: CameraVoice[]; cameraWheelProbe: number[]; cameraWheelAudioProbe: (number | null)[]; cameraAudioQuantumMs: number; cameraPointerInput: number | null; cameraAudioClock: () => number; cameraTouchProbe: TouchProbe };
 
 async function voices(page: Page) {
   return page.evaluate(() => (window as unknown as ProbedWindow).cameraAudioProbe);
@@ -26,6 +29,22 @@ async function prepareCamera(page: Page) {
     document.addEventListener("pointermove", (event) => {
       if (event.isTrusted && event.buttons !== 0) (window as unknown as ProbedWindow).cameraPointerInput = performance.now();
     }, true);
+    const touchPointers = new Map<number, TouchPointer>();
+    const touchEvents: TouchPointerEvent[] = [];
+    const touchProbe: TouchProbe = { active: [], events: touchEvents };
+    (window as unknown as ProbedWindow).cameraTouchProbe = touchProbe;
+    for (const type of ["pointerdown", "pointermove", "pointerup", "pointercancel"] as const) {
+      document.addEventListener(type, (event) => {
+        if (!event.isTrusted || event.pointerType !== "touch") return;
+        touchEvents.push({ type, pointerId: event.pointerId, x: event.clientX, y: event.clientY });
+        if (type === "pointerdown") touchPointers.set(event.pointerId, { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, x: event.clientX, y: event.clientY });
+        else if (type === "pointermove") {
+          const pointer = touchPointers.get(event.pointerId);
+          if (pointer) { pointer.x = event.clientX; pointer.y = event.clientY; }
+        } else touchPointers.delete(event.pointerId);
+        touchProbe.active = [...touchPointers.values()];
+      }, true);
+    }
     const tracked = new WeakMap<AudioBufferSourceNode, CameraVoice>();
     const start = AudioBufferSourceNode.prototype.start;
     const stop = AudioBufferSourceNode.prototype.stop;
@@ -229,7 +248,7 @@ test("a trusted wheel event delivered two seconds late cannot restart camera sou
   } finally { await cdp.detach(); }
 });
 
-test("touch pinch cancellation and finger release stop only their camera feedback", async ({ page, context }) => {
+test("touch pinch cancellation and finger release stop only their camera feedback", async ({ page, context }, testInfo) => {
   const point = await prepareCamera(page);
   const cdp = await context.newCDPSession(page);
   await cdp.send("Emulation.setTouchEmulationEnabled", { enabled: true });
@@ -245,13 +264,28 @@ test("touch pinch cancellation and finger release stop only their camera feedbac
 
   const beforeSecondPinch = (await voices(page)).length;
   await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: fingers(35) });
+  await expect.poll(() => page.evaluate(() => (window as unknown as ProbedWindow).cameraTouchProbe.active.length)).toBe(2);
+  const startedPointers = await page.evaluate(() => (window as unknown as ProbedWindow).cameraTouchProbe.active);
+  const cdpIds = new Map(startedPointers.map((pointer) => [pointer.pointerId, Math.abs(pointer.startX - point.x) < Math.abs(pointer.startX - (point.x + 35)) ? 0 : 1]));
+  expect(new Set(cdpIds.values()).size).toBe(2);
   await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: fingers(65) });
   await expect.poll(async () => (await voices(page)).length).toBeGreaterThan(beforeSecondPinch);
-  // Lift finger 1; finger 0 retains its identity for the following rotation.
+  // CDP/platform versions differ on whether nonempty touchEnd identifies the
+  // lifted or retained contact. Follow the actual trusted pointerup inventory.
   await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [{ id: 1, x: point.x + 65, y: point.y }] });
+  await expect.poll(() => page.evaluate(() => (window as unknown as ProbedWindow).cameraTouchProbe.active.length)).toBe(1);
+  const remaining = await page.evaluate(() => (window as unknown as ProbedWindow).cameraTouchProbe.active[0]);
+  const remainingCdpId = cdpIds.get(remaining.pointerId);
+  expect(remainingCdpId).toBeDefined();
   await expect.poll(async () => (await voices(page)).every((voice) => voice.ended !== null)).toBe(true);
   const beforeDrag = (await voices(page)).length;
-  await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ id: 0, x: point.x + 40, y: point.y + 15 }] });
+  const downsBeforeDrag = await page.evaluate(() => (window as unknown as ProbedWindow).cameraTouchProbe.events.filter((event) => event.type === "pointerdown").length);
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ id: remainingCdpId!, x: remaining.x + 40, y: remaining.y + 15 }] });
+  await expect.poll(() => page.evaluate(({ pointerId, x }) => (window as unknown as ProbedWindow).cameraTouchProbe.events.some((event) => event.type === "pointermove" && event.pointerId === pointerId && Math.abs(event.x - x) < 1), { pointerId: remaining.pointerId, x: remaining.x + 40 })).toBe(true);
+  const continued = await page.evaluate(() => (window as unknown as ProbedWindow).cameraTouchProbe);
+  await testInfo.attach("partial-touch-release-inventory", { body: JSON.stringify({ startedPointers, remaining, remainingCdpId, continued }, null, 2), contentType: "application/json" });
+  expect(continued.active.map((pointer) => pointer.pointerId)).toEqual([remaining.pointerId]);
+  expect(continued.events.filter((event) => event.type === "pointerdown")).toHaveLength(downsBeforeDrag);
   await expect.poll(async () => (await voices(page)).length).toBeGreaterThan(beforeDrag);
   const released = await page.evaluate(() => performance.now());
   await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
