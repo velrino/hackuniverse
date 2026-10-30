@@ -1,5 +1,5 @@
 import { audioVolume, defaultAudioPreferences, readAudioPreferences } from "./preferences";
-import { audioCues, type AudioCue, type AudioFailure, type AudioPorts, type AudioPreferences, type AudioSnapshot, type EffectsPort, type EffectVoice, type MusicPort } from "./types";
+import { audioCues, type AudioCue, type AudioFailure, type AudioPorts, type AudioPreferences, type AudioSnapshot, type EffectsPort, type EffectVoice, type CameraMotion, type MusicPort } from "./types";
 
 const initialSnapshot: AudioSnapshot = Object.freeze({ preferences: defaultAudioPreferences, musicStatus: "idle", effectsStatus: "idle", musicError: null, effectsError: null, preferenceError: false });
 const failure = (error: unknown): AudioFailure => error && typeof error === "object" && "name" in error && error.name === "NotAllowedError" ? "blocked" : "load";
@@ -19,8 +19,10 @@ export function createAudioController(ports: AudioPorts) {
   let lastCueAt = -Infinity;
   const cueTimes = new Map<AudioCue, number>();
   const voices = new Set<EffectVoice>();
-  const movementVoices = new Map<"zoom" | "orbit", { voice?: EffectVoice }>();
-  const movementTimes = new Map<"zoom" | "orbit", number>();
+  type Playback = { voice?: EffectVoice; cue: AudioCue };
+  type MotionState = { playback?: Playback; timer?: unknown; revision: number };
+  const motions = new Map<CameraMotion, MotionState>();
+  const retiring = new Map<CameraMotion, Playback>();
   let musicGesturePending = false;
   let effectsGesturePending = false;
   let lastUnlockAt = -Infinity;
@@ -35,11 +37,79 @@ export function createAudioController(ports: AudioPorts) {
     try { ports.writePreferences(preferences); } catch { preferenceError = true; }
     publish({ preferences, preferenceError });
   };
-  const stopVoices = () => {
-    voices.forEach((voice) => { try { voice.stop(); } catch { /* Already ended. */ } });
-    voices.clear();
-    movementVoices.clear(); movementTimes.clear();
+  const cancelLease = (state: MotionState) => {
+    ++state.revision;
+    if (state.timer !== undefined) ports.cancel(state.timer);
+    state.timer = undefined;
   };
+  const stopVoices = () => {
+    motions.forEach(cancelLease); motions.clear();
+    const all = new Set(voices);
+    retiring.forEach((ticket) => { if (ticket.voice) all.add(ticket.voice); });
+    retiring.clear(); voices.clear();
+    all.forEach((voice) => { try { voice.stop(); } catch { /* Already ended. */ } });
+  };
+  function retire(motion: CameraMotion, playback: Playback, fade: number) {
+    const prior = retiring.get(motion);
+    retiring.delete(motion);
+    if (prior?.voice) { try { prior.voice.stop(); } catch { /* Already ended. */ } }
+    if (!playback.voice) return;
+    voices.delete(playback.voice);
+    retiring.set(motion, playback);
+    try { playback.voice.stop(fade); } catch { retiring.delete(motion); }
+  }
+  function stopCameraMotion(motion?: CameraMotion) {
+    for (const layer of motion ? [motion] : ["zoom", "orbit"] as const) {
+      const state = motions.get(layer);
+      motions.delete(layer);
+      if (state) {
+        cancelLease(state);
+        if (state.playback) retire(layer, state.playback, 0.02);
+      }
+    }
+  }
+  const effectsReady = () => mounted && visible && snapshot.preferences.effectsEnabled && snapshot.preferences.effectsVolume > 0 && snapshot.effectsStatus === "ready" && Boolean(effects?.isRunning());
+  function cameraMotion(motion: CameraMotion, direction?: "in" | "out") {
+    if ((motion !== "orbit" && motion !== "zoom") || !effectsReady() || !effects) return;
+    const now = ports.now();
+    if (!Number.isFinite(now)) return;
+    const cue: AudioCue = motion === "orbit" ? "camera-orbit" : direction === "out" ? "zoom-out" : "zoom-in";
+    let state = motions.get(motion);
+    if (!state) { state = { revision: 0 }; motions.set(motion, state); }
+    cancelLease(state);
+    const owned = state;
+    const revision = state.revision;
+    state.timer = ports.later(() => {
+      if (motions.get(motion) === owned && owned.revision === revision) stopCameraMotion(motion);
+    }, 120);
+    if (state.playback?.voice && state.playback.cue === cue) return;
+    try {
+      let delay = 0;
+      if (state.playback?.voice) { retire(motion, state.playback, 0.008); delay = 0.008; }
+      else {
+        // Cancel a fading prior gesture before a new one can become audible.
+        const prior = retiring.get(motion); retiring.delete(motion);
+        if (prior?.voice) { prior.voice.stop(); }
+        if (voices.size >= 3) {
+          const occupied = [...motions.values()].map((item) => item.playback?.voice);
+          const ordinary = [...voices].find((voice) => !occupied.includes(voice));
+          if (ordinary) { voices.delete(ordinary); ordinary.stop(); }
+        }
+      }
+      const playback: Playback = { cue };
+      state.playback = playback;
+      let ended = false;
+      const voice = effects.play(cue, () => {
+        ended = true;
+        if (playback.voice) voices.delete(playback.voice);
+        if (owned.playback === playback) owned.playback = undefined;
+        if (retiring.get(motion) === playback) retiring.delete(motion);
+      }, delay);
+      playback.voice = voice;
+      if (!ended) voices.add(voice);
+      lastCueAt = now;
+    } catch { stopVoices(); publish({ effectsStatus: "error", effectsError: "load" }); }
+  }
   function startMusic(gesture = false) {
     if (!mounted || !visible || !snapshot.preferences.musicEnabled) return;
     const attempt = ++musicAttempt;
@@ -146,7 +216,7 @@ export function createAudioController(ports: AudioPorts) {
     setEffectsVolume(value: number) {
       const volume = audioVolume(value);
       if (volume === null) return;
-      persist({ effectsVolume: volume }); effects?.setVolume(volume);
+      persist({ effectsVolume: volume }); if (volume === 0) stopVoices(); effects?.setVolume(volume);
     },
     retry() {
       persist({});
@@ -165,40 +235,21 @@ export function createAudioController(ports: AudioPorts) {
       if (retryMusic) startMusic(true);
       if (retryEffects) startEffects(true);
     },
+    cameraMotion, stopCameraMotion,
     playCue(cue: AudioCue) {
-      if (!mounted || !visible || !audioCues.includes(cue) || !snapshot.preferences.effectsEnabled || snapshot.preferences.effectsVolume <= 0 || snapshot.effectsStatus !== "ready" || !effects?.isRunning()) return;
-      const zoom = cue === "zoom-in" || cue === "zoom-out";
-      const movement = zoom ? "zoom" : cue === "camera-orbit" ? "orbit" : null;
+      if (cue === "zoom-in" || cue === "zoom-out" || cue === "camera-orbit") {
+        cameraMotion(cue === "camera-orbit" ? "orbit" : "zoom", cue === "zoom-out" ? "out" : "in"); return;
+      }
+      if (!effectsReady() || !effects || !audioCues.includes(cue)) return;
       const now = ports.now();
-      if (!Number.isFinite(now)) return;
-      const lastMovementAt = movement ? movementTimes.get(movement) ?? -Infinity : -Infinity;
-      if (movement) { if (now >= lastMovementAt && now - lastMovementAt < 100) return; }
-      else if (now - lastCueAt < 100 || now - (cueTimes.get(cue) ?? -Infinity) < 180 || voices.size >= 3) return;
+      if (!Number.isFinite(now) || now - lastCueAt < 100 || now - (cueTimes.get(cue) ?? -Infinity) < 180 || voices.size >= 3) return;
       try {
-        let delaySeconds = 0;
-        if (movement) {
-          // Camera movement owns one replaceable layer per gesture kind. UI cues
-          // cannot mask it, and priority eviction preserves the other movement layer.
-          const occupied = [...movementVoices.values()].map((ticket) => ticket.voice);
-          const previous = movementVoices.get(movement)?.voice ?? (voices.size >= 3 ? [...voices].find((voice) => !occupied.includes(voice)) : undefined);
-          if (previous) {
-            voices.delete(previous);
-            previous.stop(0.008);
-            delaySeconds = 0.008;
-          }
-        }
         let ended = false;
         const playback: { voice?: EffectVoice } = {};
-        if (movement) movementVoices.set(movement, playback);
-        const voice = effects.play(cue, () => {
-          ended = true;
-          if (playback.voice) voices.delete(playback.voice);
-          if (movement && movementVoices.get(movement) === playback) movementVoices.delete(movement);
-        }, delaySeconds);
+        const voice = effects.play(cue, () => { ended = true; if (playback.voice) voices.delete(playback.voice); });
         playback.voice = voice;
         if (!ended) voices.add(voice);
         lastCueAt = now; cueTimes.set(cue, now);
-        if (movement) movementTimes.set(movement, now);
       } catch { stopVoices(); publish({ effectsStatus: "error", effectsError: "load" }); }
     },
     setVisible(next: boolean) {

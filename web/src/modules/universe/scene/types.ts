@@ -38,6 +38,7 @@ export type UniverseSceneProps = {
   onInteraction?: () => void;
   onZoomIntent?: (direction: "in" | "out") => void;
   onOrbitIntent?: () => void;
+  onCameraGestureEnd?: (motion: "zoom" | "orbit") => void;
   onDestinationHover?: (id: string) => void;
   cameraRestore?: UniverseCameraRestore;
   onCameraChange?: (pose: UniverseCameraPose, reason: "manual" | "navigation") => void;

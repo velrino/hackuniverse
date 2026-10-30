@@ -163,3 +163,19 @@ test("zoom handoff fades the old voice and schedules its replacement without ret
   effects.dispose();
   assert.equal(fake.contexts[0].state, "closed");
 });
+
+test("releasing before a handoff starts cancels its scheduled voice instead of playing a short tail", async (t) => {
+  const fake = browser(t);
+  t.mock.method(globalThis, "fetch", async () => new Response(new ArrayBuffer(8), { status: 200 }));
+  const effects = createBrowserAudioPorts().createEffects(() => {});
+  const signal = new AbortController().signal;
+  await effects.resume(signal); await effects.load(signal);
+  let ended = 0;
+  const voice = effects.play("zoom-out", () => ended++, 0.008);
+  voice.stop(0.02);
+  assert.deepEqual(fake.effectSources[0].starts, [0.008]);
+  assert.deepEqual(fake.effectSources[0].stops, [0]);
+  assert.deepEqual(fake.ramps, [], "a recording that has not started has no audible tail to fade");
+  assert.equal(ended, 1);
+  effects.dispose();
+});
