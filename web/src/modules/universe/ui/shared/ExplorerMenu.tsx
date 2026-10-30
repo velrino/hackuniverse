@@ -137,8 +137,12 @@ function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, 
       </TabsContent>
 
       <TabsContent value="settings" className="universe-menu-panel universe-menu-options">
-        {LocationControls && <LocationControls />}
+        <fieldset className="universe-menu-group">
+          <legend>{copy.menuGroups.language}</legend>
+          <div className="universe-menu-language"><LanguagePicker /></div>
+        </fieldset>
         {AudioControls && <AudioControls />}
+        {LocationControls && <LocationControls />}
         {DataControls && <fieldset className="universe-menu-group">
           <legend>{copy.menuGroups.workspace}</legend>
           <DataControls target={currentTarget} onRequestClose={() => onOpenChange(false)} />
@@ -167,10 +171,6 @@ function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, 
           <p id={flightHintId}>{flightAvailable ? copy.flightHint : copy.flightUnavailable}</p>
           {flightStatus === "error" && <p role="alert">{copy.flightError}</p>}
           <p>{copy.flightKeys}</p>
-        </fieldset>
-        <fieldset className="universe-menu-group">
-          <legend>{copy.menuGroups.language}</legend>
-          <div className="universe-menu-language"><LanguagePicker /></div>
         </fieldset>
         <fieldset className="universe-menu-group">
           <legend>{copy.guide}</legend>
