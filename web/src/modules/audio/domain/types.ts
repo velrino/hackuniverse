@@ -1,4 +1,4 @@
-export const audioCues = ["menu-open", "menu-close", "ui-select", "zoom-in", "zoom-out"] as const;
+export const audioCues = ["menu-open", "menu-close", "ui-select", "zoom-in", "zoom-out", "camera-orbit", "toggle-on", "toggle-off", "destination-hover"] as const;
 export type AudioCue = (typeof audioCues)[number];
 export type AudioPreferences = Readonly<{
   musicEnabled: boolean;
@@ -23,13 +23,14 @@ export type MusicPort = {
   setVolume(value: number): void;
   dispose(): void;
 };
+export type EffectVoice = { stop(fadeSeconds?: number): void };
 export type EffectsPort = {
   resume(signal: AbortSignal): Promise<void>;
   suspend(): Promise<void>;
   isRunning(): boolean;
   load(signal: AbortSignal): Promise<void>;
   setVolume(value: number): void;
-  play(cue: AudioCue, ended: () => void): { stop(): void };
+  play(cue: AudioCue, ended: () => void, delaySeconds?: number): EffectVoice;
   dispose(): void;
 };
 export type AudioPorts = {

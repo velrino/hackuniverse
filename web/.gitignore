@@ -16,6 +16,7 @@
 /.scene-tests/
 /.telemetry-tests/
 /.audio-tests/
+/.storage-tests/
 
 # next.js
 /.next/

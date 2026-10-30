@@ -1,4 +1,5 @@
-import { audioCues, type AudioCue, type AudioPorts } from "../domain/types";
+import { audioCues, type AudioCue, type AudioPorts, type EffectVoice } from "../domain/types";
+import { browserStorage } from "../../../lib/storage";
 
 const preferencesKey = "hackuniverse.audio.v1";
 const musicUrl = "/audio/music/open-skies-loop.mp3";
@@ -22,7 +23,7 @@ function resumeContext(context: AudioContext, signal: AbortSignal, isCurrent: ()
       if (error) reject(error); else resolve();
     };
     const abort = () => finish(new DOMException("Audio cancelled", "AbortError"));
-    const timer = setTimeout(() => finish(new Error("Audio activation timed out")), assetTimeoutMs);
+    const timer = setTimeout(() => finish(context.state !== "running" ? new DOMException("Audio activation timed out; a user gesture is required", "NotAllowedError") : new Error("Audio activation timed out")), assetTimeoutMs);
     signal.addEventListener("abort", abort, { once: true });
     if (signal.aborted) abort();
     void resuming.then(() => {
@@ -38,12 +39,12 @@ export function createBrowserAudioPorts(): AudioPorts {
   return {
     now: () => performance.now(),
     readPreferences() {
-      const value = window.localStorage.getItem(preferencesKey);
+      const value = browserStorage.getItem(preferencesKey);
       if (value === null) return null;
       if (value.length > 1024) throw new Error("Invalid audio preferences");
       try { return JSON.parse(value); } catch { return null; }
     },
-    writePreferences(preferences) { window.localStorage.setItem(preferencesKey, JSON.stringify({ schemaVersion: 1, ...preferences })); },
+    writePreferences(preferences) { browserStorage.setItem(preferencesKey, JSON.stringify({ schemaVersion: 1, ...preferences })); },
     createMusic(events) {
       const player = new Audio();
       player.preload = "none";
@@ -77,7 +78,7 @@ export function createBrowserAudioPorts(): AudioPorts {
               if (error) { player.pause(); void context.suspend().catch(() => {}); reject(error); }
               else resolve();
             };
-            const timer = setTimeout(() => finish(new Error("Music playback timed out")), assetTimeoutMs);
+            const timer = setTimeout(() => finish(context.state !== "running" ? new DOMException("Music playback timed out; a user gesture is required", "NotAllowedError") : new Error("Music playback timed out")), assetTimeoutMs);
             cancelPlay = () => finish(new DOMException("Playback cancelled", "AbortError"));
             // A delayed resume must not reactivate a context after timeout/cancel.
             void resume.then(() => { if (settled && player.paused && context.state !== "closed") void context.suspend().catch(() => {}); }, () => {});
@@ -106,11 +107,12 @@ export function createBrowserAudioPorts(): AudioPorts {
       let buffers = new Map<AudioCue, AudioBuffer>();
       let disposed = false;
       let activation = 0;
-      const sources = new Set<AudioBufferSourceNode>();
+      const sources = new Map<AudioBufferSourceNode, EffectVoice>();
+      const stopSources = () => { for (const voice of sources.values()) voice.stop(); };
       context.addEventListener("statechange", interrupted);
       return {
         resume(signal) { const current = ++activation; return resumeContext(context, signal, () => current === activation && !disposed); },
-        suspend: () => context.state === "closed" ? Promise.resolve() : context.suspend(),
+        suspend() { stopSources(); return context.state === "closed" ? Promise.resolve() : context.suspend(); },
         isRunning: () => context.state === "running",
         setVolume: (volume) => { gain.gain.setTargetAtTime(volume, context.currentTime, 0.015); },
         async load(signal) {
@@ -144,26 +146,41 @@ export function createBrowserAudioPorts(): AudioPorts {
             request.abort();
           }
         },
-        play(cue, ended) {
+        play(cue, ended, delaySeconds = 0) {
           const buffer = buffers.get(cue);
           if (disposed || !buffer || context.state !== "running") throw new Error("Sound is not ready");
           const source = context.createBufferSource();
+          const level = context.createGain();
           source.buffer = buffer;
-          source.connect(gain);
-          sources.add(source);
+          source.connect(level); level.connect(gain);
           let stopped = false;
           const cleanup = () => {
             if (stopped) return;
-            stopped = true; sources.delete(source); source.disconnect(); ended();
+            stopped = true; sources.delete(source); source.disconnect(); level.disconnect(); ended();
           };
           source.onended = cleanup;
-          try { source.start(); } catch (error) { cleanup(); throw error; }
-          return { stop() { if (!stopped) { source.stop(); cleanup(); } } };
+          const voice: EffectVoice = { stop(fadeSeconds = 0) {
+            if (stopped) return;
+            const fade = context.state === "running" && Number.isFinite(fadeSeconds) ? Math.max(0, Math.min(0.02, fadeSeconds)) : 0;
+            try {
+              if (fade) {
+                level.gain.cancelScheduledValues(context.currentTime);
+                level.gain.setValueAtTime(level.gain.value, context.currentTime);
+                level.gain.linearRampToValueAtTime(0, context.currentTime + fade);
+              }
+              source.stop(context.currentTime + fade);
+            } catch { cleanup(); }
+            if (!fade) cleanup();
+          } };
+          sources.set(source, voice);
+          const delay = Number.isFinite(delaySeconds) ? Math.max(0, Math.min(0.02, delaySeconds)) : 0;
+          try { source.start(context.currentTime + delay); } catch (error) { cleanup(); throw error; }
+          return voice;
         },
         dispose() {
           disposed = true;
           context.removeEventListener("statechange", interrupted);
-          sources.forEach((source) => { source.onended = null; try { source.stop(); } catch { /* Already ended. */ } source.disconnect(); });
+          stopSources();
           sources.clear(); buffers.clear(); gain.disconnect();
           void context.close().catch(() => {});
         },

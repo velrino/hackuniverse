@@ -1,9 +1,10 @@
 import { emptyLocalWorkspace, parseLocalWorkspace, TransferValidationError, validateWorkspaceJson, workspaceDocument, workspaceLimits, WorkspaceValidationError, type LocalWorkspace } from "../domain";
+import type { StorageService } from "../../../lib/storage";
 import { browserWorkspaceWriteLock, type WorkspaceWriteLock } from "./write-lock";
 
 export const workspaceStorageKey = "hackuniverse.workspace.v1";
 export const workspaceLockTimeoutMs = 2000;
-export type WorkspaceStorage = Pick<Storage, "getItem" | "setItem">;
+export type WorkspaceStorage = Pick<StorageService, "getItem" | "setItem">;
 export type WorkspaceStorageError = "unavailable" | "corrupt" | "conflict";
 export type WorkspaceReadResult =
   | { ok: true; workspace: LocalWorkspace; snapshot: string | null }

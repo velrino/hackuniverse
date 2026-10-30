@@ -8,15 +8,16 @@
     "start": "next start",
     "lint": "eslint",
     "test:catalog": "tsc --project tsconfig.catalog-tests.json && node --test .catalog-tests/domain/catalog.test.js .catalog-tests/domain/camera-link.test.js .catalog-tests/adapters/catalog/firecrawl/normalize.test.js",
-    "test:scene": "tsc --project tsconfig.scene-tests.json && node --test .scene-tests/scene/tour-motion.test.js .scene-tests/scene/entity-transition.test.js .scene-tests/scene/zoom-intent.test.js .scene-tests/scene/planet-presentation.test.js .scene-tests/host/camera-location.test.js",
-    "test:audio": "tsc --project tsconfig.audio-tests.json && node --test .audio-tests/domain/*.test.js .audio-tests/adapters/*.test.js",
+    "test:scene": "tsc --project tsconfig.scene-tests.json && node --test .scene-tests/modules/universe/scene/tour-motion.test.js .scene-tests/modules/universe/scene/entity-transition.test.js .scene-tests/modules/universe/scene/zoom-intent.test.js .scene-tests/modules/universe/scene/orbit-intent.test.js .scene-tests/modules/universe/scene/destination-hover-intent.test.js .scene-tests/modules/universe/scene/planet-presentation.test.js .scene-tests/modules/universe/host/camera-location.test.js",
+    "test:audio": "tsc --project tsconfig.audio-tests.json && node --test .audio-tests/modules/audio/domain/*.test.js .audio-tests/modules/audio/adapters/*.test.js",
     "test:telemetry": "tsc --project tsconfig.telemetry-tests.json && node --test .telemetry-tests/lib/telemetry/*.test.js",
     "test:browser": "playwright test",
-    "test:workspace": "tsc --project tsconfig.workspace-tests.json && node --test .workspace-tests/modules/universe-workspace/domain/*.test.js .workspace-tests/modules/universe-workspace/adapters/*.test.js .workspace-tests/modules/universe-workspace/configs/*.test.js .workspace-tests/components/ui/json-editor/*.test.js"
+    "test:workspace": "tsc --project tsconfig.workspace-tests.json && node --test .workspace-tests/modules/universe-workspace/domain/*.test.js .workspace-tests/modules/universe-workspace/adapters/*.test.js .workspace-tests/modules/universe-workspace/configs/*.test.js .workspace-tests/components/ui/json-editor/*.test.js",
+    "test:storage": "tsc --project tsconfig.storage-tests.json && node --test .storage-tests/lib/storage/*.test.js"
   },
   "dependencies": {
     "@json-edit-react/themes": "1.0.0",
-    "@velrino/ui": "https://github.com/velrino/velrino-ui/releases/download/v0.0.4/velrino-ui-0.0.4.tgz",
+    "@velrino/ui": "https://github.com/velrino/velrino-ui/releases/download/v0.0.5/velrino-ui-0.0.5.tgz",
     "cn": "^0.5.0",
     "json-edit-react": "2.0.5",
     "lucide-react": "^1.62.0",

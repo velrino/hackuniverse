@@ -6,7 +6,7 @@
     "moduleResolution": "Node",
     "noEmit": false,
     "incremental": false,
-    "rootDir": "src/modules/universe",
+    "rootDir": "src",
     "outDir": ".scene-tests",
     "types": [
       "node"
@@ -17,6 +17,8 @@
     "src/modules/universe/scene/tour-motion.test.ts",
     "src/modules/universe/scene/entity-transition.test.ts",
     "src/modules/universe/scene/zoom-intent.test.ts",
+    "src/modules/universe/scene/orbit-intent.test.ts",
+    "src/modules/universe/scene/destination-hover-intent.test.ts",
     "src/modules/universe/scene/planet-presentation.test.ts",
     "src/modules/universe/host/camera-location.test.ts"
   ]

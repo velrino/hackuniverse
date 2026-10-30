@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 1,
+  "source": "starmap-import",
+  "preload": false,
+  "files": [
+    {
+      "id": "CAM_Rotate",
+      "url": "/audio/catalog/starmap/CAM_Rotate.mp3",
+      "durationSeconds": 2.3771428571428572,
+      "bytes": 19017,
+      "sha256": "d3f376d4badcc3f6f3c8cd4ce013adc6a0d43dc8aa41504c304faadaa9c88de1",
+      "silent": false
+    },
+    {
+      "id": "CAM_Zoom",
+      "url": "/audio/catalog/starmap/CAM_Zoom.mp3",
+      "durationSeconds": 5.381224489795918,
+      "bytes": 43049,
+      "sha256": "86edc02645d196fc7aef5fa00679cc056f24e5856aa49c92a33990877ece60d7",
+      "silent": false
+    },
+    {
+      "id": "GOHover",
+      "url": "/audio/catalog/starmap/GOHover.mp3",
+      "durationSeconds": 0.18285714285714286,
+      "bytes": 1462,
+      "sha256": "b8281074e5d7ae7b61892a36e96c2dc920f083a5d9b40b6f82d61bf8d7dd678e",
+      "silent": false
+    },
+    {
+      "id": "SystemAmbient",
+      "url": "/audio/catalog/starmap/SystemAmbient.mp3",
+      "durationSeconds": 5.0416326530612245,
+      "bytes": 60500,
+      "sha256": "81edb2334ad7902633106e8c772684d337422e195666653b58f5679945933be9",
+      "silent": false
+    },
+    {
+      "id": "ToggleButtonActivate",
+      "url": "/audio/catalog/starmap/ToggleButtonActivate.mp3",
+      "durationSeconds": 0.8620408163265306,
+      "bytes": 10345,
+      "sha256": "bf9faf22b3a49d7490e312ec6e900f3c613c96df95293649db40522e88864cde",
+      "silent": false
+    },
+    {
+      "id": "ToggleButtonDeactivate",
+      "url": "/audio/catalog/starmap/ToggleButtonDeactivate.mp3",
+      "durationSeconds": 0.8881632653061224,
+      "bytes": 10658,
+      "sha256": "aa01e2be2fd74c852d47be0859526c37d19d1f6fa856507eac879a7848c1214c",
+      "silent": false
+    },
+    {
+      "id": "UI_DiscClick",
+      "url": "/audio/catalog/starmap/UI_DiscClick.mp3",
+      "durationSeconds": 0.2873469387755102,
+      "bytes": 2298,
+      "sha256": "f5889d16ae00a19311161614360326460ee2f05382eefeb94e26bbdc93b239b0",
+      "silent": false
+    },
+    {
+      "id": "UI_DiscClose",
+      "url": "/audio/catalog/starmap/UI_DiscClose.mp3",
+      "durationSeconds": 0.9404081632653061,
+      "bytes": 11285,
+      "sha256": "b69abe9b9b5e60bf2315c43300b6325909e53b77a3f4ba827e0b2c353bf325e1",
+      "silent": false
+    },
+    {
+      "id": "UI_DiscOpen",
+      "url": "/audio/catalog/starmap/UI_DiscOpen.mp3",
+      "durationSeconds": 1.5673469387755101,
+      "bytes": 18808,
+      "sha256": "0d361decad7f136b5f2454830965fa7dfce0dfa3c0e66a81626906ccf33546a8",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_ControlDisk_Label",
+      "url": "/audio/catalog/starmap/Unused/SE_ControlDisk_Label.mp3",
+      "durationSeconds": 0.3395918367346939,
+      "bytes": 2716,
+      "sha256": "d8f574f0e31bc9ab281dc68cf31c13cf5b823e0eaedde85934cba77be81ba10b",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_EnterJumpPointCompleted",
+      "url": "/audio/catalog/starmap/Unused/SE_EnterJumpPointCompleted.mp3",
+      "durationSeconds": 0.10448979591836735,
+      "bytes": 835,
+      "sha256": "5583d8c7dbbd9e20fecfde8c313d5b62319daa1fdec37e1614557d0478e23966",
+      "silent": true
+    },
+    {
+      "id": "Unused-SE_EnterJumpPointStart",
+      "url": "/audio/catalog/starmap/Unused/SE_EnterJumpPointStart.mp3",
+      "durationSeconds": 7.1053061224489795,
+      "bytes": 85264,
+      "sha256": "8e7605e3f8480f3de365a85054eca7329bb8eca9a6f6bdbc33a4dadb1710a0d3",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_EnterStarSystemCompleted",
+      "url": "/audio/catalog/starmap/Unused/SE_EnterStarSystemCompleted.mp3",
+      "durationSeconds": 0.10448979591836735,
+      "bytes": 835,
+      "sha256": "5583d8c7dbbd9e20fecfde8c313d5b62319daa1fdec37e1614557d0478e23966",
+      "silent": true
+    },
+    {
+      "id": "Unused-SE_EnterStarSystemStart",
+      "url": "/audio/catalog/starmap/Unused/SE_EnterStarSystemStart.mp3",
+      "durationSeconds": 3.866122448979592,
+      "bytes": 46393,
+      "sha256": "c67648737d4955df8d0c5b1d4fcad3ca68929bf2d2d9285d4399ab24e05ef062",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_HideHeatmap",
+      "url": "/audio/catalog/starmap/Unused/SE_HideHeatmap.mp3",
+      "durationSeconds": 1.3322448979591837,
+      "bytes": 15987,
+      "sha256": "4b0866853bcb28e83d6e399a39f471ccf6bac8bcdf1e1efaa67991fd8e8778a8",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_HideLongRangeScanner",
+      "url": "/audio/catalog/starmap/Unused/SE_HideLongRangeScanner.mp3",
+      "durationSeconds": 1.0448979591836736,
+      "bytes": 12539,
+      "sha256": "30dbd290f89464ee1264d22b03715833c87f9cfadedb573a848c30ad2d005834",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_HoverBodyOut",
+      "url": "/audio/catalog/starmap/Unused/SE_HoverBodyOut.mp3",
+      "durationSeconds": 0.10448979591836735,
+      "bytes": 835,
+      "sha256": "5583d8c7dbbd9e20fecfde8c313d5b62319daa1fdec37e1614557d0478e23966",
+      "silent": true
+    },
+    {
+      "id": "Unused-SE_HoverJumpPointIn",
+      "url": "/audio/catalog/starmap/Unused/SE_HoverJumpPointIn.mp3",
+      "durationSeconds": 0.23510204081632652,
+      "bytes": 1880,
+      "sha256": "350167564ad3b5fa34ea20f22fd548916a8ba14188ee78553683dcaede074ea8",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_HoverJumpPointOut",
+      "url": "/audio/catalog/starmap/Unused/SE_HoverJumpPointOut.mp3",
+      "durationSeconds": 0.10448979591836735,
+      "bytes": 835,
+      "sha256": "5583d8c7dbbd9e20fecfde8c313d5b62319daa1fdec37e1614557d0478e23966",
+      "silent": true
+    },
+    {
+      "id": "Unused-SE_HoverSystemIn",
+      "url": "/audio/catalog/starmap/Unused/SE_HoverSystemIn.mp3",
+      "durationSeconds": 0.23510204081632652,
+      "bytes": 1880,
+      "sha256": "1c6825cf6b1e3cca9b2679fabdf1362d1ea171aec7943cf4ccc89559db946d8a",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_HoverSystemOut",
+      "url": "/audio/catalog/starmap/Unused/SE_HoverSystemOut.mp3",
+      "durationSeconds": 0.10448979591836735,
+      "bytes": 835,
+      "sha256": "5583d8c7dbbd9e20fecfde8c313d5b62319daa1fdec37e1614557d0478e23966",
+      "silent": true
+    },
+    {
+      "id": "Unused-SE_LeaveStarSystemToGalaxyCompleted",
+      "url": "/audio/catalog/starmap/Unused/SE_LeaveStarSystemToGalaxyCompleted.mp3",
+      "durationSeconds": 0.10448979591836735,
+      "bytes": 835,
+      "sha256": "5583d8c7dbbd9e20fecfde8c313d5b62319daa1fdec37e1614557d0478e23966",
+      "silent": true
+    },
+    {
+      "id": "Unused-SE_LeaveStarSystemToGalaxyStart",
+      "url": "/audio/catalog/starmap/Unused/SE_LeaveStarSystemToGalaxyStart.mp3",
+      "durationSeconds": 4.048979591836734,
+      "bytes": 48588,
+      "sha256": "0397787060a52c0ebade59a9cafc96dae14c3dbf79fbc4b5b8d9f3877d90b615",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_LoadingBackgroundExtra_LOOP",
+      "url": "/audio/catalog/starmap/Unused/SE_LoadingBackgroundExtra_LOOP.mp3",
+      "durationSeconds": 4.362448979591837,
+      "bytes": 52349,
+      "sha256": "df4ae7f9b82a40132b8aace3902e8df6fb56d062c1d5dcaae0b478115571341c",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_LoadingBackground_LOOP",
+      "url": "/audio/catalog/starmap/Unused/SE_LoadingBackground_LOOP.mp3",
+      "durationSeconds": 3.9183673469387754,
+      "bytes": 47020,
+      "sha256": "3c7975bdc13adbce6c18f5b8ba1e79b8c517ea5df22be526c12a2553eba76fe6",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_LoadingEnterButtonAppear",
+      "url": "/audio/catalog/starmap/Unused/SE_LoadingEnterButtonAppear.mp3",
+      "durationSeconds": 0.626938775510204,
+      "bytes": 7523,
+      "sha256": "88abaa27cda27809ff19f9aca3e6e840f61840b3c1561b2e0b5a6146b41ec454",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_LoadingEnterButtonHover",
+      "url": "/audio/catalog/starmap/Unused/SE_LoadingEnterButtonHover.mp3",
+      "durationSeconds": 0.0783673469387755,
+      "bytes": 940,
+      "sha256": "872b608a9f9b23ba5d2f8ccfeb9e7a82852bc50721df47ee3ad9fe6f5cbbbcde",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_LoadingLogo1",
+      "url": "/audio/catalog/starmap/Unused/SE_LoadingLogo1.mp3",
+      "durationSeconds": 8.80326530612245,
+      "bytes": 105639,
+      "sha256": "f0a1a0c5f5ecc7a0c120b858866cf39a5e97e9e3a6ed991c4e00c1f732b46eb3",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_LoadingLogo2",
+      "url": "/audio/catalog/starmap/Unused/SE_LoadingLogo2.mp3",
+      "durationSeconds": 1.6457142857142857,
+      "bytes": 19749,
+      "sha256": "e10aeb1e7b81a79bfd635d1ca54c12c4bb49de25fde8a8d7267ebc0d702c9d8e",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_SelectBelt_LOOP",
+      "url": "/audio/catalog/starmap/Unused/SE_SelectBelt_LOOP.mp3",
+      "durationSeconds": 6.373877551020408,
+      "bytes": 76487,
+      "sha256": "95c2d6070f296ce877bc5f7f9c441e2639fce1797cdb3da6a254f79c961d1c1c",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_SelectJumpPoint_LOOP",
+      "url": "/audio/catalog/starmap/Unused/SE_SelectJumpPoint_LOOP.mp3",
+      "durationSeconds": 4.440816326530612,
+      "bytes": 53290,
+      "sha256": "4d26d5fd73475ce0f8a5ea3d8cab40ba70becf0cb96c2e2b915a534f02f4a092",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_SelectMoon_LOOP",
+      "url": "/audio/catalog/starmap/Unused/SE_SelectMoon_LOOP.mp3",
+      "durationSeconds": 5.903673469387755,
+      "bytes": 70844,
+      "sha256": "6670259e51277db954513c62d67a8872de7f814316cbfdd5020948cf2d52e022",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_SelectNothing",
+      "url": "/audio/catalog/starmap/Unused/SE_SelectNothing.mp3",
+      "durationSeconds": 1.9591836734693877,
+      "bytes": 23510,
+      "sha256": "25d33d9c066e27e0e0f3f322aadd4c5959be4c0878ed0668032561e9c49074ca",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_SelectPlanet_LOOP",
+      "url": "/audio/catalog/starmap/Unused/SE_SelectPlanet_LOOP.mp3",
+      "durationSeconds": 8.855510204081632,
+      "bytes": 106266,
+      "sha256": "be5379660ca481d966cf35f5f7c4167b441552d18005e3e40d19e7ebf1c1aff1",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_SelectSpaceStation_LOOP",
+      "url": "/audio/catalog/starmap/Unused/SE_SelectSpaceStation_LOOP.mp3",
+      "durationSeconds": 8.698775510204081,
+      "bytes": 104385,
+      "sha256": "4d142f82000a184fa46bf4bad9772e6427017aaa8f3035cb0243f0a6f0448798",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_SelectStar_LOOP",
+      "url": "/audio/catalog/starmap/Unused/SE_SelectStar_LOOP.mp3",
+      "durationSeconds": 7.183673469387755,
+      "bytes": 86204,
+      "sha256": "9d18cfd0e266e59fd0e2a5283532890ef892f1eba24e38bc169faa5079976551",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_ShowHeatmap",
+      "url": "/audio/catalog/starmap/Unused/SE_ShowHeatmap.mp3",
+      "durationSeconds": 1.1755102040816328,
+      "bytes": 14106,
+      "sha256": "f943ce87136e1952a2e099de8cc498a6f69ba60e4319d63ddf37df2f0d683020",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_ShowLongRangeScanner",
+      "url": "/audio/catalog/starmap/Unused/SE_ShowLongRangeScanner.mp3",
+      "durationSeconds": 1.0187755102040816,
+      "bytes": 12225,
+      "sha256": "f85f6f6acc96f9b375fb3de4130e1670ab9f004bd21a48d22adb801150e82d32",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_ShowOrbitals",
+      "url": "/audio/catalog/starmap/Unused/SE_ShowOrbitals.mp3",
+      "durationSeconds": 2.5338775510204083,
+      "bytes": 30407,
+      "sha256": "0593bf3704f68a7f98727d1c68689ad9b671102476dc632b41f189d1330f986f",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_StartGalaxyAmbiance_LOOP",
+      "url": "/audio/catalog/starmap/Unused/SE_StartGalaxyAmbiance_LOOP.mp3",
+      "durationSeconds": 5.0416326530612245,
+      "bytes": 60500,
+      "sha256": "37f6f7fe0c088ce60cc68e9dbc95843495174d6575f3dd788194942b9536eab9",
+      "silent": false
+    },
+    {
+      "id": "Unused-SE_UpdateHeatmap",
+      "url": "/audio/catalog/starmap/Unused/SE_UpdateHeatmap.mp3",
+      "durationSeconds": 0.4440816326530612,
+      "bytes": 3552,
+      "sha256": "c223d7f9cc9d775d740755ac05ac339afe56096749f2aebde9d22c8e24ecf455",
+      "silent": false
+    },
+    {
+      "id": "Unused-UI_BB_RoutingRouteFound",
+      "url": "/audio/catalog/starmap/Unused/UI_BB_RoutingRouteFound.mp3",
+      "durationSeconds": 0.10448979591836735,
+      "bytes": 835,
+      "sha256": "5583d8c7dbbd9e20fecfde8c313d5b62319daa1fdec37e1614557d0478e23966",
+      "silent": true
+    },
+    {
+      "id": "Unused-UI_BB_RoutingSearchForRoute",
+      "url": "/audio/catalog/starmap/Unused/UI_BB_RoutingSearchForRoute.mp3",
+      "durationSeconds": 0.10448979591836735,
+      "bytes": 835,
+      "sha256": "5583d8c7dbbd9e20fecfde8c313d5b62319daa1fdec37e1614557d0478e23966",
+      "silent": true
+    },
+    {
+      "id": "Unused-UI_DiscToggleActivate",
+      "url": "/audio/catalog/starmap/Unused/UI_DiscToggleActivate.mp3",
+      "durationSeconds": 1.2016326530612245,
+      "bytes": 14420,
+      "sha256": "4057d3c7e7a8a04022c02386186f66fddb7dd4b1c2b2e4b6d5bf5ca20cabee74",
+      "silent": false
+    },
+    {
+      "id": "Unused-UI_DiscToggleDeactivate",
+      "url": "/audio/catalog/starmap/Unused/UI_DiscToggleDeactivate.mp3",
+      "durationSeconds": 1.0448979591836736,
+      "bytes": 12539,
+      "sha256": "83f7a7ff0b4554aecb931d62494cb08293f76db68edef779eed39ea91decb04b",
+      "silent": false
+    }
+  ]
+}

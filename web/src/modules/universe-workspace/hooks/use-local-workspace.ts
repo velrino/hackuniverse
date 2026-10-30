@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
+import { browserStorage } from "../../../lib/storage";
 import { createLocalWorkspaceStore, workspaceStorageKey } from "../adapters";
 import { selectWorkspaceUniverse, type LocalWorkspace } from "../domain";
 
 // Browser APIs are resolved only after mount or an explicit user mutation.
 // Every consumer in this document observes the same workspace instance.
-const store = createLocalWorkspaceStore(() => window.localStorage);
+const store = createLocalWorkspaceStore(() => browserStorage);
 let consumers = 0;
 
 function storageChanged(event: StorageEvent) {

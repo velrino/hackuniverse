@@ -5,15 +5,15 @@ import { createUniverseController } from "./controller";
 import type { UniverseSceneProps } from "./types";
 import "./labels.css";
 
-export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit = true, resetToken, zoomAction, ariaLabel, onSelect, onReady, onUnavailable, onError, flightEnabled = false, flightPaused = false, flightInput, onFlightStatus, flightTargetId, guideActionLabel, onGuideRequest, autopilotTargetId, onAutopilotEnd, hasParentView = false, onScaleOut, onScaleIn, tourStep = null, tourPreparing = false, onTourArrive, entityTransition = null, onEntityTransitionEnd, onInteraction, onZoomIntent, cameraRestore, onCameraChange, onCameraRestored, onCameraReader, starSelected = false, starFocusToken = 0, onSelectStar }: UniverseSceneProps) {
+export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit = true, resetToken, zoomAction, ariaLabel, onSelect, onReady, onUnavailable, onError, flightEnabled = false, flightPaused = false, flightInput, onFlightStatus, flightTargetId, guideActionLabel, onGuideRequest, autopilotTargetId, onAutopilotEnd, hasParentView = false, onScaleOut, onScaleIn, tourStep = null, tourPreparing = false, onTourArrive, entityTransition = null, onEntityTransitionEnd, onInteraction, onZoomIntent, onOrbitIntent, onDestinationHover, cameraRestore, onCameraChange, onCameraRestored, onCameraReader, starSelected = false, starFocusToken = 0, onSelectStar }: UniverseSceneProps) {
   const host = useRef<HTMLDivElement>(null);
   const controller = useRef<ReturnType<typeof createUniverseController> | null>(null);
-  const callbacks = useRef({ onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onEntityTransitionEnd, onInteraction, onZoomIntent, onCameraChange, onCameraRestored, onCameraReader, onSelectStar });
+  const callbacks = useRef({ onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onEntityTransitionEnd, onInteraction, onZoomIntent, onOrbitIntent, onDestinationHover, onCameraChange, onCameraRestored, onCameraReader, onSelectStar });
   const zoomDirection = zoomAction?.direction;
   const zoomToken = zoomAction?.token;
   const lastReset = useRef(resetToken);
 
-  useEffect(() => { callbacks.current = { onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onEntityTransitionEnd, onInteraction, onZoomIntent, onCameraChange, onCameraRestored, onCameraReader, onSelectStar }; }, [onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onEntityTransitionEnd, onInteraction, onZoomIntent, onCameraChange, onCameraRestored, onCameraReader, onSelectStar]);
+  useEffect(() => { callbacks.current = { onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onEntityTransitionEnd, onInteraction, onZoomIntent, onOrbitIntent, onDestinationHover, onCameraChange, onCameraRestored, onCameraReader, onSelectStar }; }, [onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onEntityTransitionEnd, onInteraction, onZoomIntent, onOrbitIntent, onDestinationHover, onCameraChange, onCameraRestored, onCameraReader, onSelectStar]);
 
   useEffect(() => {
     if (!host.current) return;
@@ -31,6 +31,8 @@ export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit
         onEntityTransitionEnd: (token) => callbacks.current.onEntityTransitionEnd?.(token),
         onInteraction: () => callbacks.current.onInteraction?.(),
         onZoomIntent: (direction) => callbacks.current.onZoomIntent?.(direction),
+        onOrbitIntent: () => callbacks.current.onOrbitIntent?.(),
+        onDestinationHover: (id) => callbacks.current.onDestinationHover?.(id),
         onCameraChange: (pose, reason) => callbacks.current.onCameraChange?.(pose, reason),
         onCameraRestored: (token, success) => callbacks.current.onCameraRestored?.(token, success),
         onSelectStar: () => callbacks.current.onSelectStar?.(),

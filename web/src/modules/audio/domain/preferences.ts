@@ -1,6 +1,6 @@
 import type { AudioPreferences } from "./types";
 
-export const defaultAudioPreferences: AudioPreferences = Object.freeze({ musicEnabled: false, effectsEnabled: false, musicVolume: 0.35, effectsVolume: 0.5 });
+export const defaultAudioPreferences: AudioPreferences = Object.freeze({ musicEnabled: true, effectsEnabled: true, musicVolume: 0.35, effectsVolume: 0.5 });
 export function readAudioPreferences(value: unknown): AudioPreferences {
   if (!value || typeof value !== "object" || Array.isArray(value)) return defaultAudioPreferences;
   const input = value as Record<string, unknown>;

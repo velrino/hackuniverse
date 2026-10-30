@@ -6,7 +6,7 @@
     "moduleResolution": "Node",
     "noEmit": false,
     "incremental": false,
-    "rootDir": "src/modules/audio",
+    "rootDir": "src",
     "outDir": ".audio-tests",
     "types": ["node"],
     "plugins": []

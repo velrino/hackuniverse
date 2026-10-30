@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { createDestinationHoverIntent } from "./destination-hover-intent";
 
 export type Destination = { highlight: (active: boolean) => void };
 type HoverOptions = {
@@ -8,12 +9,13 @@ type HoverOptions = {
   getHitTargets: () => THREE.Object3D[];
   resolve: (id: string) => Destination | null;
   requestRender: () => void;
+  onChange?: (id: string | null) => void;
 };
 
 const labelSelector = "button.universe-node-label[data-destination-id]";
 
 /** Resolve destinations and activate their existing materials without owning GPU resources. */
-export function createDestinationHover({ camera, canvas, labelLayer, getHitTargets, resolve, requestRender }: HoverOptions) {
+export function createDestinationHover({ camera, canvas, labelLayer, getHitTargets, resolve, requestRender, onChange }: HoverOptions) {
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   const intersections: THREE.Intersection[] = [];
@@ -24,6 +26,7 @@ export function createDestinationHover({ camera, canvas, labelLayer, getHitTarge
   let previousCursor = "";
   let disposed = false;
   let activeHighlight: Destination["highlight"] | null = null;
+  const intent = createDestinationHoverIntent(onChange);
 
   function highlight(next: Destination["highlight"] | null = null) {
     if (activeHighlight === next) return;
@@ -50,6 +53,7 @@ export function createDestinationHover({ camera, canvas, labelLayer, getHitTarge
   }
 
   function clear() {
+    intent.clear();
     pointerInside = false;
     pressed = false;
     label = null;
@@ -61,6 +65,7 @@ export function createDestinationHover({ camera, canvas, labelLayer, getHitTarge
   }
 
   function onPointerMove(event: PointerEvent) {
+    if (event.type === "pointermove") intent.move(event.clientX, event.clientY, event.isTrusted && supportsHover(event) && event.buttons === 0);
     if (!supportsHover(event)) { clear(); requestRender(); return; }
     const rect = canvas.getBoundingClientRect();
     if (rect.width <= 0 || rect.height <= 0) return;
@@ -72,6 +77,7 @@ export function createDestinationHover({ camera, canvas, labelLayer, getHitTarge
   }
 
   function onPointerDown(event: PointerEvent) {
+    intent.clear();
     pressed = true;
     if (!supportsHover(event)) pointerInside = false;
     hide();
@@ -79,6 +85,7 @@ export function createDestinationHover({ camera, canvas, labelLayer, getHitTarge
   }
 
   function onPointerLeave() {
+    intent.clear();
     pointerInside = false;
     hide();
     requestRender();
@@ -107,6 +114,11 @@ export function createDestinationHover({ camera, canvas, labelLayer, getHitTarge
     requestRender();
   }
 
+  function onLabelMove(event: PointerEvent) {
+    intent.move(event.clientX, event.clientY, event.isTrusted && supportsHover(event) && event.buttons === 0);
+    requestRender();
+  }
+
   canvas.addEventListener("pointermove", onPointerMove);
   canvas.addEventListener("pointerdown", onPointerDown);
   canvas.addEventListener("pointerup", onPointerMove);
@@ -114,14 +126,17 @@ export function createDestinationHover({ camera, canvas, labelLayer, getHitTarge
   canvas.addEventListener("pointercancel", onPointerCancel);
   labelLayer.addEventListener("pointerover", onLabelOver);
   labelLayer.addEventListener("pointerout", onLabelOut);
+  labelLayer.addEventListener("pointermove", onLabelMove);
 
   return {
     update({ enabled, dragging }: { enabled: boolean; dragging: boolean }) {
       if (disposed) return;
-      if (!enabled || dragging || pressed) { hide(); return; }
+      if (!enabled || dragging || pressed) { intent.target(null, false); hide(); return; }
       let destination: Destination | null = null;
+      let destinationId: string | null = null;
       if (label && label.isConnected && !label.hidden && !label.disabled && !labelLayer.inert) {
-        destination = resolve(label.dataset.destinationId ?? "");
+        destinationId = label.dataset.destinationId ?? null;
+        destination = resolve(destinationId ?? "");
       } else if (pointerInside) {
         camera.updateMatrixWorld();
         raycaster.setFromCamera(pointer, camera);
@@ -130,11 +145,12 @@ export function createDestinationHover({ camera, canvas, labelLayer, getHitTarge
         for (const hit of intersections) {
           if (typeof hit.object.userData.id !== "string") continue;
           destination = resolve(hit.object.userData.id);
-          if (destination) break;
+          if (destination) { destinationId = hit.object.userData.id; break; }
         }
       }
-      if (!destination || typeof destination.highlight !== "function") { hide(); return; }
+      if (!destination || typeof destination.highlight !== "function") { intent.target(null, true); hide(); return; }
       highlight(destination.highlight);
+      intent.target(destinationId, true);
       cursor(true);
     },
     clear,
@@ -149,6 +165,7 @@ export function createDestinationHover({ camera, canvas, labelLayer, getHitTarge
       canvas.removeEventListener("pointercancel", onPointerCancel);
       labelLayer.removeEventListener("pointerover", onLabelOver);
       labelLayer.removeEventListener("pointerout", onLabelOut);
+      labelLayer.removeEventListener("pointermove", onLabelMove);
       intersections.length = 0;
     },
   };
