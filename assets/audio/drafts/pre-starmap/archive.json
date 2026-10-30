@@ -1,0 +1,84 @@
+{
+  "status": "superseded-not-runtime",
+  "reason": "Starmap sound-effect replacement; Open Skies music unchanged.",
+  "files": [
+    {
+      "previousPath": "assets/audio/generation.json",
+      "archivedPath": "assets/audio/drafts/pre-starmap/generation.json",
+      "sha256": "40c6b53c682f8b719b4a206bce930f5b86ce914b7fddd74fcd0a5f464c332d4b",
+      "bytes": 7547
+    },
+    {
+      "previousPath": "assets/audio/manifest.json",
+      "archivedPath": "assets/audio/drafts/pre-starmap/manifest.json",
+      "sha256": "5791c5a31796df0adbd07663d34cd204e74a634a7d450a8bfee0fd2bd9816d93",
+      "bytes": 7511
+    },
+    {
+      "previousPath": "assets/audio/source/camera-orbit-original.mp3",
+      "archivedPath": "assets/audio/drafts/pre-starmap/source/camera-orbit-original.mp3",
+      "sha256": "fb951d37f7c859500eb7c49d66808b905bdc5306534d4ac6ab0765ee34cf2f47",
+      "bytes": 55341
+    },
+    {
+      "previousPath": "assets/audio/source/menu-close.mp3",
+      "archivedPath": "assets/audio/drafts/pre-starmap/source/menu-close.mp3",
+      "sha256": "843e019a16a70d272fe008d89c805d84dae7f89d9374852020f3d50b651b5049",
+      "bytes": 8820
+    },
+    {
+      "previousPath": "assets/audio/source/menu-open.mp3",
+      "archivedPath": "assets/audio/drafts/pre-starmap/source/menu-open.mp3",
+      "sha256": "5026bb37a2f8febb6aa2cf132a73a65cb657476b02136a73aed331f992b3b2da",
+      "bytes": 8820
+    },
+    {
+      "previousPath": "assets/audio/source/ui-select.mp3",
+      "archivedPath": "assets/audio/drafts/pre-starmap/source/ui-select.mp3",
+      "sha256": "3dd302bd07a028570797a0c87c2c15532361855b1f5e15b9316e4efa2f29bec2",
+      "bytes": 8820
+    },
+    {
+      "previousPath": "assets/audio/source/user-zoom-cinematic.mp3",
+      "archivedPath": "assets/audio/drafts/pre-starmap/source/user-zoom-cinematic.mp3",
+      "sha256": "56e793aff1f6d6fdfcb5b85d89dd890ae0d43884771c4fc87294f5cb4265e349",
+      "bytes": 16173
+    },
+    {
+      "previousPath": "web/public/audio/sfx/camera-orbit.mp3",
+      "archivedPath": "assets/audio/drafts/pre-starmap/web/sfx/camera-orbit.mp3",
+      "sha256": "dc2da47f30d7612a0a8e8ad96b363a3a8bf6938226b1ba74aeb934ba54c2f34d",
+      "bytes": 20106
+    },
+    {
+      "previousPath": "web/public/audio/sfx/menu-close.mp3",
+      "archivedPath": "assets/audio/drafts/pre-starmap/web/sfx/menu-close.mp3",
+      "sha256": "f6bc91dd932a0bbe4e886ef39c1bf68613e018f6ab15806c49efd535e25e504a",
+      "bytes": 3386
+    },
+    {
+      "previousPath": "web/public/audio/sfx/menu-open.mp3",
+      "archivedPath": "assets/audio/drafts/pre-starmap/web/sfx/menu-open.mp3",
+      "sha256": "c7beaa0f78f80f323e67e0b41f640e22e1fab446415ac181fe0631768b22270f",
+      "bytes": 3386
+    },
+    {
+      "previousPath": "web/public/audio/sfx/ui-select.mp3",
+      "archivedPath": "assets/audio/drafts/pre-starmap/web/sfx/ui-select.mp3",
+      "sha256": "f4198cffd7857b6f3bd79bb134c34205132ec83f7d949bad7d671a351b2f35f2",
+      "bytes": 3386
+    },
+    {
+      "previousPath": "web/public/audio/sfx/zoom-in.mp3",
+      "archivedPath": "assets/audio/drafts/pre-starmap/web/sfx/zoom-in.mp3",
+      "sha256": "35d57aa745a466a6e4ff5a4c48650d9ca71f94b6dc26a32f032fbee03f436be2",
+      "bytes": 8194
+    },
+    {
+      "previousPath": "web/public/audio/sfx/zoom-out.mp3",
+      "archivedPath": "assets/audio/drafts/pre-starmap/web/sfx/zoom-out.mp3",
+      "sha256": "35d57aa745a466a6e4ff5a4c48650d9ca71f94b6dc26a32f032fbee03f436be2",
+      "bytes": 8194
+    }
+  ]
+}

@@ -15,6 +15,7 @@ const eslintConfig = defineConfig([
     ".scene-tests/**",
     ".telemetry-tests/**",
     ".audio-tests/**",
+    ".storage-tests/**",
     ".workspace-tests/**",
     "next-env.d.ts",
   ]),

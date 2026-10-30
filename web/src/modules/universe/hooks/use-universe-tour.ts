@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { browserStorage } from "../../../lib/storage";
 import type { NavigationTarget } from "../domain/types";
 
 export type UniverseTourStep = Readonly<{ target: NavigationTarget; holdMs?: number; motion?: "approach" }>;
@@ -34,7 +35,7 @@ const seenInDocument = new Set<string>();
 function hasSeen(key: string) {
   if (seenInDocument.has(key)) return true;
   try {
-    if (window.localStorage.getItem(key) === "1") {
+    if (browserStorage.getItem(key) === "1") {
       seenInDocument.add(key);
       return true;
     }
@@ -44,7 +45,7 @@ function hasSeen(key: string) {
 
 function markSeen(key: string) {
   seenInDocument.add(key);
-  try { window.localStorage.setItem(key, "1"); }
+  try { browserStorage.setItem(key, "1"); }
   catch { /* A blocked storage write must not prevent an explicit tour. */ }
 }
 

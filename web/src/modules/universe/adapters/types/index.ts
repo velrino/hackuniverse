@@ -10,6 +10,8 @@ export type UniverseActionContext = { target: NavigationTarget; onInteraction: (
 /** Optional interaction feedback supplied by the host; no audio provider enters the scene. */
 export type UniverseAudio = {
   onZoomIntent?: (direction: "in" | "out") => void;
+  onOrbitIntent?: () => void;
+  onDestinationHover?: (id: string) => void;
   onMenuOpenChange?: (open: boolean) => void;
   Controls?: ComponentType;
 };

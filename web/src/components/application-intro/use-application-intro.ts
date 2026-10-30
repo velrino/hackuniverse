@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { browserStorage } from "../../lib/storage";
 
 const storageKey = "hackuniverse.intro.v1.seen";
 const durationMs = 3000;
@@ -22,9 +23,9 @@ export function useApplicationIntro() {
       seenInDocument = true;
 
       try {
-        if (window.localStorage.getItem(storageKey) === "1") return settle();
+        if (browserStorage.getItem(storageKey) === "1") return settle();
         // Persist before opening so a refresh during the intro skips it.
-        window.localStorage.setItem(storageKey, "1");
+        browserStorage.setItem(storageKey, "1");
       } catch {
         // The document guard still prevents repeats when storage is blocked.
       }

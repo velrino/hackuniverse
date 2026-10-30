@@ -56,6 +56,8 @@ export function UniverseHost({ catalog, tour, management, source }: { catalog: U
   const location = useMemo(() => ({ navigationRequest: camera.state.navigationRequest, Controls: CameraShareControls, Status: CameraLinkStatus }), [camera.state.navigationRequest]);
   const audio = useMemo<UniverseAudio>(() => ({
     onZoomIntent: (direction) => playCue(direction === "in" ? "zoom-in" : "zoom-out"),
+    onOrbitIntent: () => playCue("camera-orbit"),
+    onDestinationHover: () => playCue("destination-hover"),
     onMenuOpenChange: (open) => playCue(open ? "menu-open" : "menu-close"),
     Controls: AudioControls,
   }), [playCue]);

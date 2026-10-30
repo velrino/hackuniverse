@@ -16,80 +16,834 @@
       "song-id": "ZHx3I9TS3XqWOgbIBQsQ",
       "bytes": 1536461,
       "status": "existing"
-    },
-    {
-      "name": "menu-open",
-      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
-      "parameters": {
-        "text": "One restrained cinematic spacecraft touchscreen activation. Close-miked dry mechanical microclick, a tiny filtered static transient and a very short smooth servo-air release. Precise aerospace instrumentation, premium tactile interface. Calm, neutral, realistic. One event only, 0.25 second active sound, clean short tail. No pitched blip, bloop, bell, sparkle, toy, cartoon, musical note, melody, voice or heavy bass.",
-        "duration_seconds": 0.5,
-        "prompt_influence": 0.65,
-        "model_id": "eleven_text_to_sound_v2",
-        "loop": false
-      },
-      "output": "source/menu-open.mp3",
-      "status": "generated",
-      "bytes": 8820,
-      "character-cost": "3"
-    },
-    {
-      "name": "menu-close",
-      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
-      "parameters": {
-        "text": "One restrained cinematic spacecraft touchscreen dismissal. Soft dry mechanical microclick, a tiny muted electrical transient and short receding filtered air release. Precise aerospace instrumentation, calm and neutral, realistic tactile interface. One event only, 0.25 second active sound, clean short tail. No pitched blip, bloop, bell, sparkle, cartoon, toy, musical note, melody, voice or heavy bass.",
-        "duration_seconds": 0.5,
-        "prompt_influence": 0.65,
-        "model_id": "eleven_text_to_sound_v2",
-        "loop": false
-      },
-      "output": "source/menu-close.mp3",
-      "status": "generated",
-      "bytes": 8820,
-      "character-cost": "3"
-    },
-    {
-      "name": "ui-select",
-      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
-      "parameters": {
-        "text": "One quiet premium spacecraft instrument switch confirmation. Realistic close-miked tactile microclick with soft polymer contact, a tiny dry filtered electrical tick underneath. Precise, restrained, neutral and informative. Extremely short, 0.15 second active sound, clean tail. No resonant pitched tone, bloop, bubbly pop, bell, sparkle, video-game toy, cartoon, music, voice or loud impact.",
-        "duration_seconds": 0.5,
-        "prompt_influence": 0.65,
-        "model_id": "eleven_text_to_sound_v2",
-        "loop": false
-      },
-      "output": "source/ui-select.mp3",
-      "status": "generated",
-      "bytes": 8820,
-      "character-cost": "3"
     }
   ],
   "providers": [
-    "ElevenLabs",
-    "user-provided"
+    "ElevenLabs (music only)",
+    "user-provided third-party Starmap recordings"
   ],
   "imports": [
     {
-      "name": "user-zoom-cinematic",
-      "origin": "user-provided",
-      "importedAt": "2026-10-30T10:22:53.427110+00:00",
-      "sourceFilename": "Futuristic_cinematic_#3-1793355528036.mp3",
-      "prompt": "Futuristic cinematic SFX for a premium 12K cinema camera assembling from disassembled parts. Layered mechanical clicks, smooth metal parts gliding into place, tiny servo motors, electronic confirmation beeps, clean sci-fi lab room tone. No harsh impacts, no distortion. Final moment: subtle lens zoom and iris closing, short bass hit and airy whoosh accent, like a high-end tech commercial.",
+      "name": "CAM_Rotate",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "CAM_Rotate.wav",
+      "sourceSha256": "e577b60bba7a8cd87cdbcf67bdd48f8a623f1efeade0420ad9ab812da7c28306",
+      "sourceBytes": 206536,
+      "output": "imported/starmap/CAM_Rotate.wav",
+      "sha256": "e898c808a308e99813a9337c6c857675a8394bc2e572c32b5a4bcd848bcd711b",
+      "bytes": 205844,
+      "decodedPcmSha256": "75821d884b938553565f9eaf3af89a70fc81c2ce5b3a79ea998d4b64d0ce4cb0",
+      "status": "metadata-stripped-pcm-identical",
       "apiRequestPerformed": false,
-      "output": "source/user-zoom-cinematic.mp3",
-      "sha256": "56e793aff1f6d6fdfcb5b85d89dd890ae0d43884771c4fc87294f5cb4265e349",
-      "bytes": 16173,
-      "durationSeconds": 0.6065,
-      "status": "original-preserved-byte-for-byte",
+      "promptProvided": false,
       "derivedOutputs": [
+        "web/public/audio/catalog/starmap/CAM_Rotate.mp3",
+        "web/public/audio/sfx/camera-orbit.mp3"
+      ]
+    },
+    {
+      "name": "CAM_Zoom",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "CAM_Zoom.wav",
+      "sourceSha256": "84476162460929693460217a6655511bfa5c530228b6499fdef95c0b86956b3d",
+      "sourceBytes": 471136,
+      "output": "imported/starmap/CAM_Zoom.wav",
+      "sha256": "2da80e2e728d74cdb9da3c4bc7e42db2a4889fe3c6603d4f2ae123f7107c0367",
+      "bytes": 470444,
+      "decodedPcmSha256": "10328ff57d71452bba281cd6186c8ca9c74193a4cc273b2d2e5c19adf4fa73a4",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/CAM_Zoom.mp3",
         "web/public/audio/sfx/zoom-in.mp3",
         "web/public/audio/sfx/zoom-out.mp3"
-      ],
-      "edit": "Entire supplied clip; same playback in both directions. No trim, pitch change, reversal or newly generated audio. Constant -5dB gain, 4ms start fade and 8ms end fade; stereo 44.1kHz 96kbps MP3."
+      ]
+    },
+    {
+      "name": "GOHover",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "GOHover.wav",
+      "sourceSha256": "f0b051ac3ac7ed02a5b727358e519b093e899d5a7581ab1f3a43c369a9a30e8c",
+      "sourceBytes": 18376,
+      "output": "imported/starmap/GOHover.wav",
+      "sha256": "d72b8ab34c3b1b3adae39451bfd8ac0218d37528e527bad5869ef8a25d4595a1",
+      "bytes": 17684,
+      "decodedPcmSha256": "c63f63e71f2878277ac1eded648b781cd905248a26892c0c6aa0b3aaae9d9d38",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/GOHover.mp3",
+        "web/public/audio/sfx/destination-hover.mp3"
+      ]
+    },
+    {
+      "name": "SystemAmbient",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "SystemAmbient.wav",
+      "sourceSha256": "a87c4bdf8ef9041ed2d53f54a351f4932835a4c752dd549a3a90fde5e3cf936d",
+      "sourceBytes": 882736,
+      "output": "imported/starmap/SystemAmbient.wav",
+      "sha256": "f7dd03495505acd9991f407e5f9ed4d3599fcdad3b0bfd26b199c4dde49fb71c",
+      "bytes": 882044,
+      "decodedPcmSha256": "90993829b14a60ee848c99d2ed5768e3f3e25dd713b70498e78cd64a06644f7a",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/SystemAmbient.mp3"
+      ]
+    },
+    {
+      "name": "ToggleButtonActivate",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "ToggleButtonActivate.wav",
+      "sourceSha256": "5e41bb86ccdb02d76fde717c7bc0a994a26e99c18b17a1d893842e86043068cb",
+      "sourceBytes": 206536,
+      "output": "imported/starmap/ToggleButtonActivate.wav",
+      "sha256": "2db14047f39c1870f7dde88b2116dd22620aed21518b99c9e1dd009f91ae6444",
+      "bytes": 205844,
+      "decodedPcmSha256": "48ff6776031834d48afabd5cbf44e1fa06bc3c8a2c0a4587c7730e84f344a03a",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/ToggleButtonActivate.mp3",
+        "web/public/audio/sfx/toggle-on.mp3"
+      ]
+    },
+    {
+      "name": "ToggleButtonDeactivate",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "ToggleButtonDeactivate.wav",
+      "sourceSha256": "34864da3bf5e0dd1f34a271a06e4df5e4e409d8587fb5a8c48b343dac5065480",
+      "sourceBytes": 177136,
+      "output": "imported/starmap/ToggleButtonDeactivate.wav",
+      "sha256": "9ab051c2c04f3133bd41dc4d78517beb3dfb6fad12c5bb20e25bd376f1c82240",
+      "bytes": 176444,
+      "decodedPcmSha256": "cb141a5da72ab122d14737999c5199fa62fd47619de5aa50128c7024ff246d75",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/ToggleButtonDeactivate.mp3",
+        "web/public/audio/sfx/toggle-off.mp3"
+      ]
+    },
+    {
+      "name": "UI_DiscClick",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "UI_DiscClick.wav",
+      "sourceSha256": "84438ab00d825a9ca044390fc52858ded57d2c7affbd673f822512c66d4c39da",
+      "sourceBytes": 27196,
+      "output": "imported/starmap/UI_DiscClick.wav",
+      "sha256": "73b8812023a4d1c0bd67309075edcade461d2226e2d477a4a80d5104dc69e581",
+      "bytes": 26504,
+      "decodedPcmSha256": "7c21c55a912b35522d2e4dda1874ecfff44484409752a9b40af8c04496a05e38",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/UI_DiscClick.mp3",
+        "web/public/audio/sfx/ui-select.mp3"
+      ]
+    },
+    {
+      "name": "UI_DiscClose",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "UI_DiscClose.wav",
+      "sourceSha256": "e8cfc78544c5be39e86913c88956b04c004d7f370acb7b7f9ca75b863983cb7c",
+      "sourceBytes": 165376,
+      "output": "imported/starmap/UI_DiscClose.wav",
+      "sha256": "f6bca00091906fcf180d3ad4464cf257425473e0a2dde9a494fb0b70c33d540c",
+      "bytes": 164684,
+      "decodedPcmSha256": "61a657b66faab6881f14771a074c1d40200c7d1d3eb3883e8c96e77e89afc08e",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/UI_DiscClose.mp3",
+        "web/public/audio/sfx/menu-close.mp3"
+      ]
+    },
+    {
+      "name": "UI_DiscOpen",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "UI_DiscOpen.wav",
+      "sourceSha256": "24836469f4f9b2d0355e2c0164a105593d1a2ce0a7942fab3db1363f6ac55d0d",
+      "sourceBytes": 330016,
+      "output": "imported/starmap/UI_DiscOpen.wav",
+      "sha256": "e4a6612aa1e6aed53fa19944171db3ec7ff4ef36c9621991848a74457b2f8140",
+      "bytes": 329324,
+      "decodedPcmSha256": "11c64eb92b47b1e5a092010879e6ea8f221064bc1f16da29e98e9ba93a26d76a",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/UI_DiscOpen.mp3",
+        "web/public/audio/sfx/menu-open.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_ControlDisk_Label",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_ControlDisk_Label.wav",
+      "sourceSha256": "3661f49082e122e801244ac811360503e09918af136c9376df0ec14c07eb84bc",
+      "sourceBytes": 27196,
+      "output": "imported/starmap/Unused/SE_ControlDisk_Label.wav",
+      "sha256": "5a1b7f426bf6e93dd6c72b01acc04a6fb59cff6b5bb3585dfb842cd79f8d2af7",
+      "bytes": 26504,
+      "decodedPcmSha256": "ffd7b6ff01887c77aed973dcdf4675050fcc4785c9f92dcb0826d16937478905",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_ControlDisk_Label.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_EnterJumpPointCompleted",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_EnterJumpPointCompleted.wav",
+      "sourceSha256": "5aa55ff2b313dde8240029494245ac6b23b90cae9b93714fe0255f17411c6075",
+      "sourceBytes": 6616,
+      "output": "imported/starmap/Unused/SE_EnterJumpPointCompleted.wav",
+      "sha256": "5d1e600b1b508dbb49e9045af8d93abcc3617d07b8da1f7e08a32299a79faf7c",
+      "bytes": 5924,
+      "decodedPcmSha256": "f245942364afb415ea6ad18219deb50faf117504c6e6a0bde047d23b12ff6431",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_EnterJumpPointCompleted.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_EnterJumpPointStart",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_EnterJumpPointStart.wav",
+      "sourceSha256": "7cc3c060bdd9d0e885e88217c3f84b0b02ee515c6d88c26688af7450b8f5960c",
+      "sourceBytes": 1247296,
+      "output": "imported/starmap/Unused/SE_EnterJumpPointStart.wav",
+      "sha256": "8f4c01038062214309b43cc69a1b7247bb1158bf791927c8018bdfff8181f58e",
+      "bytes": 1246604,
+      "decodedPcmSha256": "e8cf55bab4fcc6b66e74c05459c0b0e584549eeb235cef9e5505feee99fbaca4",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_EnterJumpPointStart.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_EnterStarSystemCompleted",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_EnterStarSystemCompleted.wav",
+      "sourceSha256": "726f238cf564c40c11751be3a064193420a00ccb11589ce256488a6b19c5e004",
+      "sourceBytes": 6616,
+      "output": "imported/starmap/Unused/SE_EnterStarSystemCompleted.wav",
+      "sha256": "5d1e600b1b508dbb49e9045af8d93abcc3617d07b8da1f7e08a32299a79faf7c",
+      "bytes": 5924,
+      "decodedPcmSha256": "f245942364afb415ea6ad18219deb50faf117504c6e6a0bde047d23b12ff6431",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_EnterStarSystemCompleted.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_EnterStarSystemStart",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_EnterStarSystemStart.wav",
+      "sourceSha256": "9d1560ed29babe476fe134ba41051359634b992d3f1e42338b368d7a272b1118",
+      "sourceBytes": 676936,
+      "output": "imported/starmap/Unused/SE_EnterStarSystemStart.wav",
+      "sha256": "40b0d5b26fdd0fb39725d0e4ab40753ecfc9f67710ca5e58804f7b7320aa182a",
+      "bytes": 676244,
+      "decodedPcmSha256": "7d823d187ff189506aacdc210f1a779db6ace92ee5ac0996a717e873e059da93",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_EnterStarSystemStart.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_HideHeatmap",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_HideHeatmap.wav",
+      "sourceSha256": "fccdeaa1a4570fcc6096f7867ede343e939f4b5d8fbf5c54f7eb3ca4288167dc",
+      "sourceBytes": 230056,
+      "output": "imported/starmap/Unused/SE_HideHeatmap.wav",
+      "sha256": "45eaf8ed02980c19066081ae89f813f81084332f46f8ec46bb599c8a5f4717f6",
+      "bytes": 229364,
+      "decodedPcmSha256": "72b77579b9b5e4d3f5a16519d9b40a498f5fe3fc92c368ce603df98baa5be66c",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_HideHeatmap.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_HideLongRangeScanner",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_HideLongRangeScanner.wav",
+      "sourceSha256": "8257630c972544a041982b4f7e05295b8a4949a0abc411c99973e319b53e5029",
+      "sourceBytes": 177136,
+      "output": "imported/starmap/Unused/SE_HideLongRangeScanner.wav",
+      "sha256": "41d1fc8a3101759a11965f515803500bc662dfec484f03228f7215425175f2ec",
+      "bytes": 176444,
+      "decodedPcmSha256": "3c83937ec28f1195b277008943024c4b5ea6d3324f96104674cd8e4cb87171ba",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_HideLongRangeScanner.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_HoverBodyOut",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_HoverBodyOut.wav",
+      "sourceSha256": "196962d1cc886cbf7b52f3b207676e04ff17777af78c6a5955545333a11476ff",
+      "sourceBytes": 6616,
+      "output": "imported/starmap/Unused/SE_HoverBodyOut.wav",
+      "sha256": "5d1e600b1b508dbb49e9045af8d93abcc3617d07b8da1f7e08a32299a79faf7c",
+      "bytes": 5924,
+      "decodedPcmSha256": "f245942364afb415ea6ad18219deb50faf117504c6e6a0bde047d23b12ff6431",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_HoverBodyOut.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_HoverJumpPointIn",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_HoverJumpPointIn.wav",
+      "sourceSha256": "08f468f51f99a68efbfedda888a08bdf29f465b9706db641775a500a48018bda",
+      "sourceBytes": 18376,
+      "output": "imported/starmap/Unused/SE_HoverJumpPointIn.wav",
+      "sha256": "33f89c02706de8db7ba8c9194d7bdf6ce09518555ec0ebdc07f40776a8d1b2b8",
+      "bytes": 17684,
+      "decodedPcmSha256": "583537cb81a8076c7f2d74462095e0e868e32af1025aa3d9950b789bd2c25de6",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_HoverJumpPointIn.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_HoverJumpPointOut",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_HoverJumpPointOut.wav",
+      "sourceSha256": "e39b02dd4a9b89c2ff2e5bbaf8d3422ce2fe63ae0eaa446fdb47e15af6b3f02e",
+      "sourceBytes": 6616,
+      "output": "imported/starmap/Unused/SE_HoverJumpPointOut.wav",
+      "sha256": "5d1e600b1b508dbb49e9045af8d93abcc3617d07b8da1f7e08a32299a79faf7c",
+      "bytes": 5924,
+      "decodedPcmSha256": "f245942364afb415ea6ad18219deb50faf117504c6e6a0bde047d23b12ff6431",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_HoverJumpPointOut.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_HoverSystemIn",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_HoverSystemIn.wav",
+      "sourceSha256": "b749db4fbc56c8b58cc71f6c6c14dffa61188591449129e64f6676eb04cc4417",
+      "sourceBytes": 18376,
+      "output": "imported/starmap/Unused/SE_HoverSystemIn.wav",
+      "sha256": "dd3dbcd81c43283bfb9e78e8fb89f139289f8c590d7edb47848d14871e36c6a4",
+      "bytes": 17684,
+      "decodedPcmSha256": "a8f2c59d81734b3c63ae43678328ec8eca6bd9b6b34d6a1c2eb69970865f74cc",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_HoverSystemIn.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_HoverSystemOut",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_HoverSystemOut.wav",
+      "sourceSha256": "5aa55ff2b313dde8240029494245ac6b23b90cae9b93714fe0255f17411c6075",
+      "sourceBytes": 6616,
+      "output": "imported/starmap/Unused/SE_HoverSystemOut.wav",
+      "sha256": "5d1e600b1b508dbb49e9045af8d93abcc3617d07b8da1f7e08a32299a79faf7c",
+      "bytes": 5924,
+      "decodedPcmSha256": "f245942364afb415ea6ad18219deb50faf117504c6e6a0bde047d23b12ff6431",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_HoverSystemOut.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_LeaveStarSystemToGalaxyCompleted",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_LeaveStarSystemToGalaxyCompleted.wav",
+      "sourceSha256": "fbb16dbbe1af86ba7d2acaf02a7c23510a9414f2596e1f35f26f65123c99cc71",
+      "sourceBytes": 6616,
+      "output": "imported/starmap/Unused/SE_LeaveStarSystemToGalaxyCompleted.wav",
+      "sha256": "5d1e600b1b508dbb49e9045af8d93abcc3617d07b8da1f7e08a32299a79faf7c",
+      "bytes": 5924,
+      "decodedPcmSha256": "f245942364afb415ea6ad18219deb50faf117504c6e6a0bde047d23b12ff6431",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_LeaveStarSystemToGalaxyCompleted.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_LeaveStarSystemToGalaxyStart",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_LeaveStarSystemToGalaxyStart.wav",
+      "sourceSha256": "cb210780945f65e9fc6272dd7618071cc16aa78da7c2476d49b8e8235586888f",
+      "sourceBytes": 706336,
+      "output": "imported/starmap/Unused/SE_LeaveStarSystemToGalaxyStart.wav",
+      "sha256": "0b43fea9c6cdc3b7222ebfba2c7c2434a5cc21fc89faa16b050945289ca6973f",
+      "bytes": 705644,
+      "decodedPcmSha256": "29450f7a54012883430ac001cf7e9a9f107a53e2d5d4aefdb032313d9c6bce39",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_LeaveStarSystemToGalaxyStart.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_LoadingBackgroundExtra_LOOP",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_LoadingBackgroundExtra_LOOP.wav",
+      "sourceSha256": "f2a88a8ffd909b5d60c412a2c254d4419e33dc75688f723b56fc0905ab5c5c96",
+      "sourceBytes": 765136,
+      "output": "imported/starmap/Unused/SE_LoadingBackgroundExtra_LOOP.wav",
+      "sha256": "3a16216a89c6990a7d6c081652a4fa561c5727335b24e921d37058b1592736bc",
+      "bytes": 764444,
+      "decodedPcmSha256": "312da77563aa65bf1ffa09af2fcfad7bf01341ea7b54acf09549168036c98dcf",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_LoadingBackgroundExtra_LOOP.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_LoadingBackground_LOOP",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_LoadingBackground_LOOP.wav",
+      "sourceSha256": "d26a82f93016153962190163cae09ceeb8992d76255439e727c2a001e31ed50e",
+      "sourceBytes": 685232,
+      "output": "imported/starmap/Unused/SE_LoadingBackground_LOOP.wav",
+      "sha256": "8430c5c22ad26bbaffbebdc4e92316328827eba736347ef7483dc8f7c28c332a",
+      "bytes": 684540,
+      "decodedPcmSha256": "c6be94763f461b05994b19794932996b571e70939c84f04b4570ece7393506ea",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_LoadingBackground_LOOP.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_LoadingEnterButtonAppear",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_LoadingEnterButtonAppear.wav",
+      "sourceSha256": "a95501b45a4a475af64070187092f8fdf565efbf13e7f73d264e3cb66b0714ab",
+      "sourceBytes": 106576,
+      "output": "imported/starmap/Unused/SE_LoadingEnterButtonAppear.wav",
+      "sha256": "0ffdc8b91b5f140880c467734ec5147e13091440cec4fb6ccab0f546f96f7789",
+      "bytes": 105884,
+      "decodedPcmSha256": "c4a5c6158371daf0403256dc1d6fef87e7b7113cdf042050b09abfcadd63931c",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_LoadingEnterButtonAppear.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_LoadingEnterButtonHover",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_LoadingEnterButtonHover.wav",
+      "sourceSha256": "340d674bcdb437439e8c9c07a2829965e479a7875d554d3afe886675ee6e8022",
+      "sourceBytes": 6616,
+      "output": "imported/starmap/Unused/SE_LoadingEnterButtonHover.wav",
+      "sha256": "32593854742998bc7024a6cf865bcaa48864edf54460ad3aaf801cfc4e21293c",
+      "bytes": 5924,
+      "decodedPcmSha256": "cb1f4570bf354adaf84a0879771007f9682e19283f67db6a1afa210665886d93",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_LoadingEnterButtonHover.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_LoadingLogo1",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_LoadingLogo1.wav",
+      "sourceSha256": "a0121cd45d3703878a555bd6aed3bcd9176bbeea72e8bc993ee3d91e9b1d0604",
+      "sourceBytes": 1547176,
+      "output": "imported/starmap/Unused/SE_LoadingLogo1.wav",
+      "sha256": "552f40485ee1e7dd7f927c2acf153a9aa64b45bffe9d4eb2df4cf8300014a8f3",
+      "bytes": 1546484,
+      "decodedPcmSha256": "05c97e312422a227c88fd2ad892d27ef1f991ff991e64924036076fc038fe307",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_LoadingLogo1.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_LoadingLogo2",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_LoadingLogo2.wav",
+      "sourceSha256": "77f047302e62f91f82b07ec9c608b1a4d66f8e93b7252ec0766536d05aff47ea",
+      "sourceBytes": 282976,
+      "output": "imported/starmap/Unused/SE_LoadingLogo2.wav",
+      "sha256": "fb68994cbb79180e02a67939c7fe5967de52b9c30cbe543907bc1e6f699cff29",
+      "bytes": 282284,
+      "decodedPcmSha256": "691cb3bf65f5b3829d3be4c68c668edfed21957968aff72ebee40be8663e8e63",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_LoadingLogo2.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_SelectBelt_LOOP",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_SelectBelt_LOOP.wav",
+      "sourceSha256": "bf2b69f7206d323f934ed48d4ee0f1586966025a9a9f62aa1acfc5226448c5af",
+      "sourceBytes": 1117936,
+      "output": "imported/starmap/Unused/SE_SelectBelt_LOOP.wav",
+      "sha256": "acd4a0fa40bd7d1cb15d46ea6d954e3add0c32d35287a73b711949ae35b3f882",
+      "bytes": 1117244,
+      "decodedPcmSha256": "33933c503bf008f8bc191454f8e4be87c0a9f1c1b48a9accc4b0be7b209ec2f6",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_SelectBelt_LOOP.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_SelectJumpPoint_LOOP",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_SelectJumpPoint_LOOP.wav",
+      "sourceSha256": "5dc1d1553fcb8b54e7ea79562da56d3ac8ca6d1ae6413e221dbdf6a816f72921",
+      "sourceBytes": 776896,
+      "output": "imported/starmap/Unused/SE_SelectJumpPoint_LOOP.wav",
+      "sha256": "1ea305c70a2d399a5669e96c3ab5b1e2dd55440c1a97fdde9cdc50164ce0db74",
+      "bytes": 776204,
+      "decodedPcmSha256": "2cabb9eaee180e0560a875ab2bc31a7b71c597784fa169fdbcd750ede3423a61",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_SelectJumpPoint_LOOP.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_SelectMoon_LOOP",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_SelectMoon_LOOP.wav",
+      "sourceSha256": "47476c6531ce1caf38e5743aecdff261f81f5d81e502b0f6c3c4a17e573874e2",
+      "sourceBytes": 1035616,
+      "output": "imported/starmap/Unused/SE_SelectMoon_LOOP.wav",
+      "sha256": "22dced1d0d9594233cd665fe75b7e33ae6c7f9a5b93097c9ec5c436344081fb1",
+      "bytes": 1034924,
+      "decodedPcmSha256": "a732672f8259006cc3ebc47223fe7dcc153687af18485b013d4e144f0b1b6e59",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_SelectMoon_LOOP.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_SelectNothing",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_SelectNothing.wav",
+      "sourceSha256": "d17875a76cf3f3448ef565c5ae9cd6f0de01664b5b66c9319129e419b6c2cd8d",
+      "sourceBytes": 338628,
+      "output": "imported/starmap/Unused/SE_SelectNothing.wav",
+      "sha256": "6c7d21bb6a6bebefda98ef376b3722c840359f1631702a078c5bcb947a5e6c28",
+      "bytes": 337936,
+      "decodedPcmSha256": "90189dfcb2710dc6b027fb75c75a4ac076040705cd5e2c1a2f312dcece211bcd",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_SelectNothing.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_SelectPlanet_LOOP",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_SelectPlanet_LOOP.wav",
+      "sourceSha256": "5709f05a571e1f0f8c3b7c7b8d9e60095b9c5ada54fff3196a2124430a15eea9",
+      "sourceBytes": 1555716,
+      "output": "imported/starmap/Unused/SE_SelectPlanet_LOOP.wav",
+      "sha256": "91808cc3da163cb834991112563471e299309b0b41f5e7d5279dad36af836d33",
+      "bytes": 1555024,
+      "decodedPcmSha256": "8d42d5dfbc632eda992a23ab51ed8dc8fee89c0e76b4e838f36f3cb7ce0f5dc1",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_SelectPlanet_LOOP.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_SelectSpaceStation_LOOP",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_SelectSpaceStation_LOOP.wav",
+      "sourceSha256": "48cc7a9fdc98b8b7f7b4cfa815634cf5025e840ba971bda1236ef16a89c9f003",
+      "sourceBytes": 1529536,
+      "output": "imported/starmap/Unused/SE_SelectSpaceStation_LOOP.wav",
+      "sha256": "b9e6d9d5abe45ae2fe6ef76a2aa1cc0c04fdf4da4ca5ae8b493242c62aa314a0",
+      "bytes": 1528844,
+      "decodedPcmSha256": "ff0a5b6d1106f4fb16c4b8575bde0b9918c9d8d499b9db8508de1013dff4d07f",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_SelectSpaceStation_LOOP.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_SelectStar_LOOP",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_SelectStar_LOOP.wav",
+      "sourceSha256": "30504047307041a92a5d3c9ca4d1e4e60469db601ecd99a82c9609dc3e014cd0",
+      "sourceBytes": 1259056,
+      "output": "imported/starmap/Unused/SE_SelectStar_LOOP.wav",
+      "sha256": "e75df06169cad723f2baf0f380f610ea4f2fa9b471620f2b7ce4e1fe4b0dd102",
+      "bytes": 1258364,
+      "decodedPcmSha256": "368ade15d2960b6a0732c23924a9188a14317758641b0b67a7c5a6e6ef24c2db",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_SelectStar_LOOP.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_ShowHeatmap",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_ShowHeatmap.wav",
+      "sourceSha256": "41c766b9220f6f2dd555c3e8cd60d9ff6682412bfbdc9301a2a2ef6e4c076e77",
+      "sourceBytes": 200656,
+      "output": "imported/starmap/Unused/SE_ShowHeatmap.wav",
+      "sha256": "a5db2c98a1ba5a5192d31de11f3914b63252649cfed5b0aa97561c415b3ac135",
+      "bytes": 199964,
+      "decodedPcmSha256": "cfd40d42eb954e0b1918fb4bceda47ce02c0c910a02d37d7c22b62c642c1977e",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_ShowHeatmap.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_ShowLongRangeScanner",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_ShowLongRangeScanner.wav",
+      "sourceSha256": "f6f0a5646cf82a42c29ba63cb7a8fb3a633bba2de47e313d269d5f5eda4018f6",
+      "sourceBytes": 171256,
+      "output": "imported/starmap/Unused/SE_ShowLongRangeScanner.wav",
+      "sha256": "288e3782ab56551978b0dc0863493ed0fc25124d68e8fffed563268f34584421",
+      "bytes": 170564,
+      "decodedPcmSha256": "f150754849528f6e67a0ccdaade5911ee9f63770c872f22dfa79c98c10bae425",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_ShowLongRangeScanner.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_ShowOrbitals",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_ShowOrbitals.wav",
+      "sourceSha256": "e7d71c9ab56a434d77f577f8c1afbfbeffd92efd0e6600e710692b5ad60d84a9",
+      "sourceBytes": 440544,
+      "output": "imported/starmap/Unused/SE_ShowOrbitals.wav",
+      "sha256": "47d129dffeec7504471ae02e1a649cf4638afd9ce6ae5cd5c7beb62fb9eb30b6",
+      "bytes": 439852,
+      "decodedPcmSha256": "1696c0af30de673a9217fc6b90e86f56bb41f8b4364362dba755a881c4a0ff04",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_ShowOrbitals.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_StartGalaxyAmbiance_LOOP",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_StartGalaxyAmbiance_LOOP.wav",
+      "sourceSha256": "2153807b266629dde33a2a0655f65b8212f38e5b6020e7a772a85a0b5e653ee5",
+      "sourceBytes": 882736,
+      "output": "imported/starmap/Unused/SE_StartGalaxyAmbiance_LOOP.wav",
+      "sha256": "2b639c86c55cede4c8c165fa8e9f63706723149feaee4b4a8668302ae8350969",
+      "bytes": 882044,
+      "decodedPcmSha256": "ca4e429287c04034526086e163133202eead24b665d6df4baa3222b75bd16aa1",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_StartGalaxyAmbiance_LOOP.mp3"
+      ]
+    },
+    {
+      "name": "Unused-SE_UpdateHeatmap",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/SE_UpdateHeatmap.wav",
+      "sourceSha256": "cd8fc3bb495807f1957213f438bfab5a458c920ec6f4d30613308bf2aac8eeb5",
+      "sourceBytes": 36016,
+      "output": "imported/starmap/Unused/SE_UpdateHeatmap.wav",
+      "sha256": "d8209dc859e879b2d37e0adc3fa41764f39f6b857b8c5f4f6a0c7d3be2db1240",
+      "bytes": 35324,
+      "decodedPcmSha256": "355786d2d225ef342bd38fce841159c00651e64d5536eb0f41e37093702f9af7",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/SE_UpdateHeatmap.mp3"
+      ]
+    },
+    {
+      "name": "Unused-UI_BB_RoutingRouteFound",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/UI_BB_RoutingRouteFound.wav",
+      "sourceSha256": "9c4c00e25577787dda7c6e271e880eb8079eeb01237be942785b83f4802a64c7",
+      "sourceBytes": 6616,
+      "output": "imported/starmap/Unused/UI_BB_RoutingRouteFound.wav",
+      "sha256": "5d1e600b1b508dbb49e9045af8d93abcc3617d07b8da1f7e08a32299a79faf7c",
+      "bytes": 5924,
+      "decodedPcmSha256": "f245942364afb415ea6ad18219deb50faf117504c6e6a0bde047d23b12ff6431",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/UI_BB_RoutingRouteFound.mp3"
+      ]
+    },
+    {
+      "name": "Unused-UI_BB_RoutingSearchForRoute",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/UI_BB_RoutingSearchForRoute.wav",
+      "sourceSha256": "589ebaf3d01142a34ae1e32f2cb79eaa17beef182ceee590afc3bdebeedd51e4",
+      "sourceBytes": 6616,
+      "output": "imported/starmap/Unused/UI_BB_RoutingSearchForRoute.wav",
+      "sha256": "5d1e600b1b508dbb49e9045af8d93abcc3617d07b8da1f7e08a32299a79faf7c",
+      "bytes": 5924,
+      "decodedPcmSha256": "f245942364afb415ea6ad18219deb50faf117504c6e6a0bde047d23b12ff6431",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/UI_BB_RoutingSearchForRoute.mp3"
+      ]
+    },
+    {
+      "name": "Unused-UI_DiscToggleActivate",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/UI_DiscToggleActivate.wav",
+      "sourceSha256": "5e41bb86ccdb02d76fde717c7bc0a994a26e99c18b17a1d893842e86043068cb",
+      "sourceBytes": 206536,
+      "output": "imported/starmap/Unused/UI_DiscToggleActivate.wav",
+      "sha256": "2db14047f39c1870f7dde88b2116dd22620aed21518b99c9e1dd009f91ae6444",
+      "bytes": 205844,
+      "decodedPcmSha256": "48ff6776031834d48afabd5cbf44e1fa06bc3c8a2c0a4587c7730e84f344a03a",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/UI_DiscToggleActivate.mp3"
+      ]
+    },
+    {
+      "name": "Unused-UI_DiscToggleDeactivate",
+      "origin": "user-provided-third-party-starmap",
+      "sourceCollection": "ARK_Starmap/Assets/Sounds",
+      "sourceFilename": "Unused/UI_DiscToggleDeactivate.wav",
+      "sourceSha256": "34864da3bf5e0dd1f34a271a06e4df5e4e409d8587fb5a8c48b343dac5065480",
+      "sourceBytes": 177136,
+      "output": "imported/starmap/Unused/UI_DiscToggleDeactivate.wav",
+      "sha256": "9ab051c2c04f3133bd41dc4d78517beb3dfb6fad12c5bb20e25bd376f1c82240",
+      "bytes": 176444,
+      "decodedPcmSha256": "cb141a5da72ab122d14737999c5199fa62fd47619de5aa50128c7024ff246d75",
+      "status": "metadata-stripped-pcm-identical",
+      "apiRequestPerformed": false,
+      "promptProvided": false,
+      "derivedOutputs": [
+        "web/public/audio/catalog/starmap/Unused/UI_DiscToggleDeactivate.mp3"
+      ]
     }
   ],
-  "supersededZoomAssets": {
-    "metadata": "drafts/technical-zoom/generation.json",
-    "source": "drafts/technical-zoom/source/",
-    "web": "drafts/technical-zoom/web/"
-  }
+  "importCatalog": "imported/starmap/catalog.json",
+  "previousEffects": "drafts/pre-starmap/generation.json",
+  "provenance": "Supplied third-party recordings; conversion and technical metadata stripping are not original authorship or license clearance. AmbientMusic.ogg and Unity .meta files were not imported."
 }

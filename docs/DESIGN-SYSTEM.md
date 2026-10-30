@@ -22,6 +22,8 @@ Application tokens live in `web/src/styles/hud.css`; reusable Panel, Button, Dia
 
 Use Barlow for readable interface typography, reserving uppercase/tracking for short labels. Keep body copy comfortable, localizable and responsive. Preserve semantic buttons/dialogs, visible keyboard focus, meaningful labels, contrast and sufficiently large targets. Clip decorative layers rather than content or focus rings. Reduced-motion mode removes unnecessary movement; selection and status must remain understandable without animation, glow or color alone. Use the existing i18n system for English and Portuguese content.
 
+Binary settings use the shared `Switch` with a visible label and explicit checked state. The sci-fi appearance has a square track and chamfered thumb, a 44-pixel interaction target and an unclipped focus outline. Music and effects have independent switches and volume controls; playback follows the [audio contract](UNIVERSE-AUDIO.md#playback-contract), without a separate Resume action on each visit.
+
 ## 3D destination feedback
 
 Every galaxy, cloud, system, central star and planet uses its own stable native-highlight callback. Hover brightens existing cores, particles, mini planets, globes and rings; it adds no circular overlay, hover-only aura, Sprite or geometry. Orbit lines and the outer background are excluded. Textured planets receive a restrained emissive cue that preserves their surface map and base hue, including the 100-color palette. Leaving or cancelling hover restores the exact material baselines. Dragging, menus, flight, tours and camera/view transitions suppress transient hover feedback.

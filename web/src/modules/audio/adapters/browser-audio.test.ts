@@ -12,6 +12,8 @@ function browser(t: TestContext) {
   let disconnects = 0;
   const contexts: Context[] = [];
   const players: Player[] = [];
+  const effectSources: { starts: number[]; stops: number[]; onended: (() => void) | null }[] = [];
+  const ramps: { value: number; at: number }[] = [];
   class Player extends EventTarget {
     preload = "";
     loop = false;
@@ -34,15 +36,24 @@ function browser(t: TestContext) {
     resume() { return resume().then(() => { this.state = "running"; this.dispatchEvent(new Event("statechange")); }); }
     suspend() { this.state = "suspended"; this.dispatchEvent(new Event("statechange")); return Promise.resolve(); }
     close() { this.state = "closed"; return Promise.resolve(); }
-    createGain() { return { ...node(), gain: { setTargetAtTime(value: number) { gains.push(value); } } }; }
+    createGain() { return { ...node(), gain: { value: 1, setTargetAtTime(value: number) { gains.push(value); }, cancelScheduledValues() {}, setValueAtTime(value: number) { this.value = value; }, linearRampToValueAtTime(value: number, at: number) { ramps.push({ value, at }); } } }; }
     createMediaElementSource(player: Player) { assert.ok(players.includes(player)); return node(); }
+    decodeAudioData() { return Promise.resolve({ duration: 0.6065, numberOfChannels: 2 }); }
+    createBufferSource() {
+      const source = { ...node(), buffer: null, starts: [] as number[], stops: [] as number[], onended: null as (() => void) | null,
+        start(at = 0) { source.starts.push(at); },
+        stop: (at = 0) => { source.stops.push(at); if (at <= this.currentTime) source.onended?.(); },
+      };
+      effectSources.push(source);
+      return source;
+    }
   }
   for (const [key, value] of [["window", { AudioContext: Context }], ["Audio", Player]] as const) {
     const original = Object.getOwnPropertyDescriptor(globalThis, key);
     Object.defineProperty(globalThis, key, { configurable: true, writable: true, value });
     t.after(() => { if (original) Object.defineProperty(globalThis, key, original); else Reflect.deleteProperty(globalThis, key); });
   }
-  return { gains, contexts, players, disconnects: () => disconnects, playWith(operation: () => Promise<void>) { play = operation; }, resumeWith(operation: () => Promise<void>) { resume = operation; } };
+  return { gains, contexts, players, effectSources, ramps, disconnects: () => disconnects, playWith(operation: () => Promise<void>) { play = operation; }, resumeWith(operation: () => Promise<void>) { resume = operation; } };
 }
 
 test("music stays a lazy streamed loop and volume uses gain instead of media volume", async (t) => {
@@ -103,5 +114,52 @@ test("aborting an effects activation clears its pending deadline", async (t) => 
   const rejected = assert.rejects(effects.resume(abort.signal), (error: unknown) => error instanceof DOMException && error.name === "AbortError");
   abort.abort(); await rejected;
   effects.dispose(); t.mock.timers.tick(30_000); await flush();
+  assert.equal(fake.contexts[0].state, "closed");
+});
+
+test("a suspended activation deadline remains recoverable by a later real gesture", async (t) => {
+  const fake = browser(t); fake.resumeWith(pending); t.mock.timers.enable({ apis: ["setTimeout"] });
+  const effects = createBrowserAudioPorts().createEffects(() => {});
+  const rejected = assert.rejects(effects.resume(new AbortController().signal), (error: unknown) => error instanceof DOMException && error.name === "NotAllowedError");
+  t.mock.timers.tick(15_000); await rejected;
+  fake.resumeWith(() => Promise.resolve());
+  await effects.resume(new AbortController().signal);
+  assert.equal(effects.isRunning(), true);
+  effects.dispose();
+});
+
+test("a stalled media load with an already running context remains a load failure", async (t) => {
+  const fake = browser(t); fake.playWith(pending); t.mock.timers.enable({ apis: ["setTimeout"] });
+  const music = createBrowserAudioPorts().createMusic({ paused() {}, failed() {} });
+  const rejected = assert.rejects(music.play(), (error: unknown) => error instanceof Error && error.name !== "NotAllowedError" && error.message.includes("timed out"));
+  await flush();
+  assert.equal(fake.contexts[0].state, "running");
+  t.mock.timers.tick(15_000); await rejected;
+  assert.equal(fake.players[0].paused, true);
+  music.dispose();
+});
+
+test("zoom handoff fades the old voice and schedules its replacement without retaining tails after suspend", async (t) => {
+  const fake = browser(t);
+  t.mock.method(globalThis, "fetch", async () => new Response(new ArrayBuffer(8), { status: 200 }));
+  const effects = createBrowserAudioPorts().createEffects(() => {});
+  const signal = new AbortController().signal;
+  await effects.resume(signal); await effects.load(signal);
+  let firstEnded = 0; let secondEnded = 0;
+  const first = effects.play("zoom-in", () => firstEnded++);
+  first.stop(0.008);
+  effects.play("zoom-out", () => secondEnded++, 0.008);
+  assert.deepEqual(fake.ramps, [{ value: 0, at: 0.008 }]);
+  assert.deepEqual(fake.effectSources[0].stops, [0.008]);
+  assert.deepEqual(fake.effectSources[1].starts, [0.008]);
+  assert.equal(firstEnded, 0, "the replacement takes over after the original's short fade");
+  await effects.suspend();
+  assert.deepEqual(fake.effectSources[0].stops, [0.008, 0]);
+  assert.deepEqual(fake.effectSources[1].stops, [0]);
+  assert.equal(firstEnded, 1); assert.equal(secondEnded, 1);
+  const disconnects = fake.disconnects();
+  fake.effectSources[0].onended?.(); fake.effectSources[1].onended?.();
+  assert.equal(fake.disconnects(), disconnects, "late callbacks cannot clean up a newer voice or disconnect twice");
+  effects.dispose();
   assert.equal(fake.contexts[0].state, "closed");
 });
