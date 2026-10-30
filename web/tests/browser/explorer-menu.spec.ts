@@ -11,7 +11,7 @@ for (const locale of ["en", "pt-BR"] as const) {
       contentType: "text/html",
       body: "<!doctype html><title>Documentation</title><h1>Velrino UI</h1>",
     }));
-    await page.goto(`/?lang=${locale}`);
+    await page.goto(`/?lang=${locale}&check=inline-language#explorer-menu`);
     const canvas = await page.locator("canvas").elementHandle();
     expect(canvas).not.toBeNull();
     const menuName = locale === "en" ? "Explorer menu" : "Menu do explorador";
@@ -31,6 +31,23 @@ for (const locale of ["en", "pt-BR"] as const) {
     const settings = dialog.getByRole("tab", { name: tabs[1], exact: true });
     await settings.click();
     await expect(settings).toHaveAttribute("aria-selected", "true");
+    const english = dialog.getByRole("button", { name: "English", exact: true });
+    const portuguese = dialog.getByRole("button", { name: "Português (Brasil)", exact: true });
+    await expect(english).toBeVisible();
+    await expect(portuguese).toBeVisible();
+    await expect(locale === "en" ? english : portuguese).toHaveAttribute("aria-pressed", "true");
+    await (locale === "en" ? portuguese : english).click();
+    const alternate = locale === "en" ? "pt-BR" : "en";
+    await expect(page).toHaveURL((url) => url.searchParams.get("lang") === alternate && url.searchParams.get("check") === "inline-language" && url.hash === "#explorer-menu");
+    await expect(page.getByRole("dialog")).toHaveCount(1);
+    await expect(dialog.getByRole("tab", { name: locale === "en" ? "Configurações" : "Settings", exact: true })).toHaveAttribute("aria-selected", "true");
+    await expect(locale === "en" ? portuguese : english).toHaveAttribute("aria-pressed", "true");
+    expect(await canvas!.evaluate((element) => element.isConnected)).toBe(true);
+    await (locale === "en" ? english : portuguese).click();
+    await expect(page).toHaveURL((url) => url.searchParams.get("lang") === locale && url.searchParams.get("check") === "inline-language" && url.hash === "#explorer-menu");
+    await expect(locale === "en" ? english : portuguese).toHaveAttribute("aria-pressed", "true");
+    await expect(settings).toHaveAttribute("aria-selected", "true");
+    await expect(page.getByRole("dialog")).toHaveCount(1);
     const link = dialog.locator(`a[href^="${docs}"]`);
     const target = new URL((await link.getAttribute("href"))!);
     expect(target.searchParams.get("lang")).toBe(locale);

@@ -5,8 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useSyncExternalStore } from "r
 import { DesignSystemLink } from "@/modules/design-system";
 import { BrandLogo } from "@/components/brand-logo";
 import { useApplicationIntroReady } from "@/components/application-intro";
-import { LanguageSelector } from "@/i18n/language-selector";
-import { useI18n, useTranslations } from "@/i18n";
+import { InlineLanguageSelector, useI18n, useTranslations } from "@/i18n";
 import { AudioControls, useAudio } from "@/modules/audio";
 import { UniverseRoot, type UniverseAdapters, type UniverseAudio, type UniverseCatalog, type UniverseManagement, type UniverseTourDefinition } from "@/modules/universe";
 import { captureClientException } from "@/lib/telemetry/client";
@@ -62,6 +61,6 @@ export function UniverseHost({ catalog, tour, management, source }: { catalog: U
   }), [playCue]);
   const presentationReady = useApplicationIntroReady();
   const reducedMotion = useSyncExternalStore(subscribeMotion, getReducedMotion, () => true);
-  const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, tour, management, audio, location, presentationReady, autoTour: camera.state.ready && !camera.state.suppressAutoTour && !reducedMotion, formatNumber: format.number, components: { Scene: ObservedScene, BrandLogo, LanguagePicker: LanguageSelector, DesignLink: DesignSystemLink } }), [catalog, copy, tour, management, audio, location, presentationReady, camera.state.ready, camera.state.suppressAutoTour, reducedMotion, format.number]);
+  const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, tour, management, audio, location, presentationReady, autoTour: camera.state.ready && !camera.state.suppressAutoTour && !reducedMotion, formatNumber: format.number, components: { Scene: ObservedScene, BrandLogo, LanguagePicker: InlineLanguageSelector, DesignLink: DesignSystemLink } }), [catalog, copy, tour, management, audio, location, presentationReady, camera.state.ready, camera.state.suppressAutoTour, reducedMotion, format.number]);
   return <CameraLocationContext value={{ ...camera, source }}><UniverseRoot adapters={adapters} /></CameraLocationContext>;
 }
