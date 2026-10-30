@@ -1,0 +1,152 @@
+{
+  "status": "local-preview-awaiting-user-listening-validation",
+  "musicTitle": "Open Skies",
+  "loopEdit": {
+    "sourceSeconds": 96,
+    "crossfadeSeconds": 6,
+    "processedSeconds": 90,
+    "method": "Equal-power wrap crossfade; original seconds6..90 followed by tail90..96 crossfaded with head0..6. MP3 derived from the processed FLAC, which is an edit of the generated MP3, not a lossless generation source."
+  },
+  "processing": [
+    "Music constant gain from measured integrated loudness, target -22LUFS / peak ceiling -4dBTP (no time-varying normalization across the seam); stereo44.1kHz96kbps MP3.",
+    "Menu/select SFX target mean level -25dBFS with peak headroom cap -9dBFS beforeMP3; integratedLUFS unavailable for0.35sclips; trimmed to0.35s, filtered110Hz–6.5kHz and short endpoint fades; mono44.1kHz64kbps MP3.",
+    "Zoom cues use the entire 0.6065s user-provided cinematic camera clip in both directions, with constant -5dB gain, 4ms start and 8ms end fades; stereo 44.1kHz 96kbps MP3. No trim, pitch change or reversal. Source and web loudness measured separately; MP3 container duration includes encoder padding, while durationSeconds measures a complete sequential decode."
+  ],
+  "files": [
+    {
+      "path": "assets/audio/masters/open-skies-loop.flac",
+      "sha256": "2dabe2b7f81f3180ed0fd969fb8667f89fee473af138d4e822cd4aab47d327a8",
+      "durationSeconds": 90.0,
+      "bytes": 4279124,
+      "sampleRate": 44100,
+      "channels": 2,
+      "integratedLufs": "-22.00",
+      "truePeakDbtp": "-10.18",
+      "meanDbfs": -23.3,
+      "peakDbfs": -10.2
+    },
+    {
+      "path": "web/public/audio/music/open-skies-loop.mp3",
+      "sha256": "7b68eadecec4f310bace2595e8010439712edf314bb00b356973e53b35c7d447",
+      "durationSeconds": 90.0,
+      "bytes": 1080961,
+      "sampleRate": 44100,
+      "channels": 2,
+      "integratedLufs": "-22.44",
+      "truePeakDbtp": "-10.55",
+      "meanDbfs": -23.8,
+      "peakDbfs": -10.6
+    },
+    {
+      "path": "web/public/audio/sfx/menu-close.mp3",
+      "sha256": "f6bc91dd932a0bbe4e886ef39c1bf68613e018f6ab15806c49efd535e25e504a",
+      "durationSeconds": 0.35,
+      "bytes": 3386,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": null,
+      "truePeakDbtp": "-8.01",
+      "meanDbfs": -31.3,
+      "peakDbfs": -8.4
+    },
+    {
+      "path": "web/public/audio/sfx/menu-open.mp3",
+      "sha256": "c7beaa0f78f80f323e67e0b41f640e22e1fab446415ac181fe0631768b22270f",
+      "durationSeconds": 0.35,
+      "bytes": 3386,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": null,
+      "truePeakDbtp": "-12.45",
+      "meanDbfs": -29.6,
+      "peakDbfs": -12.7
+    },
+    {
+      "path": "web/public/audio/sfx/ui-select.mp3",
+      "sha256": "f4198cffd7857b6f3bd79bb134c34205132ec83f7d949bad7d671a351b2f35f2",
+      "durationSeconds": 0.35,
+      "bytes": 3386,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": null,
+      "truePeakDbtp": "-8.07",
+      "meanDbfs": -22.6,
+      "peakDbfs": -8.1
+    },
+    {
+      "path": "assets/audio/source/user-zoom-cinematic.mp3",
+      "sha256": "56e793aff1f6d6fdfcb5b85d89dd890ae0d43884771c4fc87294f5cb4265e349",
+      "durationSeconds": 0.6065,
+      "encodedDurationSeconds": 0.6065,
+      "bytes": 16173,
+      "sampleRate": 48000,
+      "channels": 2,
+      "integratedLufs": -15.3,
+      "truePeakDbtp": -4.1,
+      "meanDbfs": -21.4,
+      "peakDbfs": -4.2
+    },
+    {
+      "path": "web/public/audio/sfx/zoom-in.mp3",
+      "sha256": "35d57aa745a466a6e4ff5a4c48650d9ca71f94b6dc26a32f032fbee03f436be2",
+      "durationSeconds": 0.606508,
+      "encodedDurationSeconds": 0.606508,
+      "bytes": 8194,
+      "sampleRate": 44100,
+      "channels": 2,
+      "integratedLufs": -20.6,
+      "truePeakDbtp": -8.8,
+      "meanDbfs": -26.7,
+      "peakDbfs": -9.1
+    },
+    {
+      "path": "web/public/audio/sfx/zoom-out.mp3",
+      "sha256": "35d57aa745a466a6e4ff5a4c48650d9ca71f94b6dc26a32f032fbee03f436be2",
+      "durationSeconds": 0.606508,
+      "encodedDurationSeconds": 0.606508,
+      "bytes": 8194,
+      "sampleRate": 44100,
+      "channels": 2,
+      "integratedLufs": -20.6,
+      "truePeakDbtp": -8.8,
+      "meanDbfs": -26.7,
+      "peakDbfs": -9.1
+    }
+  ],
+  "listeningApproval": null,
+  "physicalDeviceValidation": null,
+  "licenseReview": "Generated assets and user-provided audio are local previews. Provider terms, account-use rights and the supplied recording rights are not established by these technical checks; publication review remains pending.",
+  "technicalLoopBoundary": {
+    "checks": [
+      {
+        "path": "assets/audio/masters/open-skies-loop.flac",
+        "decodedFrames": 3969000,
+        "boundaryStepPerChannel": [
+          0.000274658203125,
+          0.000244140625
+        ],
+        "maxAdjacentStepNearBoundary": 0.00787353515625,
+        "headTailRmsDifferenceDb": 0.8524533970746504
+      },
+      {
+        "path": "web/public/audio/music/open-skies-loop.mp3",
+        "decodedFrames": 3969000,
+        "boundaryStepPerChannel": [
+          0.0009068213403224945,
+          0.004131034016609192
+        ],
+        "maxAdjacentStepNearBoundary": 0.012003153562545776,
+        "headTailRmsDifferenceDb": 0.8758409349610218
+      }
+    ],
+    "method": "Full sequential decode before sample continuity check, preserving MP3 reservoir/encoder delay. Numerical check only; repeated listening approval remains pending. Constant gain avoids changing the level across the seam."
+  },
+  "soundDesign": "technical-aerospace-v1 menus/select; user-provided cinematic camera assembly/zoom for both zoom cues. One shared zoom voice prevents overlapping zoom effects.",
+  "musicUnchangedFrom": "drafts/open-skies-bloop/manifest.json (identical music hash)",
+  "zoomSource": {
+    "origin": "user-provided",
+    "metadata": "assets/audio/generation.json#imports",
+    "originalPreserved": true,
+    "previousAssets": "assets/audio/drafts/technical-zoom/"
+  }
+}

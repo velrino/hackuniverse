@@ -60,7 +60,7 @@ const en = {
   close: "Close",
   menu: "Explorer menu",
   menuTitle: "Mission controls",
-  menuDescription: "Make this space your own.",
+  menuDescription: "Explore, shape your journey and meet the creator.",
   design: "Design system",
   guide: "Navigation guide",
   guideDesktop: "Drag to orbit · Scroll to zoom · Select a planet to explore",
@@ -71,7 +71,18 @@ const en = {
   fallbackDescription: "3D is unavailable on this device. Every planet is still accessible through the atlas.",
   canvas: "Interactive three-dimensional universe. Drag to orbit, pinch or scroll to zoom. The atlas provides an accessible alternative.",
   universeHome: "Return to the starting view",
-  tabs: { atlas: "Atlas", view: "View", controls: "Controls", settings: "Settings" },
+  tabs: { goTo: "Go to", settings: "Settings", about: "About" },
+  menuGroups: { workspace: "Workspace and data", view: "View and tour", flight: "Spaceship", language: "Language", resources: "Resources" },
+  about: {
+    credit: "Created by",
+    author: "Denis Velrino",
+    intro: "HackUniverse is a space for turning discoveries into worlds. Organize your own planets, star systems and galaxies, then explore them in 3D.",
+    source: "HackUniverse on GitHub",
+    sourceDescription: "Explore the source code, issues and project roadmap.",
+    githubDescription: "Discover more projects by Velrino.",
+    linkedinDescription: "Connect with Denis Velrino.",
+    credits: "Spacecraft credits",
+  },
   enterFlight: "Pilot spaceship",
   exitFlight: "Return to map",
   flightHint: "Explore this system from a third-person chase camera. Flight is optional.",
@@ -94,6 +105,17 @@ const en = {
   currentLocation: "Current location",
   guideShip: "Guide ship here",
   cancelGuidance: "Cancel guidance",
+  cameraLink: {
+    "title": "Share this view",
+    "action": "Copy view link",
+    "copied": "View link copied.",
+    "failed": "The link could not be copied. Select and copy it below.",
+    "invalid": "This camera link is invalid. The default view is available.",
+    "unavailable": "This destination or source is unavailable here. Browser-local objects require the same imported workspace on the other device.",
+    "local": "This link includes the destination and camera only. Browser-local objects are not uploaded; import their workspace on the other device first.",
+    "hint": "Share the current destination and camera. No account or workspace data is included.",
+    "field": "View link"
+  },
 };
 
 export default en;

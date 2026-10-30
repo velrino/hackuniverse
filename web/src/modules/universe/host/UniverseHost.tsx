@@ -1,25 +1,45 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useMemo, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import { DesignSystemLink } from "@/modules/design-system";
 import { BrandLogo } from "@/components/brand-logo";
 import { useApplicationIntroReady } from "@/components/application-intro";
 import { LanguageSelector } from "@/i18n/language-selector";
 import { useI18n, useTranslations } from "@/i18n";
-import { UniverseRoot, type UniverseAdapters, type UniverseCatalog, type UniverseTourDefinition } from "@/modules/universe";
+import { AudioControls, useAudio } from "@/modules/audio";
+import { UniverseRoot, type UniverseAdapters, type UniverseAudio, type UniverseCatalog, type UniverseManagement, type UniverseTourDefinition } from "@/modules/universe";
 import { captureClientException } from "@/lib/telemetry/client";
 import type { UniverseSceneProps } from "../scene";
+import type { CameraLinkSource, UniverseCameraPose } from "../domain/camera-link";
+import type { NavigationTarget } from "../domain/types";
+import { CameraLocationContext, CameraLinkStatus, CameraShareControls, useCameraLocation, useCameraLocationContext } from "./use-camera-location";
 
 const Scene = dynamic(() => import("../scene").then((module) => module.UniverseScene), { ssr: false });
 
 function ObservedScene(props: UniverseSceneProps) {
+  const location = useCameraLocationContext();
+  const controller = location?.controller;
+  const target = useRef<NavigationTarget | null>(null);
+  useEffect(() => {
+    target.current = props.selectedId ? { kind: "planet", id: props.selectedId } : props.view.anchor ? { kind: props.view.anchor.kind, id: props.view.anchor.id } : null;
+  }, [props.selectedId, props.view]);
+  const attachCamera = useCallback((reader: (() => UniverseCameraPose | null) | null) => {
+    controller?.attach(reader ? () => {
+      const pose = reader();
+      return pose && target.current ? { target: target.current, pose } : null;
+    } : null);
+  }, [controller]);
+  const cameraChanged = useCallback<NonNullable<UniverseSceneProps["onCameraChange"]>>((pose, reason) => {
+    if (target.current) controller?.capture({ target: target.current, pose }, reason);
+  }, [controller]);
+  const cameraRestored = useCallback((token: string, success: boolean) => controller?.restored(token, success), [controller]);
   const { onError } = props;
   const reportError = useCallback<NonNullable<UniverseSceneProps["onError"]>>((error, operation) => {
     try { captureClientException(error, { source: "universe-scene", operation }); }
     finally { onError?.(error, operation); }
   }, [onError]);
-  return <Scene {...props} onError={reportError} />;
+  return <Scene {...props} onError={reportError} cameraRestore={location?.state.restore} onCameraChange={cameraChanged} onCameraRestored={cameraRestored} onCameraReader={attachCamera} />;
 }
 const motionQuery = "(prefers-reduced-motion: reduce)";
 function subscribeMotion(change: () => void) {
@@ -29,11 +49,19 @@ function subscribeMotion(change: () => void) {
 }
 const getReducedMotion = () => window.matchMedia(motionQuery).matches;
 
-export function UniverseHost({ catalog, tour }: { catalog: UniverseCatalog; tour?: UniverseTourDefinition }) {
+export function UniverseHost({ catalog, tour, management, source }: { catalog: UniverseCatalog; tour?: UniverseTourDefinition; management?: UniverseManagement; source?: CameraLinkSource }) {
   const copy = useTranslations("universe");
   const { format } = useI18n();
+  const { playCue } = useAudio();
+  const camera = useCameraLocation(catalog, source);
+  const location = useMemo(() => ({ navigationRequest: camera.state.navigationRequest, Controls: CameraShareControls, Status: CameraLinkStatus }), [camera.state.navigationRequest]);
+  const audio = useMemo<UniverseAudio>(() => ({
+    onZoomIntent: (direction) => playCue(direction === "in" ? "zoom-in" : "zoom-out"),
+    onMenuOpenChange: (open) => playCue(open ? "menu-open" : "menu-close"),
+    Controls: AudioControls,
+  }), [playCue]);
   const presentationReady = useApplicationIntroReady();
   const reducedMotion = useSyncExternalStore(subscribeMotion, getReducedMotion, () => true);
-  const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, tour, presentationReady, autoTour: !reducedMotion, formatNumber: format.number, components: { Scene: ObservedScene, BrandLogo, LanguagePicker: LanguageSelector, DesignLink: DesignSystemLink } }), [catalog, copy, tour, presentationReady, reducedMotion, format.number]);
-  return <UniverseRoot adapters={adapters} />;
+  const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, tour, management, audio, location, presentationReady, autoTour: camera.state.ready && !camera.state.suppressAutoTour && !reducedMotion, formatNumber: format.number, components: { Scene: ObservedScene, BrandLogo, LanguagePicker: LanguageSelector, DesignLink: DesignSystemLink } }), [catalog, copy, tour, management, audio, location, presentationReady, camera.state.ready, camera.state.suppressAutoTour, reducedMotion, format.number]);
+  return <CameraLocationContext value={{ ...camera, source }}><UniverseRoot adapters={adapters} /></CameraLocationContext>;
 }

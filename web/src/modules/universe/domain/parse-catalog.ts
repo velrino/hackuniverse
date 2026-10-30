@@ -1,11 +1,9 @@
 import type { CatalogReference, EntityKind, NavigationTarget, SystemStar, UniverseCatalog, UniverseEntity, UniversePlanet } from "./types";
+import { entityHierarchy, getParentKind } from "./hierarchy";
 
 type InputRecord = Record<string, unknown>;
-const kinds = new Set<EntityKind>(["universe", "galaxy", "cloud", "system", "planet"]);
+const kinds = new Set<EntityKind>(entityHierarchy);
 const controls = /[\u0000-\u001f\u007f-\u009f]/u;
-const parentKinds: Record<Exclude<EntityKind, "universe">, EntityKind> = {
-  galaxy: "universe", cloud: "galaxy", system: "cloud", planet: "system",
-};
 
 function invalid(message: string): never {
   throw new Error(`Invalid universe catalog: ${message}`);
@@ -138,7 +136,7 @@ export function parseUniverseCatalog(input: unknown): UniverseCatalog {
     invalid("rootId must identify the only root universe, with no parent");
   }
   for (const item of entities) {
-    if (item.kind !== "universe" && (item.parentId === null || byId.get(item.parentId)?.kind !== parentKinds[item.kind])) {
+    if (item.kind !== "universe" && (item.parentId === null || byId.get(item.parentId)?.kind !== getParentKind(item.kind))) {
       invalid("each entity must resolve to its required parent kind");
     }
   }

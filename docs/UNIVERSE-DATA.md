@@ -81,7 +81,9 @@ References and tags can also be omitted entirely. Planet details use the canonic
 
 ## Default source and host composition
 
-The [default catalog adapter](../web/src/modules/universe/adapters/catalog/index.ts) imports the canonical demo JSON and parses it once. `DemoUniverseHost` selects that dataset for `/`; the reusable `UniverseHost` requires an already validated `catalog` prop and does not choose a supplier or import the fixture itself. Both hosts are available through `@/modules/universe/host`.
+The [default catalog adapter](../web/src/modules/universe/adapters/catalog/index.ts) imports the canonical demo JSON and parses it once. `DemoUniverseHost` supplies that dataset and its optional tour to `UniverseWorkspaceHost` for `/`. The workspace host chooses immutable Demo or editable Local data; Account currently opens only a login preview. The reusable `UniverseHost` requires an already validated `catalog` prop and does not choose a supplier or import the fixture itself. The universe hosts are available through `@/modules/universe/host`; import the workspace host through `@/modules/universe-workspace`.
+
+The browser workspace wraps multiple canonical single-root catalogs in its own versioned envelope, preserving this document contract and globally unique application IDs. Pure workspace operations validate the result after creation, edits and cascading deletion. Missing ancestors can be created as empty groups; demo records are never copied into a new workspace. Persistence, concurrent-tab locking, quotas and the future account boundary are documented in [the local workspace guide](LOCAL-WORKSPACE.md).
 
 The fixture contains **738 planets and 871 total entities**: 400 fictional website records, eight Solar System planets, 50 illustrative bodies around ten real-named neighbors and 280 URLless fictional bodies in seven added demo sectors. It has one universe, five galaxies, twenty clouds and 107 systems. The original four fictional galaxies retain 100 planets each across ten systems whose sizes are a permutation of `20, 15, 12, 10, 10, 8, 8, 6, 6, 5`. The initial target remains `{ kind: "planet", id: "planet-earth" }`. These are current data values, not runtime quotas.
 
@@ -128,3 +130,5 @@ Interface localization does not translate or rewrite catalog content, labels, ta
 ## Validation
 
 From `web/`, run `npm run test:catalog`. Native Node tests cover canonical and supplier boundaries, URLless/empty catalogs, hierarchy and input failures, safe projection, immutability, derived identity, adapter conversion and projection isolation. The runner compiles tests with the existing TypeScript dependency into ignored `.catalog-tests/` output. Fixture parity was also checked against the pre-migration 400-record dataset; no duplicate legacy fixture is committed. `npm run test:scene` separately checks tour continuity, distance bounds and shared orbital motion.
+
+`npm run test:workspace` separately checks local CRUD, the multi-universe envelope, persistence limits, conflicting snapshots and write-lock behavior; see [workspace validation](LOCAL-WORKSPACE.md#validation-and-roadmap).

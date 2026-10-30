@@ -1,0 +1,89 @@
+{
+  "status": "local-preview-awaiting-user-listening-validation",
+  "musicTitle": "Stellar Temple",
+  "loopEdit": {
+    "sourceSeconds": 96,
+    "crossfadeSeconds": 6,
+    "processedSeconds": 90,
+    "method": "Equal-power wrap crossfade; original seconds6..90 followed by tail90..96 crossfaded with head0..6. MP3 derived from the processed FLAC, which is an edit of the generated MP3, not a lossless generation source."
+  },
+  "processing": [
+    "Music EBU loudness target -22LUFS / true peak -4dBTP; stereo44.1kHz96kbps MP3.",
+    "SFX EBU loudness target -23LUFS / true peak -5dBTP; short endpoint fades; mono44.1kHz64kbps MP3."
+  ],
+  "files": [
+    {
+      "path": "assets/audio/masters/stellar-temple-loop.flac",
+      "sha256": "2e98970f5e62087019b65d3da25f34911e06fd7a5d9fc7018c3e18eae8d48713",
+      "durationSeconds": 90.0,
+      "bytes": 3720480,
+      "sampleRate": 44100,
+      "channels": 2,
+      "integratedLufs": "-21.90",
+      "truePeakDbtp": "-7.50"
+    },
+    {
+      "path": "web/public/audio/music/stellar-temple-loop.mp3",
+      "sha256": "170e47e9347ed06724be7e3f5d5d684566b5fe0b89b3ed3b1363496c8d6c77c9",
+      "durationSeconds": 90.0,
+      "bytes": 1080965,
+      "sampleRate": 44100,
+      "channels": 2,
+      "integratedLufs": "-22.35",
+      "truePeakDbtp": "-7.99"
+    },
+    {
+      "path": "web/public/audio/sfx/menu-close.mp3",
+      "sha256": "8d4bcfaa0c3d1f8539adb5a1f246ae9990d20a844a3a7edd97f512964aef9405",
+      "durationSeconds": 0.680249,
+      "bytes": 6103,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": "-23.59",
+      "truePeakDbtp": "-11.51"
+    },
+    {
+      "path": "web/public/audio/sfx/menu-open.mp3",
+      "sha256": "f1cc83e3b3c9a2e75a025ed44171763ee8354308311b7a3bdd95416cccdd0eae",
+      "durationSeconds": 0.8,
+      "bytes": 6939,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": "-25.58",
+      "truePeakDbtp": "-11.27"
+    },
+    {
+      "path": "web/public/audio/sfx/ui-select.mp3",
+      "sha256": "a86e3961d95164420ac8e78ab92fbdec27975eb54fb7b0ef40432f221a3fb057",
+      "durationSeconds": 0.48,
+      "bytes": 4431,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": "-23.85",
+      "truePeakDbtp": "-13.25"
+    },
+    {
+      "path": "web/public/audio/sfx/zoom-in.mp3",
+      "sha256": "ebb2191a98eed09fa52e924eee344ca5bbf90f4bf2f64dccf2600b3df1f8d087",
+      "durationSeconds": 0.64,
+      "bytes": 5685,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": "-27.70",
+      "truePeakDbtp": "-17.29"
+    },
+    {
+      "path": "web/public/audio/sfx/zoom-out.mp3",
+      "sha256": "a2fb37ccfb366bb3b70cdbd63a8701f2e522d538813098c4bfe227a145216aba",
+      "durationSeconds": 0.64,
+      "bytes": 5685,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": "-25.04",
+      "truePeakDbtp": "-15.36"
+    }
+  ],
+  "listeningApproval": null,
+  "physicalDeviceValidation": null,
+  "licenseReview": "Generation and local preview only. Provider terms and account-use rights must be reviewed before publication."
+}

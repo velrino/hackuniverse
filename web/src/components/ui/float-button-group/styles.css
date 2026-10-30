@@ -1,0 +1,8 @@
+.float-button-group { position: relative; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.float-button-group__actions { display: grid; justify-items: stretch; gap: 8px; min-width: 170px; animation: float-actions-in .16s ease-out; }
+.float-button-group__action[data-slot="button"] { justify-content: flex-start; min-height: 46px; padding-inline: 16px; border-color: var(--hud-line); background: var(--hud-surface); color: var(--hud-text); box-shadow: 0 4px 24px rgb(0 0 0 / 25%); }
+.float-button-group__trigger[data-slot="button"] { width: 54px; height: 54px; border-radius: 50%; border: 1px solid var(--hud-accent); box-shadow: 0 0 28px color-mix(in srgb, var(--hud-accent) 18%, transparent); }
+.float-button-group__trigger svg { width: 24px; height: 24px; transition: transform .15s; }
+.float-button-group__plus--open { transform: rotate(45deg); }
+@keyframes float-actions-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .float-button-group__actions { animation: none; } .float-button-group__trigger svg { transition: none; } }

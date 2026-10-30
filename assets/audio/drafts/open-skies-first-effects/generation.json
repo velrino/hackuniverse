@@ -1,0 +1,96 @@
+{
+  "generatedAt": "2026-10-30T03:55:45.472286+00:00",
+  "provider": "ElevenLabs",
+  "status": "local-preview-awaiting-user-validation",
+  "requests": [
+    {
+      "name": "open-skies-original",
+      "endpoint": "https://api.elevenlabs.io/v1/music",
+      "parameters": {
+        "prompt": "Minimalist hopeful deep space ambient, felt tempo around 65 BPM, designed as a perfectly seamless infinite loop. The beauty of exploring a vast solar system, discovering new planets and endless possibilities. Extremely sparse soundscape. Soft warm synthetic drone, gentle uplifting major-key suspended and add9 harmonies, subtle luminous atmospheric textures, occasional delicate sparkling crystal-like tones. Peaceful, optimistic, inspiring, comforting, and full of wonder. A sense of freedom, curiosity, discovery, and a bright future among the stars. Weightless and spacious, with very few sounds and plenty of breathing room. Only very slow subtle harmonic movement, absolutely no prominent melody, no rhythmic patterns, no pulse or beat, no arpeggios, no drums, no percussion, no heavy bass, no acoustic instruments, no vocals or choir. Avoid dark, melancholic, sad, lonely, ominous, mystical, temple-like, tense, or mysterious moods. Pure synthetic instrumental. Soft rounded attacks, airy but never harsh or piercing, restrained dynamics and gentle diffuse reverb. Consistent bright atmosphere throughout, no intro, no outro, no climax, no section changes, no transitions, no fade-in, no fade-out, no silence, no final cadence. Start already in the middle of the ongoing ambience. The end must return to the same harmony, timbre and energy as the beginning for continuous gapless looping. Original music without referencing or imitating named artists or existing soundtracks.",
+        "music_length_ms": 96000,
+        "model_id": "music_v2_5",
+        "force_instrumental": true
+      },
+      "output": "source/open-skies-original.mp3",
+      "status": "generated",
+      "bytes": 1536461,
+      "song-id": "ZHx3I9TS3XqWOgbIBQsQ"
+    },
+    {
+      "name": "menu-open",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "A single minimalist hopeful futuristic interface opening. One soft rounded synthetic upward shimmer with a tiny luminous major-key glass sparkle, gentle optimistic warmth and wonder, like quietly revealing a new planet in bright deep space. Extremely sparse and weightless, short attack and clean short diffuse tail. A single calm UI acknowledgment, not a musical phrase. No dark or mysterious mood, no rumble, bass, voice, drums, rhythm, alarm, harsh treble or dramatic whoosh.",
+        "duration_seconds": 0.8,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/menu-open.mp3",
+      "status": "error",
+      "httpStatus": 400,
+      "errorCode": "invalid_text_length"
+    },
+    {
+      "name": "menu-close",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "A single minimalist hopeful futuristic interface closing. One gentle descending airy synthetic shimmer that softly settles, with a warm luminous major-key resonance, comforting and optimistic, not sad or ominous. Extremely sparse and weightless, rounded attack and short clean reverb tail. One calm UI gesture only. No dark or mysterious mood, no bass, voice, drums, melody, rhythm, alarm, impact or harsh high frequencies.",
+        "duration_seconds": 0.7,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/menu-close.mp3",
+      "status": "generated",
+      "bytes": 12163,
+      "character-cost": "4"
+    },
+    {
+      "name": "ui-select",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "One very quiet minimalist hopeful space interface selection tick. A tiny rounded luminous synthetic crystal droplet, softly sparkling, warm and optimistic major-key colour. Extremely short, delicate, comforting and tactile. One single soft acknowledgment with a clean short decay, not a repeated sequence or tune. No dark or mysterious mood, no prominent melody, rhythm, bass, voice, percussion, harsh click, alarm or impact.",
+        "duration_seconds": 0.5,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/ui-select.mp3",
+      "status": "generated",
+      "bytes": 8820,
+      "character-cost": "3"
+    },
+    {
+      "name": "zoom-in",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "One brief minimalist hopeful deep-space navigation zoom inward. A very soft smooth ascending airy synthetic breath with a faint luminous major-key sparkle, like gently approaching a beautiful newly discovered planet. Peaceful, optimistic, weightless, spacious, extremely sparse. One gentle short sweep with rounded soft onset and clean decay. No dark or mysterious mood, bass, voice, choir, melody, rhythm, drums, arpeggio, alarm, laser or harsh frequencies.",
+        "duration_seconds": 0.65,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/zoom-in.mp3",
+      "status": "error",
+      "httpStatus": 400,
+      "errorCode": "invalid_text_length"
+    },
+    {
+      "name": "zoom-out",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "One brief minimalist hopeful deep-space navigation zoom outward. A very soft smooth descending airy synthetic breath opening into spaciousness, with a faint luminous major-key sparkle, like revealing the beauty and possibilities of a vast solar system. Peaceful, optimistic, comforting, weightless, extremely sparse. One gentle short sweep with rounded onset and clean decay. No sad, dark, lonely or mysterious mood, bass, voice, choir, melody, rhythm, drums, arpeggio, alarm, laser or harsh frequencies.",
+        "duration_seconds": 0.65,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/zoom-out.mp3",
+      "status": "error",
+      "httpStatus": 400,
+      "errorCode": "invalid_text_length"
+    }
+  ]
+}

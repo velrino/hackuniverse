@@ -1,0 +1,20 @@
+.workspace-host { position: relative; width: 100%; height: 100dvh; overflow: hidden; background: var(--background); }
+.workspace-float { position: absolute; z-index: 4; right: max(24px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); }
+.workspace-selection-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.workspace-selection-actions [data-slot="button"] { padding-inline: 10px; font-size: 12px; }
+.workspace-source-controls { display: grid; gap: 10px; }
+.workspace-source-controls label { color: var(--hud-text); font-size: 13px; }
+.workspace-source-controls [data-slot="select-trigger"] { width: 100%; font-size: 14px; }
+.workspace-empty { position: absolute; z-index: 2; top: 43%; left: 50%; display: grid; width: min(370px, calc(100% - 64px)); justify-items: center; gap: 18px; transform: translate(-50%, -50%); color: var(--hud-text); text-align: center; }
+.workspace-empty > svg { color: var(--hud-accent); filter: drop-shadow(0 0 16px color-mix(in srgb, var(--hud-accent) 35%, transparent)); }
+.workspace-empty h2 { font-size: clamp(26px, 5vw, 36px); font-weight: 600; line-height: 1.15; }
+.workspace-empty p { color: var(--hud-muted); font-size: 14px; line-height: 1.7; }
+.workspace-empty button { min-height: 46px; }
+.workspace-status { position: absolute; z-index: 3; bottom: max(25px, env(safe-area-inset-bottom)); left: 50%; display: flex; max-width: calc(100% - 240px); align-items: center; gap: 8px; transform: translateX(-50%); color: var(--hud-muted); text-align: center; font-size: 12px; pointer-events: none; }
+.workspace-host:has(.universe-page[data-tour-active="true"]) > .workspace-status { display: none; }
+.workspace-warning { position: absolute; z-index: 5; top: 100px; left: 50%; display: grid; width: min(430px, calc(100% - 48px)); gap: 12px; padding: 18px; transform: translateX(-50%); border: 1px solid var(--hud-line); background: var(--hud-surface); color: var(--hud-text); font-size: 13px; line-height: 1.6; }
+@media (max-width: 640px) {
+  .workspace-float { right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); }
+  .workspace-status { bottom: max(30px, env(safe-area-inset-bottom)); max-width: calc(100% - 210px); font-size: 10px; }
+  .workspace-warning { top: 112px; }
+}

@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     ".catalog-tests/**",
     ".scene-tests/**",
     ".telemetry-tests/**",
+    ".audio-tests/**",
+    ".workspace-tests/**",
     "next-env.d.ts",
   ]),
 ]);

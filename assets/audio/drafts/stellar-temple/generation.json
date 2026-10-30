@@ -1,0 +1,96 @@
+{
+  "generatedAt": "2026-10-30T03:39:35.500346+00:00",
+  "provider": "ElevenLabs",
+  "status": "local-preview-awaiting-user-validation",
+  "requests": [
+    {
+      "name": "stellar-temple-original",
+      "endpoint": "https://api.elevenlabs.io/v1/music",
+      "parameters": {
+        "prompt": "Original unobtrusive ambient sci-fi temple score for slowly exploring a vast, empty, star-filled futuristic universe. Felt pulse around 74 BPM, but completely beatless: no drums, percussion, rhythmic ostinato or bass groove. Deep warm analog synth pads evolve extremely slowly over spacious suspended minor/add9 chords. Distant airy wordless choir-like SYNTH textures, never intelligible words or solo singing. Very sparse delicate glassy plucks and occasional soft struck-crystal chime tones, long diffuse reverb tails drifting through the stereo field. Blend calm interstellar emptiness with a meditative dojo or an ancient sanctuary floating in space. Serene, weightless, mysterious and quietly wondrous, never ominous horror. Low density, restrained high frequencies, soft attacks, warm depth and a vast sense of silence between events. No lead melody, catchy hook, arpeggio, dramatic build, impact, heartbeat, spacecraft engine or sound effects. Consistent texture and loudness throughout, no section changes. Designed as a seamless continuous background loop: start already in the middle of the ambience and end in the same harmonic and spectral atmosphere. No intro, no outro, no fade-in, no fade-out, no silence, no final cadence, no ending. Entirely instrumental, no speech or lyrics. Original music, not imitating any named artist, franchise or existing soundtrack.",
+        "music_length_ms": 96000,
+        "model_id": "music_v2_5",
+        "force_instrumental": true
+      },
+      "output": "source/stellar-temple-original.mp3",
+      "status": "generated",
+      "bytes": 1536461,
+      "song-id": "weSYLXCkMaru93hCvsap"
+    },
+    {
+      "name": "menu-open",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "A single quiet futuristic holographic interface opening: soft airy upward shimmer with a tiny warm glass resonance, restrained cyan HUD feel, gentle and welcoming. Very short soft onset, clean reverb decay. One UI gesture only. No voice, music, drums, alarm, harsh treble, rumble or impact.",
+        "duration_seconds": 0.8,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/menu-open.mp3",
+      "status": "generated",
+      "bytes": 13835,
+      "character-cost": "4"
+    },
+    {
+      "name": "menu-close",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "A single quiet futuristic holographic interface closing: soft downward airy shimmer settling into silence, a rounded warm glass resonance, restrained sci-fi HUD. Very short soft onset and clean short decay. One UI gesture only. No voice, music, drums, alarm, harsh treble, rumble or impact.",
+        "duration_seconds": 0.7,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/menu-close.mp3",
+      "status": "generated",
+      "bytes": 12163,
+      "character-cost": "4"
+    },
+    {
+      "name": "ui-select",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "One extremely subtle futuristic interface selection tick: tiny rounded glass droplet plus a feather-light electronic chirp, warm and smooth, not sharp. A single concise tactile HUD acknowledgment followed by a clean short decay. No repeated sequence, voice, music, drums, alarm or impact.",
+        "duration_seconds": 0.5,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/ui-select.mp3",
+      "status": "generated",
+      "bytes": 8820,
+      "character-cost": "3"
+    },
+    {
+      "name": "zoom-in",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "One restrained sci-fi star map camera zooming inward: smooth soft rising filtered airy synth whoosh with a subtle harmonic shimmer, the feeling of gently approaching a star. Quiet, brief, warm, futuristic, no dramatic acceleration. One short sweep. No voice, music, drums, alarm, impact, laser or harsh high frequencies.",
+        "duration_seconds": 0.65,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/zoom-in.mp3",
+      "status": "generated",
+      "bytes": 11327,
+      "character-cost": "4"
+    },
+    {
+      "name": "zoom-out",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "One restrained sci-fi star map camera zooming outward: smooth soft falling filtered airy synth whoosh with a subtle harmonic shimmer, the feeling of gently drifting back into deep space. Quiet, brief, warm, futuristic, no dramatic acceleration. One short sweep. No voice, music, drums, alarm, impact, laser or harsh high frequencies.",
+        "duration_seconds": 0.65,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/zoom-out.mp3",
+      "status": "generated",
+      "bytes": 11327,
+      "character-cost": "4"
+    }
+  ]
+}

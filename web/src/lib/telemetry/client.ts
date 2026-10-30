@@ -9,6 +9,8 @@ type ClientState = {
   consoleObserved?: boolean;
   stringErrors?: Map<string, number>;
   warnedProperties?: Set<string>;
+  /** Only the last accepted native pageview key, with camera/search content removed. */
+  lastPageviewUrl?: string;
   /** An earlier development module may still own an exception-mirroring listener. */
   unsubscribe?: () => void;
 };
@@ -89,7 +91,7 @@ export function initializeClientTelemetry(): boolean {
       persistence_name: "hackuniverse",
       person_profiles: "never",
       autocapture: false,
-      // The SDK alone owns initial/history/query pageviews; anchors are not new pages.
+      // The SDK owns initial/history/query capture; transport ignores camera-only changes.
       capture_pageview: { path: true, search: true, hash: false },
       capture_pageleave: false,
       // Console uses the same object-identity dedup as explicit React boundaries.
@@ -113,7 +115,7 @@ export function initializeClientTelemetry(): boolean {
         if (!event) return null;
         if (!["$pageview", "$exception"].includes(event.event) && !isCustomEventName(event.event)) return null;
         try {
-          return sanitizeTelemetryEvent({
+          const sanitized = sanitizeTelemetryEvent<typeof event>({
             ...event,
             properties: {
               ...event.properties,
@@ -122,6 +124,14 @@ export function initializeClientTelemetry(): boolean {
               ...(event.event === "$exception" ? { exception_id: event.properties.exception_id ?? event.uuid } : {}),
             },
           });
+          if (sanitized.event === "$pageview") {
+            const url = sanitized.properties.$current_url;
+            if (typeof url === "string" && /^https?:\/\//u.test(url)) {
+              if (state.lastPageviewUrl === url) return null;
+              state.lastPageviewUrl = url;
+            } else delete state.lastPageviewUrl;
+          }
+          return sanitized;
         } catch { return null; }
       },
     });

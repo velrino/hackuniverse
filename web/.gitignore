@@ -15,6 +15,7 @@
 /.catalog-tests/
 /.scene-tests/
 /.telemetry-tests/
+/.audio-tests/
 
 # next.js
 /.next/
@@ -47,3 +48,6 @@ next-env.d.ts
 # Browser verification artifacts
 /test-results/
 /playwright-report/
+
+# Compiled local-workspace regression tests
+/.workspace-tests/

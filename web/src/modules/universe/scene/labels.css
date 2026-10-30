@@ -38,6 +38,7 @@ button.universe-node-label:focus-visible {
   }
 }
 .universe-node-label:not(button) { pointer-events: none; cursor: default; }
+.universe-context-label { color: var(--hud-text); letter-spacing: 0.02em; }
 button.universe-node-label:disabled { cursor: default; }
 
 .universe-guide-button {

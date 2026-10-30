@@ -1,4 +1,5 @@
 import { universePtBR } from "@/modules/universe/messages";
+import { identityPtBR } from "@/modules/identity/messages";
 import type { Messages } from "../messages";
 
 const ptBR = {
@@ -19,9 +20,10 @@ const ptBR = {
     hint: "Você pode mudar seu idioma a qualquer momento.",
   },
   universe: universePtBR,
+  identity: identityPtBR,
   applicationIntro: {
     label: "Bem-vindo ao HackUniverse",
-    detail: "Seu universo começa aqui.",
+    detail: "Animação de boas-vindas · 3 segundos.",
   },
   notFound: {
     eyebrow: "Erro 404 / Rota não encontrada",

@@ -2,7 +2,7 @@
 
 https://github.com/user-attachments/assets/71ee72c3-f5f6-4b40-8359-383dcdcb93ad
 
-**TL;DR:** Turn websites into planets and organize them into systems, galaxies and universes. The working 3D demo includes smooth exploration, a searchable atlas, planet/star details and optional flight. It uses a local, provider-neutral catalog; a Firecrawl search adapter demonstrates normalization. Live ingestion, accounts, persistence and the Go API remain planned. New accounts will start with zero planets.
+**TL;DR:** Turn websites into planets and organize them into systems, galaxies and universes. The web app includes immersive exploration, a searchable atlas, planet/star details, optional flight and a browser-local editor. Its provider-neutral catalog keeps the bundled Demo separate from your Local universes; a Firecrawl search adapter demonstrates normalization. Account authentication, synchronization, live ingestion and the Go API remain planned. New accounts will start with zero planets.
 
 [Explore the live demo](https://hackuniverse.vercel.app/) · [Run locally](#run-the-web-app) · [Download the demo (MP4)](assets/demo/video/demo.mp4)
 
@@ -38,9 +38,15 @@ Use these shared components and tokens when building new pages. The [visual refe
 
 The home provides a mobile-first, full-screen 3D demo with [738 planets and 871 total entities](web/src/modules/universe/data/demo-universe.json) across 107 systems, 20 stellar clouds and five galaxies. The Milky Way contains the unchanged Solar Neighborhood plus seven clearly fictional demo sectors: 67 systems and 338 planets in total. Its layouts are illustrative, not a measured Milky Way map or confirmed exoplanet inventory. All previous 528 records retain their IDs, seeds and order.
 
-Start on Earth, watch the first-visit tour widen to the universe, or replay it from your current view. Galaxies have luminous multicolor particles by default and a stronger hover state that preserves their hues. Surrounding spiral particles and neighboring-group stars remain visible as you zoom through the hierarchy. Selecting a planet preserves its whole system; selecting a central star frames that system and opens its details. Planet/star names and descriptions use the shared accessible writing effect while facts and actions appear immediately. One hamburger opens the atlas and options. Optional third-person flight stays inside the active system, and the Space Jump cutscene remains temporarily disabled.
+A once-per-browser, three-second welcome shows elapsed animation progress from 0 to 100%; it does not measure network work. Start on Earth, watch the first-visit tour widen to the universe, or replay it from your current view. Galaxies have luminous multicolor particles by default and a stronger hover state that preserves their hues. Surrounding spiral particles and neighboring-group stars remain visible as you zoom through the hierarchy. Selecting a planet preserves its whole system; selecting a central star frames that system and opens its details. Planet/star names and descriptions use the shared accessible writing effect while facts and actions appear immediately. One hamburger opens Go to, Settings and About. Optional third-person flight stays inside the active system, and the Space Jump cutscene remains temporarily disabled.
 
 The default JSON is canonical, and every bundled entity is explicitly marked `type: "demo"`. This optional object classification is independent of catalog mode; a future hide-demo filter is not implemented. The reusable host also accepts validated catalogs with optional references, URLless objects and an empty root. See the [explorer guide](docs/UNIVERSE-EXPLORER.md), [catalog contract and adapter examples](docs/UNIVERSE-DATA.md) and [spacecraft credits](docs/ASSET-CREDITS.md). This demo does not create real account content or make provider requests.
+
+## Local workspace
+
+Choose Local in the universe menu's Settings to create, edit and delete planets or groups across multiple universes. The guided editor reveals optional fields when needed, suggests the current location and validates only the final save. The floating Actions button and object manager preserve the bundled Demo. Missing ancestors can be created automatically; group deletion includes its descendants. A File → Options → Confirm flow imports JSON backups, with an optional advanced editor; export downloads the complete Local workspace. Changes are saved only in the current browser and origin, with no account sync or automatic upload. Account opens an ephemeral login preview.
+
+See [the local workspace guide](docs/LOCAL-WORKSPACE.md) for usage, storage/locking limits, module boundaries and validation commands. [Frontend issue #36](https://github.com/velrino/hackuniverse/issues/36) and [future integration issue #37](https://github.com/velrino/hackuniverse/issues/37) track the separate scopes.
 
 ## Run the web app
 

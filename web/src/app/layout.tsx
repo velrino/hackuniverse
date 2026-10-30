@@ -8,6 +8,8 @@ import { ApplicationIntro } from "@/components/application-intro";
 import { localeRequestHeader, resolveLocale } from "@/i18n/config";
 import { messages } from "@/i18n/messages";
 import { I18nProvider } from "@/i18n/provider";
+import { IdentityProvider } from "@/modules/identity";
+import { AudioProvider } from "@/modules/audio";
 import "@velrino/ui/styles.css";
 import "./globals.css";
 import "@/styles/hud.css";
@@ -43,9 +45,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Suspense fallback={null}>
           <I18nProvider initialLocale={locale}>
             <UIProvider appearance="sci-fi">
-              <ApplicationIntro>
-                <ApplicationShell>{children}</ApplicationShell>
-              </ApplicationIntro>
+              <IdentityProvider>
+                <AudioProvider>
+                  <ApplicationIntro>
+                    <ApplicationShell>{children}</ApplicationShell>
+                  </ApplicationIntro>
+                </AudioProvider>
+              </IdentityProvider>
             </UIProvider>
           </I18nProvider>
         </Suspense>

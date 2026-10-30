@@ -5,14 +5,15 @@ import { createUniverseController } from "./controller";
 import type { UniverseSceneProps } from "./types";
 import "./labels.css";
 
-export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit = true, resetToken, zoomAction, ariaLabel, onSelect, onReady, onUnavailable, onError, flightEnabled = false, flightPaused = false, flightInput, onFlightStatus, flightTargetId, guideActionLabel, onGuideRequest, autopilotTargetId, onAutopilotEnd, hasParentView = false, onScaleOut, onScaleIn, tourStep = null, tourPreparing = false, onTourArrive, onInteraction, starSelected = false, starFocusToken = 0, onSelectStar }: UniverseSceneProps) {
+export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit = true, resetToken, zoomAction, ariaLabel, onSelect, onReady, onUnavailable, onError, flightEnabled = false, flightPaused = false, flightInput, onFlightStatus, flightTargetId, guideActionLabel, onGuideRequest, autopilotTargetId, onAutopilotEnd, hasParentView = false, onScaleOut, onScaleIn, tourStep = null, tourPreparing = false, onTourArrive, entityTransition = null, onEntityTransitionEnd, onInteraction, onZoomIntent, cameraRestore, onCameraChange, onCameraRestored, onCameraReader, starSelected = false, starFocusToken = 0, onSelectStar }: UniverseSceneProps) {
   const host = useRef<HTMLDivElement>(null);
   const controller = useRef<ReturnType<typeof createUniverseController> | null>(null);
-  const callbacks = useRef({ onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onInteraction, onSelectStar });
+  const callbacks = useRef({ onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onEntityTransitionEnd, onInteraction, onZoomIntent, onCameraChange, onCameraRestored, onCameraReader, onSelectStar });
   const zoomDirection = zoomAction?.direction;
   const zoomToken = zoomAction?.token;
+  const lastReset = useRef(resetToken);
 
-  useEffect(() => { callbacks.current = { onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onInteraction, onSelectStar }; }, [onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onInteraction, onSelectStar]);
+  useEffect(() => { callbacks.current = { onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onEntityTransitionEnd, onInteraction, onZoomIntent, onCameraChange, onCameraRestored, onCameraReader, onSelectStar }; }, [onSelect, onReady, onUnavailable, onError, onFlightStatus, onGuideRequest, onAutopilotEnd, onScaleOut, onScaleIn, onTourArrive, onEntityTransitionEnd, onInteraction, onZoomIntent, onCameraChange, onCameraRestored, onCameraReader, onSelectStar]);
 
   useEffect(() => {
     if (!host.current) return;
@@ -27,15 +28,20 @@ export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit
         onScaleOut: () => callbacks.current.onScaleOut?.(),
         onScaleIn: (id) => callbacks.current.onScaleIn?.(id),
         onTourArrive: (token) => callbacks.current.onTourArrive?.(token),
+        onEntityTransitionEnd: (token) => callbacks.current.onEntityTransitionEnd?.(token),
         onInteraction: () => callbacks.current.onInteraction?.(),
+        onZoomIntent: (direction) => callbacks.current.onZoomIntent?.(direction),
+        onCameraChange: (pose, reason) => callbacks.current.onCameraChange?.(pose, reason),
+        onCameraRestored: (token, success) => callbacks.current.onCameraRestored?.(token, success),
         onSelectStar: () => callbacks.current.onSelectStar?.(),
         onError: (error, operation) => callbacks.current.onError?.(error, operation),
       });
+      callbacks.current.onCameraReader?.(() => controller.current?.readCameraPose() ?? null);
     } catch (error) {
       try { callbacks.current.onError?.(error, "initialize"); } catch { /* Diagnostics must not interrupt recovery. */ }
       callbacks.current.onUnavailable();
     }
-    return () => { controller.current?.destroy(); controller.current = null; };
+    return () => { callbacks.current.onCameraReader?.(null); controller.current?.destroy(); controller.current = null; };
   }, []);
 
   // Release the previous tour before a manual destination starts its own tween.
@@ -57,7 +63,7 @@ export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit
   useEffect(() => { controller.current?.setOrbits(showOrbits); }, [showOrbits]);
   useEffect(() => { controller.current?.setAutoOrbit?.(autoOrbit); }, [autoOrbit]);
   useEffect(() => { controller.current?.setAriaLabel(ariaLabel); }, [ariaLabel]);
-  useEffect(() => { controller.current?.reset(); }, [resetToken]);
+  useEffect(() => { if (lastReset.current !== resetToken) { lastReset.current = resetToken; controller.current?.reset(); } }, [resetToken]);
   useEffect(() => { if (zoomDirection) controller.current?.zoom(zoomDirection); }, [zoomDirection, zoomToken]);
   useEffect(() => { controller.current?.setFlightEnabled(flightEnabled); }, [flightEnabled]);
   useEffect(() => { controller.current?.setFlightPaused(flightPaused); }, [flightPaused]);
@@ -67,6 +73,16 @@ export function UniverseScene({ view, selectedId, playing, showOrbits, autoOrbit
   useEffect(() => { controller.current?.setAutopilotTarget(autopilotTargetId ?? null); }, [autopilotTargetId, flightEnabled]);
   useEffect(() => { controller.current?.setHasParentView(hasParentView); }, [hasParentView]);
   useEffect(() => { if (tourStep) controller.current?.setTourStep?.(tourStep); }, [tourStep, view]);
+  // Resolve particles only after the current catalog projection and selection exist.
+  useEffect(() => {
+    if (controller.current?.setEntityTransition) controller.current.setEntityTransition(entityTransition);
+    else if (entityTransition) {
+      try { callbacks.current.onEntityTransitionEnd?.(entityTransition.token); } catch { /* Preserve the editor fallback. */ }
+    }
+  }, [entityTransition, view]);
+
+  // Last: explicit URL intent wins over default focus, reset and tour effects.
+  useEffect(() => { if (cameraRestore) controller.current?.restoreCamera(cameraRestore); }, [cameraRestore, view, selectedId, flightEnabled, tourStep, tourPreparing]);
 
   return <div ref={host} className="universe-scene" style={{ position: "absolute", inset: 0 }} />;
 }

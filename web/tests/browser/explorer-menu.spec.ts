@@ -23,7 +23,12 @@ for (const locale of ["en", "pt-BR"] as const) {
     const box = await dialog.boundingBox();
     expect(box!.x).toBeGreaterThanOrEqual(0);
     expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width + 1);
-    const settings = dialog.getByRole("tab", { name: locale === "en" ? "Settings" : "Opções", exact: true });
+    const tabs = locale === "en" ? ["Go to", "Settings", "About"] : ["Ir para", "Configurações", "Sobre"];
+    await expect(dialog.getByRole("tab")).toHaveText(tabs);
+    await expect(dialog.getByRole("tab", { name: tabs[0], exact: true })).toHaveAttribute("aria-selected", "true");
+    const searchName = locale === "en" ? "Search planets" : "Buscar planetas";
+    await dialog.getByRole("textbox", { name: searchName, exact: true }).fill("earth");
+    const settings = dialog.getByRole("tab", { name: tabs[1], exact: true });
     await settings.click();
     await expect(settings).toHaveAttribute("aria-selected", "true");
     const link = dialog.locator(`a[href^="${docs}"]`);
@@ -38,6 +43,19 @@ for (const locale of ["en", "pt-BR"] as const) {
     expect(await popup.evaluate(() => window.opener === null)).toBe(true);
     expect(page.url()).toBe(original);
     await popup.close();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+    await trigger.click();
+    await expect(dialog.getByRole("tab", { name: tabs[0], exact: true })).toHaveAttribute("aria-selected", "true");
+    await expect(dialog.getByRole("textbox", { name: searchName, exact: true })).toHaveValue("earth");
+    await dialog.getByRole("tab", { name: tabs[2], exact: true }).click();
+    await expect(dialog.getByRole("heading", { name: "Denis Velrino", exact: true })).toBeVisible();
+    for (const href of ["https://github.com/velrino/hackuniverse", "https://github.com/velrino/", "https://www.linkedin.com/in/velrino/", "https://sketchfab.com/yanix", "https://creativecommons.org/licenses/by/4.0/"]) {
+      const aboutLink = dialog.locator(`a[href="${href}"]`);
+      await expect(aboutLink).toHaveAttribute("target", "_blank");
+      await expect(aboutLink).toHaveAttribute("rel", "noopener noreferrer");
+    }
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
     await expect(trigger).toBeFocused();

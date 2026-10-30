@@ -1,0 +1,14 @@
+.audio-controls { display: grid; min-width: 0; gap: 16px; padding: 16px; }
+.audio-controls h3 { margin: 0; color: var(--hud-text); font-size: 17px; font-weight: 600; }
+.audio-controls > p, .audio-controls__channel > p { margin: 0; color: var(--hud-muted); font-size: 12px; line-height: 1.6; }
+.audio-controls__channel { display: grid; gap: 10px; min-width: 0; }
+.audio-controls__channel + .audio-controls__channel { padding-top: 14px; border-top: 1px solid var(--hud-line); }
+.audio-controls__heading { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; gap: 8px; }
+.audio-controls__heading h4 { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--hud-text); font-size: 14px; font-weight: 500; }
+.audio-controls__heading span { color: var(--hud-muted); font-size: 12px; }
+.audio-controls [data-slot="button"] { min-height: 44px; width: 100%; white-space: normal; }
+.audio-controls label { display: flex; align-items: center; justify-content: space-between; color: var(--hud-muted); font-size: 12px; }
+.audio-controls output { color: var(--hud-accent); font-variant-numeric: tabular-nums; }
+.audio-controls input[type="range"] { min-width: 0; width: 100%; min-height: 44px; margin: 0; accent-color: var(--hud-accent); cursor: pointer; }
+.audio-controls input[type="range"]:focus-visible { outline: 2px solid var(--hud-accent); outline-offset: 3px; }
+.audio-controls .audio-controls__error { color: var(--hud-text); }

@@ -13,6 +13,7 @@
   },
   "include": [
     "src/modules/universe/domain/catalog.test.ts",
+    "src/modules/universe/domain/camera-link.test.ts",
     "src/modules/universe/adapters/catalog/firecrawl/normalize.test.ts"
   ]
 }

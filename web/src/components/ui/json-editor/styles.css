@@ -1,0 +1,53 @@
+.json-editor {
+  min-width: 0;
+  min-height: 12rem;
+  max-height: min(52dvh, 32rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  resize: vertical;
+  border: 1px solid var(--vui-line);
+  border-radius: var(--vui-radius, 0.25rem);
+  background: var(--vui-surface);
+  color: var(--vui-text);
+}
+.json-editor:focus-visible,
+.json-editor :is(button, input, textarea, select):focus-visible {
+  outline: 2px solid var(--vui-accent);
+  outline-offset: 2px;
+}
+.json-editor__notice {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  padding: 1.25rem;
+  color: var(--vui-muted);
+  font-family: var(--vui-font);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.json-editor__tree {
+  box-sizing: border-box;
+  min-height: 12rem;
+}
+.json-editor .jer-edit-buttons,
+.json-editor .jer-confirm-buttons {
+  height: auto;
+}
+.json-editor .jer-edit-buttons:focus-within,
+.json-editor .jer-value-main-row:focus-within > .jer-edit-buttons,
+.json-editor .jer-value-and-buttons:focus-within > .jer-edit-buttons,
+.json-editor .jer-collection-header-row:focus-within > .jer-edit-buttons {
+  opacity: 1;
+}
+.json-editor textarea {
+  max-width: 100%;
+}
+@media (max-width: 640px) {
+  .json-editor {
+    max-height: 48dvh;
+  }
+  .json-editor :is(.jer-edit-buttons, .jer-confirm-buttons) > button {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+}
