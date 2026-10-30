@@ -51,9 +51,14 @@
 .universe-details-actions { display: grid; gap: 8px; }
 .universe-details-actions [data-slot="button"] { min-height: 44px; white-space: normal; }
 .universe-guide-touch { display: none; }
-.universe-tour-status { position: absolute; z-index: 3; right: max(16px, env(safe-area-inset-right)); bottom: calc(16px + env(safe-area-inset-bottom)); left: max(16px, env(safe-area-inset-left)); display: grid; width: min(360px, calc(100% - 32px)); max-height: calc(100dvh - 32px - env(safe-area-inset-bottom)); justify-items: center; gap: 10px; margin-inline: auto; padding: 12px 16px; border: 1px solid var(--hud-line); background: var(--universe-hud-surface); text-align: center; }
+.universe-tour-status { position: absolute; z-index: 3; right: max(16px, env(safe-area-inset-right)); bottom: calc(16px + env(safe-area-inset-bottom)); left: max(16px, env(safe-area-inset-left)); display: grid; width: min(360px, calc(100% - 32px)); max-height: calc(100dvh - 32px - env(safe-area-inset-bottom)); justify-items: center; gap: 10px; margin-inline: auto; padding: 0; border: 0; background: transparent; text-align: center; }
 .universe-tour-status p { min-width: 0; max-width: 100%; margin: 0; color: var(--hud-accent); font: 12px/1.5 var(--font-mono); overflow-wrap: anywhere; }
 .universe-tour-status [data-slot="button"] { min-width: 132px; min-height: 44px; white-space: normal; background: transparent; }
+.universe-tour-entry { position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; padding: max(24px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); background: rgb(2 10 16 / 45%); }
+.universe-tour-entry__panel { display: grid; width: min(100%, 400px); max-height: 100%; gap: 16px; padding: clamp(24px, 5vw, 36px); overflow: auto; text-align: center; background: var(--universe-hud-surface); }
+.universe-tour-entry__panel h2 { color: var(--hud-accent); font-size: clamp(24px, 6vw, 32px); line-height: 1.2; }
+.universe-tour-entry__panel > p:not(.hud-kicker) { color: var(--hud-muted); font-size: 14px; line-height: 1.6; }
+.universe-tour-entry__panel [data-slot="button"] { min-height: 48px; margin-top: 8px; }
 .universe-flight-exit[data-slot="button"] { position: absolute; z-index: 3; right: max(24px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); min-height: 44px; }
 .universe-flight-error { position: absolute; z-index: 3; top: 90px; left: 50%; max-width: calc(100% - 32px); padding: 12px 16px; transform: translateX(-50%); border: 1px solid var(--hud-line); background: var(--hud-surface); color: var(--hud-text); font-size: 13px; }
 .universe-camera-notice { position: absolute; z-index: 3; top: 110px; left: 50%; width: min(360px, calc(100% - 32px)); margin: 0; padding: 12px 16px; transform: translateX(-50%); border: 1px solid var(--hud-line); background: var(--universe-hud-surface); color: var(--hud-text); font-size: 13px; line-height: 1.5; text-align: center; }

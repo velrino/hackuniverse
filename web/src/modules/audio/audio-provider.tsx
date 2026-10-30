@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useSyncExternalStore, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { createBrowserAudioPorts } from "./adapters/browser-audio";
 import { createAudioController } from "./domain/controller";
 import { AudioContext } from "./hooks/use-audio";
@@ -12,6 +12,11 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   // Fast Refresh recalculates memos; effect cleanup replaces the previous controller.
   const controller = useMemo(() => createAudioController(createBrowserAudioPorts()), []);
   const snapshot = useSyncExternalStore(controller.subscribe, controller.getSnapshot, controller.getServerSnapshot);
+  const [interactionReceived, setInteractionReceived] = useState(false);
+  const unlockFromGesture = useCallback(() => {
+    setInteractionReceived(true);
+    controller.unlockFromGesture();
+  }, [controller]);
   useEffect(() => {
     controller.mount(!document.hidden);
     const visibility = () => controller.setVisible(!document.hidden);
@@ -53,7 +58,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     const unlock = (event: PointerEvent | KeyboardEvent) => {
       const target = event.target;
       const silent = target instanceof Element && Boolean(target.closest('[data-audio-silent], [inert], [aria-disabled="true"], :disabled'));
-      if (isAudioUnlockGesture(event, silent, navigator.userActivation?.isActive)) controller.unlockFromGesture();
+      if (isAudioUnlockGesture(event, silent, navigator.userActivation?.isActive)) unlockFromGesture();
     };
     document.addEventListener("visibilitychange", visibility);
     document.addEventListener("click", click);
@@ -70,7 +75,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       document.removeEventListener("keydown", unlock, true);
       controller.dispose();
     };
-  }, [controller]);
-  const value = useMemo(() => ({ ...snapshot, playCue: controller.playCue, cameraMotion: controller.cameraMotion, stopCameraMotion: controller.stopCameraMotion, setMusicEnabled: controller.setMusicEnabled, setEffectsEnabled: controller.setEffectsEnabled, enableMusic: controller.enableMusic, enableEffects: controller.enableEffects, setMusicVolume: controller.setMusicVolume, setEffectsVolume: controller.setEffectsVolume, retry: controller.retry }), [snapshot, controller]);
+  }, [controller, unlockFromGesture]);
+  const value = useMemo(() => ({ ...snapshot, interactionReceived, playCue: controller.playCue, cameraMotion: controller.cameraMotion, stopCameraMotion: controller.stopCameraMotion, unlockFromGesture, setMusicEnabled: controller.setMusicEnabled, setEffectsEnabled: controller.setEffectsEnabled, enableMusic: controller.enableMusic, enableEffects: controller.enableEffects, setMusicVolume: controller.setMusicVolume, setEffectsVolume: controller.setEffectsVolume, retry: controller.retry }), [snapshot, controller, interactionReceived, unlockFromGesture]);
   return <AudioContext value={value}>{children}</AudioContext>;
 }

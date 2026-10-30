@@ -22,6 +22,8 @@ const en = {
   applicationIntro: {
     label: "Welcome to HackUniverse",
     detail: "Welcome animation · 3 seconds.",
+    entryDetail: "A whole universe to explore. Enter to begin your journey with sound.",
+    enter: "Enter universe",
   },
   notFound: {
     eyebrow: "Error 404 / Route not found",

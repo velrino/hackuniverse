@@ -51,17 +51,24 @@ const getReducedMotion = () => window.matchMedia(motionQuery).matches;
 export function UniverseHost({ catalog, tour, management, source }: { catalog: UniverseCatalog; tour?: UniverseTourDefinition; management?: UniverseManagement; source?: CameraLinkSource }) {
   const copy = useTranslations("universe");
   const { format } = useI18n();
-  const { playCue, cameraMotion, stopCameraMotion } = useAudio();
+  const { playCue, cameraMotion, stopCameraMotion, unlockFromGesture, interactionReceived, preferences, musicStatus, effectsStatus, musicError, effectsError } = useAudio();
+  const musicWaiting = preferences.musicEnabled && preferences.musicVolume > 0 && musicStatus !== "playing" && (musicStatus !== "error" || musicError === "blocked");
+  const effectsWaiting = preferences.effectsEnabled && preferences.effectsVolume > 0 && effectsStatus !== "ready" && (effectsStatus !== "error" || effectsError === "blocked");
+  const tourRequiresInteraction = !interactionReceived && (musicWaiting || effectsWaiting);
   const camera = useCameraLocation(catalog, source);
   const location = useMemo(() => ({ navigationRequest: camera.state.navigationRequest, Controls: CameraShareControls, Status: CameraLinkStatus }), [camera.state.navigationRequest]);
   const audio = useMemo<UniverseAudio>(() => ({
+    tourRequiresInteraction,
+    onTourStart: unlockFromGesture,
+    onTourZoomIntent: (direction) => cameraMotion("zoom", direction),
+    onTourZoomEnd: () => stopCameraMotion("zoom"),
     onZoomIntent: (direction) => cameraMotion("zoom", direction),
     onOrbitIntent: () => cameraMotion("orbit"),
     onCameraGestureEnd: (motion) => stopCameraMotion(motion),
     onDestinationHover: () => playCue("destination-hover"),
     onMenuOpenChange: (open) => playCue(open ? "menu-open" : "menu-close"),
     Controls: AudioControls,
-  }), [playCue, cameraMotion, stopCameraMotion]);
+  }), [playCue, cameraMotion, stopCameraMotion, unlockFromGesture, tourRequiresInteraction]);
   const presentationReady = useApplicationIntroReady();
   const reducedMotion = useSyncExternalStore(subscribeMotion, getReducedMotion, () => true);
   const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, tour, management, audio, location, presentationReady, autoTour: camera.state.ready && !camera.state.suppressAutoTour && !reducedMotion, formatNumber: format.number, components: { Scene: ObservedScene, BrandLogo, LanguagePicker: InlineLanguageSelector, DesignLink: DesignSystemLink } }), [catalog, copy, tour, management, audio, location, presentationReady, camera.state.ready, camera.state.suppressAutoTour, reducedMotion, format.number]);

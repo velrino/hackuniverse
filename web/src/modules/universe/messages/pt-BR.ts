@@ -33,6 +33,8 @@ const ptBR = {
   wider: "Visão mais ampla",
   reset: "Restaurar câmera",
   tourTitle: "Tour",
+  tourWelcome: "Seu universo está pronto",
+  tourStart: "Começar tour",
   tourDescription: "Comece ao lado de um planeta e se afaste para descobrir o universo inteiro.",
   tourSkip: "Pular tour",
   play: "Retomar movimento",

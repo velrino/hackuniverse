@@ -1,0 +1,6 @@
+.application-intro-content { display: contents; }
+.application-intro-entry[data-slot="dialog-content"] { width: min(420px, calc(100vw - 32px)); text-align: center; }
+.application-intro-entry__logo { justify-self: center; margin-inline: auto; }
+.application-intro-entry [data-slot="dialog-header"] { text-align: center; }
+.application-intro-entry [data-slot="dialog-title"] { color: var(--hud-accent); }
+.application-intro-entry [data-slot="button"] { min-height: 48px; width: 100%; }

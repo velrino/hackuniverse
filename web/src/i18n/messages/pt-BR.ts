@@ -24,6 +24,8 @@ const ptBR = {
   applicationIntro: {
     label: "Bem-vindo ao HackUniverse",
     detail: "Animação de boas-vindas · 3 segundos.",
+    entryDetail: "Um universo inteiro para explorar. Entre para começar sua jornada com som.",
+    enter: "Entrar no universo",
   },
   notFound: {
     eyebrow: "Erro 404 / Rota não encontrada",
