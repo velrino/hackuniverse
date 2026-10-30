@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 type CameraVoice = { duration: number; started: number; stopped: number | null; fadeMs: number | null; ended: number | null; startContext: number; stopContext: number | null };
-type ProbedWindow = Window & { cameraAudioProbe: CameraVoice[]; cameraWheelProbe: number[]; cameraPointerInput: number | null; cameraAudioClock: () => number };
+type ProbedWindow = Window & { cameraAudioProbe: CameraVoice[]; cameraWheelProbe: number[]; cameraWheelAudioProbe: (number | null)[]; cameraAudioQuantumMs: number; cameraPointerInput: number | null; cameraAudioClock: () => number };
 
 async function voices(page: Page) {
   return page.evaluate(() => (window as unknown as ProbedWindow).cameraAudioProbe);
@@ -14,9 +14,14 @@ async function prepareCamera(page: Page) {
     const records: CameraVoice[] = [];
     (window as unknown as ProbedWindow).cameraAudioProbe = records;
     (window as unknown as ProbedWindow).cameraWheelProbe = [];
+    (window as unknown as ProbedWindow).cameraWheelAudioProbe = [];
     (window as unknown as ProbedWindow).cameraPointerInput = null;
     document.addEventListener("wheel", (event) => {
-      if (event.isTrusted) (window as unknown as ProbedWindow).cameraWheelProbe.push(performance.now());
+      if (event.isTrusted) {
+        const probe = window as unknown as ProbedWindow;
+        probe.cameraWheelProbe.push(performance.now());
+        probe.cameraWheelAudioProbe.push(typeof probe.cameraAudioClock === "function" ? probe.cameraAudioClock() : null);
+      }
     }, true);
     document.addEventListener("pointermove", (event) => {
       if (event.isTrusted && event.buttons !== 0) (window as unknown as ProbedWindow).cameraPointerInput = performance.now();
@@ -30,6 +35,7 @@ async function prepareCamera(page: Page) {
         const record: CameraVoice = { duration: this.buffer.duration, started: performance.now(), stopped: null, fadeMs: null, ended: null, startContext: Math.max(when ?? this.context.currentTime, this.context.currentTime), stopContext: null };
         records.push(record); tracked.set(this, record);
         (window as unknown as ProbedWindow).cameraAudioClock = () => this.context.currentTime;
+        (window as unknown as ProbedWindow).cameraAudioQuantumMs = 128 / this.context.sampleRate * 1000;
         this.addEventListener("ended", () => { record.ended = performance.now(); }, { once: true });
       }
       return start.call(this, when, offset, duration);
@@ -108,23 +114,34 @@ test("fourteen wheel ticks over two seconds end actual zoom sources after input 
         if (remaining > 0) await page.waitForTimeout(remaining);
         await page.mouse.wheel(0, delta);
       }
-      const wheelTimes = await page.evaluate((offset) => (window as unknown as ProbedWindow).cameraWheelProbe.slice(offset), beforeWheels);
+      const { wheelTimes, audioTimes, quantumMs } = await page.evaluate((offset) => {
+        const probe = window as unknown as ProbedWindow;
+        return { wheelTimes: probe.cameraWheelProbe.slice(offset), audioTimes: probe.cameraWheelAudioProbe.slice(offset), quantumMs: probe.cameraAudioQuantumMs };
+      }, beforeWheels);
       expect(wheelTimes).toHaveLength(14);
       const lastInput = wheelTimes.at(-1)!;
       const now = await page.evaluate(() => performance.now());
       await page.waitForTimeout(Math.max(0, lastInput + 230 - now));
+      await expect.poll(async () => (await voices(page)).slice(before).filter((voice) => voice.duration > 5).every((voice) => voice.ended !== null), { timeout: 1000 }).toBe(true);
       const zooms = (await voices(page)).slice(before).filter((voice) => voice.duration > 5);
       const gaps = wheelTimes.slice(1).map((time, index) => time - wheelTimes[index]);
       const inputSegments = 1 + gaps.filter((gap) => gap >= 180).length;
       await testInfo.attach(`fourteen-wheel-${direction}-raw-timing`, {
-        body: JSON.stringify({ direction, wheelTimes, gaps, inputSegments, zooms }, null, 2),
+        body: JSON.stringify({ direction, wheelTimes, audioTimes, quantumMs, gaps, inputSegments, zooms }, null, 2),
         contentType: "application/json",
       });
       expect(zooms.length).toBeGreaterThan(0);
       expect(zooms.length).toBeLessThanOrEqual(inputSegments);
       if (inputSegments === 1) expect(zooms).toHaveLength(1);
       expect(zooms.every((voice) => voice.stopped !== null && voice.ended !== null)).toBe(true);
-      expect(Math.max(...zooms.map((voice) => voice.ended!)) - lastInput).toBeLessThan(230);
+      const lastAudioInput = audioTimes.at(-1);
+      expect(lastAudioInput).not.toBeNull();
+      const nativeTailMs = (Math.max(...zooms.map((voice) => voice.stopContext!)) - lastAudioInput!) * 1000;
+      // The audio clock owns the audible 180 ms hold + 20 ms fade. ended is a
+      // later JS notification, so its dispatch gets a separate bounded allowance.
+      expect(nativeTailMs).toBeLessThanOrEqual(200 + quantumMs);
+      const notificationTailMs = Math.max(...zooms.map((voice) => voice.ended!)) - lastInput;
+      expect(notificationTailMs).toBeLessThan(350);
 
       let longestOverlapMs = 0;
       for (let index = 1; index < zooms.length; index++) {
@@ -138,7 +155,7 @@ test("fourteen wheel ticks over two seconds end actual zoom sources after input 
       const completed = (await voices(page)).length;
       await page.waitForTimeout(400);
       expect((await voices(page)).length).toBe(completed);
-      measurements.push({ direction, wheelEvents: wheelTimes.length, inputDurationMs: wheelTimes.at(-1)! - wheelTimes[0], inputSegments, sourceCount: zooms.length, lastActualEndAfterInputMs: Math.max(...zooms.map((voice) => voice.ended!)) - lastInput, longestOverlapMs });
+      measurements.push({ direction, wheelEvents: wheelTimes.length, inputDurationMs: wheelTimes.at(-1)! - wheelTimes[0], inputSegments, sourceCount: zooms.length, nativeTailMs, notificationTailMs, quantumMs, longestOverlapMs });
     });
   }
   await testInfo.attach("fourteen-wheel-audio-lifetime", { body: JSON.stringify(measurements, null, 2), contentType: "application/json" });
