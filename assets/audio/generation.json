@@ -1,0 +1,95 @@
+{
+  "generatedAt": "2026-10-30T04:17:43.210032+00:00",
+  "provider": "mixed",
+  "status": "local-preview-awaiting-user-validation",
+  "requests": [
+    {
+      "name": "open-skies-original",
+      "endpoint": "https://api.elevenlabs.io/v1/music",
+      "parameters": {
+        "prompt": "Minimalist hopeful deep space ambient, felt tempo around 65 BPM, designed as a perfectly seamless infinite loop. The beauty of exploring a vast solar system, discovering new planets and endless possibilities. Extremely sparse soundscape. Soft warm synthetic drone, gentle uplifting major-key suspended and add9 harmonies, subtle luminous atmospheric textures, occasional delicate sparkling crystal-like tones. Peaceful, optimistic, inspiring, comforting, and full of wonder. A sense of freedom, curiosity, discovery, and a bright future among the stars. Weightless and spacious, with very few sounds and plenty of breathing room. Only very slow subtle harmonic movement, absolutely no prominent melody, no rhythmic patterns, no pulse or beat, no arpeggios, no drums, no percussion, no heavy bass, no acoustic instruments, no vocals or choir. Avoid dark, melancholic, sad, lonely, ominous, mystical, temple-like, tense, or mysterious moods. Pure synthetic instrumental. Soft rounded attacks, airy but never harsh or piercing, restrained dynamics and gentle diffuse reverb. Consistent bright atmosphere throughout, no intro, no outro, no climax, no section changes, no transitions, no fade-in, no fade-out, no silence, no final cadence. Start already in the middle of the ongoing ambience. The end must return to the same harmony, timbre and energy as the beginning for continuous gapless looping. Original music without referencing or imitating named artists or existing soundtracks.",
+        "music_length_ms": 96000,
+        "model_id": "music_v2_5",
+        "force_instrumental": true
+      },
+      "output": "source/open-skies-original.mp3",
+      "song-id": "ZHx3I9TS3XqWOgbIBQsQ",
+      "bytes": 1536461,
+      "status": "existing"
+    },
+    {
+      "name": "menu-open",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "One restrained cinematic spacecraft touchscreen activation. Close-miked dry mechanical microclick, a tiny filtered static transient and a very short smooth servo-air release. Precise aerospace instrumentation, premium tactile interface. Calm, neutral, realistic. One event only, 0.25 second active sound, clean short tail. No pitched blip, bloop, bell, sparkle, toy, cartoon, musical note, melody, voice or heavy bass.",
+        "duration_seconds": 0.5,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/menu-open.mp3",
+      "status": "generated",
+      "bytes": 8820,
+      "character-cost": "3"
+    },
+    {
+      "name": "menu-close",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "One restrained cinematic spacecraft touchscreen dismissal. Soft dry mechanical microclick, a tiny muted electrical transient and short receding filtered air release. Precise aerospace instrumentation, calm and neutral, realistic tactile interface. One event only, 0.25 second active sound, clean short tail. No pitched blip, bloop, bell, sparkle, cartoon, toy, musical note, melody, voice or heavy bass.",
+        "duration_seconds": 0.5,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/menu-close.mp3",
+      "status": "generated",
+      "bytes": 8820,
+      "character-cost": "3"
+    },
+    {
+      "name": "ui-select",
+      "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+      "parameters": {
+        "text": "One quiet premium spacecraft instrument switch confirmation. Realistic close-miked tactile microclick with soft polymer contact, a tiny dry filtered electrical tick underneath. Precise, restrained, neutral and informative. Extremely short, 0.15 second active sound, clean tail. No resonant pitched tone, bloop, bubbly pop, bell, sparkle, video-game toy, cartoon, music, voice or loud impact.",
+        "duration_seconds": 0.5,
+        "prompt_influence": 0.65,
+        "model_id": "eleven_text_to_sound_v2",
+        "loop": false
+      },
+      "output": "source/ui-select.mp3",
+      "status": "generated",
+      "bytes": 8820,
+      "character-cost": "3"
+    }
+  ],
+  "providers": [
+    "ElevenLabs",
+    "user-provided"
+  ],
+  "imports": [
+    {
+      "name": "user-zoom-cinematic",
+      "origin": "user-provided",
+      "importedAt": "2026-10-30T10:22:53.427110+00:00",
+      "sourceFilename": "Futuristic_cinematic_#3-1793355528036.mp3",
+      "prompt": "Futuristic cinematic SFX for a premium 12K cinema camera assembling from disassembled parts. Layered mechanical clicks, smooth metal parts gliding into place, tiny servo motors, electronic confirmation beeps, clean sci-fi lab room tone. No harsh impacts, no distortion. Final moment: subtle lens zoom and iris closing, short bass hit and airy whoosh accent, like a high-end tech commercial.",
+      "apiRequestPerformed": false,
+      "output": "source/user-zoom-cinematic.mp3",
+      "sha256": "56e793aff1f6d6fdfcb5b85d89dd890ae0d43884771c4fc87294f5cb4265e349",
+      "bytes": 16173,
+      "durationSeconds": 0.6065,
+      "status": "original-preserved-byte-for-byte",
+      "derivedOutputs": [
+        "web/public/audio/sfx/zoom-in.mp3",
+        "web/public/audio/sfx/zoom-out.mp3"
+      ],
+      "edit": "Entire supplied clip; same playback in both directions. No trim, pitch change, reversal or newly generated audio. Constant -5dB gain, 4ms start fade and 8ms end fade; stereo 44.1kHz 96kbps MP3."
+    }
+  ],
+  "supersededZoomAssets": {
+    "metadata": "drafts/technical-zoom/generation.json",
+    "source": "drafts/technical-zoom/source/",
+    "web": "drafts/technical-zoom/web/"
+  }
+}

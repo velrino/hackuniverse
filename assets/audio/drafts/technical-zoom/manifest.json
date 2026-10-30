@@ -1,0 +1,130 @@
+{
+  "status": "local-preview-awaiting-user-listening-validation",
+  "musicTitle": "Open Skies",
+  "loopEdit": {
+    "sourceSeconds": 96,
+    "crossfadeSeconds": 6,
+    "processedSeconds": 90,
+    "method": "Equal-power wrap crossfade; original seconds6..90 followed by tail90..96 crossfaded with head0..6. MP3 derived from the processed FLAC, which is an edit of the generated MP3, not a lossless generation source."
+  },
+  "processing": [
+    "Music constant gain from measured integrated loudness, target -22LUFS / peak ceiling -4dBTP (no time-varying normalization across the seam); stereo44.1kHz96kbps MP3.",
+    "SFX target mean level -25dBFS with peak headroom cap -9dBFS beforeMP3; integratedLUFS unavailable for0.35sclips; trimmed to0.35s, filtered110Hz\u20136.5kHz and short endpoint fades; mono44.1kHz64kbps MP3."
+  ],
+  "files": [
+    {
+      "path": "assets/audio/masters/open-skies-loop.flac",
+      "sha256": "2dabe2b7f81f3180ed0fd969fb8667f89fee473af138d4e822cd4aab47d327a8",
+      "durationSeconds": 90.0,
+      "bytes": 4279124,
+      "sampleRate": 44100,
+      "channels": 2,
+      "integratedLufs": "-22.00",
+      "truePeakDbtp": "-10.18",
+      "meanDbfs": -23.3,
+      "peakDbfs": -10.2
+    },
+    {
+      "path": "web/public/audio/music/open-skies-loop.mp3",
+      "sha256": "7b68eadecec4f310bace2595e8010439712edf314bb00b356973e53b35c7d447",
+      "durationSeconds": 90.0,
+      "bytes": 1080961,
+      "sampleRate": 44100,
+      "channels": 2,
+      "integratedLufs": "-22.44",
+      "truePeakDbtp": "-10.55",
+      "meanDbfs": -23.8,
+      "peakDbfs": -10.6
+    },
+    {
+      "path": "web/public/audio/sfx/menu-close.mp3",
+      "sha256": "f6bc91dd932a0bbe4e886ef39c1bf68613e018f6ab15806c49efd535e25e504a",
+      "durationSeconds": 0.35,
+      "bytes": 3386,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": null,
+      "truePeakDbtp": "-8.01",
+      "meanDbfs": -31.3,
+      "peakDbfs": -8.4
+    },
+    {
+      "path": "web/public/audio/sfx/menu-open.mp3",
+      "sha256": "c7beaa0f78f80f323e67e0b41f640e22e1fab446415ac181fe0631768b22270f",
+      "durationSeconds": 0.35,
+      "bytes": 3386,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": null,
+      "truePeakDbtp": "-12.45",
+      "meanDbfs": -29.6,
+      "peakDbfs": -12.7
+    },
+    {
+      "path": "web/public/audio/sfx/ui-select.mp3",
+      "sha256": "f4198cffd7857b6f3bd79bb134c34205132ec83f7d949bad7d671a351b2f35f2",
+      "durationSeconds": 0.35,
+      "bytes": 3386,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": null,
+      "truePeakDbtp": "-8.07",
+      "meanDbfs": -22.6,
+      "peakDbfs": -8.1
+    },
+    {
+      "path": "web/public/audio/sfx/zoom-in.mp3",
+      "sha256": "8df8ea7ee7bd882aa4b6ffd0b023e95efefef895d4c9db9bd7be66b3e2d6db63",
+      "durationSeconds": 0.35,
+      "bytes": 3386,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": null,
+      "truePeakDbtp": "-9.85",
+      "meanDbfs": -23.0,
+      "peakDbfs": -10.0
+    },
+    {
+      "path": "web/public/audio/sfx/zoom-out.mp3",
+      "sha256": "13c0b18cf11a72499f53f714d68d5476d0397a7b8b5d554c3550b5695a79fc30",
+      "durationSeconds": 0.35,
+      "bytes": 3386,
+      "sampleRate": 44100,
+      "channels": 1,
+      "integratedLufs": null,
+      "truePeakDbtp": "-9.86",
+      "meanDbfs": -22.4,
+      "peakDbfs": -9.9
+    }
+  ],
+  "listeningApproval": null,
+  "physicalDeviceValidation": null,
+  "licenseReview": "Generation and local preview only. Provider terms and account-use rights must be reviewed before publication.",
+  "technicalLoopBoundary": {
+    "checks": [
+      {
+        "path": "assets/audio/masters/open-skies-loop.flac",
+        "decodedFrames": 3969000,
+        "boundaryStepPerChannel": [
+          0.000274658203125,
+          0.000244140625
+        ],
+        "maxAdjacentStepNearBoundary": 0.00787353515625,
+        "headTailRmsDifferenceDb": 0.8524533970746504
+      },
+      {
+        "path": "web/public/audio/music/open-skies-loop.mp3",
+        "decodedFrames": 3969000,
+        "boundaryStepPerChannel": [
+          0.0009068213403224945,
+          0.004131034016609192
+        ],
+        "maxAdjacentStepNearBoundary": 0.012003153562545776,
+        "headTailRmsDifferenceDb": 0.8758409349610218
+      }
+    ],
+    "method": "Full sequential decode before sample continuity check, preserving MP3 reservoir/encoder delay. Numerical check only; repeated listening approval remains pending. Constant gain avoids changing the level across the seam."
+  },
+  "soundDesign": "technical-aerospace-v1: dry tactile clicks, filtered electrical transients and servo-air glides. No pitched bloop or musical UI motif.",
+  "musicUnchangedFrom": "drafts/open-skies-bloop/manifest.json (identical music hash)"
+}

@@ -7,13 +7,13 @@ import { ApplicationIntroReadyContext } from "./context";
 import { useApplicationIntro } from "./use-application-intro";
 
 export function ApplicationIntro({ children }: { children: ReactNode }) {
-  const { visible, ready } = useApplicationIntro();
+  const { visible, ready, progress } = useApplicationIntro();
   const copy = useTranslations("applicationIntro");
 
   return (
     <ApplicationIntroReadyContext.Provider value={ready}>
       {children}
-      {visible && <FullScreenLoader progress={null} label={copy.label} detail={copy.detail} />}
+      {visible && <FullScreenLoader progress={progress} label={copy.label} detail={copy.detail} />}
     </ApplicationIntroReadyContext.Provider>
   );
 }

@@ -1,4 +1,5 @@
-export type EntityKind = "universe" | "galaxy" | "cloud" | "system" | "planet";
+import type { EntityKind } from "./hierarchy";
+export type { EntityKind } from "./hierarchy";
 
 export type NavigationTarget = Readonly<{ kind: EntityKind; id: string }>;
 

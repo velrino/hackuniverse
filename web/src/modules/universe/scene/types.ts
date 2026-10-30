@@ -1,5 +1,9 @@
 import type { NavigationTarget, UniverseSceneView } from "../domain/types";
+import type { UniverseEntityTransition } from "./entity-transition";
+export type { UniverseEntityTransition } from "./entity-transition";
 import type { ShipFlightInput } from "./flight";
+import type { UniverseCameraPose, UniverseCameraRestore } from "../domain/camera-link";
+export type { UniverseCameraRestore } from "../domain/camera-link";
 
 export type UniverseFlightStatus = "idle" | "loading" | "ready" | "error";
 export type UniverseTourCameraStep = { token: string; target: NavigationTarget; motion?: "approach" };
@@ -29,7 +33,14 @@ export type UniverseSceneProps = {
   tourStep?: UniverseTourCameraStep | null;
   tourPreparing?: boolean;
   onTourArrive?: (token: string) => void;
+  entityTransition?: UniverseEntityTransition | null;
+  onEntityTransitionEnd?: (token: string) => void;
   onInteraction?: () => void;
+  onZoomIntent?: (direction: "in" | "out") => void;
+  cameraRestore?: UniverseCameraRestore;
+  onCameraChange?: (pose: UniverseCameraPose, reason: "manual" | "navigation") => void;
+  onCameraRestored?: (token: string, success: boolean) => void;
+  onCameraReader?: (reader: (() => UniverseCameraPose | null) | null) => void;
   starSelected?: boolean;
   starFocusToken?: number;
   onSelectStar?: () => void;

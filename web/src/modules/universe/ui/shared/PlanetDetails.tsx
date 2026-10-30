@@ -4,8 +4,9 @@ import { Panel } from "@/components/ui/panel";
 import { TypewriterText } from "@/components/ui/typewriter-text";
 import type { UniversePlanet } from "../../domain/types";
 import type { UniverseCopy } from "../../messages";
+import type { ReactNode } from "react";
 
-export function PlanetDetails({ planet, copy, onBack, demo }: { planet: UniversePlanet; copy: UniverseCopy; onBack: () => void; demo: boolean }) {
+export function PlanetDetails({ planet, copy, onBack, demo, actions }: { planet: UniversePlanet; copy: UniverseCopy; onBack: () => void; demo: boolean; actions?: ReactNode }) {
   const reference = planet.reference;
   const SourceIcon = reference?.href ? Link2 : CircleDot;
 
@@ -17,6 +18,7 @@ export function PlanetDetails({ planet, copy, onBack, demo }: { planet: Universe
       {reference && <div className="universe-source"><SourceIcon size={15} aria-hidden="true" /><span>{reference.label}</span></div>}
       {demo && reference && <p className="universe-source-note">{copy.demoReference}</p>}
       <div className="universe-details-actions">
+        {actions}
         <Button type="button" variant="outline" className="hud-button" onClick={onBack}><ArrowLeft aria-hidden="true" />{copy.parentSystem}</Button>
         {!demo && reference?.href && <Button asChild className="hud-button"><a href={reference.href} target="_blank" rel="noopener noreferrer">{copy.openReference}<ArrowUpRight aria-hidden="true" /></a></Button>}
       </div>

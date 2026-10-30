@@ -1,7 +1,7 @@
 "use client";
 
 import { mockCatalog } from "../adapters/catalog";
-import { UniverseHost } from "./UniverseHost";
+import { UniverseWorkspaceHost } from "@/modules/universe-workspace";
 import type { UniverseTourDefinition } from "../adapters/types";
 
 const tour: UniverseTourDefinition = {
@@ -17,5 +17,5 @@ const tour: UniverseTourDefinition = {
 
 /** The bundled demo is one source selection, outside the reusable host. */
 export function DemoUniverseHost() {
-  return <UniverseHost catalog={mockCatalog} tour={tour} />;
+  return <UniverseWorkspaceHost demoCatalog={mockCatalog} demoTour={tour} />;
 }

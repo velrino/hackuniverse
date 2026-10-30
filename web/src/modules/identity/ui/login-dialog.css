@@ -1,0 +1,101 @@
+.identity-login-dialog {
+  width: min(calc(100vw - 2rem), 28rem);
+}
+
+.identity-login-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.identity-login-body {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.identity-login-preview {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.75rem;
+  border-left: 2px solid var(--hud-accent);
+  background: color-mix(in srgb, var(--hud-accent) 7%, transparent);
+  color: var(--hud-muted);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.identity-login-preview svg {
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+  color: var(--hud-accent);
+}
+
+.identity-login-action {
+  width: 100%;
+  min-height: 2.875rem;
+}
+
+.identity-google-mark {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.identity-login-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--hud-muted);
+  font-size: 0.75rem;
+}
+
+.identity-login-divider span {
+  height: 1px;
+  flex: 1;
+  background: var(--hud-line);
+}
+
+.identity-login-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.identity-login-field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.identity-login-field label {
+  color: var(--hud-text);
+  font-size: 0.875rem;
+}
+
+.identity-login-field input {
+  width: 100%;
+  min-height: 2.875rem;
+  font-size: 1rem;
+}
+
+.identity-login-password {
+  position: relative;
+}
+
+.identity-login-password input {
+  padding-right: 3.125rem;
+}
+
+.identity-login-password button {
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+}
+
+.identity-login-status {
+  min-height: 2.75rem;
+  color: var(--hud-accent);
+  font-size: 0.8125rem;
+  line-height: 1.65;
+}

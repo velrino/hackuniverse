@@ -33,6 +33,12 @@
   line-height: 1.2;
 }
 
+.universe-explorer-menu__header [data-slot="dialog-description"] {
+  max-width: 52ch;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
 .universe-menu-location {
   display: flex;
   min-height: 36px;
@@ -79,12 +85,12 @@
 .universe-menu-tablist[data-slot="tabs-list"] {
   display: grid;
   flex-shrink: 0;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 2px;
   padding: 3px;
 }
 
-.universe-menu-tablist [data-slot="tabs-trigger"] { padding-inline: 8px; }
+.universe-menu-tablist [data-slot="tabs-trigger"] { min-width: 0; min-height: 44px; padding-inline: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .universe-menu-tablist [data-slot="tabs-trigger"] > span {
   min-width: 0;
@@ -156,7 +162,10 @@
 
 .universe-menu-options { display: flex; flex-direction: column; gap: 18px; padding: 3px; }
 .universe-menu-panel[hidden] { display: none; }
-.universe-menu-options > p { color: var(--hud-muted); font-size: 14px; line-height: 1.6; }
+.universe-menu-group { display: grid; flex: 0 0 auto; min-width: 0; gap: 12px; margin: 0; padding: 0; border: 0; }
+.universe-menu-group + .universe-menu-group { padding-top: 16px; border-top: 1px solid var(--hud-line); }
+.universe-menu-group legend { margin-bottom: 12px; padding: 0; color: var(--hud-text); font-size: 14px; font-weight: 600; }
+.universe-menu-group > p { color: var(--hud-muted); font-size: 13px; line-height: 1.6; }
 .universe-menu-action[data-slot="button"] { min-height: 48px; flex-shrink: 0; justify-content: flex-start; padding: 12px 16px; white-space: normal; }
 .universe-menu-action[aria-pressed="true"] { border-color: var(--hud-accent); background: var(--accent); }
 .universe-menu-language { padding-block: 4px; }
@@ -164,6 +173,20 @@
 .universe-menu-credit a { display: inline-flex; min-height: 44px; align-items: center; color: var(--hud-accent); text-decoration: underline; text-underline-offset: 3px; }
 .universe-menu-design-link:focus-visible,
 .universe-menu-credit a:focus-visible { outline: 2px solid var(--hud-accent); outline-offset: 3px; }
+
+.universe-menu-about-panel { padding: 3px; }
+.universe-menu-about { display: grid; gap: 14px; }
+.universe-menu-about h3 { margin: 0; color: var(--hud-text); font-size: 26px; font-weight: 600; line-height: 1.2; }
+.universe-menu-about > p:not(.hud-kicker) { color: var(--hud-muted); font-size: 14px; line-height: 1.7; }
+.universe-menu-about-links { display: grid; gap: 12px; margin-top: 4px; }
+.universe-menu-about-link[data-slot="button"] { display: flex; width: 100%; min-height: 64px; justify-content: flex-start; gap: 12px; padding: 12px 14px; text-align: left; white-space: normal; }
+.universe-menu-about-link > span { display: grid; flex: 1; min-width: 0; gap: 4px; }
+.universe-menu-about-link strong { font-size: 14px; font-weight: 600; line-height: 1.4; }
+.universe-menu-about-link small { font-size: 12px; font-weight: 400; line-height: 1.6; opacity: 0.85; }
+.universe-menu-about-link > svg { flex-shrink: 0; }
+.universe-menu-credits { margin-top: 4px; padding-top: 16px; border-top: 1px solid var(--hud-line); }
+.universe-menu-credits h4 { color: var(--hud-text); font-size: 14px; font-weight: 600; }
+.universe-menu-credit { color: var(--hud-muted); font-size: 12px; line-height: 1.6; }
 
 @media (max-width: 640px) {
   .universe-explorer-menu[data-slot="dialog-content"] { width: calc(100vw - 1rem); max-width: calc(100vw - 1rem); height: calc(100dvh - 1rem); max-height: calc(100dvh - 1rem); padding: 16px; }
@@ -175,6 +198,7 @@
 
 @media (max-height: 500px) {
   .universe-explorer-menu[data-slot="dialog-content"] { height: calc(100dvh - 1rem); max-height: calc(100dvh - 1rem); padding-block: 14px; }
-  .universe-menu-location { display: none; }
+  .universe-menu-atlas { overflow-y: auto; }
+  .universe-menu-planets { flex: 0 0 auto; max-height: 240px; }
   .universe-explorer-menu > [data-slot="dialog-body"] { gap: 8px; }
 }
