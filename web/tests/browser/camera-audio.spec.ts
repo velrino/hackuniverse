@@ -145,29 +145,45 @@ test("fourteen wheel ticks over two seconds end actual zoom sources after input 
 });
 
 test("the native audio deadline expires while JavaScript and its ended callbacks are blocked", async ({ page }, testInfo) => {
+  type Measurement = { before: number; after: number; deadline: number; endedWhileBlocked: number | null; blockedMs: number; sourceCount: number };
+  type StallProbe = ProbedWindow & { nativeAudioStall: Measurement | { error: string } | null };
   const point = await prepareCamera(page);
   await page.mouse.move(point.x, point.y);
   await page.mouse.wheel(0, 100);
   await expect.poll(async () => (await voices(page)).filter((voice) => voice.duration > 5).length).toBe(1);
-  // Renew just before blocking, rather than spending the lease waiting for the
-  // browser to deliver the initial wheel event and publish its first source.
-  await page.mouse.wheel(0, 100);
-  const measured = await page.evaluate(() => {
-    const probe = window as unknown as ProbedWindow;
-    const record = probe.cameraAudioProbe.find((voice) => voice.duration > 5);
-    if (!record || record.stopContext === null) throw new Error("The native camera audio deadline was not armed");
-    const before = probe.cameraAudioClock();
-    const deadline = record.stopContext;
-    const started = performance.now();
-    while (performance.now() - started < 700) { /* Simulate a busy rendering/application task. */ }
-    return { before, after: probe.cameraAudioClock(), deadline, endedWhileBlocked: record.ended, blockedMs: performance.now() - started };
+  await page.evaluate(() => {
+    const probe = window as unknown as StallProbe;
+    probe.nativeAudioStall = null;
+    const blockAfterCameraInput = (event: WheelEvent) => {
+      if (!event.isTrusted) return;
+      document.removeEventListener("wheel", blockAfterCameraInput);
+      // The app's canvas listener has already armed this wheel's native stop.
+      // Inspect and block in that same task, before a slow CI protocol roundtrip
+      // can spend the entire lease. An earlier source may already have expired.
+      const zooms = probe.cameraAudioProbe.filter((voice) => voice.duration > 5);
+      const record = zooms.at(-1);
+      const before = probe.cameraAudioClock();
+      if (!record || record.stopContext === null || record.stopContext <= before || record.ended !== null) {
+        probe.nativeAudioStall = { error: "The wheel did not arm a live native camera audio deadline" };
+        return;
+      }
+      const deadline = record.stopContext;
+      const started = performance.now();
+      while (performance.now() - started < 700) { /* Simulate a busy rendering/application task. */ }
+      probe.nativeAudioStall = { before, after: probe.cameraAudioClock(), deadline, endedWhileBlocked: record.ended, blockedMs: performance.now() - started, sourceCount: zooms.length };
+    };
+    document.addEventListener("wheel", blockAfterCameraInput);
   });
+  await page.mouse.wheel(0, 100);
+  await expect.poll(() => page.evaluate(() => (window as unknown as StallProbe).nativeAudioStall)).not.toBeNull();
+  const measured = await page.evaluate(() => (window as unknown as StallProbe).nativeAudioStall);
+  if (!measured || "error" in measured) throw new Error(measured?.error ?? "The native audio stall was not observed");
   expect(measured.deadline - measured.before).toBeGreaterThan(0);
   expect(measured.deadline - measured.before).toBeLessThan(0.23);
   expect(measured.after).toBeGreaterThan(measured.deadline + 0.3);
   expect(measured.endedWhileBlocked).toBeNull();
   await expect.poll(async () => (await voices(page)).filter((voice) => voice.duration > 5).every((voice) => voice.ended !== null)).toBe(true);
-  expect((await voices(page)).filter((voice) => voice.duration > 5)).toHaveLength(1);
+  expect((await voices(page)).filter((voice) => voice.duration > 5)).toHaveLength(measured.sourceCount);
   await testInfo.attach("native-clock-cutoff-during-js-stall", { body: JSON.stringify(measured, null, 2), contentType: "application/json" });
 });
 
