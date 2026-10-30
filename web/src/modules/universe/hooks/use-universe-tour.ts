@@ -9,11 +9,12 @@ export type UniverseTourOptions = Readonly<{
   ready: boolean;
   enabled?: boolean;
   autoStart?: boolean;
+  requireStart?: boolean;
   onStep: (step: UniverseTourStep, token: string) => void;
   onComplete?: () => void;
 }>;
 export type UniverseTourState = Readonly<{
-  phase: "idle" | "waiting" | "arriving" | "holding";
+  phase: "idle" | "prompt" | "waiting" | "arriving" | "holding";
   stepIndex: number;
   currentStep: UniverseTourStep | null;
   token: string | null;
@@ -54,7 +55,7 @@ function snapshot(run: Run): UniverseTourState {
 }
 
 /** Arrival acknowledgements start each dwell; navigation and camera work stay with the caller. */
-export function useUniverseTour({ storageKey, steps, ready, enabled = true, autoStart = true, onStep, onComplete }: UniverseTourOptions) {
+export function useUniverseTour({ storageKey, steps, ready, enabled = true, autoStart = true, requireStart = false, onStep, onComplete }: UniverseTourOptions) {
   const instance = useId();
   const [state, setState] = useState<UniverseTourState>(idle);
   const mounted = useRef(false);
@@ -173,14 +174,18 @@ export function useUniverseTour({ storageKey, steps, ready, enabled = true, auto
       if (run.current && run.current.storageKey !== storageKey) stop();
       if (waiting.current && waiting.current.storageKey !== storageKey) stop();
       if (!ready) {
-        if (run.current) stop();
+        if (run.current || state.phase === "prompt") stop();
         return;
       }
+      if (!autoStart && state.phase === "prompt") { stop(); return; }
       if (!run.current && waiting.current) begin(waiting.current.steps);
-      else if (!run.current && autoStart && cancelledAutoKey.current !== storageKey && !hasSeen(storageKey)) begin();
+      else if (!run.current && autoStart && cancelledAutoKey.current !== storageKey && !hasSeen(storageKey)) {
+        if (requireStart) setState((previous) => previous.phase === "prompt" ? previous : { ...idle, phase: "prompt", currentStep: steps[0] });
+        else begin();
+      }
     });
     return () => { current = false; };
-  }, [ready, enabled, storageKey, steps, autoStart, begin, stop]);
+  }, [ready, enabled, storageKey, steps, autoStart, requireStart, state.phase, begin, stop]);
 
   useEffect(() => {
     const current = run.current;
@@ -194,5 +199,5 @@ export function useUniverseTour({ storageKey, steps, ready, enabled = true, auto
     };
   }, [state.phase, state.token, advance]);
 
-  return { ...state, active: state.phase !== "idle", start: begin, cancel, arrive };
+  return { ...state, active: state.phase !== "idle" && state.phase !== "prompt", awaitingStart: state.phase === "prompt", start: begin, cancel, arrive };
 }

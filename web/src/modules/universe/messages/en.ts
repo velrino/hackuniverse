@@ -31,6 +31,8 @@ const en = {
   wider: "Wider view",
   reset: "Reset camera",
   tourTitle: "Tour",
+  tourWelcome: "Your universe is ready",
+  tourStart: "Start tour",
   tourDescription: "Start beside a planet and pull back to discover the whole universe.",
   tourSkip: "Skip tour",
   play: "Resume motion",

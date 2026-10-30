@@ -12,6 +12,7 @@ import { createSpatialBackground } from "./background";
 import { createDestinationHover } from "./destination-hover";
 import { createDestinationHighlight } from "./destination-highlight";
 import { createTourDolly, type TourDolly } from "./tour-motion";
+import { createTourZoomFeedback } from "./tour-zoom-feedback";
 import { galaxyParticleTexture } from "./galaxy-particles";
 import { createCloudHaze, createGalaxyVisual, createGlow, createRoundPointMaterial, updateCloudHaze, updateGalaxyVisual } from "./cluster-visuals";
 import { createSurroundingContext, type ContextLabel } from "./surrounding-context";
@@ -24,7 +25,7 @@ import { createPlanetRings } from "./planet-rings";
 import { isCameraPose, type UniverseCameraPose } from "../domain/camera-link";
 import type { UniverseCameraRestore } from "./types";
 
-type Callbacks = { onSelect: (id: string) => void; onSelectStar: () => void; onReady: () => void; onUnavailable: () => void; onError?: (error: unknown, operation: UniverseSceneErrorOperation) => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onEntityTransitionEnd?: (token: string) => void; onInteraction: () => void; onZoomIntent?: (direction: "in" | "out") => void; onOrbitIntent?: () => void; onCameraGestureEnd?: (motion: "zoom" | "orbit") => void; onDestinationHover?: (id: string) => void; onCameraChange?: (pose: UniverseCameraPose, reason: "manual" | "navigation") => void; onCameraRestored?: (token: string, success: boolean) => void };
+type Callbacks = { onSelect: (id: string) => void; onSelectStar: () => void; onReady: () => void; onUnavailable: () => void; onError?: (error: unknown, operation: UniverseSceneErrorOperation) => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onEntityTransitionEnd?: (token: string) => void; onInteraction: () => void; onZoomIntent?: (direction: "in" | "out") => void; onOrbitIntent?: () => void; onCameraGestureEnd?: (motion: "zoom" | "orbit") => void; onTourZoomIntent?: (direction: "in" | "out") => void; onTourZoomEnd?: () => void; onDestinationHover?: (id: string) => void; onCameraChange?: (pose: UniverseCameraPose, reason: "manual" | "navigation") => void; onCameraRestored?: (token: string, success: boolean) => void };
 type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; previewPixels?: number; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[]; dust?: THREE.Points; core?: THREE.Sprite; highlight?: (active: boolean) => void; haze?: { primary: THREE.Sprite; secondary: THREE.Sprite } };
 type Label = { element: HTMLElement; body?: Body; position?: THREE.Vector3; width: number; star?: boolean; context?: ContextLabel };
 type CentralStar = { systemId: string; object: THREE.Mesh; highlight: (active: boolean) => void };
@@ -191,6 +192,12 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   const projected = new THREE.Vector3();
   const labelPosition = new THREE.Vector3();
   const tourDirection = new THREE.Vector3();
+  const tourBeforePosition = new THREE.Vector3();
+  const tourBeforeTarget = new THREE.Vector3();
+  const tourFeedback = createTourZoomFeedback(
+    (direction) => { try { callbacks.onTourZoomIntent?.(direction); } catch { /* Optional feedback cannot own the tour camera. */ } },
+    () => { try { callbacks.onTourZoomEnd?.(); } catch { /* Optional feedback cannot own the tour lifecycle. */ } },
+  );
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   const activePointers = new Set<number>();
@@ -574,6 +581,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
 
   function cancelCameraTween(keepOverlap = false) {
+    tourFeedback.stop();
     if (keepOverlap && worldTransition) worldTransition.cameraOwned = false;
     else finishWorldTransition();
     cameraTween = null;
@@ -634,6 +642,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       requestRender();
       return;
     }
+    tourFeedback.stop();
     suppressCameraGestures(true, view.key);
     // Keep only one bounded snapshot for deletion after the projection is rebuilt.
     previousEntityViewKey = currentView?.key;
@@ -851,6 +860,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   function setTourStep(step: UniverseTourCameraStep | null) {
     if (step) { clearCameraReport(); suppressCameraGestures(); }
     if (step?.token === tourStep?.token) return;
+    tourFeedback.stop();
     const previous = tourStep;
     tourStep = step;
     arrivedTourToken = null;
@@ -1015,6 +1025,15 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       }
       previousFocusPosition.copy(focused.object.position);
     }
+    // Exclude the orbital-follow translation above and the automatic orbit below.
+    // Only explicit tour-owned camera animations can renew the tour sound.
+    const tourMoving = Boolean(tourStep && !tourPreparing && playing && !reducedMotion && !piloting &&
+      (cameraTween || worldTransition?.cameraOwned));
+    const tourBeforeDistance = tourMoving ? camera.position.distanceTo(controls.target) : 0;
+    if (tourMoving) {
+      tourBeforePosition.copy(camera.position);
+      tourBeforeTarget.copy(controls.target);
+    } else tourFeedback.stop();
     if (!piloting && worldTransition) {
       const progress = Math.min(1, (time - worldTransition.started) / worldTransition.duration);
       const eased = progress * progress * (3 - 2 * progress);
@@ -1052,6 +1071,15 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         onComplete?.();
       }
     }
+    if (tourMoving && (cameraTween || worldTransition?.cameraOwned)) {
+      tourFeedback.sample({
+        active: true,
+        beforeDistance: tourBeforeDistance,
+        afterDistance: camera.position.distanceTo(controls.target),
+        cameraTravelSquared: camera.position.distanceToSquared(tourBeforePosition),
+        targetTravelSquared: controls.target.distanceToSquared(tourBeforeTarget),
+      });
+    } else tourFeedback.stop();
     if (piloting) {
       controls.autoRotate = false;
       pilot.update(delta);
@@ -1165,10 +1193,12 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       });
       if (!ready && currentView) { ready = true; callbacks.onReady(); }
       if (tourStep && arrivedTourToken !== tourStep.token && !cameraTween && !worldTransition && playing) {
+        tourFeedback.stop();
         arrivedTourToken = tourStep.token;
         callbacks.onTourArrive(tourStep.token);
       }
     } catch (error) {
+      tourFeedback.stop();
       reportError(error, "render");
       unavailable = true;
       stopFlight();
@@ -1318,7 +1348,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   }
   function onPointerCancel(event: PointerEvent) { suppressCameraGestures(); activePointers.delete(event.pointerId); touchPoints.delete(event.pointerId); if (activePointers.size === 0) document.removeEventListener("pointermove", onAfterControlPointerMove); pointerStart = null; clearZoomIntent(); promoteRemainingTouch(event); }
   function onLostPointerCapture(event: PointerEvent) { if (activePointers.has(event.pointerId)) onPointerCancel(event); }
-  function onWindowBlur() { suppressCameraGestures(); activePointers.clear(); touchPoints.clear(); document.removeEventListener("pointermove", onAfterControlPointerMove); pointerStart = null; clearZoomIntent(); }
+  function onWindowBlur() { tourFeedback.stop(); suppressCameraGestures(); activePointers.clear(); touchPoints.clear(); document.removeEventListener("pointermove", onAfterControlPointerMove); pointerStart = null; clearZoomIntent(); }
   function onWheelCapture(event: WheelEvent) { if (event.isTrusted) wheelDistances.set(event, controls.getDistance()); }
   function onWheel(event: WheelEvent, before = wheelDistances.get(event)) {
     if (!event.isTrusted || !event.deltaY || !controls.enabled || !playing || pilot.isActive()) return;
@@ -1384,9 +1414,10 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       else callbacks.onScaleIn(decision.id);
     }
   }
-  function stopFrame() { if (frame !== null) cancelAnimationFrame(frame); frame = null; previousTime = performance.now(); }
+  function stopFrame() { tourFeedback.stop(); if (frame !== null) cancelAnimationFrame(frame); frame = null; previousTime = performance.now(); }
   function onVisibility() { pageVisible = !document.hidden; if (!pageVisible) { onWindowBlur(); destinationHover.clear(); guideButton.hidden = true; } pilot.setPaused(flightPaused || !pageVisible || !intersecting); stopFrame(); if (pageVisible) requestRender(); }
   function onMotion() {
+    tourFeedback.stop();
     suppressCameraGestures();
     reducedMotion = motionQuery.matches;
     if (reducedMotion) finishEntityTransition();
@@ -1608,10 +1639,11 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     setStarSelected,
     setTourStep,
     setEntityTransition,
-    setTourPreparing(value: boolean) { tourPreparing = value; if (value) { suppressCameraGestures(); clearCameraReport(); } },
+    setTourPreparing(value: boolean) { tourPreparing = value; if (value) { tourFeedback.stop(); suppressCameraGestures(); clearCameraReport(); } },
     setAriaLabel(value: string) { canvas.setAttribute("aria-label", value); },
     setAutoOrbit(value: boolean) { autoOrbit = value; if (!value) controls.autoRotate = false; requestRender(); },
     setPlaying(value: boolean) {
+      if (!value) tourFeedback.stop();
       if (!value) suppressCameraGestures();
       if (!value) destinationHover.clear();
       if (!value) clearZoomIntent();
@@ -1663,6 +1695,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       requestRender();
     },
     destroy() {
+      tourFeedback.stop();
       suppressCameraGestures();
       destroyed = true;
       clearCameraReport();

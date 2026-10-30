@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, Layers3, Orbit } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Panel } from "@/components/ui/panel";
 import { useUniverseAdapters } from "../../adapters/hooks/use-universe-adapters";
 import { useUniverseNavigation } from "../../hooks/use-universe-navigation";
 import { useUniverseTour, type UniverseTourStep } from "../../hooks/use-universe-tour";
@@ -26,6 +27,7 @@ export function Explorer() {
   const menuOpenRef = useRef(false);
   const hud = useRef<HTMLDivElement>(null);
   const skipTourButton = useRef<HTMLButtonElement>(null);
+  const startTourButton = useRef<HTMLButtonElement>(null);
   const tourHadFocus = useRef(false);
   const tourWasActive = useRef(false);
   const [showOrbits, setShowOrbits] = useState(true);
@@ -62,9 +64,11 @@ export function Explorer() {
     ready: presentationReady && sceneStatus === "ready" && !blocked && !flightEnabled && flightStatus === "idle",
     enabled: tourAvailable,
     autoStart: autoTour,
+    requireStart: audio?.tourRequiresInteraction,
     onStep: onTourStep,
   });
   const { cancel: cancelTour } = tour;
+  useEffect(() => { if (tour.awaitingStart) startTourButton.current?.focus({ preventScroll: true }); }, [tour.awaitingStart]);
   const locationRequestToken = location?.navigationRequest?.token;
   useEffect(() => {
     if (!locationRequestToken) return;
@@ -120,7 +124,17 @@ export function Explorer() {
   const hoverFeedback = useCallback((id: string) => {
     try { audio?.onDestinationHover?.(id); } catch { /* Optional feedback cannot block navigation. */ }
   }, [audio]);
+  const tourZoomFeedback = useCallback((direction: "in" | "out") => {
+    try { audio?.onTourZoomIntent?.(direction); } catch { /* Optional feedback cannot block the tour. */ }
+  }, [audio]);
+  const stopTourZoomFeedback = useCallback(() => {
+    try { audio?.onTourZoomEnd?.(); } catch { /* Optional feedback cannot block the tour. */ }
+  }, [audio]);
+  const unlockTourAudio = () => {
+    try { audio?.onTourStart?.(); } catch { /* Playback permission cannot block exploration. */ }
+  };
   const startTour = () => {
+    unlockTourAudio();
     const prepared = buildManualUniverseTour(catalog, { kind: current.kind, id: current.id }, tourDefinition?.steps ?? noTourSteps);
     if (!prepared) return;
     setSelectedStarSystemId(null);
@@ -200,11 +214,11 @@ export function Explorer() {
 
   return (
     <main className="universe-page universe-minimal" aria-label={copy.title} data-scale={current.kind} data-flight={flightEnabled} data-flight-status={flightStatus} data-tour-phase={tour.phase} data-tour-active={tour.active}>
-      <div className="universe-scene" aria-busy={sceneStatus === "loading"}>
-        <Scene view={view} selectedId={planet?.id ?? null} playing={!blocked} showOrbits={showOrbits} autoOrbit={tour.active || autoOrbit} resetToken={resetToken} zoomAction={null} onSelect={selectSceneNode} onReady={onReady} onUnavailable={onUnavailable} ariaLabel={copy.canvas} flightEnabled={flightEnabled} flightPaused={blocked} flightInput={flightInput} onFlightStatus={onFlightStatus} flightTargetId={flightEnabled ? flightTargetId : null} autopilotTargetId={flightEnabled ? autopilotTargetId : null} guideActionLabel={autopilotTargetId === flightTargetId && autopilotTargetId ? copy.cancelGuidance : copy.guideShip} onGuideRequest={guideTo} onAutopilotEnd={onAutopilotEnd} hasParentView={Boolean(parent)} onScaleOut={goWider} onScaleIn={goTo} tourPreparing={tour.phase === "waiting" && tour.currentStep?.motion === "approach"} tourStep={tour.active && tour.token === tourCameraStep?.token ? tourCameraStep : null} onTourArrive={tour.arrive} onInteraction={cancelTour} onZoomIntent={zoomFeedback} onOrbitIntent={orbitFeedback} onCameraGestureEnd={stopCameraFeedback} onDestinationHover={hoverFeedback} starSelected={starSelected} starFocusToken={starFocusToken} onSelectStar={selectStar} entityTransition={management?.entityTransition} onEntityTransitionEnd={management?.onEntityTransitionEnd} />
+      <div className="universe-scene" inert={tour.awaitingStart} aria-busy={sceneStatus === "loading"}>
+        <Scene view={view} selectedId={planet?.id ?? null} playing={!blocked && !tour.awaitingStart} showOrbits={showOrbits} autoOrbit={tour.active || autoOrbit} resetToken={resetToken} zoomAction={null} onSelect={selectSceneNode} onReady={onReady} onUnavailable={onUnavailable} ariaLabel={copy.canvas} flightEnabled={flightEnabled} flightPaused={blocked} flightInput={flightInput} onFlightStatus={onFlightStatus} flightTargetId={flightEnabled ? flightTargetId : null} autopilotTargetId={flightEnabled ? autopilotTargetId : null} guideActionLabel={autopilotTargetId === flightTargetId && autopilotTargetId ? copy.cancelGuidance : copy.guideShip} onGuideRequest={guideTo} onAutopilotEnd={onAutopilotEnd} hasParentView={Boolean(parent)} onScaleOut={goWider} onScaleIn={goTo} tourPreparing={tour.phase === "waiting" && tour.currentStep?.motion === "approach"} tourStep={tour.active && tour.token === tourCameraStep?.token ? tourCameraStep : null} onTourArrive={tour.arrive} onTourZoomIntent={tourZoomFeedback} onTourZoomEnd={stopTourZoomFeedback} onInteraction={cancelTour} onZoomIntent={zoomFeedback} onOrbitIntent={orbitFeedback} onCameraGestureEnd={stopCameraFeedback} onDestinationHover={hoverFeedback} starSelected={starSelected} starFocusToken={starFocusToken} onSelectStar={selectStar} entityTransition={management?.entityTransition} onEntityTransitionEnd={management?.onEntityTransitionEnd} />
       </div>
       <div className="universe-vignette" aria-hidden="true" />
-      <div ref={hud} className="universe-hud" hidden={tour.active}>
+      <div ref={hud} className="universe-hud" hidden={tour.active || tour.awaitingStart}>
         {location?.Status && <location.Status />}
         {management && <management.Actions target={{ kind: current.kind, id: current.id }} onInteraction={prepareManagement} disabled={menuOpen} />}
         {management?.EmptyState && !blocked && !tour.active && !flightEnabled && sceneStatus === "ready" && current.kind !== "planet" && view.nodes.length === 0 && <management.EmptyState target={{ kind: current.kind, id: current.id }} onInteraction={prepareManagement} />}
@@ -221,6 +235,14 @@ export function Explorer() {
         {parent && <Button type="button" variant="outline" data-audio-ignore="true" className="hud-button universe-scale-back" onClick={goWiderManually} title={`${copy.wider}: ${copy.kinds[parent.kind]}`}><Layers3 aria-hidden="true" /><span>{copy.kinds[parent.kind]}</span></Button>}
         {flightEnabled && !blocked && <><FlightControls copy={copy} onInput={setFlightInput} /><Button type="button" variant="outline" className="hud-button universe-flight-exit" onClick={() => setFlightEnabled(false)}><ArrowLeft aria-hidden="true" />{copy.exitFlight}</Button></>}
       </div>
+      {tour.awaitingStart && <div className="universe-tour-entry">
+        <Panel as="section" className="universe-tour-entry__panel" aria-label={copy.tourTitle}>
+          <p className="hud-kicker">HackUniverse</p>
+          <h2>{copy.tourWelcome}</h2>
+          <p>{copy.tourDescription}</p>
+          <Button ref={startTourButton} type="button" onClick={() => { unlockTourAudio(); tour.start(); }}>{copy.tourStart}</Button>
+        </Panel>
+      </div>}
       <div className="universe-tour-status" hidden={!tour.active}>
         <p role="status" aria-atomic="true">{copy.tourTitle} · {current.name}</p>
         <Button ref={skipTourButton} type="button" variant="outline" className="hud-button" onClick={cancelTour}>{copy.tourSkip}</Button>

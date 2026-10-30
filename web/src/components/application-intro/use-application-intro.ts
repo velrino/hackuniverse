@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { browserStorage } from "../../lib/storage";
 
 const storageKey = "hackuniverse.intro.v1.seen";
@@ -9,27 +9,40 @@ const progressIntervalMs = 50;
 const completionFrameMs = 50;
 let seenInDocument = false;
 
-export function useApplicationIntro() {
-  const [state, setState] = useState({ visible: false, ready: false, progress: 0 });
+type IntroPhase = "checking" | "entry" | "loading" | "ready";
+type IntroState = { phase: IntroPhase; visible: boolean; ready: boolean; progress: number };
+
+export function useApplicationIntro({ requireInteraction = false }: { requireInteraction?: boolean } = {}) {
+  const [state, setState] = useState<IntroState>({ phase: "checking", visible: false, ready: false, progress: 0 });
+  const [requested, setRequested] = useState(false);
+  const checked = useRef(false);
+  const skipped = useRef(false);
   const startedAt = useRef<number | null>(null);
+  const start = useCallback(() => setRequested(true), []);
 
   useEffect(() => {
     const settle = () => {
-      const timer = window.setTimeout(() => setState({ visible: false, ready: true, progress: 100 }), 0);
+      const timer = window.setTimeout(() => setState({ phase: "ready", visible: false, ready: true, progress: 100 }), 0);
       return () => window.clearTimeout(timer);
     };
-    if (startedAt.current === null) {
-      if (seenInDocument) return settle();
-      seenInDocument = true;
-
+    if (!checked.current) {
+      checked.current = true;
+      skipped.current = seenInDocument;
       try {
-        if (browserStorage.getItem(storageKey) === "1") return settle();
+        skipped.current ||= browserStorage.getItem(storageKey) === "1";
+      } catch { /* The in-document guard remains available when storage is blocked. */ }
+    }
+    if (skipped.current) return settle();
+    if (startedAt.current === null) {
+      if (requireInteraction && !requested) {
+        const timer = window.setTimeout(() => setState({ phase: "entry", visible: false, ready: false, progress: 0 }), 0);
+        return () => window.clearTimeout(timer);
+      }
+      seenInDocument = true;
+      try {
         // Persist before opening so a refresh during the intro skips it.
         browserStorage.setItem(storageKey, "1");
-      } catch {
-        // The document guard still prevents repeats when storage is blocked.
-      }
-
+      } catch { /* The document guard still prevents repeats when storage is blocked. */ }
       startedAt.current = performance.now();
     }
 
@@ -44,6 +57,7 @@ export function useApplicationIntro() {
       const elapsed = Math.max(0, current - start);
       const complete = current >= closeAt;
       setState({
+        phase: complete ? "ready" : "loading",
         visible: !complete,
         ready: complete,
         progress: Math.min(100, elapsed / durationMs * 100),
@@ -60,7 +74,7 @@ export function useApplicationIntro() {
     // Leave one short completion frame so 100% is visible before releasing the tour.
     const closeTimer = window.setTimeout(() => {
       window.clearInterval(progressTimer);
-      setState({ visible: false, ready: true, progress: 100 });
+      setState({ phase: "ready", visible: false, ready: true, progress: 100 });
     }, closeAt - now);
 
     return () => {
@@ -69,7 +83,7 @@ export function useApplicationIntro() {
       window.clearTimeout(completeTimer);
       window.clearTimeout(closeTimer);
     };
-  }, []);
+  }, [requireInteraction, requested]);
 
-  return state;
+  return { ...state, start };
 }

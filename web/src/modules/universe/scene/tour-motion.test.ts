@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createTourDolly, type TourDolly } from "./tour-motion";
+import { createTourZoomFeedback } from "./tour-zoom-feedback";
 import { orbitalAngle, orbitalSpeed, systemOrbit } from "./layout";
 import "../hooks/universe-tour-route.test";
 
@@ -105,4 +106,70 @@ test("main integration and previews retain the same orbital phase", () => {
     for (const delta of [0.016, 0.033, 0.05, 0.008, 0.04]) { elapsed += delta; angle += delta * orbitalSpeed(systemOrbit(index)); }
     near(angle, orbitalAngle(index, elapsed));
   }
+});
+
+test("tour feedback renews on actual approach and pullback samples without a replay timer", () => {
+  const events: string[] = [];
+  const feedback = createTourZoomFeedback((direction) => events.push(direction), () => events.push("end"));
+  for (let distance = 100; distance > 70; distance -= 10) feedback.sample({
+    active: true, beforeDistance: distance, afterDistance: distance - 10,
+    cameraTravelSquared: 100, targetTravelSquared: 0,
+  });
+  for (let distance = 70; distance < 100; distance += 10) feedback.sample({
+    active: true, beforeDistance: distance, afterDistance: distance + 10,
+    cameraTravelSquared: 100, targetTravelSquared: 0,
+  });
+  assert.deepEqual(events, ["in", "in", "in", "out", "out", "out"]);
+  feedback.stop();
+  assert.deepEqual(events.slice(-2), ["out", "end"]);
+});
+
+test("tour holds and inactive orbital-follow movement cannot renew zoom feedback", () => {
+  const events: string[] = [];
+  const feedback = createTourZoomFeedback((direction) => events.push(direction), () => events.push("end"));
+  const still = { active: true, beforeDistance: 20, afterDistance: 20, cameraTravelSquared: 0, targetTravelSquared: 0 };
+  feedback.sample(still);
+  feedback.sample({ ...still, afterDistance: 21, cameraTravelSquared: 1 });
+  feedback.sample(still);
+  feedback.sample({ ...still, active: false, afterDistance: 22, cameraTravelSquared: 9, targetTravelSquared: 4 });
+  feedback.stop();
+  assert.deepEqual(events, ["out", "end"]);
+});
+
+test("lateral tour approach retains its direction until translation stops", () => {
+  const events: string[] = [];
+  const feedback = createTourZoomFeedback((direction) => events.push(direction), () => events.push("end"));
+  feedback.sample({ active: true, beforeDistance: 20, afterDistance: 19, cameraTravelSquared: 1, targetTravelSquared: 0 });
+  feedback.sample({ active: true, beforeDistance: 19, afterDistance: 19, cameraTravelSquared: 2, targetTravelSquared: 2 });
+  feedback.sample({ active: true, beforeDistance: 19, afterDistance: 19, cameraTravelSquared: 0, targetTravelSquared: 0 });
+  assert.deepEqual(events, ["in", "in", "end"]);
+});
+
+test("cancellation ends each tour movement once and allows a subsequent movement", () => {
+  const events: string[] = [];
+  const feedback = createTourZoomFeedback((direction) => events.push(direction), () => events.push("end"));
+  const sample = { active: true, beforeDistance: 10, afterDistance: 12, cameraTravelSquared: 4, targetTravelSquared: 0 };
+  feedback.sample(sample);
+  feedback.stop();
+  feedback.stop();
+  feedback.sample({ ...sample, active: false });
+  feedback.sample(sample);
+  feedback.stop();
+  assert.deepEqual(events, ["out", "end", "out", "end"]);
+});
+
+test("invalid tour samples and numerical jitter end feedback without poisoning the next sample", () => {
+  const events: string[] = [];
+  const feedback = createTourZoomFeedback((direction) => events.push(direction), () => events.push("end"));
+  const sample = { active: true, beforeDistance: 10, afterDistance: 11, cameraTravelSquared: 1, targetTravelSquared: 0 };
+  feedback.sample(sample);
+  for (const bad of [NaN, Infinity, -1]) {
+    feedback.sample({ ...sample, cameraTravelSquared: bad });
+    feedback.sample({ ...sample, targetTravelSquared: bad });
+  }
+  feedback.sample({ ...sample, afterDistance: 0 });
+  feedback.sample({ ...sample, beforeDistance: -1 });
+  feedback.sample({ ...sample, afterDistance: 10 + 1e-12, cameraTravelSquared: 1e-24 });
+  feedback.sample(sample);
+  assert.deepEqual(events, ["out", "end", "out"]);
 });
