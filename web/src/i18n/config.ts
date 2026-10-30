@@ -6,11 +6,12 @@ export const localeQueryKey = "lang";
 export const localeRequestHeader = "x-hackuniverse-locale";
 
 export const languageOptions = [
-  { locale: "en", label: "English", region: "United States", flag: "🇺🇸" },
-  { locale: "pt-BR", label: "Português", region: "Brasil", flag: "🇧🇷" },
+  { locale: "en", label: "English", fullLabel: "English", region: "United States", flag: "🇺🇸" },
+  { locale: "pt-BR", label: "Português", fullLabel: "Português (Brasil)", region: "Brasil", flag: "🇧🇷" },
 ] as const satisfies readonly {
   locale: Locale;
   label: string;
+  fullLabel: string;
   region: string;
   flag: string;
 }[];
