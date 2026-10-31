@@ -26,7 +26,7 @@ Local editing, multiple universes, cascading deletion and browser persistence ar
 
 The [audio guide](../docs/UNIVERSE-AUDIO.md) records audio provenance, playback controls and browser behavior. Application-owned persistence shares the lazy [browser storage transport](../docs/BROWSER-STORAGE.md); modules retain their own schemas, defaults and recovery rules.
 
-`DemoUniverseHost` also supplies the guided Earth-to-universe tour as presentation configuration. It waits for scene readiness and the global intro, and runs automatically once with a three-second Earth arrival hold. Manual replay from Settings approaches Earth from the current camera through adjacent hierarchy groups, holds for one second after arrival, then follows the original outward steps. The hook snapshots a prepared manual route while awaiting readiness. Its `hackuniverse.demo-tour.v1.seen` flag is independent of the welcome flag below; [the explorer guide](../docs/UNIVERSE-EXPLORER.md#guided-demo-tour) owns cancellation, timing and reduced-motion rules.
+`DemoUniverseHost` also supplies the guided Earth-to-universe tour as presentation configuration. It waits for scene readiness and the global intro, and runs automatically once with a three-second Earth arrival hold. Manual replay from Settings approaches Earth from the current camera through adjacent hierarchy groups, holds for one second after arrival, then follows the original outward steps. The hook snapshots a prepared manual route while awaiting readiness. Its `hackuniverse.demo-tour.v1.seen` flag is independent of the startup-loader flag below; [the explorer guide](../docs/UNIVERSE-EXPLORER.md#guided-demo-tour) owns cancellation, timing and reduced-motion rules.
 
 All bundled entities explicitly carry optional `type: "demo"`; catalog `mode` never assigns that classification. A hide-demo feature is not implemented. The [data guide](../docs/UNIVERSE-DATA.md) owns classification, star metadata, rendering-only scene anchor/ancestors and future filtering rules. Detailed system previews require a projected extent of at least 28 pixels and are limited to four at scene widths below 640 pixels, eight otherwise; other systems remain light proxies. Bounded spiral particles and neighboring-group points preserve the surroundings through hierarchy zooms. They remain decorative and refresh when crossing the mobile breakpoint; [the explorer guide](../docs/UNIVERSE-EXPLORER.md#scene-detail-and-scale) defines continuity and rendering budgets.
 
@@ -49,9 +49,9 @@ export function ObjectCopy({ id, name, description }: { id: string; name: string
 
 The current application uses this effect only for planet/star panel names and descriptions. Facts, demo markers, source links and actions remain immediate. Keep these same limits when reusing the component; [the visual guide](../docs/DESIGN-SYSTEM.md#detail-text-reveal) records the interaction standard.
 
-## First-visit welcome
+## First-visit startup
 
-The first-visit sequence is owned by `ApplicationIntro`; see [startup preparation](../docs/UNIVERSE-EXPLORER.md#startup-preparation) for loader timing, background scene preparation, the subsequent audio entry action and returning visits. The manual loading preview lives on the shared documentation site and remains independent of application startup.
+The first-visit sequence is owned by `ApplicationIntro`; see [startup preparation](../docs/UNIVERSE-EXPLORER.md#startup-preparation) for loader timing, background scene preparation, direct app entry without a welcome modal, the best-effort startup cue and returning visits. Audio activates through normal trusted interactions; runtime zoom aliases remain silent. The manual loading preview lives on the shared documentation site and remains independent of application startup.
 
 ## Run locally
 

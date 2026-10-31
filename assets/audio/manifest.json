@@ -38,7 +38,8 @@
   "processing": [
     "Music constant gain from measured integrated loudness, target -22LUFS / peak ceiling -4dBTP (no time-varying normalization across the seam); stereo44.1kHz96kbps MP3.",
     "Starmap WAV copies remove BWF/descriptive metadata with identical s16le PCM, sample rate, channels and frame count. Sources in the supplied folder are untouched.",
-    "Web effects use constant gain toward -28dBFS mean with a -10dBFS sample-peak ceiling and at most48dB boost; no compression, pitch or speed changes. Mono64kbps/stereo96kbps MP3 at44.1kHz. Only active UI derivatives trim measured quiet padding; camera recordings retain their full source duration. Active aliases use2ms/8ms endpoint fades. ID3, Xing and encoder tags are removed; ordinary codec frame padding is included in measured durations."
+    "Web effects use constant gain toward -28dBFS mean with a -10dBFS sample-peak ceiling and at most48dB boost; no compression, pitch or speed changes. Mono64kbps/stereo96kbps MP3 at44.1kHz. Only active UI derivatives trim measured quiet padding; camera recordings retain their full source duration. Active aliases use2ms/8ms endpoint fades. ID3, Xing and encoder tags are removed; ordinary codec frame padding is included in measured durations.",
+    "User-requested runtime override: only zoom-in.mp3 and zoom-out.mp3 are digitally silent. Decode the previous runtime alias, set every PCM sample to zero, remove its existing codec padding to retain the 235200-sample source duration, and encode mono 44.1 kHz/64 kbps MP3 without ID3/Xing/encoder tags. The resulting aliases retain 237312 decoded frames (5.38122449 s including codec padding). Imported CAM_Zoom.wav, its catalog MP3 and all other audio files remain unchanged; no generation API was called."
   ],
   "files": [
     {
@@ -1293,31 +1294,31 @@
     },
     {
       "path": "web/public/audio/sfx/zoom-in.mp3",
-      "sha256": "86edc02645d196fc7aef5fa00679cc056f24e5856aa49c92a33990877ece60d7",
+      "sha256": "7f6fe86b3fffcb36973cbd5529f01525edfa5250eb96c836710ede4fa79f8fd6",
       "bytes": 43049,
       "durationSeconds": 5.381224489795918,
       "encodedDurationSeconds": 5.381125,
       "sampleRate": 44100,
       "channels": 1,
-      "meanDbfs": -28.449,
-      "peakDbfs": -13.448,
-      "silent": false,
-      "integratedLufs": -25.36,
-      "truePeakDbtp": -13.43
+      "meanDbfs": null,
+      "peakDbfs": null,
+      "silent": true,
+      "integratedLufs": null,
+      "truePeakDbtp": null
     },
     {
       "path": "web/public/audio/sfx/zoom-out.mp3",
-      "sha256": "86edc02645d196fc7aef5fa00679cc056f24e5856aa49c92a33990877ece60d7",
+      "sha256": "7f6fe86b3fffcb36973cbd5529f01525edfa5250eb96c836710ede4fa79f8fd6",
       "bytes": 43049,
       "durationSeconds": 5.381224489795918,
       "encodedDurationSeconds": 5.381125,
       "sampleRate": 44100,
       "channels": 1,
-      "meanDbfs": -28.449,
-      "peakDbfs": -13.448,
-      "silent": false,
-      "integratedLufs": -25.36,
-      "truePeakDbtp": -13.43
+      "meanDbfs": null,
+      "peakDbfs": null,
+      "silent": true,
+      "integratedLufs": null,
+      "truePeakDbtp": null
     },
     {
       "path": "web/public/audio/sfx/toggle-on.mp3",
@@ -1363,7 +1364,7 @@
     }
   ],
   "licenseReview": "Open Skies generated-music rights and imported third-party Starmap recording rights are not established by technical checks. No LICENSE file was found in the supplied Starmap project; do not infer original authorship or redistribution permission.",
-  "soundDesign": "Imported Starmap interface and camera recordings; Open Skies music unchanged. SystemAmbient and Unused assets remain catalog-only; eight supplied silent placeholders stay silent.",
+  "soundDesign": "Imported Starmap interface and camera recordings; Open Skies music unchanged. SystemAmbient and Unused assets remain catalog-only; eight supplied silent placeholders stay silent. Only the two runtime zoom aliases are muted by user request; the imported CAM_Zoom recording and its catalog derivative retain their original sound.",
   "effectsCatalog": "assets/audio/imported/starmap/catalog.json",
   "publicEffectsCatalog": "web/public/audio/catalog/starmap/catalog.json",
   "previousEffects": "assets/audio/drafts/pre-starmap/manifest.json",
@@ -1391,12 +1392,14 @@
     "zoom-in": {
       "sourceRelativePath": "CAM_Zoom.wav",
       "path": "web/public/audio/sfx/zoom-in.mp3",
-      "durationSeconds": 5.381224489795918
+      "durationSeconds": 5.381224489795918,
+      "muted": true
     },
     "zoom-out": {
       "sourceRelativePath": "CAM_Zoom.wav",
       "path": "web/public/audio/sfx/zoom-out.mp3",
-      "durationSeconds": 5.381224489795918
+      "durationSeconds": 5.381224489795918,
+      "muted": true
     },
     "toggle-on": {
       "sourceRelativePath": "ToggleButtonActivate.wav",

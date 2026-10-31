@@ -13,7 +13,7 @@ export function useApplicationPreparation(settled: boolean) {
   }, [register, settled]);
 }
 
-/** Settles only after the global seen check and any active welcome overlay. */
+/** Settles only after the global seen check and any active startup loader. */
 export function useApplicationIntroReady() {
   return useContext(ApplicationIntroReadyContext);
 }
