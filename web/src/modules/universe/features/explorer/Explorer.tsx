@@ -213,11 +213,12 @@ export function Explorer() {
   };
 
   return (
-    <main className="universe-page universe-minimal" aria-label={copy.title} data-scale={current.kind} data-flight={flightEnabled} data-flight-status={flightStatus} data-tour-phase={tour.phase} data-tour-active={tour.active}>
+    <main className="universe-page universe-minimal" aria-label={copy.title} data-scale={current.kind} data-flight={flightEnabled} data-flight-status={flightStatus} data-tour-phase={tour.phase} data-tour-active={tour.active} data-audio-toggle={Boolean(audio?.Toggle)}>
       <div className="universe-scene" inert={tour.awaitingStart} aria-busy={sceneStatus === "loading"}>
         <Scene view={view} selectedId={planet?.id ?? null} playing={!blocked && !tour.awaitingStart} showOrbits={showOrbits} autoOrbit={tour.active || autoOrbit} resetToken={resetToken} zoomAction={null} onSelect={selectSceneNode} onReady={onReady} onUnavailable={onUnavailable} ariaLabel={copy.canvas} flightEnabled={flightEnabled} flightPaused={blocked} flightInput={flightInput} onFlightStatus={onFlightStatus} flightTargetId={flightEnabled ? flightTargetId : null} autopilotTargetId={flightEnabled ? autopilotTargetId : null} guideActionLabel={autopilotTargetId === flightTargetId && autopilotTargetId ? copy.cancelGuidance : copy.guideShip} onGuideRequest={guideTo} onAutopilotEnd={onAutopilotEnd} hasParentView={Boolean(parent)} onScaleOut={goWider} onScaleIn={goTo} tourPreparing={tour.phase === "waiting" && tour.currentStep?.motion === "approach"} tourStep={tour.active && tour.token === tourCameraStep?.token ? tourCameraStep : null} onTourArrive={tour.arrive} onTourZoomIntent={tourZoomFeedback} onTourZoomEnd={stopTourZoomFeedback} onInteraction={cancelTour} onZoomIntent={zoomFeedback} onOrbitIntent={orbitFeedback} onCameraGestureEnd={stopCameraFeedback} onDestinationHover={hoverFeedback} starSelected={starSelected} starFocusToken={starFocusToken} onSelectStar={selectStar} entityTransition={management?.entityTransition} onEntityTransitionEnd={management?.onEntityTransitionEnd} />
       </div>
       <div className="universe-vignette" aria-hidden="true" />
+      {audio?.Toggle && <div className="universe-audio-toggle"><audio.Toggle /></div>}
       <div ref={hud} className="universe-hud" hidden={tour.active || tour.awaitingStart}>
         {location?.Status && <location.Status />}
         {management && <management.Actions target={{ kind: current.kind, id: current.id }} onInteraction={prepareManagement} disabled={menuOpen} />}
@@ -225,7 +226,7 @@ export function Explorer() {
         <header className="universe-topbar">
           <div className="universe-brand universe-brand-static"><BrandLogo size={32} eager /><span>HackUniverse<small>{catalog.mode === "demo" ? copy.demo : copy.title}</small></span></div>
           <div className="universe-context" aria-live="polite"><span>{copy.kinds[current.kind]}</span><h1>{current.name}</h1></div>
-          <ExplorerMenu catalog={catalog} copy={copy} open={menuOpen} onOpenChange={changeMenu} currentTarget={{ kind: current.kind, id: current.id }} onNavigate={goTo} showOrbits={showOrbits} onToggleOrbits={() => setShowOrbits((value) => !value)} autoOrbit={autoOrbit} onToggleAutoOrbit={() => setAutoOrbit((value) => !value)} onResetCamera={() => setResetToken((value) => value + 1)} flightEnabled={flightEnabled} flightAvailable={Boolean(activeSystem) && sceneStatus === "ready"} flightStatus={flightStatus} onToggleFlight={toggleFlight} tourAvailable={tourAvailable && sceneStatus === "ready"} onStartTour={startTour} onCloseAutoFocus={(event) => { if (tour.active) { event.preventDefault(); skipTourButton.current?.focus({ preventScroll: true }); } }} LanguagePicker={LanguagePicker} DesignLink={DesignLink} DataControls={management?.Controls} AudioControls={audio?.Controls} LocationControls={location?.Controls} />
+          <ExplorerMenu catalog={catalog} copy={copy} open={menuOpen} onOpenChange={changeMenu} currentTarget={{ kind: current.kind, id: current.id }} onNavigate={goTo} showOrbits={showOrbits} onToggleOrbits={() => setShowOrbits((value) => !value)} autoOrbit={autoOrbit} onToggleAutoOrbit={() => setAutoOrbit((value) => !value)} onResetCamera={() => setResetToken((value) => value + 1)} resetAvailable={sceneStatus === "ready" && !flightEnabled} flightEnabled={flightEnabled} flightAvailable={Boolean(activeSystem) && sceneStatus === "ready"} flightStatus={flightStatus} onToggleFlight={toggleFlight} tourAvailable={tourAvailable && sceneStatus === "ready"} onStartTour={startTour} onCloseAutoFocus={(event) => { if (tour.active) { event.preventDefault(); skipTourButton.current?.focus({ preventScroll: true }); } }} LanguagePicker={LanguagePicker} DesignLink={DesignLink} DataControls={management?.Controls} AudioControls={audio?.Controls} LocationControls={location?.Controls} />
         </header>
         {(sceneStatus === "loading" || flightStatus === "loading") && <div className="universe-scene-state" role="status"><Orbit className="universe-loading-orbit" size={24} aria-hidden="true" /><p>{flightStatus === "loading" ? copy.flightLoading : copy.loading}</p></div>}
         {sceneStatus === "unavailable" && <section className="universe-scene-state universe-fallback" role="status"><h2>{copy.fallbackTitle}</h2><p>{copy.fallbackDescription}</p><Button className="hud-button" data-audio-ignore="true" onClick={() => changeMenu(true)}>{copy.library}</Button></section>}
@@ -245,7 +246,7 @@ export function Explorer() {
       </div>}
       <div className="universe-tour-status" hidden={!tour.active}>
         <p role="status" aria-atomic="true">{copy.tourTitle} · {current.name}</p>
-        <Button ref={skipTourButton} type="button" variant="outline" className="hud-button" onClick={cancelTour}>{copy.tourSkip}</Button>
+        <Button ref={skipTourButton} type="button" variant="outline" className="hud-button" onClick={() => { stopTourZoomFeedback(); cancelTour(); }}>{copy.tourSkip}</Button>
       </div>
     </main>
   );

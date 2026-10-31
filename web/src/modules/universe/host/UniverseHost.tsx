@@ -6,7 +6,7 @@ import { DesignSystemLink } from "@/modules/design-system";
 import { BrandLogo } from "@/components/brand-logo";
 import { useApplicationIntroReady } from "@/components/application-intro";
 import { InlineLanguageSelector, useI18n, useTranslations } from "@/i18n";
-import { AudioControls, useAudio } from "@/modules/audio";
+import { AudioControls, AudioToggle, useAudio } from "@/modules/audio";
 import { UniverseRoot, type UniverseAdapters, type UniverseAudio, type UniverseCatalog, type UniverseManagement, type UniverseTourDefinition } from "@/modules/universe";
 import { captureClientException } from "@/lib/telemetry/client";
 import type { UniverseSceneProps } from "../scene";
@@ -54,7 +54,7 @@ export function UniverseHost({ catalog, tour, management, source }: { catalog: U
   const { playCue, cameraMotion, stopCameraMotion, unlockFromGesture, interactionReceived, preferences, musicStatus, effectsStatus, musicError, effectsError } = useAudio();
   const musicWaiting = preferences.musicEnabled && preferences.musicVolume > 0 && musicStatus !== "playing" && (musicStatus !== "error" || musicError === "blocked");
   const effectsWaiting = preferences.effectsEnabled && preferences.effectsVolume > 0 && effectsStatus !== "ready" && (effectsStatus !== "error" || effectsError === "blocked");
-  const tourRequiresInteraction = !interactionReceived && (musicWaiting || effectsWaiting);
+  const tourRequiresInteraction = !preferences.muted && !interactionReceived && (musicWaiting || effectsWaiting);
   const camera = useCameraLocation(catalog, source);
   const location = useMemo(() => ({ navigationRequest: camera.state.navigationRequest, Controls: CameraShareControls, Status: CameraLinkStatus }), [camera.state.navigationRequest]);
   const audio = useMemo<UniverseAudio>(() => ({
@@ -68,6 +68,7 @@ export function UniverseHost({ catalog, tour, management, source }: { catalog: U
     onDestinationHover: () => playCue("destination-hover"),
     onMenuOpenChange: (open) => playCue(open ? "menu-open" : "menu-close"),
     Controls: AudioControls,
+    Toggle: AudioToggle,
   }), [playCue, cameraMotion, stopCameraMotion, unlockFromGesture, tourRequiresInteraction]);
   const presentationReady = useApplicationIntroReady();
   const reducedMotion = useSyncExternalStore(subscribeMotion, getReducedMotion, () => true);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState, type ComponentType, type CSSProperties, type ReactNode } from "react";
-import { ArrowUpRight, ChevronLeft, ChevronRight, Menu, Orbit, Rocket, RotateCcw, RotateCw, Search } from "lucide-react";
+import { ArrowUpRight, BookOpen, ChevronLeft, ChevronRight, Compass, Database, Eye, Languages, Menu, Orbit, Play, Rocket, RotateCcw, RotateCw, Search, Share2, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -13,9 +13,10 @@ import { getPlanetAppearance } from "../../domain/planet-appearance";
 import type { UniverseCopy } from "../../messages";
 import { MenuAbout } from "./MenuAbout";
 import "./menu.css";
+import "./menu-navigation.css";
 
 const ATLAS_PAGE_SIZE = 24;
-type MenuTab = "go-to" | "settings" | "about";
+type MenuTab = "pause" | "go-to" | "settings" | "about";
 
 export type ExplorerMenuProps = {
   catalog: UniverseCatalog;
@@ -28,6 +29,7 @@ export type ExplorerMenuProps = {
   onToggleOrbits: () => void;
   autoOrbit: boolean;
   onToggleAutoOrbit: () => void;
+  resetAvailable: boolean;
   onResetCamera: () => void;
   flightEnabled: boolean;
   flightAvailable: boolean;
@@ -49,6 +51,21 @@ type MenuContentsProps = ExplorerMenuProps & {
   setQuery: (query: string) => void;
   setPage: (page: number) => void;
 };
+
+/** Native nested dialogs preserve the paused parent and return focus to each row. */
+function SettingsCategory({ title, icon, closeLabel, children }: { title: string; icon: ReactNode; closeLabel: string; children: ReactNode }) {
+  return <Dialog>
+    <DialogTrigger asChild>
+      <Button type="button" variant="outline" className="hud-option universe-menu-category">
+        {icon}<span>{title}</span><ChevronRight aria-hidden="true" />
+      </Button>
+    </DialogTrigger>
+    <DialogContent className="universe-menu-category-dialog" closeLabel={closeLabel} aria-describedby={undefined}>
+      <DialogHeader><DialogTitle>{title}</DialogTitle></DialogHeader>
+      <div className="universe-menu-category-dialog__options">{children}</div>
+    </DialogContent>
+  </Dialog>;
+}
 
 export function ExplorerMenu(props: ExplorerMenuProps) {
   const { copy, open, onOpenChange } = props;
@@ -74,8 +91,8 @@ export function ExplorerMenu(props: ExplorerMenuProps) {
 }
 
 /** Opening mounts fresh tab navigation while the parent retains the atlas draft. */
-function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, tourAvailable, onStartTour, LanguagePicker, DesignLink, DataControls, AudioControls, LocationControls, query, page, setQuery, setPage }: MenuContentsProps) {
-  const [tab, setTab] = useState<MenuTab>("go-to");
+function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, resetAvailable, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, tourAvailable, onStartTour, LanguagePicker, DesignLink, DataControls, AudioControls, LocationControls, query, page, setQuery, setPage }: MenuContentsProps) {
+  const [tab, setTab] = useState<MenuTab>("pause");
   const resultsList = useRef<HTMLUListElement>(null);
   const id = useId();
   const searchId = `${id}-search`;
@@ -90,12 +107,30 @@ function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, 
   const navigate = (targetId: string) => { onNavigate(targetId); onOpenChange(false); };
 
   return (
-    <Tabs value={tab} onValueChange={(value) => { if (value === "go-to" || value === "settings" || value === "about") setTab(value); }} className="universe-menu-tabs">
+    <Tabs value={tab} onValueChange={(value) => { if (value === "pause" || value === "go-to" || value === "settings" || value === "about") setTab(value); }} className="universe-menu-tabs universe-menu-tabs--pause">
       <TabsList className="universe-menu-tablist" aria-label={copy.menuTitle}>
+        <TabsTrigger value="pause" title={copy.tabs.pause}>{copy.tabs.pause}</TabsTrigger>
         <TabsTrigger value="go-to" title={copy.tabs.goTo}>{copy.tabs.goTo}</TabsTrigger>
         <TabsTrigger value="settings" title={copy.tabs.settings}>{copy.tabs.settings}</TabsTrigger>
         <TabsTrigger value="about" title={copy.tabs.about}>{copy.tabs.about}</TabsTrigger>
       </TabsList>
+
+      <TabsContent value="pause" className="universe-menu-panel universe-menu-pause">
+        <div className="universe-menu-pause__actions">
+          <Button type="button" className="hud-button universe-menu-action" onClick={() => onOpenChange(false)}>
+            <Play aria-hidden="true" />{copy.menuActions.resume}
+          </Button>
+          <Button type="button" variant="outline" className="hud-button universe-menu-action" disabled={!tourAvailable} onClick={onStartTour}>
+            <Orbit aria-hidden="true" />{copy.tourTitle}
+          </Button>
+          <Button type="button" variant="outline" className="hud-button universe-menu-action" disabled={!resetAvailable} onClick={() => { onResetCamera(); onOpenChange(false); }}>
+            <RotateCcw aria-hidden="true" />{copy.menuActions.reset}
+          </Button>
+          <Button type="button" variant="outline" className="hud-button universe-menu-action" onClick={() => onOpenChange(false)}>
+            <X aria-hidden="true" />{copy.close}
+          </Button>
+        </div>
+      </TabsContent>
 
       <TabsContent value="go-to" className="universe-menu-panel universe-menu-atlas">
         <nav className="universe-menu-location" aria-label={copy.location}>
@@ -137,51 +172,48 @@ function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, 
       </TabsContent>
 
       <TabsContent value="settings" className="universe-menu-panel universe-menu-options">
-        <fieldset className="universe-menu-group">
-          <legend>{copy.menuGroups.language}</legend>
+        <SettingsCategory title={copy.menuGroups.language} icon={<Languages aria-hidden="true" />} closeLabel={copy.close}>
           <div className="universe-menu-language"><LanguagePicker /></div>
-        </fieldset>
-        {AudioControls && <AudioControls />}
-        {LocationControls && <LocationControls />}
-        {DataControls && <fieldset className="universe-menu-group">
-          <legend>{copy.menuGroups.workspace}</legend>
+        </SettingsCategory>
+        {AudioControls && <SettingsCategory title={copy.menuGroups.sound} icon={<Volume2 aria-hidden="true" />} closeLabel={copy.close}>
+          <AudioControls />
+        </SettingsCategory>}
+        {LocationControls && <SettingsCategory title={copy.menuGroups.sharing} icon={<Share2 aria-hidden="true" />} closeLabel={copy.close}>
+          <LocationControls />
+        </SettingsCategory>}
+        {DataControls && <SettingsCategory title={copy.menuGroups.workspace} icon={<Database aria-hidden="true" />} closeLabel={copy.close}>
           <DataControls target={currentTarget} onRequestClose={() => onOpenChange(false)} />
-        </fieldset>}
-        <fieldset className="universe-menu-group">
-          <legend>{copy.menuGroups.view}</legend>
-          {tourAvailable && <>
-            <Button type="button" variant="outline" className="hud-button universe-menu-action" onClick={onStartTour}><Orbit aria-hidden="true" />{copy.tourTitle}</Button>
-            <p>{copy.tourDescription}</p>
-          </>}
-          <Button type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={showOrbits} onClick={onToggleOrbits}>
-            <Orbit aria-hidden="true" />{showOrbits ? copy.hideOrbits : copy.orbits}
-          </Button>
-          <Button type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={autoOrbit} onClick={onToggleAutoOrbit}>
-            <RotateCw aria-hidden="true" />{copy.autoOrbit}
-          </Button>
-          <Button type="button" variant="outline" className="hud-button universe-menu-action" onClick={() => { onResetCamera(); onOpenChange(false); }}>
-            <RotateCcw aria-hidden="true" />{copy.reset}
-          </Button>
-        </fieldset>
-        <fieldset className="universe-menu-group">
-          <legend>{copy.menuGroups.flight}</legend>
-          <Button type="button" variant="outline" className="hud-button universe-menu-action" disabled={!flightAvailable || flightStatus === "loading"} aria-pressed={flightEnabled} aria-describedby={flightHintId} onClick={() => { onToggleFlight(); onOpenChange(false); }}>
-            <Rocket aria-hidden="true" />{flightStatus === "loading" ? copy.flightLoading : flightEnabled ? copy.exitFlight : copy.enterFlight}
-          </Button>
-          <p id={flightHintId}>{flightAvailable ? copy.flightHint : copy.flightUnavailable}</p>
-          {flightStatus === "error" && <p role="alert">{copy.flightError}</p>}
-          <p>{copy.flightKeys}</p>
-        </fieldset>
-        <fieldset className="universe-menu-group">
-          <legend>{copy.guide}</legend>
-          <p className="universe-guide-desktop">{copy.guideDesktop}</p>
-          <p className="universe-guide-touch">{copy.guideTouch}</p>
-          <p>{copy.guideGroups}</p>
-        </fieldset>
-        <fieldset className="universe-menu-group">
-          <legend>{copy.menuGroups.resources}</legend>
+        </SettingsCategory>}
+        <SettingsCategory title={copy.menuGroups.view} icon={<Eye aria-hidden="true" />} closeLabel={copy.close}>
+          <div className="universe-menu-group">
+            <Button type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={showOrbits} onClick={onToggleOrbits}>
+              <Orbit aria-hidden="true" />{showOrbits ? copy.hideOrbits : copy.orbits}
+            </Button>
+            <Button type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={autoOrbit} onClick={onToggleAutoOrbit}>
+              <RotateCw aria-hidden="true" />{copy.autoOrbit}
+            </Button>
+          </div>
+        </SettingsCategory>
+        <SettingsCategory title={copy.menuGroups.flight} icon={<Rocket aria-hidden="true" />} closeLabel={copy.close}>
+          <div className="universe-menu-group">
+            <Button type="button" variant="outline" className="hud-button universe-menu-action" disabled={!flightAvailable || flightStatus === "loading"} aria-pressed={flightEnabled} aria-describedby={flightHintId} onClick={() => { onToggleFlight(); onOpenChange(false); }}>
+              <Rocket aria-hidden="true" />{flightStatus === "loading" ? copy.flightLoading : flightEnabled ? copy.exitFlight : copy.enterFlight}
+            </Button>
+            <p id={flightHintId}>{flightAvailable ? copy.flightHint : copy.flightUnavailable}</p>
+            {flightStatus === "error" && <p role="alert">{copy.flightError}</p>}
+            <p>{copy.flightKeys}</p>
+          </div>
+        </SettingsCategory>
+        <SettingsCategory title={copy.guide} icon={<Compass aria-hidden="true" />} closeLabel={copy.close}>
+          <div className="universe-menu-group">
+            <p className="universe-guide-desktop">{copy.guideDesktop}</p>
+            <p className="universe-guide-touch">{copy.guideTouch}</p>
+            <p>{copy.guideGroups}</p>
+          </div>
+        </SettingsCategory>
+        <SettingsCategory title={copy.menuGroups.resources} icon={<BookOpen aria-hidden="true" />} closeLabel={copy.close}>
           <DesignLink className="universe-menu-design-link">{copy.design}<ArrowUpRight size={16} aria-hidden="true" /></DesignLink>
-        </fieldset>
+        </SettingsCategory>
       </TabsContent>
 
       <TabsContent value="about" className="universe-menu-panel universe-menu-about-panel">

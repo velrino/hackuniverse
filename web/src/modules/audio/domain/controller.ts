@@ -68,7 +68,7 @@ export function createAudioController(ports: AudioPorts) {
       }
     }
   }
-  const effectsReady = () => mounted && visible && snapshot.preferences.effectsEnabled && snapshot.preferences.effectsVolume > 0 && snapshot.effectsStatus === "ready" && Boolean(effects?.isRunning());
+  const effectsReady = () => mounted && visible && !snapshot.preferences.muted && snapshot.preferences.effectsEnabled && snapshot.preferences.effectsVolume > 0 && snapshot.effectsStatus === "ready" && Boolean(effects?.isRunning());
   function cameraMotion(motion: CameraMotion, direction?: "in" | "out") {
     if ((motion !== "orbit" && motion !== "zoom") || !effectsReady() || !effects) return;
     const now = ports.now();
@@ -127,7 +127,7 @@ export function createAudioController(ports: AudioPorts) {
     } catch { stopVoices(); publish({ effectsStatus: "error", effectsError: "load" }); }
   }
   function startMusic(gesture = false) {
-    if (!mounted || !visible || !snapshot.preferences.musicEnabled) return;
+    if (!mounted || !visible || snapshot.preferences.muted || !snapshot.preferences.musicEnabled) return;
     const attempt = ++musicAttempt;
     musicGesturePending = gesture;
     try {
@@ -135,7 +135,7 @@ export function createAudioController(ports: AudioPorts) {
       if (!music) {
         const created = ports.createMusic({
           paused: () => { if (music === created && snapshot.musicStatus === "playing") publish({ musicStatus: snapshot.preferences.musicEnabled ? "paused" : "off" }); },
-          failed: () => { if (music === created && snapshot.preferences.musicEnabled) { ++musicAttempt; publish({ musicStatus: "error", musicError: "load" }); } },
+          failed: () => { if (music === created && !snapshot.preferences.muted && snapshot.preferences.musicEnabled) { ++musicAttempt; publish({ musicStatus: "error", musicError: "load" }); } },
         });
         music = created;
       }
@@ -144,8 +144,8 @@ export function createAudioController(ports: AudioPorts) {
       publish({ musicStatus: "loading", musicError: null });
       // Invoke synchronously in the enabling click, before awaiting any asset operation.
       void player.play().then(() => {
-        if (attempt !== musicAttempt || !mounted || !visible || !snapshot.preferences.musicEnabled) {
-          if (music === player && (!mounted || !visible || !snapshot.preferences.musicEnabled)) player.pause();
+        if (attempt !== musicAttempt || !mounted || !visible || snapshot.preferences.muted || !snapshot.preferences.musicEnabled) {
+          if (music === player && (!mounted || !visible || snapshot.preferences.muted || !snapshot.preferences.musicEnabled)) player.pause();
           return;
         }
         musicGesturePending = false;
@@ -156,7 +156,7 @@ export function createAudioController(ports: AudioPorts) {
     } catch { musicGesturePending = false; publish({ musicStatus: "error", musicError: "unavailable" }); }
   }
   function startEffects(gesture = false) {
-    if (!mounted || !visible || !snapshot.preferences.effectsEnabled) return;
+    if (!mounted || !visible || snapshot.preferences.muted || !snapshot.preferences.effectsEnabled) return;
     const attempt = ++effectsAttempt;
     effectsGesturePending = gesture;
     effectsAbort?.abort();
@@ -179,7 +179,7 @@ export function createAudioController(ports: AudioPorts) {
       // AudioContext.resume must run in the original gesture, before fetching/decoding.
       const unlock = engine.resume(abort.signal);
       void Promise.all([unlock, engine.load(abort.signal)]).then(() => {
-        if (attempt !== effectsAttempt || !mounted || !snapshot.preferences.effectsEnabled) return;
+        if (attempt !== effectsAttempt || !mounted || snapshot.preferences.muted || !snapshot.preferences.effectsEnabled) return;
         effectsGesturePending = false;
         publish({ effectsStatus: visible && engine.isRunning() ? "ready" : "paused", effectsError: null });
       }, (error: unknown) => {
@@ -205,6 +205,26 @@ export function createAudioController(ports: AudioPorts) {
       publish({ effectsStatus: "off", effectsError: null });
     }
   };
+  const setMuted = (muted: boolean) => {
+    // Explicitly enabling the master control recovers an all-Off mix while
+    // retaining its volumes. Ordinary gestures never alter either saved channel.
+    const enableEmptyMix = !muted && !snapshot.preferences.musicEnabled && !snapshot.preferences.effectsEnabled;
+    persist({ muted, ...(enableEmptyMix ? { musicEnabled: true, effectsEnabled: true } : {}) });
+    if (muted) {
+      ++musicAttempt; ++effectsAttempt;
+      musicGesturePending = false; effectsGesturePending = false;
+      resumeMusic = false; resumeEffects = false;
+      effectsAbort?.abort(); effectsAbort = null;
+      stopVoices(); music?.pause();
+      void effects?.suspend().catch(() => {});
+      publish({ musicStatus: "off", effectsStatus: "off", musicError: null, effectsError: null });
+    } else {
+      resumeMusic = !visible && snapshot.preferences.musicEnabled;
+      resumeEffects = !visible && snapshot.preferences.effectsEnabled;
+      if (visible) { startMusic(true); startEffects(true); }
+      else publish({ musicStatus: snapshot.preferences.musicEnabled ? "idle" : "off", effectsStatus: snapshot.preferences.effectsEnabled ? "idle" : "off" });
+    }
+  };
   return {
     getSnapshot: () => snapshot,
     getServerSnapshot: () => initialSnapshot,
@@ -216,12 +236,12 @@ export function createAudioController(ports: AudioPorts) {
       let preferenceError = false;
       try { preferences = readAudioPreferences(ports.readPreferences()); }
       catch { preferenceError = true; preferences = Object.freeze({ ...defaultAudioPreferences, musicEnabled: false, effectsEnabled: false }); }
-      publish({ preferences, preferenceError, musicStatus: preferences.musicEnabled ? "idle" : "off", effectsStatus: preferences.effectsEnabled ? "idle" : "off", musicError: null, effectsError: null });
-      resumeMusic = !visible && preferences.musicEnabled;
-      resumeEffects = !visible && preferences.effectsEnabled;
+      publish({ preferences, preferenceError, musicStatus: !preferences.muted && preferences.musicEnabled ? "idle" : "off", effectsStatus: !preferences.muted && preferences.effectsEnabled ? "idle" : "off", musicError: null, effectsError: null });
+      resumeMusic = !visible && !preferences.muted && preferences.musicEnabled;
+      resumeEffects = !visible && !preferences.muted && preferences.effectsEnabled;
       if (visible) { startMusic(); startEffects(); }
     },
-    setMusicEnabled, setEffectsEnabled,
+    setMusicEnabled, setEffectsEnabled, setMuted,
     enableMusic: () => setMusicEnabled(true),
     enableEffects: () => setEffectsEnabled(true),
     setMusicVolume(value: number) {
@@ -240,7 +260,7 @@ export function createAudioController(ports: AudioPorts) {
       if (snapshot.preferences.effectsEnabled && snapshot.effectsStatus === "error" && snapshot.effectsError !== "blocked") startEffects(true);
     },
     unlockFromGesture() {
-      if (!mounted || !visible) return;
+      if (!mounted || !visible || snapshot.preferences.muted) return;
       const retryMusic = snapshot.preferences.musicEnabled && !musicGesturePending && snapshot.musicStatus !== "playing" && !(snapshot.musicStatus === "error" && snapshot.musicError !== "blocked");
       const retryEffects = snapshot.preferences.effectsEnabled && !effectsGesturePending && snapshot.effectsStatus !== "ready" && !(snapshot.effectsStatus === "error" && snapshot.effectsError !== "blocked");
       if (!retryMusic && !retryEffects) return;
@@ -276,7 +296,7 @@ export function createAudioController(ports: AudioPorts) {
         resumeEffects = snapshot.effectsStatus === "ready" || snapshot.effectsStatus === "loading";
         ++musicAttempt; ++effectsAttempt; musicGesturePending = false; effectsGesturePending = false;
         effectsAbort?.abort(); music?.pause(); stopVoices();
-        if (snapshot.preferences.musicEnabled && snapshot.musicStatus !== "idle" && snapshot.musicStatus !== "error") publish({ musicStatus: "paused" });
+        if (!snapshot.preferences.muted && snapshot.preferences.musicEnabled && snapshot.musicStatus !== "idle" && snapshot.musicStatus !== "error") publish({ musicStatus: "paused" });
         void effects?.suspend().catch(() => {});
         if (snapshot.preferences.effectsEnabled && (snapshot.effectsStatus === "ready" || snapshot.effectsStatus === "loading")) publish({ effectsStatus: "paused" });
       } else {

@@ -1,8 +1,8 @@
 import { expect, test, type CDPSession, type Page } from "@playwright/test";
 
-type TourVoice = { duration: number; started: number; ended: number | null };
+type TourVoice = { duration: number; started: number; ended: number | null; stopContext: number | null };
 type TourMusic = { media: HTMLMediaElement; context: AudioContext };
-type TourAudioProbe = { voices: TourVoice[]; music: TourMusic[] };
+type TourAudioProbe = { voices: TourVoice[]; music: TourMusic[]; effectsContext: BaseAudioContext | null; skip: { at: number; audioAt: number; quantum: number } | null };
 type ProbedWindow = Window & { tourAudioProbe: TourAudioProbe };
 type InitialState = { tourPhase: string | null; tourActive: string | null; introPhase: string | null; hasBeenActive: boolean; startCount: number; entryCount: number; startPoint: { x: number; y: number } | null; entryPoint: { x: number; y: number } | null; menuVisible: boolean; zoomCount: number; music: { paused: boolean; contextState: string }[] };
 
@@ -21,7 +21,7 @@ async function observeAudio(page: Page, { muted = false, introSeen = false } = {
   await page.addInitScript(({ muted, introSeen }) => {
     if (introSeen) localStorage.setItem("hackuniverse.intro.v1.seen", "1");
     if (muted) localStorage.setItem("hackuniverse.audio.v1", JSON.stringify({ schemaVersion: 1, musicEnabled: false, effectsEnabled: false, musicVolume: 0.35, effectsVolume: 0.5 }));
-    const probe: TourAudioProbe = { voices: [], music: [] };
+    const probe: TourAudioProbe = { voices: [], music: [], effectsContext: null, skip: null };
     (window as unknown as ProbedWindow).tourAudioProbe = probe;
     const mediaSource = AudioContext.prototype.createMediaElementSource;
     AudioContext.prototype.createMediaElementSource = function (media) {
@@ -30,14 +30,28 @@ async function observeAudio(page: Page, { muted = false, introSeen = false } = {
       return source;
     };
     const start = AudioBufferSourceNode.prototype.start;
+    const stop = AudioBufferSourceNode.prototype.stop;
+    const tracked = new WeakMap<AudioBufferSourceNode, TourVoice>();
     AudioBufferSourceNode.prototype.start = function (when, offset, duration) {
       if (this.buffer) {
-        const voice: TourVoice = { duration: this.buffer.duration, started: performance.now(), ended: null };
+        const voice: TourVoice = { duration: this.buffer.duration, started: performance.now(), ended: null, stopContext: null };
         probe.voices.push(voice);
+        tracked.set(this, voice);
+        probe.effectsContext = this.context;
         this.addEventListener("ended", () => { voice.ended = performance.now(); }, { once: true });
       }
       return start.call(this, when, offset, duration);
     };
+    AudioBufferSourceNode.prototype.stop = function (when) {
+      const voice = tracked.get(this);
+      if (voice) voice.stopContext = Math.max(when ?? this.context.currentTime, this.context.currentTime);
+      return stop.call(this, when);
+    };
+    document.addEventListener("click", (event) => {
+      if (!event.isTrusted || !(event.target instanceof Element) || !probe.effectsContext) return;
+      if (event.target.closest("button")?.textContent?.trim() !== "Skip tour") return;
+      probe.skip = { at: performance.now(), audioAt: probe.effectsContext.currentTime, quantum: 128 / probe.effectsContext.sampleRate };
+    }, true);
   }, { muted, introSeen });
 }
 
@@ -50,6 +64,8 @@ async function readAudio(page: Page) {
       // The imported menu-open alias is the only active effect in this range.
       menuOpen: probe.voices.filter((voice) => voice.duration > 1.4 && voice.duration < 1.7),
       voiceCount: probe.voices.length,
+      skip: probe.skip,
+      effectsState: probe.effectsContext?.state ?? null,
       music: probe.music.map(({ media, context }) => ({ paused: media.paused, currentTime: media.currentTime, contextState: context.state })),
     };
   });
@@ -92,7 +108,7 @@ async function readBeforeGesture(cdp: CDPSession): Promise<InitialState> {
   return result.result.value as InitialState;
 }
 
-test("a fresh tour starts music through its button and stops zoom feedback when skipped", async ({ page, isMobile }) => {
+test("a fresh tour starts music through its button and stops zoom feedback when skipped", async ({ page, isMobile }, testInfo) => {
   // This returning visitor saw the welcome but has not run the universe tour.
   await observeAudio(page, { introSeen: true });
   await page.goto("/?lang=en&source=demo");
@@ -115,14 +131,37 @@ test("a fresh tour starts music through its button and stops zoom feedback when 
     return phase === "arriving" && audio.zooms.some((voice) => voice.ended === null);
   }, { timeout: 15000 }).toBe(true);
 
+  await page.getByRole("button", { name: "Mute sound", exact: true }).click();
+  await expect(main).toHaveAttribute("data-tour-active", "true");
+  await expect.poll(async () => {
+    const audio = await readAudio(page);
+    return audio.effectsState === "suspended" && audio.music.every((music) => music.paused);
+  }).toBe(true);
+  const mutedSources = (await readAudio(page)).zooms.length;
+  await page.waitForTimeout(400);
+  await expect(main).toHaveAttribute("data-tour-active", "true");
+  expect((await readAudio(page)).zooms).toHaveLength(mutedSources);
+  await page.getByRole("button", { name: "Enable sound", exact: true }).click();
+  await expect(main).toHaveAttribute("data-tour-active", "true");
+  await expect.poll(async () => (await readAudio(page)).music.some((music) => !music.paused && music.contextState === "running"), { timeout: 15000 }).toBe(true);
+  await expect.poll(async () => {
+    const [audio, phase] = await Promise.all([readAudio(page), main.getAttribute("data-tour-phase")]);
+    return phase === "arriving" && audio.zooms.slice(mutedSources).some((voice) => voice.ended === null);
+  }, { timeout: 15000 }).toBe(true);
+
   const musicBeforeSkip = (await readAudio(page)).music.find((music) => !music.paused && music.contextState === "running")!.currentTime;
-  const skippedAt = await page.evaluate(() => performance.now());
   await page.getByRole("button", { name: "Skip tour", exact: true }).click();
   await expect(main).toHaveAttribute("data-tour-active", "false");
   await expect(main).toHaveAttribute("data-tour-phase", "idle");
   await expect.poll(async () => (await readAudio(page)).zooms.every((voice) => voice.ended !== null)).toBe(true);
   const stopped = await readAudio(page);
-  expect(Math.max(...stopped.zooms.map((voice) => voice.ended!)) - skippedAt).toBeLessThan(250);
+  await testInfo.attach("tour-skip-native-deadlines", { body: JSON.stringify({ click: stopped.skip, zooms: stopped.zooms }, null, 2), contentType: "application/json" });
+  expect(stopped.skip).not.toBeNull();
+  expect(stopped.zooms.every((voice) => voice.stopContext !== null)).toBe(true);
+  // The paired native clock measures the handler's release deadline. Driver
+  // actionability waits and delayed JS ended callbacks are outside this bound.
+  expect(Math.max(...stopped.zooms.map((voice) => voice.stopContext!)) - stopped.skip!.audioAt).toBeLessThanOrEqual(0.03 + stopped.skip!.quantum);
+  expect(stopped.zooms.filter((voice) => voice.started > stopped.skip!.at)).toHaveLength(0);
   await page.waitForTimeout(400);
   expect((await readAudio(page)).zooms).toHaveLength(stopped.zooms.length);
   await expect.poll(async () => (await readAudio(page)).music.some((music) => !music.paused && music.contextState === "running" && music.currentTime > musicBeforeSkip + 0.1)).toBe(true);
@@ -175,7 +214,7 @@ test("a saved mute choice lets the automatic tour proceed without prompting or a
   await expect(page.getByRole("button", { name: "Enter universe", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Skip tour", exact: true })).toBeVisible();
   await page.waitForTimeout(300);
-  expect(await readAudio(page)).toEqual({ zooms: [], menuOpen: [], voiceCount: 0, music: [] });
+  expect(await readAudio(page)).toEqual({ zooms: [], menuOpen: [], voiceCount: 0, skip: null, effectsState: null, music: [] });
   expect(requests).toEqual([]);
   await page.getByRole("button", { name: "Skip tour", exact: true }).click();
   await expect(main).toHaveAttribute("data-tour-active", "false");

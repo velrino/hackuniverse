@@ -176,7 +176,7 @@ test("mixed preferences apply before resources exist and explicit enable persist
   assert.ok(instance.calls.includes("music-volume:0.2"));
   await flush();
   assert.equal(instance.controller.getSnapshot().musicStatus, "playing");
-  assert.deepEqual(instance.saved, { ...mutedPreferences, musicEnabled: true, effectsEnabled: true });
+  assert.deepEqual(instance.saved, { ...mutedPreferences, muted: false, musicEnabled: true, effectsEnabled: true });
 });
 
 test("mounting a hidden document allocates nothing until it becomes visible", async () => {
@@ -714,7 +714,119 @@ test("volume and preference failures apply safely to the current visit", async (
 });
 
 test("saved preference data is versioned, bounded by value and cannot introduce extra fields", () => {
-  const enabled: AudioPreferences = { musicEnabled: true, effectsEnabled: true, musicVolume: 0.1, effectsVolume: 1 };
+  const enabled: AudioPreferences = { muted: false, musicEnabled: true, effectsEnabled: true, musicVolume: 0.1, effectsVolume: 1 };
   assert.deepEqual(readAudioPreferences({ schemaVersion: 1, ...enabled, injected: "ignored" }), enabled);
-  for (const input of [null, [], {}, { schemaVersion: 2, ...enabled }, { schemaVersion: 1, ...enabled, musicVolume: NaN }, { schemaVersion: 1, ...enabled, effectsVolume: -1 }]) assert.deepEqual(readAudioPreferences(input), defaultAudioPreferences);
+  for (const input of [null, [], {}, { schemaVersion: 2, ...enabled }, { schemaVersion: 1, ...enabled, muted: "true" }, { schemaVersion: 1, ...enabled, musicVolume: NaN }, { schemaVersion: 1, ...enabled, effectsVolume: -1 }]) assert.deepEqual(readAudioPreferences(input), defaultAudioPreferences);
+});
+
+test("legacy version-one preferences stay unmuted without changing their configured mix", () => {
+  assert.equal(defaultAudioPreferences.muted, false);
+  assert.deepEqual(readAudioPreferences({ ...mutedPreferences, musicEnabled: true }), {
+    muted: false, musicEnabled: true, effectsEnabled: false, musicVolume: 0.2, effectsVolume: 0.4,
+  });
+});
+
+test("saved master mute allocates nothing and survives gestures, visibility and refresh", async () => {
+  const saved = { ...mutedPreferences, muted: true, musicEnabled: true, effectsEnabled: true };
+  const instance = fixture(saved);
+  instance.controller.mount();
+  instance.controller.unlockFromGesture(); instance.controller.retry();
+  instance.controller.setVisible(false); instance.controller.setVisible(true);
+  instance.controller.cameraMotion("zoom", "out"); instance.controller.playCue("menu-open");
+  await flush();
+  assert.deepEqual(instance.calls, ["read-preferences", "persist"]);
+  assert.deepEqual(instance.saved, saved);
+  assert.equal(instance.controller.getSnapshot().musicStatus, "off");
+  assert.equal(instance.controller.getSnapshot().effectsStatus, "off");
+  instance.controller.dispose();
+  const refreshed = fixture(instance.saved); refreshed.controller.mount();
+  await flush();
+  assert.deepEqual(refreshed.calls, ["read-preferences"]);
+  assert.deepEqual(refreshed.controller.getSnapshot().preferences, readAudioPreferences(saved));
+});
+
+test("master mute stops active and fading voices immediately while preserving volumes and channel flags", async () => {
+  const instance = fixture(); instance.controller.mount(); await flush();
+  instance.delayStopEnds();
+  instance.controller.cameraMotion("zoom", "in");
+  instance.clock(50); instance.controller.cameraMotion("zoom", "out");
+  instance.controller.cameraMotion("orbit");
+  assert.equal(instance.pendingTimers, 2);
+  assert.equal(instance.liveVoices.size, 2);
+  instance.calls.length = 0;
+  instance.controller.setMuted(true);
+  assert.equal(instance.pendingTimers, 0);
+  assert.equal(instance.liveVoices.size, 0);
+  assert.ok(instance.calls.includes("pause-music"));
+  assert.ok(instance.calls.includes("suspend-effects"));
+  assert.equal(instance.calls.filter((call) => call === "stop-voice").length, 3);
+  assert.deepEqual(instance.controller.getSnapshot().preferences, { ...defaultAudioPreferences, muted: true });
+  instance.controller.unlockFromGesture();
+  instance.controller.cameraMotion("zoom", "in");
+  instance.controller.setVisible(false); instance.controller.setVisible(true);
+  await flush();
+  assert.equal(instance.calls.includes("play-music"), false);
+  assert.equal(instance.calls.includes("resume-effects"), false);
+  assert.equal(instance.voices.length, 3);
+});
+
+test("master mute cancels pending activation and late completion cannot restore playback", async () => {
+  const instance = fixture(); const pending = deferred();
+  const signals: AbortSignal[] = [];
+  instance.playWith(() => pending.promise); instance.resumeWith(() => pending.promise);
+  instance.loadWith((signal) => { signals.push(signal); return pending.promise; });
+  instance.controller.mount();
+  instance.controller.setMuted(true);
+  assert.equal(signals[0].aborted, true);
+  pending.resolve(); await flush();
+  assert.equal(instance.controller.getSnapshot().musicStatus, "off");
+  assert.equal(instance.controller.getSnapshot().effectsStatus, "off");
+  assert.equal(instance.controller.getSnapshot().preferences.musicEnabled, true);
+  assert.equal(instance.controller.getSnapshot().preferences.effectsEnabled, true);
+  instance.clock(1000); instance.controller.unlockFromGesture();
+  assert.equal(instance.calls.filter((call) => call === "play-music").length, 1);
+  assert.equal(instance.calls.filter((call) => call === "resume-effects").length, 1);
+});
+
+test("explicit unmute synchronously restores only the configured channels and their current volumes", async () => {
+  const instance = fixture(); instance.controller.mount(); await flush();
+  instance.controller.setMuted(true);
+  instance.controller.setMusicEnabled(false);
+  instance.controller.setEffectsVolume(0.22);
+  instance.calls.length = 0;
+  instance.controller.setMuted(false);
+  assert.equal(instance.calls[0], "persist");
+  assert.equal(instance.calls.includes("play-music"), false);
+  assert.ok(instance.calls.indexOf("resume-effects") < instance.calls.indexOf("load-effects"));
+  assert.ok(instance.calls.includes("effects-volume:0.22"));
+  await flush();
+  assert.equal(instance.controller.getSnapshot().musicStatus, "off");
+  assert.equal(instance.controller.getSnapshot().effectsStatus, "ready");
+  assert.deepEqual(instance.controller.getSnapshot().preferences, { muted: false, musicEnabled: false, effectsEnabled: true, musicVolume: 0.35, effectsVolume: 0.22 });
+  assert.equal(instance.voices.length, 0, "unmute does not replay an old camera gesture");
+});
+
+test("explicit master enable recovers an all-Off legacy mix without resetting volume choices", async () => {
+  const instance = fixture(mutedPreferences); instance.controller.mount();
+  instance.controller.setMuted(false);
+  assert.ok(instance.calls.includes("play-music"));
+  assert.ok(instance.calls.includes("resume-effects"));
+  await flush();
+  assert.deepEqual(instance.saved, { ...mutedPreferences, muted: false, musicEnabled: true, effectsEnabled: true });
+  assert.equal(instance.controller.getSnapshot().musicStatus, "playing");
+  assert.equal(instance.controller.getSnapshot().effectsStatus, "ready");
+  assert.ok(instance.calls.includes("music-volume:0.2"));
+  assert.ok(instance.calls.includes("effects-volume:0.4"));
+});
+
+test("unmuting a hidden document waits for visibility without replaying prior input", async () => {
+  const instance = fixture({ ...mutedPreferences, muted: true, musicEnabled: true, effectsEnabled: true });
+  instance.controller.mount(false); instance.calls.length = 0;
+  instance.controller.setMuted(false);
+  assert.deepEqual(instance.calls, ["persist"]);
+  instance.controller.cameraMotion("zoom", "in");
+  instance.controller.setVisible(true); await flush();
+  assert.equal(instance.controller.getSnapshot().musicStatus, "playing");
+  assert.equal(instance.controller.getSnapshot().effectsStatus, "ready");
+  assert.equal(instance.voices.length, 0);
 });

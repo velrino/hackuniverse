@@ -73,8 +73,9 @@ const en = {
   fallbackDescription: "3D is unavailable on this device. Every planet is still accessible through the atlas.",
   canvas: "Interactive three-dimensional universe. Drag to orbit, pinch or scroll to zoom. The atlas provides an accessible alternative.",
   universeHome: "Return to the starting view",
-  tabs: { goTo: "Go to", settings: "Settings", about: "About" },
-  menuGroups: { workspace: "Workspace and data", view: "View and tour", flight: "Spaceship", language: "Language", resources: "Resources" },
+  tabs: { pause: "Pause", goTo: "Go to", settings: "Settings", about: "About" },
+  menuActions: { resume: "Resume", reset: "Reset" },
+  menuGroups: { workspace: "Workspace and data", view: "Visual", flight: "Spaceship", language: "Language", sound: "Sound", sharing: "Share view", resources: "Resources" },
   about: {
     credit: "Created by",
     author: "Denis Velrino",

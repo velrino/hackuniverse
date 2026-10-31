@@ -1,0 +1,81 @@
+.universe-menu-tabs--pause .universe-menu-tablist[data-slot="tabs-list"] {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.universe-explorer-menu[data-slot="dialog-content"]:has(.universe-menu-pause[data-state="active"]) {
+  height: auto;
+}
+
+.universe-explorer-menu:has(.universe-menu-pause[data-state="active"]) > [data-slot="dialog-body"] {
+  overflow-y: auto;
+}
+
+.universe-menu-tabs--pause:has(.universe-menu-pause[data-state="active"]),
+.universe-menu-pause {
+  flex: 0 0 auto;
+}
+
+.universe-menu-pause {
+  padding: 3px;
+}
+
+.universe-menu-pause__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.universe-menu-pause__actions .universe-menu-action[data-slot="button"] {
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+}
+
+.universe-menu-category[data-slot="button"] {
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  flex-shrink: 0;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  text-align: left;
+  white-space: normal;
+}
+
+.universe-menu-category > span {
+  flex: 1;
+  min-width: 0;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.universe-menu-category > svg {
+  flex-shrink: 0;
+}
+
+.universe-menu-category-dialog[data-slot="dialog-content"] {
+  width: min(540px, calc(100vw - 2rem));
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100dvh - 2rem);
+}
+
+.universe-menu-category-dialog__options {
+  min-width: 0;
+  padding: 3px;
+}
+
+.universe-menu-category-dialog__options > .universe-menu-group > legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 360px) {
+  .universe-menu-pause__actions {
+    grid-template-columns: 1fr;
+  }
+}

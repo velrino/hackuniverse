@@ -13,16 +13,16 @@ import "./styles.css";
 
 export function ApplicationIntro({ children }: { children: ReactNode }) {
   const { preferences, musicStatus, effectsStatus, musicError, effectsError, playCue, unlockFromGesture } = useAudio();
-  const requireInteraction = preferences.musicEnabled && preferences.musicVolume > 0 && musicStatus !== "playing" && (!musicError || musicError === "blocked") || preferences.effectsEnabled && preferences.effectsVolume > 0 && effectsStatus !== "ready" && (!effectsError || effectsError === "blocked");
+  const requireInteraction = !preferences.muted && (preferences.musicEnabled && preferences.musicVolume > 0 && musicStatus !== "playing" && (!musicError || musicError === "blocked") || preferences.effectsEnabled && preferences.effectsVolume > 0 && effectsStatus !== "ready" && (!effectsError || effectsError === "blocked"));
   const { phase, visible, ready, progress, start } = useApplicationIntro({ requireInteraction });
   const copy = useTranslations("applicationIntro");
   const played = useRef(false);
 
   useEffect(() => {
-    if (!visible || played.current || !preferences.effectsEnabled || effectsStatus !== "ready") return;
+    if (!visible || played.current || preferences.muted || !preferences.effectsEnabled || effectsStatus !== "ready") return;
     played.current = true;
     playCue("menu-open");
-  }, [visible, preferences.effectsEnabled, effectsStatus, playCue]);
+  }, [visible, preferences.muted, preferences.effectsEnabled, effectsStatus, playCue]);
 
   const enter = () => {
     // Keep both activation-sensitive APIs in the trusted button stack.
