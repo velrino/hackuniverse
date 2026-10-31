@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState, type ComponentType, type CSSProperties, type ReactNode } from "react";
-import { ArrowUpRight, BookOpen, ChevronLeft, ChevronRight, Compass, Database, Eye, Languages, Menu, Orbit, Play, Rocket, RotateCcw, RotateCw, Search, Share2, Volume2, X } from "lucide-react";
+import { ArrowUpRight, BookOpen, ChevronLeft, ChevronRight, Compass, Database, Eye, Languages, Menu, Orbit, Play, Rocket, RotateCcw, RotateCw, Search, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -42,7 +42,6 @@ export type ExplorerMenuProps = {
   DesignLink: ComponentType<{ children: ReactNode; className?: string }>;
   DataControls?: UniverseManagement["Controls"];
   AudioControls?: ComponentType;
-  LocationControls?: ComponentType;
 };
 
 type MenuContentsProps = ExplorerMenuProps & {
@@ -91,7 +90,7 @@ export function ExplorerMenu(props: ExplorerMenuProps) {
 }
 
 /** Opening mounts fresh tab navigation while the parent retains the atlas draft. */
-function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, resetAvailable, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, tourAvailable, onStartTour, LanguagePicker, DesignLink, DataControls, AudioControls, LocationControls, query, page, setQuery, setPage }: MenuContentsProps) {
+function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, resetAvailable, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, tourAvailable, onStartTour, LanguagePicker, DesignLink, DataControls, AudioControls, query, page, setQuery, setPage }: MenuContentsProps) {
   const [tab, setTab] = useState<MenuTab>("pause");
   const resultsList = useRef<HTMLUListElement>(null);
   const id = useId();
@@ -177,9 +176,6 @@ function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, 
         </SettingsCategory>
         {AudioControls && <SettingsCategory title={copy.menuGroups.sound} icon={<Volume2 aria-hidden="true" />} closeLabel={copy.close}>
           <AudioControls />
-        </SettingsCategory>}
-        {LocationControls && <SettingsCategory title={copy.menuGroups.sharing} icon={<Share2 aria-hidden="true" />} closeLabel={copy.close}>
-          <LocationControls />
         </SettingsCategory>}
         {DataControls && <SettingsCategory title={copy.menuGroups.workspace} icon={<Database aria-hidden="true" />} closeLabel={copy.close}>
           <DataControls target={currentTarget} onRequestClose={() => onOpenChange(false)} />

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, Layers3, Orbit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, useDialogReturnFocus } from "@/components/ui/dialog";
 import { useUniverseAdapters } from "../../adapters/hooks/use-universe-adapters";
 import { useUniverseNavigation } from "../../hooks/use-universe-navigation";
 import { useUniverseTour, type UniverseTourStep } from "../../hooks/use-universe-tour";
@@ -24,6 +25,8 @@ export function Explorer() {
   const { current, parent, view, navigate, planet } = useUniverseNavigation(catalog, management?.navigationRequest, location?.navigationRequest);
   const activeSystem = current.kind === "system" ? current : current.kind === "planet" ? getParent(catalog, current.id) : undefined;
   const [menuOpen, setMenuOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const shareFocus = useDialogReturnFocus();
   const menuOpenRef = useRef(false);
   const hud = useRef<HTMLDivElement>(null);
   const skipTourButton = useRef<HTMLButtonElement>(null);
@@ -48,7 +51,7 @@ export function Explorer() {
   const onUnavailable = useCallback(() => { setSceneStatus("unavailable"); setFlightEnabled(false); }, []);
   const onFlightStatus = useCallback((status: "idle" | "loading" | "ready" | "error") => setFlightStatus(status), []);
   const onAutopilotEnd = useCallback(() => setAutopilotTargetId(null), []);
-  const blocked = menuOpen || Boolean(management?.blocked);
+  const blocked = menuOpen || shareOpen || Boolean(management?.blocked);
   const tourAvailable = useMemo(() => Boolean(tourDefinition?.steps.length && tourDefinition.steps.every((step) => getEntity(catalog, step.target))), [catalog, tourDefinition]);
   const onTourStep = useCallback((step: UniverseTourStep, token: string) => {
     setSelectedStarSystemId(null);
@@ -221,12 +224,12 @@ export function Explorer() {
       {audio?.Toggle && <div className="universe-audio-toggle"><audio.Toggle /></div>}
       <div ref={hud} className="universe-hud" hidden={tour.active || tour.awaitingStart}>
         {location?.Status && <location.Status />}
-        {management && <management.Actions target={{ kind: current.kind, id: current.id }} onInteraction={prepareManagement} disabled={menuOpen} />}
+        {management && <management.Actions target={{ kind: current.kind, id: current.id }} onInteraction={prepareManagement} disabled={menuOpen || shareOpen} share={location ? { label: copy.menuGroups.sharing, onSelect: () => setShareOpen(true) } : undefined} />}
         {management?.EmptyState && !blocked && !tour.active && !flightEnabled && sceneStatus === "ready" && current.kind !== "planet" && view.nodes.length === 0 && <management.EmptyState target={{ kind: current.kind, id: current.id }} onInteraction={prepareManagement} />}
         <header className="universe-topbar">
           <div className="universe-brand universe-brand-static"><BrandLogo size={32} eager /><span>HackUniverse<small>{catalog.mode === "demo" ? copy.demo : copy.title}</small></span></div>
           <div className="universe-context" aria-live="polite"><span>{copy.kinds[current.kind]}</span><h1>{current.name}</h1></div>
-          <ExplorerMenu catalog={catalog} copy={copy} open={menuOpen} onOpenChange={changeMenu} currentTarget={{ kind: current.kind, id: current.id }} onNavigate={goTo} showOrbits={showOrbits} onToggleOrbits={() => setShowOrbits((value) => !value)} autoOrbit={autoOrbit} onToggleAutoOrbit={() => setAutoOrbit((value) => !value)} onResetCamera={() => setResetToken((value) => value + 1)} resetAvailable={sceneStatus === "ready" && !flightEnabled} flightEnabled={flightEnabled} flightAvailable={Boolean(activeSystem) && sceneStatus === "ready"} flightStatus={flightStatus} onToggleFlight={toggleFlight} tourAvailable={tourAvailable && sceneStatus === "ready"} onStartTour={startTour} onCloseAutoFocus={(event) => { if (tour.active) { event.preventDefault(); skipTourButton.current?.focus({ preventScroll: true }); } }} LanguagePicker={LanguagePicker} DesignLink={DesignLink} DataControls={management?.Controls} AudioControls={audio?.Controls} LocationControls={location?.Controls} />
+          <ExplorerMenu catalog={catalog} copy={copy} open={menuOpen} onOpenChange={changeMenu} currentTarget={{ kind: current.kind, id: current.id }} onNavigate={goTo} showOrbits={showOrbits} onToggleOrbits={() => setShowOrbits((value) => !value)} autoOrbit={autoOrbit} onToggleAutoOrbit={() => setAutoOrbit((value) => !value)} onResetCamera={() => setResetToken((value) => value + 1)} resetAvailable={sceneStatus === "ready" && !flightEnabled} flightEnabled={flightEnabled} flightAvailable={Boolean(activeSystem) && sceneStatus === "ready"} flightStatus={flightStatus} onToggleFlight={toggleFlight} tourAvailable={tourAvailable && sceneStatus === "ready"} onStartTour={startTour} onCloseAutoFocus={(event) => { if (tour.active) { event.preventDefault(); skipTourButton.current?.focus({ preventScroll: true }); } }} LanguagePicker={LanguagePicker} DesignLink={DesignLink} DataControls={management?.Controls} AudioControls={audio?.Controls} />
         </header>
         {(sceneStatus === "loading" || flightStatus === "loading") && <div className="universe-scene-state" role="status"><Orbit className="universe-loading-orbit" size={24} aria-hidden="true" /><p>{flightStatus === "loading" ? copy.flightLoading : copy.loading}</p></div>}
         {sceneStatus === "unavailable" && <section className="universe-scene-state universe-fallback" role="status"><h2>{copy.fallbackTitle}</h2><p>{copy.fallbackDescription}</p><Button className="hud-button" data-audio-ignore="true" onClick={() => changeMenu(true)}>{copy.library}</Button></section>}
@@ -236,6 +239,12 @@ export function Explorer() {
         {parent && <Button type="button" variant="outline" data-audio-ignore="true" className="hud-button universe-scale-back" onClick={goWiderManually} title={`${copy.wider}: ${copy.kinds[parent.kind]}`}><Layers3 aria-hidden="true" /><span>{copy.kinds[parent.kind]}</span></Button>}
         {flightEnabled && !blocked && <><FlightControls copy={copy} onInput={setFlightInput} /><Button type="button" variant="outline" className="hud-button universe-flight-exit" onClick={() => setFlightEnabled(false)}><ArrowLeft aria-hidden="true" />{copy.exitFlight}</Button></>}
       </div>
+      {location && <Dialog open={shareOpen} onOpenChange={setShareOpen}>
+        <DialogContent {...shareFocus} className="universe-menu-category-dialog" closeLabel={copy.close} aria-describedby={undefined}>
+          <DialogHeader><DialogTitle>{copy.menuGroups.sharing}</DialogTitle></DialogHeader>
+          <div className="universe-menu-category-dialog__options"><location.Controls /></div>
+        </DialogContent>
+      </Dialog>}
       {tour.awaitingStart && <div className="universe-tour-entry">
         <Panel as="section" className="universe-tour-entry__panel" aria-label={copy.tourTitle}>
           <p className="hud-kicker">HackUniverse</p>
