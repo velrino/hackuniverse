@@ -54,7 +54,7 @@ function subscribeMotion(change: () => void) {
 }
 const getReducedMotion = () => window.matchMedia(motionQuery).matches;
 
-export function UniverseHost({ catalog, tour, management, source, presentation }: { catalog: UniverseCatalog; tour?: UniverseTourDefinition; management?: UniverseManagement; source?: CameraLinkSource; presentation?: { regions: UniverseCopy["demoRegions"]; factualReferences: boolean } }) {
+export function UniverseHost({ catalog, tour, management, source, presentation }: { catalog: UniverseCatalog; tour?: UniverseTourDefinition; management?: UniverseManagement; source?: CameraLinkSource; presentation?: { regions: UniverseCopy["demoRegions"]; factualReferences: boolean; discoveryTarget?: NavigationTarget } }) {
   const translations = useTranslations("universe");
   const regionPresentation = presentation?.regions;
   const copy = useMemo(() => regionPresentation ? {
@@ -85,6 +85,7 @@ export function UniverseHost({ catalog, tour, management, source, presentation }
   const presentationReady = useApplicationIntroReady();
   const reducedMotion = useSyncExternalStore(subscribeMotion, getReducedMotion, () => true);
   const allowDemoReferences = Boolean(presentation?.factualReferences);
-  const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, tour, management, audio, location, presentationReady, allowDemoReferences, autoTour: camera.state.ready && !camera.state.suppressAutoTour && !reducedMotion, formatNumber: format.number, components: { Scene: ObservedScene, BrandLogo, LanguagePicker: InlineLanguageSelector, DesignLink: DesignSystemLink } }), [catalog, copy, tour, management, audio, location, presentationReady, allowDemoReferences, camera.state.ready, camera.state.suppressAutoTour, reducedMotion, format.number]);
+  const discoveryTarget = presentation?.discoveryTarget;
+  const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, tour, management, audio, location, presentationReady, allowDemoReferences, discoveryTarget, autoTour: camera.state.ready && !camera.state.suppressAutoTour && !reducedMotion, formatNumber: format.number, components: { Scene: ObservedScene, BrandLogo, LanguagePicker: InlineLanguageSelector, DesignLink: DesignSystemLink } }), [catalog, copy, tour, management, audio, location, presentationReady, allowDemoReferences, discoveryTarget, camera.state.ready, camera.state.suppressAutoTour, reducedMotion, format.number]);
   return <CameraLocationContext value={{ ...camera, source }}><UniverseRoot adapters={adapters} /></CameraLocationContext>;
 }

@@ -44,6 +44,7 @@ export type UniverseAdapters = {
   tour?: UniverseTourDefinition;
   presentationReady?: boolean;
   allowDemoReferences?: boolean;
+  discoveryTarget?: NavigationTarget;
   autoTour?: boolean;
   management?: UniverseManagement;
   audio?: UniverseAudio;

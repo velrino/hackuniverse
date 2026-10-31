@@ -78,7 +78,7 @@ const fil = {
   canvas: "Interaktibong uniberso sa tatlong dimensiyon. I-drag upang umikot, at gumamit ng dalawang daliri o mag-scroll upang mag-zoom. May alternatibong madaling ma-access sa atlas.",
   universeHome: "Bumalik sa panimulang tanawin",
   tabs: { pause: "I-pause", goTo: "Pumunta sa", settings: "Mga setting", about: "Tungkol" },
-  menuActions: { resume: "Magpatuloy", reset: "Ibalik" },
+  menuActions: { resume: "Magpatuloy", reset: "Ibalik", nearbySystems: "Mga kalapit na sistema" },
   menuGroups: { workspace: "Workspace at datos", view: "Tanawin", flight: "Sasakyang pangkalawakan", language: "Wika", sound: "Tunog", sharing: "Ibahagi ang tanawin", resources: "Mga mapagkukunan" },
   about: {
     credit: "Nilikha ni",

@@ -78,7 +78,7 @@ const ptBR = {
   canvas: "Universo interativo em três dimensões. Arraste para orbitar e use a pinça ou a rolagem para aproximar. O atlas oferece uma alternativa acessível.",
   universeHome: "Voltar à visão inicial",
   tabs: { pause: "Pausa", goTo: "Ir para", settings: "Configurações", about: "Sobre" },
-  menuActions: { resume: "Retomar", reset: "Restaurar" },
+  menuActions: { resume: "Retomar", reset: "Restaurar", nearbySystems: "Sistemas próximos" },
   menuGroups: { workspace: "Espaço de trabalho e dados", view: "Visual", flight: "Nave espacial", language: "Idioma", sound: "Som", sharing: "Compartilhar vista", resources: "Recursos" },
   about: {
     credit: "Criado por",

@@ -19,5 +19,5 @@ const tour: UniverseTourDefinition = {
 /** The bundled demo is one source selection, outside the reusable host. */
 export function DemoUniverseHost() {
   const copy = useTranslations("universe");
-  return <UniverseWorkspaceHost demoCatalog={mockCatalog} demoTour={tour} demoPresentation={{ regions: copy.demoRegions, factualReferences: true }} />;
+  return <UniverseWorkspaceHost demoCatalog={mockCatalog} demoTour={tour} demoPresentation={{ regions: copy.demoRegions, factualReferences: true, discoveryTarget: { kind: "cloud", id: "cloud-local-interstellar" } }} />;
 }

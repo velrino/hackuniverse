@@ -27,13 +27,13 @@ for (const locale of ["en", "pt-BR"] as const) {
     await expect(dialog.getByRole("tab")).toHaveText(tabs);
     await expect(dialog.getByRole("tab", { name: tabs[0], exact: true })).toHaveAttribute("aria-selected", "true");
     const pause = dialog.getByRole("tabpanel", { name: tabs[0], exact: true });
-    const quickActions = locale === "en" ? ["Resume", "Tour", "Reset", "Close"] : ["Retomar", "Tour", "Restaurar", "Fechar"];
+    const quickActions = locale === "en" ? ["Resume", "Nearby systems", "Tour", "Reset", "Close"] : ["Retomar", "Sistemas próximos", "Tour", "Restaurar", "Fechar"];
     await expect(pause.getByRole("button")).toHaveText(quickActions);
     await pause.getByRole("button", { name: quickActions[0], exact: true }).click();
     await expect(dialog).toBeHidden();
     await expect(trigger).toBeFocused();
     await trigger.click();
-    await pause.getByRole("button", { name: quickActions[3], exact: true }).click();
+    await pause.getByRole("button", { name: quickActions[4], exact: true }).click();
     await expect(dialog).toBeHidden();
     await expect(trigger).toBeFocused();
     await trigger.click();

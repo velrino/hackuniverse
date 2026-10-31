@@ -120,6 +120,56 @@ test("factual demo sources and hierarchy navigation preserve the canvas and loca
   await canvas!.dispose();
 });
 
+test("the initial Demo neighborhood exposes multiple real systems from Pause", async ({ page, context }) => {
+  const { errors, providerRequests } = await prepare(context, page);
+  const neighborhood = demo.entities.find(({ id }) => id === "cloud-local-interstellar")!;
+  const nearbySystems = demo.entities.filter((entity) => entity.kind === "system" && entity.parentId === neighborhood.id);
+  const nearbySystem = nearbySystems.find(({ id }) => id === "system-gj-887")!;
+  const nearbyPlanets = demo.planets.filter(({ parentId }) => parentId === nearbySystem.id);
+  expect(nearbySystems).toHaveLength(16);
+  expect(nearbyPlanets).toHaveLength(4);
+
+  await page.goto("/?lang=en&source=demo&target=planet-earth&check=nearby-systems#neighborhood");
+  await expect(page.locator('.universe-scene[aria-busy]')).toHaveAttribute("aria-busy", "false");
+  await expect(page.locator("main")).toHaveAttribute("data-scale", "planet");
+  const canvas = await page.locator("canvas").elementHandle();
+  expect(canvas).not.toBeNull();
+  await page.getByRole("button", { name: "Explorer menu", exact: true }).click();
+  const menu = page.getByRole("dialog", { name: "Mission controls", exact: true });
+  await menu.getByRole("tabpanel", { name: "Pause", exact: true }).getByRole("button", { name: "Nearby systems", exact: true }).click();
+  await expect(menu).toBeHidden();
+  await expect(page.locator("main")).toHaveAttribute("data-scale", "cloud");
+  await expect(page.locator(".universe-context h1")).toHaveText(neighborhood.name);
+  const systemLabels = page.locator("button.universe-node-label[data-destination-id]");
+  await expect(systemLabels).toHaveCount(nearbySystems.length);
+  await expect.poll(async () => new Set(await page.locator("button.universe-node-label[data-destination-id]:visible").allTextContents()).size).toBeGreaterThan(1);
+  const systemLabel = page.locator(`button.universe-node-label[data-destination-id="${nearbySystem.id}"]`);
+  await expect(systemLabel).toHaveText(nearbySystem.name);
+  await expect(systemLabel).toBeVisible();
+  await systemLabel.click();
+  await expect(page.locator("main")).toHaveAttribute("data-scale", "system");
+  await expect(page.locator(".universe-context h1")).toHaveText(nearbySystem.name);
+  expect(await canvas!.evaluate((node) => node.isConnected)).toBe(true);
+
+  await page.getByRole("button", { name: "Explorer menu", exact: true }).click();
+  await menu.getByRole("tab", { name: "Go to", exact: true }).click();
+  await menu.getByRole("textbox", { name: "Search planets", exact: true }).fill(nearbySystem.name);
+  await expect(menu.locator(".universe-menu-planet-text strong")).toHaveText(nearbyPlanets.map(({ name }) => name));
+  const destination = nearbyPlanets[0];
+  await menu.locator(".universe-menu-planets button").filter({ has: page.getByText(destination.name, { exact: true }) }).click();
+  await expect(menu).toBeHidden();
+  const planetPanel = page.getByRole("region", { name: destination.name, exact: true });
+  await expect(planetPanel.getByRole("heading", { name: destination.name, exact: true })).toBeVisible();
+  await expect(planetPanel.locator(".universe-details-description")).toContainText(destination.description);
+  await planetPanel.getByRole("button", { name: "Back to system", exact: true }).click();
+  await expect(page.locator(".universe-context h1")).toHaveText(nearbySystem.name);
+  expect(await canvas!.evaluate((node) => node.isConnected)).toBe(true);
+  await expectStoredWorkspace(page);
+  expect(providerRequests).toEqual([]);
+  expect(errors).toEqual([]);
+  await canvas!.dispose();
+});
+
 test("switching and direct entry to Local retain its content and ordinary stellar-cloud label", async ({ page, context }) => {
   const { errors, providerRequests } = await prepare(context, page);
   await page.goto("/?lang=en&source=demo");
@@ -151,6 +201,10 @@ test("switching and direct entry to Local retain its content and ordinary stella
   await expect(page.locator(".universe-context > span")).toHaveText("Stellar cloud");
   await expect(page.locator(".universe-context h1")).toHaveText("Synthetic local cloud");
   await expectStoredWorkspace(page);
+  await page.getByRole("button", { name: "Explorer menu", exact: true }).click();
+  await expect(menu.getByRole("tabpanel", { name: "Pause", exact: true })).toBeVisible();
+  await expect(menu.getByRole("button", { name: "Nearby systems", exact: true })).toHaveCount(0);
+  await page.keyboard.press("Escape");
   expect(providerRequests).toEqual([]);
   expect(errors).toEqual([]);
 });

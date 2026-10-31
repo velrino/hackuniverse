@@ -89,6 +89,23 @@ for (const host of regions.flatMap((region) => region.hosts).sort(rankHost)) {
   planetCount += host.planets.length;
 }
 for (const name of priorityHosts) assert.ok(selectedHosts.has(name), `A priority host was removed by the bounds: ${name}`);
+const nearbySelection = curated.nearbySelection;
+assert.ok(Array.isArray(nearbySelection.hostNames) && nearbySelection.hostNames.length > 0);
+assert.equal(new Set(nearbySelection.hostNames).size, nearbySelection.hostNames.length, "Nearby host names must be unique");
+assert.ok(nearbySelection.hostNames.length + 1 <= bounds.maxSystemsPerRegion, "The Solar Neighborhood exceeds its system budget");
+assert.ok(positive(nearbySelection.maxDistancePc) && nearbySelection.maxDistancePc <= bounds.sourceRadiusPc);
+const nearbyHosts = nearbySelection.hostNames.map((name) => {
+  const host = hosts.find((entry) => entry.name === name);
+  assert.ok(host, `A curated nearby host is absent from the source: ${name}`);
+  assert.ok(!selectedHosts.has(name), `A nearby host already belongs to a constellation region: ${name}`);
+  assert.ok(host.distance <= nearbySelection.maxDistancePc, `A nearby host exceeds the local distance selection: ${name}`);
+  assert.ok(hostCount + 1 <= bounds.maxExoplanetHosts && planetCount + host.planets.length <= bounds.maxPlanets, "The additional nearby systems exceed the demo catalog bounds");
+  selectedHosts.add(name);
+  hostCount++;
+  planetCount += host.planets.length;
+  return host;
+});
+assert.ok(nearbyHosts.every((host, index) => index === 0 || nearbyHosts[index - 1].distance <= host.distance), "Nearby systems must retain their curated distance ordering");
 assert.ok(planetCount > 738, "The factual expansion must exceed the previous 738-planet fixture");
 
 function planetNode(row, constellation) {
@@ -142,7 +159,7 @@ const constellationRegions = regions.map((region) => {
 const galaxies = curated.galaxies.map((galaxy) => ({
   id: galaxy.id, name: galaxy.name, description: galaxy.description,
   seed: galaxy.seed ?? seed(galaxy.id), type: "demo",
-  clouds: galaxy.id === "galaxy-milky-way" ? [{ ...curated.solarRegion, systems: [curated.solarSystem] }, ...constellationRegions] : [],
+  clouds: galaxy.id === "galaxy-milky-way" ? [{ ...curated.solarRegion, systems: [curated.solarSystem, ...nearbyHosts.map(systemNode)] }, ...constellationRegions] : [],
 }));
 const allSystems = galaxies.flatMap((galaxy) => galaxy.clouds.flatMap((region) => region.systems));
 const allPlanets = allSystems.flatMap((system) => system.planets);
@@ -165,8 +182,9 @@ const output = {
     constellationMethod: assignments.method,
     astropyVersion: assignments.astropyVersion,
     bounds,
-    selection: "Single-star, non-circumbinary confirmed planets with no published confirmation controversy; complete eligible host groups selected from a 100 pc source pool. Priority nearby hosts precede planet-rich hosts; the 31 highest-ranked real constellation regions are retained. This is a bounded demonstration, not a full nearby census.",
+    selection: "Single-star, non-circumbinary confirmed planets with no published confirmation controversy; complete eligible host groups selected from a 100 pc source pool. Priority nearby hosts precede planet-rich hosts; the 31 highest-ranked real constellation regions are retained. Fifteen additional eligible nearby hosts are added to Solar Neighborhood without moving any existing constellation system. This is a bounded demonstration, not a full nearby census.",
     priorityHosts,
+    nearbySelection: { ...nearbySelection, addedSystems: nearbyHosts.length, addedPlanets: nearbyHosts.reduce((sum, host) => sum + host.planets.length, 0) },
     counts: { galaxies: galaxies.length, regions: 1 + constellationRegions.length, systems: allSystems.length, exoplanetHosts: hostCount, planets: planetCount, exoplanets: planetCount - curated.solarSystem.planets.length, entities: ids.length },
     descriptions: "Planet descriptions use source names, host relationships, discovery year/method and only positive orbital periods with a zero limit flag. Missing facts are omitted. No climate, surface, habitability or life claim is inferred for an exoplanet.",
     stellarParameters: "Optional non-limited stellar temperature, radius and age are copied from a source row; stellar radius in Solar radii is multiplied by NASA's 695700 km nominal Solar radius. Composite fields can have different literature references, retained in the raw snapshot. Stellar age estimates above the approximately 13.8-billion-year age of the universe are omitted from display because this interface does not show their uncertainties; the raw NASA snapshot is unchanged.",
