@@ -2,7 +2,7 @@
   "universe": {
     "id": "universe-demo-atlas",
     "name": "Universe",
-    "description": "A bounded demonstration catalog of the Solar System, confirmed exoplanets and five named galaxies. The spatial layout and procedural appearances are illustrations, not a measured three-dimensional model.",
+    "description": "A bounded demonstration catalog of the Solar System, confirmed exoplanets and twenty named galaxies. The spatial layout and procedural appearances are illustrations, not a measured three-dimensional model.",
     "seed": 3983766564,
     "type": "demo"
   },
@@ -222,6 +222,96 @@
       "name": "Pinwheel",
       "description": "Pinwheel, also called Messier 101, is a face-on spiral galaxy. No planetary systems are included here in this demonstration.",
       "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-101/"
+    },
+    {
+      "id": "galaxy-bode",
+      "name": "Bode's Galaxy",
+      "description": "Bode's Galaxy, also known as Messier 81, is a spiral galaxy in Ursa Major. Its spiral arms contain populations of young, blue stars. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-81/"
+    },
+    {
+      "id": "galaxy-black-eye",
+      "name": "Black Eye",
+      "description": "Black Eye, also known as Messier 64, is a spiral galaxy in Coma Berenices. A prominent band of dust partly obscures its bright central region. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-64/"
+    },
+    {
+      "id": "galaxy-sunflower",
+      "name": "Sunflower",
+      "description": "Sunflower, also known as Messier 63, is a flocculent spiral galaxy in Canes Venatici. Its patchy arms are less sharply defined than those of a grand-design spiral. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-63/"
+    },
+    {
+      "id": "galaxy-southern-pinwheel",
+      "name": "Southern Pinwheel",
+      "description": "Southern Pinwheel, also known as Messier 83, is a spiral galaxy in Hydra. Its dusty spiral arms contain many young star clusters. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-83/"
+    },
+    {
+      "id": "galaxy-messier-95",
+      "name": "Messier 95",
+      "description": "Messier 95, also called NGC 3351, is a barred spiral galaxy in Leo. It belongs to the Leo I or M96 galaxy group. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-95/"
+    },
+    {
+      "id": "galaxy-messier-96",
+      "name": "Messier 96",
+      "description": "Messier 96, also called NGC 3368, is a spiral galaxy in Leo. Its asymmetric arms and off-center core are influenced by interactions with neighboring galaxies. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-96/"
+    },
+    {
+      "id": "galaxy-messier-98",
+      "name": "Messier 98",
+      "description": "Messier 98 is a spiral galaxy in the Virgo Cluster, seen in the direction of Coma Berenices. Its gas and dust support numerous star-forming regions. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-98/"
+    },
+    {
+      "id": "galaxy-messier-99",
+      "name": "Messier 99",
+      "description": "Messier 99 is a grand-design spiral galaxy in Coma Berenices. Its long, clearly defined spiral arms contain stars and star-forming material. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-99/"
+    },
+    {
+      "id": "galaxy-messier-100",
+      "name": "Messier 100",
+      "description": "Messier 100 is a grand-design spiral galaxy in the Virgo Cluster. Its prominent, dusty arms contain regions of active star formation. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-100/"
+    },
+    {
+      "id": "galaxy-sculptor",
+      "name": "Sculptor",
+      "description": "Sculptor, also called NGC 253 or Caldwell 65, is a spiral galaxy viewed nearly edge-on. Intense star formation earns it a starburst classification. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-caldwell-catalog/caldwell-65/"
+    },
+    {
+      "id": "galaxy-ngc-1300",
+      "name": "NGC 1300",
+      "description": "NGC 1300 is a barred spiral galaxy in Eridanus. Its main spiral arms extend from the ends of a straight central bar of stars. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/asset/hubble/spiral-galaxy-ngc-1300/"
+    },
+    {
+      "id": "galaxy-ngc-1365",
+      "name": "NGC 1365",
+      "description": "NGC 1365 is a barred spiral galaxy in Fornax and a member of the Fornax Cluster. Its large central bar connects to two prominent spiral arms. No planetary systems are included here in this demonstration.",
+      "source": "https://www.eso.org/public/news/eso9911/"
+    },
+    {
+      "id": "galaxy-ngc-2403",
+      "name": "NGC 2403",
+      "description": "NGC 2403, also called Caldwell 7, is a spiral galaxy in Camelopardalis. Its ionized hydrogen clouds are active sites of star formation. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-caldwell-catalog/caldwell-7/"
+    },
+    {
+      "id": "galaxy-ngc-2903",
+      "name": "NGC 2903",
+      "description": "NGC 2903 is a barred spiral galaxy in Leo. Dust lanes and young star clusters trace its arms and the region around its central bar. No planetary systems are included here in this demonstration.",
+      "source": "https://esahubble.org/images/heic0102a/"
+    },
+    {
+      "id": "galaxy-fireworks",
+      "name": "Fireworks",
+      "description": "Fireworks, also called NGC 6946, is an intermediate spiral galaxy with a high rate of star formation. Frequent observed supernovae gave the galaxy its nickname. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/missions/hubble/hubble-views-a-dazzling-a-fireworks-galaxy/"
     }
   ],
   "solarFactsSource": "https://science.nasa.gov/solar-system/planets/",

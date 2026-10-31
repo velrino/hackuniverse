@@ -16,6 +16,8 @@ import { createTourZoomFeedback } from "./tour-zoom-feedback";
 import { galaxyParticleTexture } from "./galaxy-particles";
 import { createCloudHaze, createGalaxyVisual, createGlow, createRoundPointMaterial, updateCloudHaze, updateGalaxyVisual } from "./cluster-visuals";
 import { createSurroundingContext, type ContextLabel } from "./surrounding-context";
+import { mapSceneViews } from "./view-coordinates";
+import { destinationPosition, findPhysicalHit, isObjectVisible, pickSceneDestination, type ScenePickTarget } from "./destination-picking";
 import { isManualZoomSample } from "./zoom-intent";
 import { isManualOrbitSample } from "./orbit-intent";
 import { isFreshCameraInput } from "./camera-input-time";
@@ -27,7 +29,8 @@ import type { UniverseCameraRestore } from "./types";
 
 type Callbacks = { onSelect: (id: string) => void; onSelectStar: () => void; onReady: () => void; onUnavailable: () => void; onError?: (error: unknown, operation: UniverseSceneErrorOperation) => void; onFlightStatus: (status: UniverseFlightStatus) => void; onGuideRequest: (id: string) => void; onAutopilotEnd: () => void; onScaleOut: () => void; onScaleIn: (id: string) => void; onTourArrive: (token: string) => void; onEntityTransitionEnd?: (token: string) => void; onInteraction: () => void; onZoomIntent?: (direction: "in" | "out") => void; onOrbitIntent?: () => void; onCameraGestureEnd?: (motion: "zoom" | "orbit") => void; onTourZoomIntent?: (direction: "in" | "out") => void; onTourZoomEnd?: () => void; onDestinationHover?: (id: string) => void; onCameraChange?: (pose: UniverseCameraPose, reason: "manual" | "navigation") => void; onCameraRestored?: (token: string, success: boolean) => void };
 type Body = { node: SceneNode; object: THREE.Group; radius: number; extent: number; angle: number; orbit: number; mesh: THREE.Mesh; detail?: THREE.Group; proxy?: THREE.Sprite; previewPixels?: number; localOrbits?: THREE.Group; miniPlanets?: { mesh: THREE.Mesh; orbit: number; scale: number; index: number }[]; dust?: THREE.Points; core?: THREE.Sprite; highlight?: (active: boolean) => void; haze?: { primary: THREE.Sprite; secondary: THREE.Sprite } };
-type Label = { element: HTMLElement; body?: Body; position?: THREE.Vector3; width: number; star?: boolean; context?: ContextLabel };
+type VisibleDestination = ScenePickTarget & { kind: SceneNode["kind"]; name: string; extent: number; highlight: (active: boolean) => void; context?: boolean };
+type Label = { element: HTMLElement; body?: Body; position?: THREE.Vector3; width: number; star?: boolean; context?: ContextLabel; destination?: VisibleDestination; preview?: boolean };
 type CentralStar = { systemId: string; object: THREE.Mesh; highlight: (active: boolean) => void };
 type CameraPose = { position: THREE.Vector3; target: THREE.Vector3 };
 type TourCameraMotion = { dolly: TourDolly; fromDistance: number };
@@ -128,6 +131,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   let starSelected = false;
   let labels: Label[] = [];
   let hitTargets: THREE.Object3D[] = [];
+  let visibleDestinations: VisibleDestination[] = [];
+  const destinationById = new Map<string, VisibleDestination>();
   let currentView: UniverseSceneView | null = null;
   let signature = "";
   let selectedId: string | null = null;
@@ -406,28 +411,48 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     viewGroup.add(surroundingContext.root);
     labels.filter((label) => label.context).forEach(({ element }) => element.remove());
     labels = labels.filter((label) => !label.context);
-    for (const context of surroundingContext.labels) addLabel(context.name, undefined, context.position, false, context);
+    visibleDestinations = visibleDestinations.filter((destination) => !destination.context);
+    destinationById.clear();
+    visibleDestinations.forEach((destination) => destinationById.set(destination.id, destination));
+    for (const context of surroundingContext.destinations) registerDestination({
+      id: context.id, kind: context.kind, name: context.name, object: surroundingContext.root,
+      position: context.position, radius: context.extent, extent: context.extent,
+      screenRadius: () => context.screenRadius, highlight: context.highlight, context: true,
+    });
+    for (const context of surroundingContext.labels) addLabel(context.name, undefined, context.position, false, context, destinationById.get(context.id));
   }
 
-  function addLabel(text: string, body?: Body, position?: THREE.Vector3, star = false, context?: ContextLabel) {
-    const element = document.createElement(body || star ? "button" : "span");
+  function registerDestination(destination: VisibleDestination) {
+    visibleDestinations.push(destination);
+    destinationById.set(destination.id, destination);
+    return destination;
+  }
+
+  function addLabel(text: string, body?: Body, position?: THREE.Vector3, star = false, context?: ContextLabel, destination?: VisibleDestination, preview = false) {
+    const element = document.createElement(body || star || context || destination || preview ? "button" : "span");
     element.className = context ? "universe-node-label universe-context-label" : "universe-node-label";
     element.hidden = Boolean(context);
     element.textContent = text;
     element.title = text;
     const labelWidth = Math.min(140, Math.max(44, text.length * 6.2 + 14));
     element.style.width = `${labelWidth}px`;
-    if (body || star) {
+    if (element instanceof HTMLButtonElement) {
       (element as HTMLButtonElement).type = "button";
-      element.dataset.destinationId = star ? centralStar!.systemId : body!.node.id;
+      const id = star ? centralStar!.systemId : body?.node.id ?? destination?.id ?? context?.id;
+      if (id) element.dataset.destinationId = id;
+      element.dataset.destinationKind = star ? "system" : body?.node.kind ?? destination?.kind ?? context?.kind ?? "";
       if (star) element.dataset.star = "true";
+      if (body || star) element.dataset.primary = "true";
+      if (preview) element.dataset.preview = "true";
       element.addEventListener("click", () => {
         if (star) requestStarSelection();
-        else requestSelection(body!.node.id);
+        else if (element.dataset.destinationId) requestSelection(element.dataset.destinationId);
       });
     } else element.style.pointerEvents = "none";
     labelLayer.appendChild(element);
-    labels.push({ element, body, position, width: labelWidth, star, context });
+    const label = { element, body, position, width: labelWidth, star, context, destination, preview };
+    labels.push(label);
+    return label;
   }
 
   function addCluster(body: Body) {
@@ -443,6 +468,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       star.scale.setScalar(3.4 * scale);
       body.mesh = star;
       body.detail.add(star);
+      star.userData.id = node.id;
+      hitTargets.push(star);
       addGlow(body.detail, 3.4 * 8.6 * scale, 0xffffff, 0.75, coronaMap, false);
       body.miniPlanets = [];
       children.filter((child) => child.kind === "planet").forEach((planet, index) => {
@@ -456,6 +483,11 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         dot.position.set(Math.cos(angle) * orbit * scale, 0, Math.sin(angle) * orbit * scale);
         body.detail!.add(dot);
         body.miniPlanets!.push({ mesh: dot, orbit, scale, index });
+        dot.userData.id = planet.id;
+        hitTargets.push(dot);
+        registerDestination({ id: planet.id, kind: planet.kind, name: planet.name, object: dot,
+          position: new THREE.Vector3(), radius: 1, extent: planetRadius(planet.seed) * scale,
+          highlight: createDestinationHighlight(dot) });
       });
       addOrbits(body.miniPlanets.map((planet) => planet.orbit * scale), body.localOrbits);
       object.add(body.detail);
@@ -464,13 +496,15 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       body.mesh.visible = false;
       body.haze = createCloudHaze(object, extent, node.color, clusterResources);
       updateCloudHaze(body.haze, node.seed, extent, orbitalTime);
-      addStarPoints(object, children.filter((child) => child.kind === "system").map((child, index, systems) => clusterPosition(child, index, systems.length, extent * 1.1)), extent * 0.13);
+      const systems = children.filter((child) => child.kind === "system");
+      addStarPoints(object, systems.map((child, index) => clusterPosition(child, index, systems.length, extent * 1.1)), extent * 0.13, systems);
     } else {
       body.mesh.visible = false;
       const visual = createGalaxyVisual(object, node.seed, extent, clusterResources, orbitalTime);
       body.dust = visual.dust;
       body.core = visual.core;
       const systemPoints: [number, number, number][] = [];
+      const systemNodes: SceneNode[] = [];
       const galaxyScale = previewScale(node, extent);
       const cloudExtent = clusterScale(children).marker;
       children.forEach((cloud, index) => {
@@ -478,9 +512,10 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         (cloud.children ?? []).filter((child) => child.kind === "system").forEach((system, childIndex, systems) => {
           const local = clusterPosition(system, childIndex, systems.length, cloudExtent * 1.1 * galaxyScale);
           systemPoints.push([origin[0] + local[0], origin[1] + local[1], origin[2] + local[2]]);
+          systemNodes.push(system);
         });
       });
-      addStarPoints(object, systemPoints, extent * 0.035);
+      addStarPoints(object, systemPoints, extent * 0.035, systemNodes);
     }
     const hit = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false }));
     // The luminous core is the destination; the sparse outer dust is scenery.
@@ -490,12 +525,21 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     hitTargets.push(hit);
   }
 
-  function addStarPoints(parent: THREE.Object3D, points: [number, number, number][], size: number) {
+  function addStarPoints(parent: THREE.Object3D, points: [number, number, number][], size: number, nodes: readonly SceneNode[]) {
     if (!points.length) return;
     const geometry = new THREE.BufferGeometry().setFromPoints(points.map((position) => new THREE.Vector3(...position)));
     const material = roundPointMaterial(size, 0xffffff, 0.95, coronaMap);
+    const colors = new THREE.Float32BufferAttribute(new Float32Array(points.length * 3).fill(1), 3);
+    geometry.setAttribute("color", colors);
+    material.vertexColors = true;
     material.blending = THREE.AdditiveBlending;
-    parent.add(new THREE.Points(geometry, material));
+    const object = new THREE.Points(geometry, material);
+    parent.add(object);
+    nodes.forEach((node, index) => registerDestination({
+      id: node.id, kind: node.kind, name: node.name, object, position: new THREE.Vector3(...points[index]),
+      radius: size / 2, extent: size, screenRadius: () => 2.5,
+      highlight: (active) => { colors.setXYZ(index, active ? 1.6 : 1, active ? 1.6 : 1, active ? 1.6 : 1); colors.needsUpdate = true; },
+    }));
   }
 
   function zoomOutLimit(proposed: number) {
@@ -547,11 +591,12 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     return radius / Math.sqrt(1 - (radius / distance) ** 2) * 1.025;
   }
 
-  function beginCameraTween(to: CameraPose, toFraming: number, onComplete?: () => void) {
+  function beginCameraTween(to: CameraPose, toFraming: number, onComplete?: () => void, keepOverlap = false) {
     suppressCameraGestures(true);
     clearZoomIntent(true);
     controls.autoRotate = false;
-    finishWorldTransition();
+    if (keepOverlap && worldTransition) worldTransition.cameraOwned = false;
+    else finishWorldTransition();
     if (reducedMotion) {
       camera.position.copy(to.position);
       controls.target.copy(to.target);
@@ -577,7 +622,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     focusDistance = distance;
     const target = body.object.position.clone();
     controls.minDistance = body.radius * 2.4;
-    beginCameraTween({ position: target.clone().addScaledVector(direction, distance), target }, 1);
+    beginCameraTween({ position: target.clone().addScaledVector(direction, distance), target }, 1, undefined, Boolean(worldTransition));
   }
 
   function cancelCameraTween(keepOverlap = false) {
@@ -592,14 +637,15 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   function requestSelection(id: string) {
     if (worldTransition) return;
     const body = bodies.find((candidate) => candidate.node.id === id);
-    if (!body) return;
-    suppressCameraGestures();
     if (pilot.isActive()) {
-      if (flightReady && !flightPaused && body.node.kind === "planet") callbacks.onSelect(id);
+      if (flightReady && !flightPaused && body?.node.kind === "planet") callbacks.onSelect(id);
       return;
     }
-    if (currentView?.mode !== "cluster") { callbacks.onSelect(id); return; }
     if (!playing) return;
+    const destination = destinationById.get(id);
+    if (!body && (!destination || !isObjectVisible(destination.object) || destination.visible?.() === false)) return;
+    suppressCameraGestures();
+    if (!body || currentView?.mode !== "cluster") { callbacks.onSelect(id); return; }
     const viewKey = currentView.key;
     const direction = camera.position.clone().sub(controls.target).normalize();
     const distance = body.extent / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 1.25 / Math.min(camera.aspect, 1);
@@ -631,9 +677,10 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       if (view.ancestors?.[0]) collectNames(view.ancestors[0]);
       else if (view.anchor) collectNames(view.anchor);
       else view.nodes.forEach(collectNames);
+      visibleDestinations.forEach((destination) => { destination.name = names.get(destination.id) ?? destination.name; });
       labels.forEach((label) => {
         if (label.context) label.context.name = names.get(label.context.id) ?? label.context.name;
-        const text = label.context?.name ?? label.body?.node.name ?? view.starName ?? "";
+        const text = label.context?.name ?? label.destination?.name ?? label.body?.node.name ?? view.starName ?? "";
         label.element.textContent = text;
         label.element.title = text;
         label.width = Math.min(140, Math.max(44, text.length * 6.2 + 14));
@@ -670,7 +717,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     const previousIntensity = sunLight.intensity;
     const entering = bodies.find((body) => `${body.node.kind}:${body.node.id}` === view.key);
     const parent = view.nodes.find((node) => `${node.kind}:${node.id}` === previousView?.key);
-    const canTransition = Boolean(previousView && !reducedMotion && (entering || parent));
+    const coordinateMapping = previousView && previousView.key !== view.key ? mapSceneViews(previousView, view) : null;
+    const canTransition = Boolean(previousView && !reducedMotion && (coordinateMapping || entering || parent));
     const outgoing = new THREE.Group();
     const orbitsVisible = orbitGroup.visible;
     if (canTransition) {
@@ -705,6 +753,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     systemPreviews = [];
     labels = [];
     hitTargets = [];
+    visibleDestinations = [];
+    destinationById.clear();
     selection.visible = false;
     planetSelection.hide();
     const focus = view.mode === "planet";
@@ -762,19 +812,21 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       if (labels.filter((label) => !label.context).length < LABEL_BUDGET) addLabel(node.name, body);
     });
     systemPreviews = bodies.filter((body) => body.detail && body.proxy);
+    // Reuse a small set of captions for the currently visible preview destinations.
+    for (let index = 0; index < 8; index++) addLabel("", undefined, undefined, false, undefined, undefined, true);
     if (!cluster && !focus) addOrbits(bodies.map((body) => body.orbit));
     fit();
     if (canTransition) {
       const destinationParent = bodies.find((body) => body.node.id === parent?.id);
-      const scale = entering ? 1 / previewScale(entering.node, entering.extent) : previewScale(destinationParent!.node, destinationParent!.extent);
-      const translation = entering ? entering.object.position.clone().multiplyScalar(-scale) : destinationParent!.object.position.clone();
+      const scale = coordinateMapping?.scale ?? (entering ? 1 / previewScale(entering.node, entering.extent) : previewScale(destinationParent!.node, destinationParent!.extent));
+      const translation = coordinateMapping?.offset ?? (entering ? entering.object.position.clone().multiplyScalar(-scale) : destinationParent!.object.position.clone());
       outgoing.scale.setScalar(scale);
       outgoing.position.copy(translation);
       background.remap(scale, translation);
       outgoing.traverse((object) => {
         if (object instanceof THREE.Points) {
           const materials = Array.isArray(object.material) ? object.material : [object.material];
-          materials.forEach((material) => { material.size *= scale; });
+          materials.forEach((material) => { if (material instanceof THREE.PointsMaterial) material.size *= scale; });
         }
       });
       const from = { position: previousPose.position.clone().multiplyScalar(scale).add(translation), target: previousPose.target.clone().multiplyScalar(scale).add(translation) };
@@ -920,6 +972,54 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       element.dataset.selected = String(selected);
       if (body || element.dataset.star === "true") element.setAttribute("aria-pressed", String(selected));
     });
+  }
+
+  function updatePreviewLabels() {
+    const slots = labels.filter((label) => label.preview);
+    const budget = width < 640 ? 4 : 8;
+    const nearest: { destination: VisibleDestination; distance: number }[] = [];
+    const world = new THREE.Vector3();
+    for (const destination of visibleDestinations) {
+      if (destination.context || !isObjectVisible(destination.object) || destination.visible?.() === false) continue;
+      destinationPosition(destination, world);
+      projected.copy(world).project(camera);
+      if (projected.z < -1 || projected.z > 1 || Math.abs(projected.x) > 1 || Math.abs(projected.y) > 1) continue;
+      const distance = camera.position.distanceToSquared(world);
+      if (nearest.length === budget && distance >= nearest[nearest.length - 1].distance) continue;
+      const index = nearest.findIndex((candidate) => distance < candidate.distance);
+      nearest.splice(index < 0 ? nearest.length : index, 0, { destination, distance });
+      if (nearest.length > budget) nearest.pop();
+    }
+    // Reserve the focused identity before assigning the other captions.
+    const pinned = slots.find((slot) => slot.element === document.activeElement && slot.destination && isObjectVisible(slot.destination.object));
+    const available = nearest.filter(({ destination }) => destination.id !== pinned?.destination?.id);
+    let next = 0;
+    slots.forEach((slot) => {
+      if (slot === pinned) return;
+      const destination = available[next++]?.destination;
+      slot.destination = destination;
+      if (!destination) { slot.element.hidden = true; delete slot.element.dataset.destinationId; return; }
+      slot.element.dataset.destinationId = destination.id;
+      slot.element.dataset.destinationKind = destination.kind;
+      if (slot.element.textContent !== destination.name) {
+        slot.element.textContent = destination.name;
+        slot.element.title = destination.name;
+        slot.width = Math.min(140, Math.max(44, destination.name.length * 6.2 + 14));
+        slot.element.style.width = `${slot.width}px`;
+      }
+    });
+  }
+
+  function pickDestination(pointer: THREE.Vector2, minimumRadius = 4) {
+    scene.updateMatrixWorld();
+    camera.updateMatrixWorld();
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObjects(hitTargets.filter(isObjectVisible), false).filter((intersection) =>
+      typeof intersection.object.userData.id === "string");
+    const physical = findPhysicalHit(hits);
+    const destination = pickSceneDestination(visibleDestinations, camera, pointer, width, height, minimumRadius, physical?.distance);
+    const fallback = physical ?? hits[0];
+    return destination?.id ?? (fallback ? fallback.object.userData.id as string : null);
   }
 
   function resize() {
@@ -1105,6 +1205,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         try { callbacks.onCameraChange?.(snapshot, reason); } catch { /* URL persistence is optional. */ }
       }
     }
+    scene.updateMatrixWorld();
+    camera.updateMatrixWorld();
     surroundingContext?.update(orbitalTime, camera, height);
     // Crossfades own both roots' opacity until the old root has been disposed.
     if (!worldTransition) for (const guides of orbitGuides) guides.update(camera, height);
@@ -1161,15 +1263,18 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         }
       }
       guideButton.hidden = !guideVisible;
+      updatePreviewLabels();
       const isSelectedLabel = (label: Label) => label.star ? starSelected : label.body?.node.id === effectiveSelectedId;
       const ordered = [...labels].sort((a, b) => Number(b.element === document.activeElement) - Number(a.element === document.activeElement) || Number(isSelectedLabel(b)) - Number(isSelectedLabel(a)) || Number(Boolean(b.body)) - Number(Boolean(a.body)));
-      ordered.forEach(({ element, body, position, width: labelWidth, star, context }) => {
+      ordered.forEach(({ element, body, position, width: labelWidth, star, context, destination, preview }) => {
+        if (preview && !destination || destination && (!isObjectVisible(destination.object) || destination.visible?.() === false)) { element.hidden = true; return; }
         if (context) {
           element.style.opacity = String(context.opacity);
           if (worldTransition || context.opacity < 0.05) { element.hidden = true; return; }
         }
-        if (star) (element as HTMLButtonElement).disabled = piloting;
-        labelPosition.copy(body?.object.position ?? position ?? new THREE.Vector3());
+        if (star || context || preview) (element as HTMLButtonElement).disabled = piloting;
+        if (destination) destinationPosition(destination, labelPosition);
+        else labelPosition.copy(body?.object.position ?? position ?? new THREE.Vector3());
         projected.copy(labelPosition).project(camera);
         const projectedX = (projected.x * 0.5 + 0.5) * width;
         const x = THREE.MathUtils.clamp(projectedX, labelWidth / 2 + 8, width - labelWidth / 2 - 8);
@@ -1205,7 +1310,10 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       callbacks.onUnavailable();
       return;
     }
-    if (animate || interacting || cameraTween || worldTransition || entityTransition || semanticZoom.hasPending() || (piloting && !flightPaused)) requestRender();
+    // A timer can fire just after this frame's RAF timestamp. Keep a settled
+    // report alive for the next frame instead of stranding keyboard navigation.
+    const settledReport = cameraReport && cameraReportTimer === null && activePointers.size === 0 && !piloting && !tourStep && !tourPreparing;
+    if (animate || interacting || cameraTween || worldTransition || entityTransition || semanticZoom.hasPending() || settledReport || (piloting && !flightPaused)) requestRender();
   }
 
   function endCameraGesture(motion: "zoom" | "orbit") {
@@ -1338,13 +1446,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     if (!start || start.dragged || event.button !== 0 || start.id !== event.pointerId || Math.hypot(event.clientX - start.x, event.clientY - start.y) > 7 || performance.now() - start.time > 700) return;
     const rect = canvas.getBoundingClientRect();
     pointer.set((event.clientX - rect.left) / width * 2 - 1, -(event.clientY - rect.top) / height * 2 + 1);
-    raycaster.setFromCamera(pointer, camera);
-    const hit = raycaster.intersectObjects(hitTargets, false)[0];
-    if (hit?.object.userData.star) { requestStarSelection(); return; }
-    if (hit && typeof hit.object.userData.id === "string") {
-      const id = hit.object.userData.id;
-      requestSelection(id);
-    }
+    const id = pickDestination(pointer, event.pointerType === "touch" ? 22 : 4);
+    if (id === centralStar?.systemId) requestStarSelection();
+    else if (id) requestSelection(id);
   }
   function onPointerCancel(event: PointerEvent) { suppressCameraGestures(); activePointers.delete(event.pointerId); touchPoints.delete(event.pointerId); if (activePointers.size === 0) document.removeEventListener("pointermove", onAfterControlPointerMove); pointerStart = null; clearZoomIntent(); promoteRemainingTouch(event); }
   function onLostPointerCapture(event: PointerEvent) { if (activePointers.has(event.pointerId)) onPointerCancel(event); }
@@ -1596,10 +1700,12 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     onChange: (id) => { if (id) { try { callbacks.onDestinationHover?.(id); } catch { /* Optional feedback cannot interrupt navigation. */ } } },
     camera, canvas, labelLayer,
     getHitTargets: () => hitTargets,
+    pick: (pointer) => pickDestination(pointer),
     resolve: (id) => {
       if (centralStar?.systemId === id) return { highlight: centralStar.highlight };
       const body = bodies.find((candidate) => candidate.node.id === id);
-      return body?.highlight ? { highlight: body.highlight } : null;
+      const highlight = body?.highlight ?? destinationById.get(id)?.highlight;
+      return highlight ? { highlight } : null;
     },
     requestRender,
   });
@@ -1736,7 +1842,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       renderer.forceContextLoss();
       canvas.remove();
       labelLayer.remove();
-      bodies = []; labels = []; hitTargets = [];
+      bodies = []; labels = []; hitTargets = []; visibleDestinations = [];
+      destinationById.clear();
     },
   };
 }

@@ -7,6 +7,7 @@ type HoverOptions = {
   canvas: HTMLCanvasElement;
   labelLayer: HTMLElement;
   getHitTargets: () => THREE.Object3D[];
+  pick?: (pointer: THREE.Vector2) => string | null;
   resolve: (id: string) => Destination | null;
   requestRender: () => void;
   onChange?: (id: string | null) => void;
@@ -15,7 +16,7 @@ type HoverOptions = {
 const labelSelector = "button.universe-node-label[data-destination-id]";
 
 /** Resolve destinations and activate their existing materials without owning GPU resources. */
-export function createDestinationHover({ camera, canvas, labelLayer, getHitTargets, resolve, requestRender, onChange }: HoverOptions) {
+export function createDestinationHover({ camera, canvas, labelLayer, getHitTargets, pick, resolve, requestRender, onChange }: HoverOptions) {
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   const intersections: THREE.Intersection[] = [];
@@ -138,6 +139,10 @@ export function createDestinationHover({ camera, canvas, labelLayer, getHitTarge
         destinationId = label.dataset.destinationId ?? null;
         destination = resolve(destinationId ?? "");
       } else if (pointerInside) {
+        if (pick) {
+          destinationId = pick(pointer);
+          destination = destinationId ? resolve(destinationId) : null;
+        } else {
         camera.updateMatrixWorld();
         raycaster.setFromCamera(pointer, camera);
         intersections.length = 0;
@@ -146,6 +151,7 @@ export function createDestinationHover({ camera, canvas, labelLayer, getHitTarge
           if (typeof hit.object.userData.id !== "string") continue;
           destination = resolve(hit.object.userData.id);
           if (destination) { destinationId = hit.object.userData.id; break; }
+        }
         }
       }
       if (!destination || typeof destination.highlight !== "function") { intent.target(null, true); hide(); return; }

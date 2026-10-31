@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-10-31T18:03:02.423Z",
+  "generatedAt": "2026-10-31T19:07:05.088Z",
   "baseURL": "http://127.0.0.1:3112",
   "sourceFormat": "organized-demo",
-  "sourceSha256": "71cdfcfce563037359db3e63bd43d34d2b0633ace055e55f63fb49d163e141cf",
+  "sourceSha256": "e7fa5153888692c6dd224e8a2e94d140161afca7e6baa66852fa1a825fee25d9",
   "runtime": {
     "node": "v25.6.1",
     "platform": "darwin",
     "arch": "arm64"
   },
   "catalog": {
-    "entities": 1255,
-    "galaxies": 5,
+    "entities": 1270,
+    "galaxies": 20,
     "regions": 32,
     "systems": 450,
     "planets": 767,
@@ -83,40 +83,40 @@
           "descendantPlanets": 1,
           "observed": "planet",
           "elapsedMs": 2002.9,
-          "renderedCallbacks": 44,
+          "renderedCallbacks": 45,
           "callbackWallMs": {
-            "count": 44,
-            "mean": 0.345,
-            "p50": 0.3,
-            "p95": 0.4,
+            "count": 45,
+            "mean": 0.373,
+            "p50": 0.4,
+            "p95": 0.5,
             "maximum": 0.5
           },
           "renderedCallbackIntervalMs": {
-            "count": 43,
-            "mean": 45.735,
+            "count": 44,
+            "mean": 44.318,
             "p50": 49.9,
             "p95": 50,
-            "maximum": 116.7
+            "maximum": 50
           },
-          "renderedCallbackCadenceHz": 21.865,
+          "renderedCallbackCadenceHz": 22.564,
           "drawCallsPerRenderedCallback": {
-            "count": 44,
+            "count": 45,
             "mean": 14,
             "p50": 14,
             "p95": 14,
             "maximum": 14
           },
-          "drawCallsDuringSample": 616,
+          "drawCallsDuringSample": 630,
           "drawMethodsDuringSample": {
-            "drawElements": 308,
-            "drawArrays": 308
+            "drawElements": 315,
+            "drawArrays": 315
           },
-          "heapUsedBytes": 15886588,
+          "heapUsedBytes": 15936880,
           "resourcesBefore": {
             "Buffer": {
-              "created": 31,
+              "created": 32,
               "deleted": 0,
-              "live": 31
+              "live": 32
             },
             "Texture": {
               "created": 17,
@@ -166,9 +166,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 31,
+              "created": 32,
               "deleted": 0,
-              "live": 31
+              "live": 32
             },
             "Texture": {
               "created": 17,
@@ -226,41 +226,41 @@
           },
           "descendantPlanets": 8,
           "observed": "system",
-          "elapsedMs": 2001.4,
-          "renderedCallbacks": 43,
+          "elapsedMs": 2002.4,
+          "renderedCallbacks": 44,
           "callbackWallMs": {
-            "count": 43,
-            "mean": 0.323,
-            "p50": 0.3,
-            "p95": 0.4,
+            "count": 44,
+            "mean": 0.391,
+            "p50": 0.4,
+            "p95": 0.5,
             "maximum": 0.5
           },
           "renderedCallbackIntervalMs": {
-            "count": 42,
-            "mean": 46.031,
-            "p50": 50,
+            "count": 43,
+            "mean": 44.96,
+            "p50": 49.9,
             "p95": 50,
             "maximum": 50.1
           },
-          "renderedCallbackCadenceHz": 21.724,
+          "renderedCallbackCadenceHz": 22.242,
           "drawCallsPerRenderedCallback": {
-            "count": 43,
+            "count": 44,
             "mean": 20,
             "p50": 20,
             "p95": 20,
             "maximum": 20
           },
-          "drawCallsDuringSample": 860,
+          "drawCallsDuringSample": 880,
           "drawMethodsDuringSample": {
-            "drawElements": 645,
-            "drawArrays": 215
+            "drawElements": 660,
+            "drawArrays": 220
           },
-          "heapUsedBytes": 14339192,
+          "heapUsedBytes": 16987508,
           "resourcesBefore": {
             "Buffer": {
-              "created": 31,
+              "created": 32,
               "deleted": 0,
-              "live": 31
+              "live": 32
             },
             "Texture": {
               "created": 17,
@@ -310,9 +310,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 31,
+              "created": 32,
               "deleted": 0,
-              "live": 31
+              "live": 32
             },
             "Texture": {
               "created": 17,
@@ -371,40 +371,40 @@
           "descendantPlanets": 34,
           "observed": "cloud",
           "elapsedMs": 2002.6,
-          "renderedCallbacks": 44,
+          "renderedCallbacks": 45,
           "callbackWallMs": {
-            "count": 44,
-            "mean": 0.523,
-            "p50": 0.5,
+            "count": 45,
+            "mean": 0.56,
+            "p50": 0.6,
             "p95": 0.6,
-            "maximum": 0.6
+            "maximum": 0.7
           },
           "renderedCallbackIntervalMs": {
-            "count": 43,
-            "mean": 45.737,
-            "p50": 50,
-            "p95": 50,
-            "maximum": 50.1
-          },
-          "renderedCallbackCadenceHz": 21.864,
-          "drawCallsPerRenderedCallback": {
             "count": 44,
+            "mean": 44.314,
+            "p50": 49.9,
+            "p95": 50,
+            "maximum": 50
+          },
+          "renderedCallbackCadenceHz": 22.566,
+          "drawCallsPerRenderedCallback": {
+            "count": 45,
             "mean": 91,
             "p50": 91,
             "p95": 91,
             "maximum": 91
           },
-          "drawCallsDuringSample": 4004,
+          "drawCallsDuringSample": 4095,
           "drawMethodsDuringSample": {
-            "drawElements": 3168,
-            "drawArrays": 836
+            "drawElements": 3240,
+            "drawArrays": 855
           },
-          "heapUsedBytes": 19343652,
+          "heapUsedBytes": 16583484,
           "resourcesBefore": {
             "Buffer": {
-              "created": 78,
-              "deleted": 17,
-              "live": 61
+              "created": 84,
+              "deleted": 18,
+              "live": 66
             },
             "Texture": {
               "created": 17,
@@ -432,9 +432,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 55,
+              "created": 57,
               "deleted": 12,
-              "live": 43
+              "live": 45
             },
             "Query": {
               "created": 0,
@@ -454,9 +454,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 78,
-              "deleted": 17,
-              "live": 61
+              "created": 84,
+              "deleted": 18,
+              "live": 66
             },
             "Texture": {
               "created": 17,
@@ -484,9 +484,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 55,
+              "created": 57,
               "deleted": 12,
-              "live": 43
+              "live": 45
             },
             "Query": {
               "created": 0,
@@ -514,41 +514,41 @@
           },
           "descendantPlanets": 767,
           "observed": "galaxy",
-          "elapsedMs": 2001.5,
-          "renderedCallbacks": 44,
+          "elapsedMs": 2002.6,
+          "renderedCallbacks": 45,
           "callbackWallMs": {
-            "count": 44,
-            "mean": 0.532,
+            "count": 45,
+            "mean": 0.52,
             "p50": 0.5,
             "p95": 0.6,
-            "maximum": 1.5
+            "maximum": 0.7
           },
           "renderedCallbackIntervalMs": {
-            "count": 43,
-            "mean": 44.96,
+            "count": 44,
+            "mean": 44.318,
             "p50": 49.9,
             "p95": 50,
-            "maximum": 50.1
+            "maximum": 50
           },
-          "renderedCallbackCadenceHz": 22.242,
+          "renderedCallbackCadenceHz": 22.564,
           "drawCallsPerRenderedCallback": {
-            "count": 44,
+            "count": 45,
             "mean": 133,
             "p50": 133,
             "p95": 133,
             "maximum": 133
           },
-          "drawCallsDuringSample": 5852,
+          "drawCallsDuringSample": 5985,
           "drawMethodsDuringSample": {
-            "drawElements": 4312,
-            "drawArrays": 1540
+            "drawElements": 4410,
+            "drawArrays": 1575
           },
-          "heapUsedBytes": 18556416,
+          "heapUsedBytes": 16575324,
           "resourcesBefore": {
             "Buffer": {
-              "created": 117,
-              "deleted": 64,
-              "live": 53
+              "created": 156,
+              "deleted": 70,
+              "live": 86
             },
             "Texture": {
               "created": 18,
@@ -556,13 +556,13 @@
               "live": 10
             },
             "Program": {
-              "created": 20,
+              "created": 19,
               "deleted": 9,
-              "live": 11
+              "live": 10
             },
             "Shader": {
-              "created": 40,
-              "deleted": 40,
+              "created": 38,
+              "deleted": 38,
               "live": 0
             },
             "Framebuffer": {
@@ -576,8 +576,8 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 92,
-              "deleted": 50,
+              "created": 94,
+              "deleted": 52,
               "live": 42
             },
             "Query": {
@@ -598,9 +598,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 117,
-              "deleted": 64,
-              "live": 53
+              "created": 156,
+              "deleted": 70,
+              "live": 86
             },
             "Texture": {
               "created": 18,
@@ -608,13 +608,13 @@
               "live": 10
             },
             "Program": {
-              "created": 20,
+              "created": 19,
               "deleted": 9,
-              "live": 11
+              "live": 10
             },
             "Shader": {
-              "created": 40,
-              "deleted": 40,
+              "created": 38,
+              "deleted": 38,
               "live": 0
             },
             "Framebuffer": {
@@ -628,8 +628,8 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 92,
-              "deleted": 50,
+              "created": 94,
+              "deleted": 52,
               "live": 42
             },
             "Query": {
@@ -658,41 +658,41 @@
           },
           "descendantPlanets": 767,
           "observed": "universe",
-          "elapsedMs": 2002.7,
-          "renderedCallbacks": 44,
+          "elapsedMs": 2002.5,
+          "renderedCallbacks": 45,
           "callbackWallMs": {
-            "count": 44,
-            "mean": 0.239,
-            "p50": 0.2,
-            "p95": 0.3,
-            "maximum": 0.4
+            "count": 45,
+            "mean": 0.431,
+            "p50": 0.4,
+            "p95": 0.5,
+            "maximum": 0.6
           },
           "renderedCallbackIntervalMs": {
-            "count": 43,
-            "mean": 44.96,
+            "count": 44,
+            "mean": 44.318,
             "p50": 49.9,
             "p95": 50,
             "maximum": 50.1
           },
-          "renderedCallbackCadenceHz": 22.242,
+          "renderedCallbackCadenceHz": 22.564,
           "drawCallsPerRenderedCallback": {
-            "count": 44,
-            "mean": 18,
-            "p50": 18,
-            "p95": 18,
-            "maximum": 18
+            "count": 45,
+            "mean": 63,
+            "p50": 63,
+            "p95": 63,
+            "maximum": 63
           },
-          "drawCallsDuringSample": 792,
+          "drawCallsDuringSample": 2835,
           "drawMethodsDuringSample": {
-            "drawElements": 484,
-            "drawArrays": 308
+            "drawElements": 1845,
+            "drawArrays": 990
           },
-          "heapUsedBytes": 14955744,
+          "heapUsedBytes": 18246096,
           "resourcesBefore": {
             "Buffer": {
-              "created": 130,
-              "deleted": 103,
-              "live": 27
+              "created": 200,
+              "deleted": 142,
+              "live": 58
             },
             "Texture": {
               "created": 18,
@@ -700,13 +700,13 @@
               "live": 10
             },
             "Program": {
-              "created": 20,
+              "created": 19,
               "deleted": 11,
-              "live": 9
+              "live": 8
             },
             "Shader": {
-              "created": 40,
-              "deleted": 40,
+              "created": 38,
+              "deleted": 38,
               "live": 0
             },
             "Framebuffer": {
@@ -720,9 +720,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 99,
-              "deleted": 86,
-              "live": 13
+              "created": 116,
+              "deleted": 88,
+              "live": 28
             },
             "Query": {
               "created": 0,
@@ -742,9 +742,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 130,
-              "deleted": 103,
-              "live": 27
+              "created": 200,
+              "deleted": 142,
+              "live": 58
             },
             "Texture": {
               "created": 18,
@@ -752,13 +752,13 @@
               "live": 10
             },
             "Program": {
-              "created": 20,
+              "created": 19,
               "deleted": 11,
-              "live": 9
+              "live": 8
             },
             "Shader": {
-              "created": 40,
-              "deleted": 40,
+              "created": 38,
+              "deleted": 38,
               "live": 0
             },
             "Framebuffer": {
@@ -772,9 +772,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 99,
-              "deleted": 86,
-              "live": 13
+              "created": 116,
+              "deleted": 88,
+              "live": 28
             },
             "Query": {
               "created": 0,
@@ -802,41 +802,41 @@
           },
           "descendantPlanets": 43,
           "observed": "cloud",
-          "elapsedMs": 2002.3,
-          "renderedCallbacks": 44,
+          "elapsedMs": 2002.4,
+          "renderedCallbacks": 43,
           "callbackWallMs": {
-            "count": 44,
-            "mean": 0.584,
+            "count": 43,
+            "mean": 0.635,
             "p50": 0.6,
-            "p95": 0.7,
-            "maximum": 0.7
+            "p95": 0.8,
+            "maximum": 0.9
           },
           "renderedCallbackIntervalMs": {
-            "count": 43,
-            "mean": 44.96,
-            "p50": 49.9,
+            "count": 42,
+            "mean": 46.031,
+            "p50": 50,
             "p95": 50,
             "maximum": 50.1
           },
-          "renderedCallbackCadenceHz": 22.242,
+          "renderedCallbackCadenceHz": 21.724,
           "drawCallsPerRenderedCallback": {
-            "count": 44,
+            "count": 43,
             "mean": 108,
             "p50": 108,
             "p95": 108,
             "maximum": 108
           },
-          "drawCallsDuringSample": 4752,
+          "drawCallsDuringSample": 4644,
           "drawMethodsDuringSample": {
-            "drawElements": 3916,
-            "drawArrays": 836
+            "drawElements": 3827,
+            "drawArrays": 817
           },
-          "heapUsedBytes": 14152324,
+          "heapUsedBytes": 18741016,
           "resourcesBefore": {
             "Buffer": {
-              "created": 222,
-              "deleted": 125,
-              "live": 97
+              "created": 278,
+              "deleted": 196,
+              "live": 82
             },
             "Texture": {
               "created": 20,
@@ -844,13 +844,13 @@
               "live": 10
             },
             "Program": {
-              "created": 33,
-              "deleted": 18,
+              "created": 30,
+              "deleted": 15,
               "live": 15
             },
             "Shader": {
-              "created": 66,
-              "deleted": 66,
+              "created": 60,
+              "deleted": 60,
               "live": 0
             },
             "Framebuffer": {
@@ -864,9 +864,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 167,
-              "deleted": 102,
-              "live": 65
+              "created": 170,
+              "deleted": 119,
+              "live": 51
             },
             "Query": {
               "created": 0,
@@ -886,9 +886,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 222,
-              "deleted": 125,
-              "live": 97
+              "created": 278,
+              "deleted": 196,
+              "live": 82
             },
             "Texture": {
               "created": 20,
@@ -896,13 +896,13 @@
               "live": 10
             },
             "Program": {
-              "created": 33,
-              "deleted": 18,
+              "created": 30,
+              "deleted": 15,
               "live": 15
             },
             "Shader": {
-              "created": 66,
-              "deleted": 66,
+              "created": 60,
+              "deleted": 60,
               "live": 0
             },
             "Framebuffer": {
@@ -916,9 +916,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 167,
-              "deleted": 102,
-              "live": 65
+              "created": 170,
+              "deleted": 119,
+              "live": 51
             },
             "Query": {
               "created": 0,
@@ -946,23 +946,23 @@
           },
           "descendantPlanets": 7,
           "observed": "system",
-          "elapsedMs": 2002.5,
+          "elapsedMs": 2002.4,
           "renderedCallbacks": 44,
           "callbackWallMs": {
             "count": 44,
-            "mean": 0.325,
+            "mean": 0.339,
             "p50": 0.3,
             "p95": 0.4,
-            "maximum": 0.4
+            "maximum": 0.5
           },
           "renderedCallbackIntervalMs": {
             "count": 43,
-            "mean": 45.347,
-            "p50": 49.9,
+            "mean": 44.963,
+            "p50": 50,
             "p95": 50,
-            "maximum": 50.1
+            "maximum": 50
           },
-          "renderedCallbackCadenceHz": 22.052,
+          "renderedCallbackCadenceHz": 22.241,
           "drawCallsPerRenderedCallback": {
             "count": 44,
             "mean": 21,
@@ -975,12 +975,12 @@
             "drawElements": 704,
             "drawArrays": 220
           },
-          "heapUsedBytes": 14570716,
+          "heapUsedBytes": 16237496,
           "resourcesBefore": {
             "Buffer": {
-              "created": 243,
-              "deleted": 208,
-              "live": 35
+              "created": 300,
+              "deleted": 264,
+              "live": 36
             },
             "Texture": {
               "created": 27,
@@ -988,13 +988,13 @@
               "live": 17
             },
             "Program": {
-              "created": 40,
-              "deleted": 28,
-              "live": 12
+              "created": 33,
+              "deleted": 19,
+              "live": 14
             },
             "Shader": {
-              "created": 80,
-              "deleted": 80,
+              "created": 66,
+              "deleted": 66,
               "live": 0
             },
             "Framebuffer": {
@@ -1008,9 +1008,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 180,
-              "deleted": 162,
-              "live": 18
+              "created": 184,
+              "deleted": 164,
+              "live": 20
             },
             "Query": {
               "created": 0,
@@ -1030,9 +1030,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 243,
-              "deleted": 208,
-              "live": 35
+              "created": 300,
+              "deleted": 264,
+              "live": 36
             },
             "Texture": {
               "created": 27,
@@ -1040,13 +1040,13 @@
               "live": 17
             },
             "Program": {
-              "created": 40,
-              "deleted": 28,
-              "live": 12
+              "created": 33,
+              "deleted": 19,
+              "live": 14
             },
             "Shader": {
-              "created": 80,
-              "deleted": 80,
+              "created": 66,
+              "deleted": 66,
               "live": 0
             },
             "Framebuffer": {
@@ -1060,9 +1060,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 180,
-              "deleted": 162,
-              "live": 18
+              "created": 184,
+              "deleted": 164,
+              "live": 20
             },
             "Query": {
               "created": 0,
@@ -1091,14 +1091,14 @@
           "height": 720
         }
       },
-      "firstDrawAtMs": 1706.1,
-      "firstSceneReadyAtMs": 2255.2,
+      "firstDrawAtMs": 1560.2,
+      "firstSceneReadyAtMs": 2312.6,
       "initialHeapUsedBytes": 10000000,
       "finalResources": {
         "Buffer": {
-          "created": 243,
-          "deleted": 208,
-          "live": 35
+          "created": 300,
+          "deleted": 264,
+          "live": 36
         },
         "Texture": {
           "created": 27,
@@ -1106,13 +1106,13 @@
           "live": 17
         },
         "Program": {
-          "created": 40,
-          "deleted": 28,
-          "live": 12
+          "created": 33,
+          "deleted": 19,
+          "live": 14
         },
         "Shader": {
-          "created": 80,
-          "deleted": 80,
+          "created": 66,
+          "deleted": 66,
           "live": 0
         },
         "Framebuffer": {
@@ -1126,9 +1126,9 @@
           "live": 0
         },
         "VertexArray": {
-          "created": 180,
-          "deleted": 162,
-          "live": 18
+          "created": 184,
+          "deleted": 164,
+          "live": 20
         },
         "Query": {
           "created": 0,
@@ -1147,8 +1147,8 @@
         }
       },
       "finalDrawMethods": {
-        "drawElements": 26999,
-        "drawArrays": 8790
+        "drawElements": 30807,
+        "drawArrays": 10339
       }
     },
     {
@@ -1170,23 +1170,23 @@
           },
           "descendantPlanets": 1,
           "observed": "planet",
-          "elapsedMs": 2003.7,
+          "elapsedMs": 2003,
           "renderedCallbacks": 45,
           "callbackWallMs": {
             "count": 45,
-            "mean": 0.951,
+            "mean": 0.847,
             "p50": 0.9,
-            "p95": 1.3,
-            "maximum": 1.5
+            "p95": 1.1,
+            "maximum": 1.6
           },
           "renderedCallbackIntervalMs": {
             "count": 44,
-            "mean": 44.695,
+            "mean": 43.936,
             "p50": 49.9,
             "p95": 50,
             "maximum": 50
           },
-          "renderedCallbackCadenceHz": 22.374,
+          "renderedCallbackCadenceHz": 22.76,
           "drawCallsPerRenderedCallback": {
             "count": 45,
             "mean": 11,
@@ -1199,12 +1199,12 @@
             "drawElements": 180,
             "drawArrays": 315
           },
-          "heapUsedBytes": 16375104,
+          "heapUsedBytes": 16989052,
           "resourcesBefore": {
             "Buffer": {
-              "created": 31,
+              "created": 32,
               "deleted": 0,
-              "live": 31
+              "live": 32
             },
             "Texture": {
               "created": 17,
@@ -1254,9 +1254,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 31,
+              "created": 32,
               "deleted": 0,
-              "live": 31
+              "live": 32
             },
             "Texture": {
               "created": 17,
@@ -1315,40 +1315,40 @@
           "descendantPlanets": 8,
           "observed": "system",
           "elapsedMs": 2003.3,
-          "renderedCallbacks": 44,
+          "renderedCallbacks": 45,
           "callbackWallMs": {
-            "count": 44,
-            "mean": 1.268,
-            "p50": 1.3,
-            "p95": 1.7,
-            "maximum": 2.3
+            "count": 45,
+            "mean": 0.989,
+            "p50": 1,
+            "p95": 1.3,
+            "maximum": 1.4
           },
           "renderedCallbackIntervalMs": {
-            "count": 43,
-            "mean": 44.96,
+            "count": 44,
+            "mean": 44.695,
             "p50": 49.9,
             "p95": 50,
-            "maximum": 50
+            "maximum": 50.1
           },
-          "renderedCallbackCadenceHz": 22.242,
+          "renderedCallbackCadenceHz": 22.374,
           "drawCallsPerRenderedCallback": {
-            "count": 44,
+            "count": 45,
             "mean": 20,
             "p50": 20,
             "p95": 20,
             "maximum": 20
           },
-          "drawCallsDuringSample": 880,
+          "drawCallsDuringSample": 900,
           "drawMethodsDuringSample": {
-            "drawElements": 660,
-            "drawArrays": 220
+            "drawElements": 675,
+            "drawArrays": 225
           },
-          "heapUsedBytes": 17558080,
+          "heapUsedBytes": 15765632,
           "resourcesBefore": {
             "Buffer": {
-              "created": 31,
+              "created": 32,
               "deleted": 0,
-              "live": 31
+              "live": 32
             },
             "Texture": {
               "created": 17,
@@ -1398,9 +1398,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 31,
+              "created": 32,
               "deleted": 0,
-              "live": 31
+              "live": 32
             },
             "Texture": {
               "created": 17,
@@ -1458,41 +1458,41 @@
           },
           "descendantPlanets": 34,
           "observed": "cloud",
-          "elapsedMs": 2002.4,
-          "renderedCallbacks": 43,
+          "elapsedMs": 2003.2,
+          "renderedCallbacks": 44,
           "callbackWallMs": {
-            "count": 43,
-            "mean": 1.281,
-            "p50": 1.3,
-            "p95": 1.6,
+            "count": 44,
+            "mean": 1.123,
+            "p50": 1.1,
+            "p95": 1.5,
             "maximum": 1.8
           },
           "renderedCallbackIntervalMs": {
-            "count": 42,
-            "mean": 45.633,
+            "count": 43,
+            "mean": 44.572,
             "p50": 49.9,
             "p95": 50,
             "maximum": 50.1
           },
-          "renderedCallbackCadenceHz": 21.914,
+          "renderedCallbackCadenceHz": 22.436,
           "drawCallsPerRenderedCallback": {
-            "count": 43,
+            "count": 44,
             "mean": 36,
             "p50": 36,
             "p95": 36,
             "maximum": 36
           },
-          "drawCallsDuringSample": 1548,
+          "drawCallsDuringSample": 1584,
           "drawMethodsDuringSample": {
-            "drawElements": 1419,
-            "drawArrays": 129
+            "drawElements": 1452,
+            "drawArrays": 132
           },
-          "heapUsedBytes": 18319548,
+          "heapUsedBytes": 17151440,
           "resourcesBefore": {
             "Buffer": {
-              "created": 72,
-              "deleted": 17,
-              "live": 55
+              "created": 75,
+              "deleted": 18,
+              "live": 57
             },
             "Texture": {
               "created": 17,
@@ -1520,9 +1520,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 47,
+              "created": 48,
               "deleted": 12,
-              "live": 35
+              "live": 36
             },
             "Query": {
               "created": 0,
@@ -1542,9 +1542,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 72,
-              "deleted": 17,
-              "live": 55
+              "created": 75,
+              "deleted": 18,
+              "live": 57
             },
             "Texture": {
               "created": 17,
@@ -1572,9 +1572,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 47,
+              "created": 48,
               "deleted": 12,
-              "live": 35
+              "live": 36
             },
             "Query": {
               "created": 0,
@@ -1602,41 +1602,41 @@
           },
           "descendantPlanets": 767,
           "observed": "galaxy",
-          "elapsedMs": 2002.9,
-          "renderedCallbacks": 46,
+          "elapsedMs": 2001.5,
+          "renderedCallbacks": 45,
           "callbackWallMs": {
-            "count": 46,
-            "mean": 2.048,
-            "p50": 2,
-            "p95": 2.5,
-            "maximum": 2.7
+            "count": 45,
+            "mean": 1.927,
+            "p50": 1.9,
+            "p95": 2.4,
+            "maximum": 3.4
           },
           "renderedCallbackIntervalMs": {
-            "count": 45,
-            "mean": 44.073,
+            "count": 44,
+            "mean": 44.693,
             "p50": 49.9,
             "p95": 50,
-            "maximum": 50.1
+            "maximum": 50
           },
-          "renderedCallbackCadenceHz": 22.69,
+          "renderedCallbackCadenceHz": 22.375,
           "drawCallsPerRenderedCallback": {
-            "count": 46,
+            "count": 45,
             "mean": 133,
             "p50": 133,
             "p95": 133,
             "maximum": 133
           },
-          "drawCallsDuringSample": 6118,
+          "drawCallsDuringSample": 5985,
           "drawMethodsDuringSample": {
-            "drawElements": 4508,
-            "drawArrays": 1610
+            "drawElements": 4410,
+            "drawArrays": 1575
           },
-          "heapUsedBytes": 15065016,
+          "heapUsedBytes": 17556196,
           "resourcesBefore": {
             "Buffer": {
-              "created": 111,
-              "deleted": 58,
-              "live": 53
+              "created": 147,
+              "deleted": 61,
+              "live": 86
             },
             "Texture": {
               "created": 18,
@@ -1644,13 +1644,13 @@
               "live": 10
             },
             "Program": {
-              "created": 18,
+              "created": 17,
               "deleted": 7,
-              "live": 11
+              "live": 10
             },
             "Shader": {
-              "created": 36,
-              "deleted": 36,
+              "created": 34,
+              "deleted": 34,
               "live": 0
             },
             "Framebuffer": {
@@ -1664,8 +1664,8 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 84,
-              "deleted": 42,
+              "created": 85,
+              "deleted": 43,
               "live": 42
             },
             "Query": {
@@ -1686,9 +1686,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 111,
-              "deleted": 58,
-              "live": 53
+              "created": 147,
+              "deleted": 61,
+              "live": 86
             },
             "Texture": {
               "created": 18,
@@ -1696,13 +1696,13 @@
               "live": 10
             },
             "Program": {
-              "created": 18,
+              "created": 17,
               "deleted": 7,
-              "live": 11
+              "live": 10
             },
             "Shader": {
-              "created": 36,
-              "deleted": 36,
+              "created": 34,
+              "deleted": 34,
               "live": 0
             },
             "Framebuffer": {
@@ -1716,8 +1716,8 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 84,
-              "deleted": 42,
+              "created": 85,
+              "deleted": 43,
               "live": 42
             },
             "Query": {
@@ -1746,41 +1746,41 @@
           },
           "descendantPlanets": 767,
           "observed": "universe",
-          "elapsedMs": 2002.7,
+          "elapsedMs": 2001.8,
           "renderedCallbacks": 44,
           "callbackWallMs": {
             "count": 44,
-            "mean": 0.539,
-            "p50": 0.5,
-            "p95": 0.9,
-            "maximum": 1.3
+            "mean": 1.225,
+            "p50": 1.2,
+            "p95": 1.7,
+            "maximum": 2
           },
           "renderedCallbackIntervalMs": {
             "count": 43,
-            "mean": 44.96,
-            "p50": 49.9,
+            "mean": 45.349,
+            "p50": 50,
             "p95": 50,
-            "maximum": 50
+            "maximum": 50.1
           },
-          "renderedCallbackCadenceHz": 22.242,
+          "renderedCallbackCadenceHz": 22.051,
           "drawCallsPerRenderedCallback": {
             "count": 44,
-            "mean": 18,
-            "p50": 18,
-            "p95": 18,
-            "maximum": 18
+            "mean": 63,
+            "p50": 63,
+            "p95": 63,
+            "maximum": 63
           },
-          "drawCallsDuringSample": 792,
+          "drawCallsDuringSample": 2772,
           "drawMethodsDuringSample": {
-            "drawElements": 484,
-            "drawArrays": 308
+            "drawElements": 1804,
+            "drawArrays": 968
           },
-          "heapUsedBytes": 16647344,
+          "heapUsedBytes": 14822352,
           "resourcesBefore": {
             "Buffer": {
-              "created": 124,
-              "deleted": 97,
-              "live": 27
+              "created": 191,
+              "deleted": 133,
+              "live": 58
             },
             "Texture": {
               "created": 18,
@@ -1788,13 +1788,13 @@
               "live": 10
             },
             "Program": {
-              "created": 18,
+              "created": 17,
               "deleted": 9,
-              "live": 9
+              "live": 8
             },
             "Shader": {
-              "created": 36,
-              "deleted": 36,
+              "created": 34,
+              "deleted": 34,
               "live": 0
             },
             "Framebuffer": {
@@ -1808,9 +1808,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 91,
-              "deleted": 78,
-              "live": 13
+              "created": 107,
+              "deleted": 79,
+              "live": 28
             },
             "Query": {
               "created": 0,
@@ -1830,9 +1830,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 124,
-              "deleted": 97,
-              "live": 27
+              "created": 191,
+              "deleted": 133,
+              "live": 58
             },
             "Texture": {
               "created": 18,
@@ -1840,13 +1840,13 @@
               "live": 10
             },
             "Program": {
-              "created": 18,
+              "created": 17,
               "deleted": 9,
-              "live": 9
+              "live": 8
             },
             "Shader": {
-              "created": 36,
-              "deleted": 36,
+              "created": 34,
+              "deleted": 34,
               "live": 0
             },
             "Framebuffer": {
@@ -1860,9 +1860,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 91,
-              "deleted": 78,
-              "live": 13
+              "created": 107,
+              "deleted": 79,
+              "live": 28
             },
             "Query": {
               "created": 0,
@@ -1890,41 +1890,41 @@
           },
           "descendantPlanets": 43,
           "observed": "cloud",
-          "elapsedMs": 2002.7,
-          "renderedCallbacks": 45,
+          "elapsedMs": 2002.2,
+          "renderedCallbacks": 44,
           "callbackWallMs": {
-            "count": 45,
-            "mean": 0.982,
+            "count": 44,
+            "mean": 0.993,
             "p50": 1,
-            "p95": 1.3,
-            "maximum": 2.1
+            "p95": 1.4,
+            "maximum": 1.5
           },
           "renderedCallbackIntervalMs": {
-            "count": 44,
-            "mean": 44.693,
-            "p50": 49.9,
+            "count": 43,
+            "mean": 45.735,
+            "p50": 50,
             "p95": 50,
-            "maximum": 50.1
+            "maximum": 50
           },
-          "renderedCallbackCadenceHz": 22.375,
+          "renderedCallbackCadenceHz": 21.865,
           "drawCallsPerRenderedCallback": {
-            "count": 45,
+            "count": 44,
             "mean": 36,
             "p50": 36,
             "p95": 36,
             "maximum": 36
           },
-          "drawCallsDuringSample": 1620,
+          "drawCallsDuringSample": 1584,
           "drawMethodsDuringSample": {
-            "drawElements": 1485,
-            "drawArrays": 135
+            "drawElements": 1452,
+            "drawArrays": 132
           },
-          "heapUsedBytes": 15621996,
+          "heapUsedBytes": 16257268,
           "resourcesBefore": {
             "Buffer": {
-              "created": 188,
-              "deleted": 119,
-              "live": 69
+              "created": 209,
+              "deleted": 187,
+              "live": 22
             },
             "Texture": {
               "created": 20,
@@ -1932,13 +1932,13 @@
               "live": 10
             },
             "Program": {
-              "created": 29,
-              "deleted": 16,
-              "live": 13
+              "created": 23,
+              "deleted": 14,
+              "live": 9
             },
             "Shader": {
-              "created": 58,
-              "deleted": 58,
+              "created": 46,
+              "deleted": 46,
               "live": 0
             },
             "Framebuffer": {
@@ -1952,9 +1952,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 137,
-              "deleted": 94,
-              "live": 43
+              "created": 120,
+              "deleted": 111,
+              "live": 9
             },
             "Query": {
               "created": 0,
@@ -1974,9 +1974,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 188,
-              "deleted": 119,
-              "live": 69
+              "created": 209,
+              "deleted": 187,
+              "live": 22
             },
             "Texture": {
               "created": 20,
@@ -1984,13 +1984,13 @@
               "live": 10
             },
             "Program": {
-              "created": 29,
-              "deleted": 16,
-              "live": 13
+              "created": 23,
+              "deleted": 14,
+              "live": 9
             },
             "Shader": {
-              "created": 58,
-              "deleted": 58,
+              "created": 46,
+              "deleted": 46,
               "live": 0
             },
             "Framebuffer": {
@@ -2004,9 +2004,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 137,
-              "deleted": 94,
-              "live": 43
+              "created": 120,
+              "deleted": 111,
+              "live": 9
             },
             "Query": {
               "created": 0,
@@ -2034,41 +2034,41 @@
           },
           "descendantPlanets": 7,
           "observed": "system",
-          "elapsedMs": 2002.7,
-          "renderedCallbacks": 44,
+          "elapsedMs": 2002.8,
+          "renderedCallbacks": 43,
           "callbackWallMs": {
-            "count": 44,
-            "mean": 0.775,
-            "p50": 0.8,
-            "p95": 1.1,
-            "maximum": 1.3
+            "count": 43,
+            "mean": 1.221,
+            "p50": 1.2,
+            "p95": 1.6,
+            "maximum": 1.9
           },
           "renderedCallbackIntervalMs": {
-            "count": 43,
-            "mean": 45.349,
-            "p50": 49.9,
+            "count": 42,
+            "mean": 46.426,
+            "p50": 50,
             "p95": 50,
-            "maximum": 50.1
+            "maximum": 50
           },
-          "renderedCallbackCadenceHz": 22.051,
+          "renderedCallbackCadenceHz": 21.54,
           "drawCallsPerRenderedCallback": {
-            "count": 44,
+            "count": 43,
             "mean": 21,
             "p50": 21,
             "p95": 21,
             "maximum": 21
           },
-          "drawCallsDuringSample": 924,
+          "drawCallsDuringSample": 903,
           "drawMethodsDuringSample": {
-            "drawElements": 704,
-            "drawArrays": 220
+            "drawElements": 688,
+            "drawArrays": 215
           },
-          "heapUsedBytes": 21318760,
+          "heapUsedBytes": 15348372,
           "resourcesBefore": {
             "Buffer": {
-              "created": 209,
-              "deleted": 174,
-              "live": 35
+              "created": 231,
+              "deleted": 195,
+              "live": 36
             },
             "Texture": {
               "created": 27,
@@ -2076,13 +2076,13 @@
               "live": 17
             },
             "Program": {
-              "created": 36,
-              "deleted": 24,
-              "live": 12
+              "created": 29,
+              "deleted": 15,
+              "live": 14
             },
             "Shader": {
-              "created": 72,
-              "deleted": 72,
+              "created": 58,
+              "deleted": 58,
               "live": 0
             },
             "Framebuffer": {
@@ -2096,9 +2096,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 150,
-              "deleted": 132,
-              "live": 18
+              "created": 135,
+              "deleted": 115,
+              "live": 20
             },
             "Query": {
               "created": 0,
@@ -2118,9 +2118,9 @@
           },
           "resourcesAfter": {
             "Buffer": {
-              "created": 209,
-              "deleted": 174,
-              "live": 35
+              "created": 231,
+              "deleted": 195,
+              "live": 36
             },
             "Texture": {
               "created": 27,
@@ -2128,13 +2128,13 @@
               "live": 17
             },
             "Program": {
-              "created": 36,
-              "deleted": 24,
-              "live": 12
+              "created": 29,
+              "deleted": 15,
+              "live": 14
             },
             "Shader": {
-              "created": 72,
-              "deleted": 72,
+              "created": 58,
+              "deleted": 58,
               "live": 0
             },
             "Framebuffer": {
@@ -2148,9 +2148,9 @@
               "live": 0
             },
             "VertexArray": {
-              "created": 150,
-              "deleted": 132,
-              "live": 18
+              "created": 135,
+              "deleted": 115,
+              "live": 20
             },
             "Query": {
               "created": 0,
@@ -2179,14 +2179,14 @@
           "height": 640
         }
       },
-      "firstDrawAtMs": 705.2,
-      "firstSceneReadyAtMs": 1108.9,
+      "firstDrawAtMs": 647.9,
+      "firstSceneReadyAtMs": 1092.8,
       "initialHeapUsedBytes": 10000000,
       "finalResources": {
         "Buffer": {
-          "created": 209,
-          "deleted": 174,
-          "live": 35
+          "created": 231,
+          "deleted": 195,
+          "live": 36
         },
         "Texture": {
           "created": 27,
@@ -2194,13 +2194,13 @@
           "live": 17
         },
         "Program": {
-          "created": 36,
-          "deleted": 24,
-          "live": 12
+          "created": 29,
+          "deleted": 15,
+          "live": 14
         },
         "Shader": {
-          "created": 72,
-          "deleted": 72,
+          "created": 58,
+          "deleted": 58,
           "live": 0
         },
         "Framebuffer": {
@@ -2214,9 +2214,9 @@
           "live": 0
         },
         "VertexArray": {
-          "created": 150,
-          "deleted": 132,
-          "live": 18
+          "created": 135,
+          "deleted": 115,
+          "live": 20
         },
         "Query": {
           "created": 0,
@@ -2235,8 +2235,8 @@
         }
       },
       "finalDrawMethods": {
-        "drawElements": 19929,
-        "drawArrays": 6527
+        "drawElements": 23463,
+        "drawArrays": 8123
       }
     }
   ],

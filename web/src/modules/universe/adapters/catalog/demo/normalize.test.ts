@@ -6,7 +6,7 @@ import test from "node:test";
 import authoring from "../../../data/demo-universe.json";
 import { getBreadcrumbs, getSceneView } from "../../../domain/catalog";
 import { parseUniverseCatalog } from "../../../domain/parse-catalog";
-import type { UniverseCatalogDocument } from "../../../domain/types";
+import type { EntityKind, UniverseCatalogDocument } from "../../../domain/types";
 import { normalizeDemoCatalog } from "./index";
 
 const marker = "SYNTHETIC_ONLY_SECRET";
@@ -80,6 +80,28 @@ test("organized demo authoring becomes the same canonical document as direct sup
   assert.deepEqual(getSceneView(catalog, "system-a").nodes, []);
 });
 
+test("matching explicit kinds preserve canonical parity with legacy implicit authoring", () => {
+  const legacy = source();
+  const explicit = {
+    ...legacy,
+    universe: {
+      ...legacy.universe, kind: "universe",
+      galaxies: legacy.universe.galaxies.map((galaxy) => ({
+        ...galaxy, kind: "galaxy",
+        clouds: galaxy.clouds.map((cloud) => ({
+          ...cloud, kind: "cloud",
+          systems: cloud.systems.map((system) => ({
+            ...system, kind: "system",
+            planets: system.planets.map((planet) => ({ ...planet, kind: "planet" })),
+          })),
+        })),
+      })),
+    },
+  };
+  assert.deepEqual(normalizeDemoCatalog(explicit), normalizeDemoCatalog(legacy));
+  assert.deepEqual(parseUniverseCatalog(normalizeDemoCatalog(explicit)), parseUniverseCatalog(normalizeDemoCatalog(legacy)));
+});
+
 test("normalized nested values are owned and empty authoring defaults to its root", () => {
   const original = source();
   const normalized = normalizeDemoCatalog(original);
@@ -115,8 +137,14 @@ test("invalid authoring and canonical values fail without echoing rejected paylo
     ["missing collection", { ...supplied, universe: { ...fields("empty", 1), galaxies: undefined } }],
     ["wrong collection", replaceSystem({ planets: marker })],
     ["misplaced collection", replaceSystem({ galaxies: [] })],
-    ["authored kind", replaceSystem({ kind: marker })],
+    ["unsupported kind", replaceSystem({ kind: marker })],
+    ["mismatched system kind", replaceSystem({ kind: "planet" })],
+    ["mismatched root kind", { ...supplied, universe: { ...supplied.universe, kind: "galaxy" } }],
+    ["non-string kind", replaceSystem({ kind: { value: marker } })],
+    ["null kind", replaceSystem({ kind: null })],
+    ["explicit undefined kind", replaceSystem({ kind: undefined })],
     ["authored parent", replaceSystem({ parentId: marker })],
+    ["matching authored parent", replaceSystem({ kind: "system", parentId: "cloud-z" })],
     ["duplicate IDs", replaceSystem({ planets: [planet, { ...planet }] })],
     ["duplicate root ID", replaceSystem({ planets: [{ ...planet, id: "universe-z" }] })],
     ["invalid seed", replaceSystem({ seed: marker })],
@@ -133,6 +161,30 @@ test("invalid authoring and canonical values fail without echoing rejected paylo
       return true;
     }));
   }
+});
+
+test("every bundled authored node exposes its canonical kind for filtering and counts", () => {
+  const authoredCounts: Record<EntityKind, number> = { universe: 0, galaxy: 0, cloud: 0, system: 0, planet: 0 };
+  const branches = [["galaxies", "galaxy"], ["clouds", "cloud"], ["systems", "system"], ["planets", "planet"]] as const;
+  function inspect(value: unknown, expectedKind: EntityKind) {
+    assert.ok(value && typeof value === "object" && !Array.isArray(value));
+    const node = value as Record<string, unknown>;
+    assert.ok(Object.hasOwn(node, "kind"), "every authored catalog entity declares its own kind");
+    assert.equal(node.kind, expectedKind, "an explicit kind identifies the object's hierarchy role");
+    assert.equal(node.type, "demo", "demo classification is separate from the entity kind");
+    authoredCounts[expectedKind]++;
+    for (const [field, childKind] of branches) {
+      if (node[field] === undefined) continue;
+      assert.ok(Array.isArray(node[field]));
+      for (const child of node[field]) inspect(child, childKind);
+    }
+  }
+  inspect(authoring.universe, "universe");
+  const expectedCounts = { universe: 1, galaxy: 20, cloud: 32, system: 450, planet: 767 };
+  assert.deepEqual(authoredCounts, expectedCounts);
+  const canonicalCounts: Record<EntityKind, number> = { universe: 0, galaxy: 0, cloud: 0, system: 0, planet: 0 };
+  for (const entity of normalizeDemoCatalog(authoring).entities) canonicalCounts[entity.kind]++;
+  assert.deepEqual(canonicalCounts, expectedCounts, "canonical filtering retains the authored entity kinds and counts");
 });
 
 test("the bundled factual demo preserves Solar identity and keeps curated scene bounds", () => {

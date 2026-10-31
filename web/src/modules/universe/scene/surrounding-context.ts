@@ -1,14 +1,25 @@
 import * as THREE from "three";
 import type { SceneNode, UniverseSceneView } from "../domain/types";
-import { clusterPosition, clusterScale, previewScale } from "./layout";
+import { clusterPosition, clusterScale } from "./layout";
 import {
   createGalaxyVisual,
   updateGalaxyVisual, type ClusterVisualResources,
 } from "./cluster-visuals";
+import { mapAncestorToAnchor, type SceneCoordinateMapping } from "./view-coordinates";
 
-type Similarity = { scale: number; offset: THREE.Vector3 };
 type Candidate = { node: SceneNode; position: THREE.Vector3; distance: number; extent: number };
-export type ContextLabel = { id: string; name: string; position: THREE.Vector3; extent: number; opacity: number };
+export type ContextDestination = {
+  id: string;
+  kind: SceneNode["kind"];
+  name: string;
+  position: THREE.Vector3;
+  extent: number;
+  /** Caption visibility, independent of the rendered marker's opacity. */
+  opacity: number;
+  screenRadius: number;
+  highlight: (active: boolean) => void;
+};
+export type ContextLabel = ContextDestination;
 
 /** Reserve every surrounding scale before spending unused slots on nearby destinations. */
 function chooseCandidates(candidates: Candidate[], mobile: boolean) {
@@ -25,33 +36,37 @@ function chooseCandidates(candidates: Candidate[], mobile: boolean) {
 }
 
 /** One bounded draw: warm-star orbits, constellation dots and elliptical galaxy arms. */
-function addDestinationMarkers(root: THREE.Group, candidates: Candidate[], pixelRatio: () => number) {
+function addDestinationMarkers(root: THREE.Group, candidates: Candidate[], destinations: ContextDestination[], pixelRatio: () => number) {
   const positions = new Float32Array(candidates.length * 3);
   const kinds = new Float32Array(candidates.length);
   const extents = new Float32Array(candidates.length);
+  const indices = new Float32Array(candidates.length);
   candidates.forEach(({ node, position, extent }, index) => {
     position.toArray(positions, index * 3);
     kinds[index] = node.kind === "galaxy" ? 2 : node.kind === "cloud" ? 1 : 0;
     extents[index] = extent;
+    indices[index] = index;
   });
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute("markerKind", new THREE.BufferAttribute(kinds, 1));
   geometry.setAttribute("markerExtent", new THREE.BufferAttribute(extents, 1));
+  geometry.setAttribute("markerIndex", new THREE.BufferAttribute(indices, 1));
   const material = new THREE.ShaderMaterial({
-    uniforms: { viewportHeight: { value: 1 }, pixelRatio: { value: pixelRatio() }, opacity: { value: 0.42 } },
-    vertexShader: `attribute float markerKind; attribute float markerExtent;
+    uniforms: { viewportHeight: { value: 1 }, pixelRatio: { value: pixelRatio() }, opacity: { value: 0.42 }, hoveredIndex: { value: -1 } },
+    vertexShader: `attribute float markerKind; attribute float markerExtent; attribute float markerIndex;
       uniform float viewportHeight; uniform float pixelRatio;
-      varying float vKind; varying float vDetail;
+      varying float vKind; varying float vDetail; varying float vIndex;
       void main() {
         vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
         float scale = length(modelMatrix[0].xyz);
         float pixels = markerExtent * scale * projectionMatrix[1][1] * viewportHeight / max(0.1, -viewPosition.z);
         gl_PointSize = clamp(pixels, 2.0 * pixelRatio, 20.0 * pixelRatio);
-        vDetail = smoothstep(4.0, 10.0, pixels / pixelRatio); vKind = markerKind;
+        vDetail = smoothstep(4.0, 10.0, pixels / pixelRatio); vKind = markerKind; vIndex = markerIndex;
         gl_Position = projectionMatrix * viewPosition;
       }`,
-    fragmentShader: `uniform float opacity; varying float vKind; varying float vDetail;
+    fragmentShader: `uniform float opacity; uniform float hoveredIndex;
+      varying float vKind; varying float vDetail; varying float vIndex;
       float dotAt(vec2 point, vec2 center, float radius) { return 1.0 - smoothstep(radius * 0.4, radius, length(point - center)); }
       void main() {
         vec2 point = (gl_PointCoord - 0.5) * 2.0;
@@ -69,7 +84,9 @@ function addDestinationMarkers(root: THREE.Group, candidates: Candidate[], pixel
           float arms = pow(0.5 + 0.5 * cos(atan(ellipse.y, ellipse.x) * 2.0 - log(radius + 0.045) * 6.0), 6.0);
           alpha = max(dotAt(ellipse, vec2(0.0), 0.28), arms * (1.0 - smoothstep(0.2, 0.95, radius)) * 0.85);
         }
-        alpha = mix(roundPoint, alpha, vDetail) * opacity;
+        float highlighted = 1.0 - step(0.5, abs(vIndex - hoveredIndex));
+        alpha = mix(roundPoint, alpha, vDetail) * opacity * mix(1.0, 1.6, highlighted);
+        color *= mix(1.0, 1.45, highlighted);
         if (alpha < 0.012) discard;
         gl_FragColor = vec4(color, alpha);
         #include <colorspace_fragment>
@@ -77,6 +94,18 @@ function addDestinationMarkers(root: THREE.Group, candidates: Candidate[], pixel
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false,
   });
   material.opacity = 0.42;
+  let disposed = false;
+  material.addEventListener("dispose", () => {
+    disposed = true;
+    material.uniforms.hoveredIndex.value = -1;
+  });
+  destinations.forEach((destination, index) => {
+    destination.highlight = (active) => {
+      if (disposed) return;
+      if (active) material.uniforms.hoveredIndex.value = index;
+      else if (material.uniforms.hoveredIndex.value === index) material.uniforms.hoveredIndex.value = -1;
+    };
+  });
   const points = new THREE.Points(geometry, material);
   points.name = "surrounding-destinations";
   // Shader uniforms follow the same material opacity used by hierarchy crossfades.
@@ -89,30 +118,7 @@ function addDestinationMarkers(root: THREE.Group, candidates: Candidate[], pixel
   };
 }
 
-/** Map a complete ancestor overview into the current anchor's coordinates. */
-function intoCurrent(chain: readonly SceneNode[], ancestorIndex: number): Similarity | null {
-  let scale = 1;
-  const offset = new THREE.Vector3();
-  for (let index = ancestorIndex; index < chain.length - 1; index++) {
-    const children = chain[index].children ?? [];
-    const childIndex = children.findIndex((child) => child.id === chain[index + 1].id);
-    if (childIndex < 0) return null;
-    const child = children[childIndex];
-    const layout = clusterScale(children);
-    const childScale = previewScale(child, layout.marker);
-    if (!Number.isFinite(childScale) || childScale <= 0) return null;
-    const position = clusterPosition(child, childIndex, children.length, layout.radius);
-    offset.set(
-      (offset.x - position[0]) / childScale,
-      (offset.y - position[1]) / childScale,
-      (offset.z - position[2]) / childScale,
-    );
-    scale /= childScale;
-  }
-  return { scale, offset };
-}
-
-function mappedGroup(parent: THREE.Group, name: string, mapping: Similarity) {
+function mappedGroup(parent: THREE.Group, name: string, mapping: SceneCoordinateMapping) {
   const group = new THREE.Group();
   group.name = name;
   group.position.copy(mapping.offset);
@@ -142,7 +148,7 @@ function contextRadius(root: THREE.Group) {
   return Number.isFinite(radius) ? radius * 1.03 : 0;
 }
 
-/** Visual-only context; its caller owns geometry/material disposal and shared maps. */
+/** Bounded catalog destinations; its caller owns geometry/material disposal and shared maps. */
 export function createSurroundingContext(
   view: UniverseSceneView,
   resources: ClusterVisualResources,
@@ -152,24 +158,29 @@ export function createSurroundingContext(
   root.name = "surrounding-context";
   const updates: ((elapsed: number) => void)[] = [];
   const labels: ContextLabel[] = [];
+  const destinations: ContextDestination[] = [];
   let updateMarkers: ((height: number) => void) | undefined;
   const worldPosition = new THREE.Vector3();
   const worldScale = new THREE.Vector3();
+  const cameraPosition = new THREE.Vector3();
   const update = (time: number, camera: THREE.PerspectiveCamera, height: number) => {
     for (const animate of updates) animate(time);
     updateMarkers?.(height);
     root.getWorldScale(worldScale);
-    for (const label of labels) {
-      worldPosition.copy(label.position).applyMatrix4(root.matrixWorld);
-      const pixels = label.extent * worldScale.x * height / (Math.max(camera.position.distanceTo(worldPosition), 0.001) * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
-      label.opacity = THREE.MathUtils.smoothstep(pixels, 4, 10) * 0.48;
+    for (const destination of destinations) {
+      worldPosition.copy(destination.position).applyMatrix4(root.matrixWorld);
+      const pixels = destination.extent * worldScale.x * height / (Math.max(camera.position.distanceTo(worldPosition), 0.001) * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
+      destination.opacity = THREE.MathUtils.smoothstep(pixels, 4, 10) * 0.48;
+      cameraPosition.copy(worldPosition).applyMatrix4(camera.matrixWorldInverse);
+      const markerPixels = destination.extent * worldScale.x * camera.projectionMatrix.elements[5] * height / Math.max(0.1, -cameraPosition.z);
+      destination.screenRadius = THREE.MathUtils.clamp(markerPixels, 2, 20) / 2;
     }
   };
   const anchor = view.anchor;
-  if (!anchor) return { root, update, labels, radius: 0 };
+  if (!anchor) return { root, update, labels, destinations, radius: 0 };
 
   const chain = [...(view.ancestors ?? []), anchor];
-  const mappings = chain.map((_, index) => intoCurrent(chain, index));
+  const mappings = chain.map((_, index) => mapAncestorToAnchor(chain, index));
   const galaxyIndex = chain.findLastIndex((node) => node.kind === "galaxy");
 
   if (galaxyIndex >= 0 && mappings[galaxyIndex]) {
@@ -205,7 +216,11 @@ export function createSurroundingContext(
   const nearest = chooseCandidates(candidates, mobile);
   if (nearest.length) {
     const ratio = resources.pixelRatio;
-    updateMarkers = addDestinationMarkers(root, nearest, typeof ratio === "function" ? ratio : () => ratio);
+    nearest.forEach(({ node, position, extent }) => destinations.push({
+      id: node.id, kind: node.kind, name: node.name, position, extent,
+      opacity: 0, screenRadius: 1, highlight: () => {},
+    }));
+    updateMarkers = addDestinationMarkers(root, nearest, destinations, typeof ratio === "function" ? ratio : () => ratio);
     const named = new Set<Candidate>();
     // Keep the wider context identifiable even when nearby systems dominate the count.
     for (const kind of ["system", "galaxy", "cloud"]) {
@@ -216,7 +231,7 @@ export function createSurroundingContext(
       if (named.size >= (mobile ? 2 : 4)) break;
       named.add(candidate);
     }
-    for (const { node, position, extent } of named) labels.push({ id: node.id, name: node.name, position, extent, opacity: 0 });
+    for (const candidate of named) labels.push(destinations[nearest.indexOf(candidate)]);
   }
-  return { root, update, labels, radius: contextRadius(root) };
+  return { root, update, labels, destinations, radius: contextRadius(root) };
 }
