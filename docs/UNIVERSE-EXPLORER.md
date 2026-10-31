@@ -27,7 +27,7 @@ The once flag is `hackuniverse.demo-tour.v1.seen`, persisted before the first ca
 
 ## Camera links
 
-Settings → Share this view contains Copy view link. It reads the current camera at the time of the click and copies the destination and pose; when clipboard access fails, a selectable View link field provides a manual fallback. The URL contract is:
+Floating Actions → Share view opens a bounded dialog with Copy view link. Closing it returns focus to Actions; the scene stays paused while the dialog is open, and the floating group remains hidden during tours. It reads the current camera at the time of the click and copies the destination and pose; when clipboard access fails, a selectable View link field provides a manual fallback. The URL contract is:
 
 ```text
 ?lang=en&source=demo&target=planet-earth&camera=px,py,pz,tx,ty,tz

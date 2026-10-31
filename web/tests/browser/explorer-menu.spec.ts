@@ -46,8 +46,8 @@ for (const locale of ["en", "pt-BR"] as const) {
     await settings.click();
     await expect(settings).toHaveAttribute("aria-selected", "true");
     const categories = locale === "en"
-      ? ["Language", "Sound", "Share view", "Workspace and data", "Visual", "Spaceship", "Navigation guide", "Resources"]
-      : ["Idioma", "Som", "Compartilhar vista", "Espaço de trabalho e dados", "Visual", "Nave espacial", "Guia de navegação", "Recursos"];
+      ? ["Language", "Sound", "Workspace and data", "Visual", "Spaceship", "Navigation guide", "Resources"]
+      : ["Idioma", "Som", "Espaço de trabalho e dados", "Visual", "Nave espacial", "Guia de navegação", "Recursos"];
     const settingsPanel = dialog.getByRole("tabpanel", { name: tabs[2], exact: true });
     await expect(settingsPanel.getByRole("button")).toHaveText(categories);
     await settingsPanel.getByRole("button", { name: categories[0], exact: true }).click();
@@ -74,13 +74,13 @@ for (const locale of ["en", "pt-BR"] as const) {
     await expect(settings).toHaveAttribute("aria-selected", "true");
     await expect(settingsPanel.getByRole("button", { name: categories[0], exact: true })).toBeFocused();
     await expect(page.getByRole("dialog")).toHaveCount(1);
-    await settingsPanel.getByRole("button", { name: categories[4], exact: true }).click();
-    await expect(child).toHaveAccessibleName(categories[4]);
+    await settingsPanel.getByRole("button", { name: categories[3], exact: true }).click();
+    await expect(child).toHaveAccessibleName(categories[3]);
     await expect(child.getByRole("button", { name: "Tour", exact: true })).toHaveCount(0);
     await expect(child.getByRole("button", { name: quickActions[2], exact: true })).toHaveCount(0);
     await child.getByRole("button", { name: locale === "en" ? "Close" : "Fechar", exact: true }).click();
-    await expect(settingsPanel.getByRole("button", { name: categories[4], exact: true })).toBeFocused();
-    await settingsPanel.getByRole("button", { name: categories[7], exact: true }).click();
+    await expect(settingsPanel.getByRole("button", { name: categories[3], exact: true })).toBeFocused();
+    await settingsPanel.getByRole("button", { name: categories[6], exact: true }).click();
     const link = child.locator(`a[href^="${docs}"]`);
     const target = new URL((await link.getAttribute("href"))!);
     expect(target.searchParams.get("lang")).toBe(locale);
@@ -96,7 +96,7 @@ for (const locale of ["en", "pt-BR"] as const) {
     await page.keyboard.press("Escape");
     await expect(child).toBeHidden();
     await expect(dialog).toBeVisible();
-    await expect(settingsPanel.getByRole("button", { name: categories[7], exact: true })).toBeFocused();
+    await expect(settingsPanel.getByRole("button", { name: categories[6], exact: true })).toBeFocused();
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
     await expect(trigger).toBeFocused();
@@ -114,6 +114,20 @@ for (const locale of ["en", "pt-BR"] as const) {
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
     await expect(trigger).toBeFocused();
+    const floatingActions = page.getByRole("button", { name: locale === "en" ? "Actions" : "Ações", exact: true });
+    const shareName = locale === "en" ? "Share view" : "Compartilhar vista";
+    await floatingActions.click();
+    await page.getByRole("button", { name: shareName, exact: true }).click();
+    const share = page.getByRole("dialog", { name: shareName, exact: true });
+    await expect(share).toBeInViewport();
+    await expect(page.getByRole("dialog")).toHaveCount(1);
+    await share.getByRole("button", { name: locale === "en" ? "Copy view link" : "Copiar link da vista", exact: true }).click();
+    await expect(page).toHaveURL((url) => url.searchParams.get("lang") === locale &&
+      url.searchParams.has("target") && url.searchParams.has("camera") &&
+      url.searchParams.get("check") === "inline-language" && url.hash === "#explorer-menu");
+    await page.keyboard.press("Escape");
+    await expect(share).toBeHidden();
+    await expect(floatingActions).toBeFocused();
     expect(await canvas!.evaluate((element) => element.isConnected)).toBe(true);
     await canvas!.dispose();
     expect(errors).toEqual([]);
@@ -137,9 +151,9 @@ test("pause quick actions reset the current camera and start a repeatable tour",
   await expect(trigger).toBeFocused();
   // Copy reads the current camera synchronously. Reset's visual behavior does
   // not depend on whether a background history report has already arrived.
-  await trigger.click();
-  await dialog.getByRole("tab", { name: "Settings", exact: true }).click();
-  await dialog.getByRole("button", { name: "Share view", exact: true }).click();
+  const floatingActions = page.getByRole("button", { name: "Actions", exact: true });
+  await floatingActions.click();
+  await page.getByRole("button", { name: "Share view", exact: true }).click();
   const share = page.getByRole("dialog", { name: "Share view", exact: true });
   await share.getByRole("button", { name: "Copy view link", exact: true }).click();
   await expect(page).toHaveURL((url) => {
@@ -147,12 +161,14 @@ test("pause quick actions reset the current camera and start a repeatable tour",
     return url.searchParams.get("target") === "planet-earth" && url.searchParams.get("lang") === "en" &&
       camera !== null && camera !== initialCamera;
   });
-  await share.getByRole("button", { name: "Close", exact: true }).click();
-  await dialog.getByRole("button", { name: "Close", exact: true }).click();
+  await page.keyboard.press("Escape");
+  await expect(share).toBeHidden();
+  await expect(floatingActions).toBeFocused();
   await trigger.click();
   await dialog.getByRole("tabpanel", { name: "Pause", exact: true }).getByRole("button", { name: "Tour", exact: true }).click();
   await expect(dialog).toBeHidden();
   await expect(page.locator("main")).toHaveAttribute("data-tour-active", "true");
+  await expect(floatingActions).toBeHidden();
   const skip = page.getByRole("button", { name: "Skip tour", exact: true });
   await expect(skip).toBeFocused();
   await skip.click();

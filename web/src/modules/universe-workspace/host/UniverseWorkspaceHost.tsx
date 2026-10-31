@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useId, useMemo, type ComponentProps } from "react";
-import { Database, Globe2, Pencil, Plus, Sparkles, Trash2 } from "lucide-react";
+import { Database, Globe2, Pencil, Plus, Share2, Sparkles, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { FloatButtonGroup } from "@/components/ui/float-button-group";
@@ -66,13 +66,14 @@ function SelectionActions({ target, onInteraction, disabled }: UniverseActionCon
   </div>;
 }
 
-function FloatingActions({ target, onInteraction, disabled }: UniverseActionContext) {
+function FloatingActions({ target, onInteraction, disabled, share }: ComponentProps<UniverseManagement["Actions"]>) {
   const { session, copy } = useWorkspaceTools();
   const entity = session.findEntity(target);
   const action = (run: () => void) => () => { onInteraction(); run(); };
   return <div className="workspace-float">
     <FloatButtonGroup label={copy.actions} open={session.floatOpen} onOpenChange={(open) => { if (open) onInteraction(); session.setFloatOpen(open); }} disabled={disabled || session.busy || !session.local.ready} actions={[
       { id: "create", label: copy.create, icon: <Plus aria-hidden="true" />, onSelect: action(() => session.openCreate(target)) },
+      ...(share ? [{ id: "share", label: share.label, icon: <Share2 aria-hidden="true" />, onSelect: share.onSelect }] : []),
       { id: "manage", label: copy.manage, icon: <Database aria-hidden="true" />, onSelect: action(() => session.openManager(target)) },
       ...(entity ? [
         { id: "edit", label: copy.edit, icon: <Pencil aria-hidden="true" />, onSelect: action(() => session.openEdit(entity)) },

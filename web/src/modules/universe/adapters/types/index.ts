@@ -32,7 +32,7 @@ export type UniverseManagement = {
   navigationRequest?: { token: string; target: NavigationTarget };
   entityTransition?: UniverseEntityTransition | null;
   onEntityTransitionEnd?: (token: string) => void;
-  Actions: ComponentType<UniverseActionContext>;
+  Actions: ComponentType<UniverseActionContext & { share?: { label: string; onSelect: () => void } }>;
   SelectionActions: ComponentType<UniverseActionContext>;
   EmptyState?: ComponentType<UniverseActionContext>;
   Controls: ComponentType<{ target: NavigationTarget; onRequestClose: () => void }>;
