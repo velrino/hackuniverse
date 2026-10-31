@@ -32,7 +32,7 @@ Select any screenshot below to open it at full resolution. The catalog and astro
 
 Explore the [shared Velrino UI gallery](https://velrino.github.io/velrino-ui/?theme=cyan&appearance=sci-fi) for colors, typography and interactive components. Design-system links open it in a new tab with the active language, keeping the universe open. Search components from Go to and adjust language, colors and surfaces in Settings. Existing `/design` bookmarks redirect there.
 
-Use these shared components and tokens when building new pages. The [visual reference guide](docs/DESIGN-SYSTEM.md) explains the design direction, and [the web guide](web/README.md) covers component usage and module structure. The `lang=en` query parameter opens the interface in English; the global language dialog can switch to Brazilian Portuguese without reloading.
+Use these shared components and tokens when building new pages. The [visual reference guide](docs/DESIGN-SYSTEM.md) explains the design direction, and [the web guide](web/README.md) covers component usage and module structure. The browser selects the initial interface language; `?lang=en`, `?lang=pt-BR` or `?lang=fil` overrides it on every page. The global language dialog switches languages without reloading. See the [localization contract](docs/LOCALIZATION.md).
 
 ## Universe demo
 
@@ -58,6 +58,6 @@ npm run dev
 
 Open [localhost:3000](http://localhost:3000).
 
-English is the default language. Use `?lang=pt-BR` or the language dialog to switch to Brazilian Portuguese without reloading. See [the web guide](web/README.md) for the shared translation API and example pages.
+English, Brazilian Portuguese and Filipino are supported. The browser selects the initial language, with English as fallback. Use `?lang=en`, `?lang=pt-BR`, `?lang=fil` or the language dialog to choose explicitly without reloading. See [the web guide](web/README.md) for the shared translation API and example pages.
 
 For the architecture and implementation plan, see [umbrella issue #1](https://github.com/velrino/hackuniverse/issues/1).

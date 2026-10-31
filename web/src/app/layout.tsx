@@ -5,7 +5,7 @@ import localFont from "next/font/local";
 import { Suspense, type ReactNode } from "react";
 import { ApplicationShell } from "@/components/application-shell";
 import { ApplicationIntro } from "@/components/application-intro";
-import { localeRequestHeader, resolveLocale } from "@/i18n/config";
+import { localeFromAcceptLanguage, localeRequestHeader, resolveLocale } from "@/i18n/config";
 import { messages } from "@/i18n/messages";
 import { I18nProvider } from "@/i18n/provider";
 import { IdentityProvider } from "@/modules/identity";
@@ -28,22 +28,26 @@ const barlow = localFont({
 export const dynamic = "force-dynamic";
 
 async function getRequestLocale() {
-  return resolveLocale((await headers()).get(localeRequestHeader));
+  const requestHeaders = await headers();
+  return {
+    locale: resolveLocale(requestHeaders.get(localeRequestHeader)),
+    browserLocale: localeFromAcceptLanguage(requestHeaders.get("accept-language")),
+  };
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getRequestLocale();
+  const { locale } = await getRequestLocale();
   return { title: messages[locale].common.pageTitle };
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const locale = await getRequestLocale();
+  const { locale, browserLocale } = await getRequestLocale();
 
   return (
     <html lang={locale} className={`dark ${barlow.variable}`}>
       <body className="antialiased">
         <Suspense fallback={null}>
-          <I18nProvider initialLocale={locale}>
+          <I18nProvider initialLocale={locale} browserLocale={browserLocale}>
             <UIProvider appearance="sci-fi">
               <IdentityProvider>
                 <AudioProvider>

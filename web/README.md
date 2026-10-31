@@ -1,6 +1,6 @@
 # HackUniverse web
 
-Next.js App Router, React, TypeScript and Tailwind CSS, with shared Velrino UI primitives. `/` is an immersive, full-viewport 3D explorer with separate Demo and browser-local workspaces; `/example` retains the translated input example. All routes share the URL-driven language contract. Account-backed catalog persistence, authentication and the account dashboard remain planned work.
+Next.js App Router, React, TypeScript and Tailwind CSS, with shared Velrino UI primitives. `/` is an immersive, full-viewport 3D explorer with separate Demo and browser-local workspaces; `/example` retains the translated input example. All routes share browser detection and a global query override. Account-backed catalog persistence, authentication and the account dashboard remain planned work.
 
 The approved transparent logo is stored at `../assets/images/logo.png`, served from `public/brand/logo.png`, and displayed in the shared header. App Router serves the generated `src/app/favicon.ico` and `src/app/icon.png` automatically.
 
@@ -78,13 +78,9 @@ npx vercel@65.4.0 deploy --prod --yes --project hackuniverse --scope velrino
 
 This uploads the current local web source. If Git-based deployment is configured later for the monorepo, use `web` as its Root Directory. Keep credentials and local `.vercel` state out of Git.
 
-## URL-driven language
+## Global language
 
-The supported values are `?lang=en` and `?lang=pt-BR`, on every application route. English is the default. Missing, invalid or repeated `lang` values resolve to English. Cookies, local storage and browser language do not select the application language. There are no locale path prefixes.
-
-The language dialog opens from the header. Selecting an option updates the current history entry without refreshing or navigating the server. The dialog stays open, and the current page's input state stays mounted. The pathname, other query parameters and hash remain intact. Escape or the close button dismisses the dialog and returns focus to its trigger.
-
-`src/proxy.ts` resolves the incoming query and overwrites an internal request header. The async root layout reads it to render the initial document language and metadata. This is an explicit dynamic-rendering boundary. The client provider then observes the URL query, including navigation and history changes; the server header is not ongoing client locale state.
+English (`en`), Brazilian Portuguese (`pt-BR`) and Filipino (`fil`) use one shared language API on every route. Browser detection, query precedence, server/client consistency and one-language-per-row selectors follow the canonical [localization contract](../docs/LOCALIZATION.md). Use `?lang=fil` to open any page in Filipino. Manual changes update the URL in place and preserve the current page and input.
 
 ## Translate a module
 
@@ -101,7 +97,7 @@ export function ExampleHeading() {
 }
 ```
 
-Messages are organized by module namespace in `src/i18n/messages/en.ts` and `src/i18n/messages/pt-BR.ts`. Add a namespace or key to English, then provide the same shape in Portuguese. `Messages` and `satisfies` enforce parity during type checking. Keep UI text, labels, accessible names and recoverable errors in these dictionaries rather than inline locale conditionals.
+Messages are organized by module namespace in `src/i18n/messages/en.ts`, `src/i18n/messages/pt-BR.ts` and `src/i18n/messages/fil.ts`. Add a namespace or key to English, then provide the same shape in Portuguese and Filipino. `Messages` and `satisfies` enforce parity during type checking. Keep UI text, labels, accessible names and recoverable errors in these dictionaries rather than inline locale conditionals.
 
 Server-rendered translated content must resolve the request locale through the same allowlist. A server-only string will not react to a same-document language switch; use the client translation boundary for text that must update immediately. Do not key the application provider or page by locale, which would remount state.
 

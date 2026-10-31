@@ -1,15 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 import {
   localeFromSearchParams,
+  localeFromAcceptLanguage,
   localeRequestHeader,
 } from "./i18n/config";
 
 export function proxy(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
-  // Override incoming values: only the URL may select the initial locale.
+  // Never trust the internal header; an explicit query overrides the browser.
   requestHeaders.set(
     localeRequestHeader,
-    localeFromSearchParams(request.nextUrl.searchParams),
+    localeFromSearchParams(request.nextUrl.searchParams, localeFromAcceptLanguage(request.headers.get("accept-language"))),
   );
 
   return NextResponse.next({ request: { headers: requestHeaders } });

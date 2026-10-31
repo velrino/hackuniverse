@@ -1,4 +1,9 @@
 import en from "./en";
 import ptBR from "./pt-BR";
+import fil from "./fil";
+import type { Locale } from "@/i18n/config";
 import type { AudioCopy } from "./types";
-export function getAudioCopy(locale: "en" | "pt-BR"): AudioCopy { return locale === "pt-BR" ? ptBR : en; }
+
+const messages = { en, "pt-BR": ptBR, fil } satisfies Record<Locale, AudioCopy>;
+
+export function getAudioCopy(locale: Locale): AudioCopy { return messages[locale]; }

@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test:i18n": "tsc --project tsconfig.i18n-tests.json && node --test .i18n-tests/i18n/config.test.js",
     "test:catalog": "tsc --project tsconfig.catalog-tests.json && node --test .catalog-tests/domain/catalog.test.js .catalog-tests/domain/camera-link.test.js .catalog-tests/adapters/catalog/firecrawl/normalize.test.js",
     "test:scene": "tsc --project tsconfig.scene-tests.json && node --test .scene-tests/modules/universe/scene/tour-motion.test.js .scene-tests/modules/universe/scene/entity-transition.test.js .scene-tests/modules/universe/scene/zoom-intent.test.js .scene-tests/modules/universe/scene/camera-input-time.test.js .scene-tests/modules/universe/scene/orbit-intent.test.js .scene-tests/modules/universe/scene/destination-hover-intent.test.js .scene-tests/modules/universe/scene/planet-presentation.test.js .scene-tests/modules/universe/host/camera-location.test.js",
     "test:audio": "tsc --project tsconfig.audio-tests.json && node --test .audio-tests/modules/audio/domain/*.test.js .audio-tests/modules/audio/adapters/*.test.js",
