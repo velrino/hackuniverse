@@ -76,7 +76,7 @@ const en = {
   canvas: "Interactive three-dimensional universe. Drag to orbit, pinch or scroll to zoom. The atlas provides an accessible alternative.",
   universeHome: "Return to the starting view",
   tabs: { pause: "Pause", goTo: "Go to", settings: "Settings", about: "About" },
-  menuActions: { resume: "Resume", reset: "Reset" },
+  menuActions: { resume: "Resume", reset: "Reset", nearbySystems: "Nearby systems" },
   menuGroups: { workspace: "Workspace and data", view: "Visual", flight: "Spaceship", language: "Language", sound: "Sound", sharing: "Share view", resources: "Resources" },
   about: {
     credit: "Created by",

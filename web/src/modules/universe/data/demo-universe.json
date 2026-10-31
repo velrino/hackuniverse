@@ -24,7 +24,7 @@
           {
             "id": "cloud-local-interstellar",
             "name": "Solar Neighborhood",
-            "description": "The Solar System is shown in this local navigation region. Other regions group nearby exoplanet hosts by their IAU sky constellations, not by physical interstellar-cloud membership.",
+            "description": "This local navigation region contains the Solar System and 15 additional confirmed planetary systems at archive-reported distances within 15 parsecs. It is a bounded selection of nearby hosts, not a complete census or a claim of shared physical interstellar-cloud membership. Other regions retain their IAU sky-constellation groupings.",
             "seed": 2328254348,
             "type": "demo",
             "systems": [
@@ -181,6 +181,780 @@
                       "Milky Way",
                       "real planet",
                       "ice giant"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-gj-887",
+                "name": "GJ 887",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 3.28679 parsecs. This demonstration includes 4 non-controversial confirmed planets from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 2462397383,
+                "type": "demo",
+                "star": {
+                  "name": "GJ 887",
+                  "description": "GJ 887 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M1 V",
+                  "temperatureK": 3688,
+                  "radiusKm": 325587.60000000003,
+                  "ageBillionYears": 2.9,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20887"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-gj-887-e",
+                    "name": "GJ 887 e",
+                    "description": "GJ 887 e is a confirmed exoplanet orbiting GJ 887. Its discovery by radial velocity was announced in 2026. The archive reports an orbital period of approximately 4.4249 days.",
+                    "seed": 881057930,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 887 e",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20887%20e"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 887",
+                      "Pisces Austrinus",
+                      "Radial Velocity"
+                    ]
+                  },
+                  {
+                    "id": "planet-gj-887-b",
+                    "name": "GJ 887 b",
+                    "description": "GJ 887 b is a confirmed exoplanet orbiting GJ 887. Its discovery by radial velocity was announced in 2020. The archive reports an orbital period of approximately 9.2619 days.",
+                    "seed": 3652950545,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 887 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20887%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 887",
+                      "Pisces Austrinus",
+                      "Radial Velocity"
+                    ]
+                  },
+                  {
+                    "id": "planet-gj-887-c",
+                    "name": "GJ 887 c",
+                    "description": "GJ 887 c is a confirmed exoplanet orbiting GJ 887. Its discovery by radial velocity was announced in 2020. The archive reports an orbital period of approximately 21.784 days.",
+                    "seed": 2715787323,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 887 c",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20887%20c"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 887",
+                      "Pisces Austrinus",
+                      "Radial Velocity"
+                    ]
+                  },
+                  {
+                    "id": "planet-gj-887-d",
+                    "name": "GJ 887 d",
+                    "description": "GJ 887 d is a confirmed exoplanet orbiting GJ 887. Its discovery by radial velocity was announced in 2026. The archive reports an orbital period of approximately 50.77 days.",
+                    "seed": 225267662,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 887 d",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20887%20d"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 887",
+                      "Pisces Austrinus",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-gj-1061",
+                "name": "GJ 1061",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 3.67278 parsecs. This demonstration includes 3 non-controversial confirmed planets from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 1872729441,
+                "type": "demo",
+                "star": {
+                  "name": "GJ 1061",
+                  "description": "GJ 1061 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M5.5 V",
+                  "temperatureK": 2953,
+                  "radiusKm": 108529.2,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%201061"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-gj-1061-b",
+                    "name": "GJ 1061 b",
+                    "description": "GJ 1061 b is a confirmed exoplanet orbiting GJ 1061. Its discovery by radial velocity was announced in 2020. The archive reports an orbital period of approximately 3.2073 days.",
+                    "seed": 2381150686,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 1061 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%201061%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 1061",
+                      "Horologium",
+                      "Radial Velocity"
+                    ]
+                  },
+                  {
+                    "id": "planet-gj-1061-c",
+                    "name": "GJ 1061 c",
+                    "description": "GJ 1061 c is a confirmed exoplanet orbiting GJ 1061. Its discovery by radial velocity was announced in 2020. The archive reports an orbital period of approximately 6.6821 days.",
+                    "seed": 2478262861,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 1061 c",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%201061%20c"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 1061",
+                      "Horologium",
+                      "Radial Velocity"
+                    ]
+                  },
+                  {
+                    "id": "planet-gj-1061-d",
+                    "name": "GJ 1061 d",
+                    "description": "GJ 1061 d is a confirmed exoplanet orbiting GJ 1061. Its discovery by radial velocity was announced in 2020. The archive reports an orbital period of approximately 13.066 days.",
+                    "seed": 220239103,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 1061 d",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%201061%20d"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 1061",
+                      "Horologium",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-gj-674",
+                "name": "GJ 674",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 4.54896 parsecs. This demonstration includes 1 non-controversial confirmed planet from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 1985125616,
+                "type": "demo",
+                "star": {
+                  "name": "GJ 674",
+                  "description": "GJ 674 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M2.5",
+                  "temperatureK": 3600,
+                  "radiusKm": 253673.09100000001,
+                  "ageBillionYears": 0.55,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20674"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-gj-674-b",
+                    "name": "GJ 674 b",
+                    "description": "GJ 674 b is a confirmed exoplanet orbiting GJ 674. Its discovery by radial velocity was announced in 2007. The archive reports an orbital period of approximately 4.6938 days.",
+                    "seed": 3826190155,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 674 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20674%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 674",
+                      "Ara",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-gj-832",
+                "name": "GJ 832",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 4.96435 parsecs. This demonstration includes 1 non-controversial confirmed planet from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 3522215044,
+                "type": "demo",
+                "star": {
+                  "name": "GJ 832",
+                  "description": "GJ 832 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M2/3 V",
+                  "temperatureK": 3472,
+                  "radiusKm": 307191.2049,
+                  "ageBillionYears": 8.1,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20832"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-gj-832-b",
+                    "name": "GJ 832 b",
+                    "description": "GJ 832 b is a confirmed exoplanet orbiting GJ 832. Its discovery by radial velocity was announced in 2008. The archive reports an orbital period of approximately 3853 days.",
+                    "seed": 3661070418,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 832 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20832%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 832",
+                      "Grus",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-gj-682",
+                "name": "GJ 682",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 5.00671 parsecs. This demonstration includes 2 non-controversial confirmed planets from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 1265875009,
+                "type": "demo",
+                "star": {
+                  "name": "GJ 682",
+                  "description": "GJ 682 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M3.5 V",
+                  "temperatureK": 3028,
+                  "radiusKm": 207496.0035,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20682"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-gj-682-b",
+                    "name": "GJ 682 b",
+                    "description": "GJ 682 b is a confirmed exoplanet orbiting GJ 682. Its discovery by radial velocity was announced in 2014. The archive reports an orbital period of approximately 17.478 days.",
+                    "seed": 3193202910,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 682 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20682%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 682",
+                      "Scorpius",
+                      "Radial Velocity"
+                    ]
+                  },
+                  {
+                    "id": "planet-gj-682-c",
+                    "name": "GJ 682 c",
+                    "description": "GJ 682 c is a confirmed exoplanet orbiting GJ 682. Its discovery by radial velocity was announced in 2014. The archive reports an orbital period of approximately 57.32 days.",
+                    "seed": 3308625057,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 682 c",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20682%20c"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 682",
+                      "Scorpius",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-gj-273",
+                "name": "GJ 273",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 5.92154 parsecs. This demonstration includes 2 non-controversial confirmed planets from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 2193358632,
+                "type": "demo",
+                "star": {
+                  "name": "GJ 273",
+                  "description": "GJ 273 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M3.5",
+                  "temperatureK": 3382,
+                  "radiusKm": 203840.09999999998,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20273"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-gj-273-c",
+                    "name": "GJ 273 c",
+                    "description": "GJ 273 c is a confirmed exoplanet orbiting GJ 273. Its discovery by radial velocity was announced in 2017. The archive reports an orbital period of approximately 4.7234 days.",
+                    "seed": 715399243,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 273 c",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20273%20c"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 273",
+                      "Canis Minor",
+                      "Radial Velocity"
+                    ]
+                  },
+                  {
+                    "id": "planet-gj-273-b",
+                    "name": "GJ 273 b",
+                    "description": "GJ 273 b is a confirmed exoplanet orbiting GJ 273. Its discovery by radial velocity was announced in 2017. The archive reports an orbital period of approximately 18.6498 days.",
+                    "seed": 3513477313,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 273 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20273%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 273",
+                      "Canis Minor",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-gj-3378",
+                "name": "GJ 3378",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 7.72274 parsecs. This demonstration includes 1 non-controversial confirmed planet from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 103295510,
+                "type": "demo",
+                "star": {
+                  "name": "GJ 3378",
+                  "description": "GJ 3378 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M4 V",
+                  "temperatureK": 3340,
+                  "radiusKm": 191317.50000000003,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%203378"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-gj-3378-b",
+                    "name": "GJ 3378 b",
+                    "description": "GJ 3378 b is a confirmed exoplanet orbiting GJ 3378. Its discovery by radial velocity was announced in 2026. The archive reports an orbital period of approximately 21.45 days.",
+                    "seed": 2784602511,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 3378 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%203378%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 3378",
+                      "Camelopardalis",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-gj-1289",
+                "name": "GJ 1289",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 8.35147 parsecs. This demonstration includes 1 non-controversial confirmed planet from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 4180456241,
+                "type": "demo",
+                "star": {
+                  "name": "GJ 1289",
+                  "description": "GJ 1289 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M4.5 Ve",
+                  "temperatureK": 3296,
+                  "radiusKm": 170454.84840000002,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%201289"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-gj-1289-b",
+                    "name": "GJ 1289 b",
+                    "description": "GJ 1289 b is a confirmed exoplanet orbiting GJ 1289. Its discovery by radial velocity was announced in 2024. The archive reports an orbital period of approximately 111.74 days.",
+                    "seed": 2874651303,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 1289 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%201289%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 1289",
+                      "Andromeda",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-hd-192310",
+                "name": "HD 192310",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 8.79687 parsecs. This demonstration includes 2 non-controversial confirmed planets from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 1109797049,
+                "type": "demo",
+                "star": {
+                  "name": "HD 192310",
+                  "description": "HD 192310 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "K3V",
+                  "temperatureK": 5166,
+                  "radiusKm": 596856.3354,
+                  "ageBillionYears": 7.81,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/HD%20192310"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-hd-192310-b",
+                    "name": "HD 192310 b",
+                    "description": "HD 192310 b is a confirmed exoplanet orbiting HD 192310. Its discovery by radial velocity was announced in 2011. The archive reports an orbital period of approximately 74.72 days.",
+                    "seed": 3153301024,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / HD 192310 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/HD%20192310%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "HD 192310",
+                      "Capricornus",
+                      "Radial Velocity"
+                    ]
+                  },
+                  {
+                    "id": "planet-hd-192310-c",
+                    "name": "HD 192310 c",
+                    "description": "HD 192310 c is a confirmed exoplanet orbiting HD 192310. Its discovery by radial velocity was announced in 2011. The archive reports an orbital period of approximately 525.8 days.",
+                    "seed": 2463497190,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / HD 192310 c",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/HD%20192310%20c"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "HD 192310",
+                      "Capricornus",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-g-192-15",
+                "name": "G 192-15",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 9.53114 parsecs. This demonstration includes 2 non-controversial confirmed planets from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 3287149472,
+                "type": "demo",
+                "star": {
+                  "name": "G 192-15",
+                  "description": "G 192-15 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M5.0 V",
+                  "temperatureK": 2999,
+                  "radiusKm": 118768.5126,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/G%20192-15"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-g-192-15-b",
+                    "name": "G 192-15 b",
+                    "description": "G 192-15 b is a confirmed exoplanet orbiting G 192-15. Its discovery by radial velocity was announced in 2025. The archive reports an orbital period of approximately 2.27476 days.",
+                    "seed": 2016682908,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / G 192-15 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/G%20192-15%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "G 192-15",
+                      "Auriga",
+                      "Radial Velocity"
+                    ]
+                  },
+                  {
+                    "id": "planet-g-192-15-c",
+                    "name": "G 192-15 c",
+                    "description": "G 192-15 c is a confirmed exoplanet orbiting G 192-15. Its discovery by radial velocity was announced in 2025. The archive reports an orbital period of approximately 1219 days.",
+                    "seed": 177357003,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / G 192-15 c",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/G%20192-15%20c"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "G 192-15",
+                      "Auriga",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-au-mic",
+                "name": "AU Mic",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 9.7221 parsecs. This demonstration includes 3 non-controversial confirmed planets from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 4127592298,
+                "type": "demo",
+                "star": {
+                  "name": "AU Mic",
+                  "description": "AU Mic is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M1 V",
+                  "temperatureK": 3540,
+                  "radiusKm": 599693.4,
+                  "ageBillionYears": 0.019,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/AU%20Mic"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-au-mic-b",
+                    "name": "AU Mic b",
+                    "description": "AU Mic b is a confirmed exoplanet orbiting AU Mic. Its discovery by transit was announced in 2020. The archive reports an orbital period of approximately 8.46345 days.",
+                    "seed": 3261688475,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / AU Mic b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/AU%20Mic%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "AU Mic",
+                      "Microscopium",
+                      "Transit"
+                    ]
+                  },
+                  {
+                    "id": "planet-au-mic-d",
+                    "name": "AU Mic d",
+                    "description": "AU Mic d is a confirmed exoplanet orbiting AU Mic. Its discovery by transit timing variations was announced in 2023. The archive reports an orbital period of approximately 12.736 days.",
+                    "seed": 3250957942,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / AU Mic d",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/AU%20Mic%20d"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "AU Mic",
+                      "Microscopium",
+                      "Transit Timing Variations"
+                    ]
+                  },
+                  {
+                    "id": "planet-au-mic-c",
+                    "name": "AU Mic c",
+                    "description": "AU Mic c is a confirmed exoplanet orbiting AU Mic. Its discovery by transit was announced in 2021. The archive reports an orbital period of approximately 18.859 days.",
+                    "seed": 3521286464,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / AU Mic c",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/AU%20Mic%20c"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "AU Mic",
+                      "Microscopium",
+                      "Transit"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-l-363-38",
+                "name": "L 363-38",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 10.2295 parsecs. This demonstration includes 1 non-controversial confirmed planet from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 1936693851,
+                "type": "demo",
+                "star": {
+                  "name": "L 363-38",
+                  "description": "L 363-38 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "temperatureK": 3129,
+                  "radiusKm": 190621.80000000002,
+                  "ageBillionYears": 8.07,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/L%20363-38"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-l-363-38-b",
+                    "name": "L 363-38 b",
+                    "description": "L 363-38 b is a confirmed exoplanet orbiting L 363-38. Its discovery by radial velocity was announced in 2023. The archive reports an orbital period of approximately 8.781 days.",
+                    "seed": 3289537717,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / L 363-38 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/L%20363-38%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "L 363-38",
+                      "Phoenix",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-gj-341",
+                "name": "GJ 341",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 10.454 parsecs. This demonstration includes 1 non-controversial confirmed planet from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 2234164097,
+                "type": "demo",
+                "star": {
+                  "name": "GJ 341",
+                  "description": "GJ 341 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M1",
+                  "temperatureK": 3770,
+                  "radiusKm": 352441.62000000005,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20341"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-gj-341-b",
+                    "name": "GJ 341 b",
+                    "description": "GJ 341 b is a confirmed exoplanet orbiting GJ 341. Its discovery by transit was announced in 2025. The archive reports an orbital period of approximately 7.57686 days.",
+                    "seed": 2908709050,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / GJ 341 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/GJ%20341%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "GJ 341",
+                      "Carina",
+                      "Transit"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-g-261-6",
+                "name": "G 261-6",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 10.6267 parsecs. This demonstration includes 1 non-controversial confirmed planet from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 1574677094,
+                "type": "demo",
+                "star": {
+                  "name": "G 261-6",
+                  "description": "G 261-6 is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M5.5 V",
+                  "temperatureK": 2907,
+                  "radiusKm": 106554.80339999999,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/G%20261-6"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-g-261-6-b",
+                    "name": "G 261-6 b",
+                    "description": "G 261-6 b is a confirmed exoplanet orbiting G 261-6. Its discovery by radial velocity was announced in 2025. The archive reports an orbital period of approximately 5.4536 days.",
+                    "seed": 3640397654,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / G 261-6 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/G%20261-6%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "G 261-6",
+                      "Draco",
+                      "Radial Velocity"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "system-coconuts-2-a",
+                "name": "COCONUTS-2 A",
+                "description": "A single-star planetary system at an archive-reported distance of approximately 10.8864 parsecs. This demonstration includes 1 non-controversial confirmed planet from the source snapshot; it is not a claim that no other planets exist.",
+                "seed": 2754328467,
+                "type": "demo",
+                "star": {
+                  "name": "COCONUTS-2 A",
+                  "description": "COCONUTS-2 A is the host star of the confirmed planets shown in this system. Stellar parameters, where supplied, come from the pinned NASA Exoplanet Archive snapshot.",
+                  "spectralType": "M3 V",
+                  "temperatureK": 3552,
+                  "radiusKm": 254626.19999999998,
+                  "ageBillionYears": 0.414,
+                  "reference": {
+                    "label": "NASA Exoplanet Archive",
+                    "href": "https://exoplanetarchive.ipac.caltech.edu/overview/COCONUTS-2%20A"
+                  }
+                },
+                "planets": [
+                  {
+                    "id": "planet-coconuts-2-b",
+                    "name": "COCONUTS-2 b",
+                    "description": "COCONUTS-2 b is a confirmed exoplanet orbiting COCONUTS-2 A. Its discovery by imaging was announced in 2021. The archive reports an orbital period of approximately 402000000 days.",
+                    "seed": 3547412944,
+                    "type": "demo",
+                    "reference": {
+                      "label": "NASA Exoplanet Archive / COCONUTS-2 b",
+                      "href": "https://exoplanetarchive.ipac.caltech.edu/overview/COCONUTS-2%20b"
+                    },
+                    "tags": [
+                      "confirmed exoplanet",
+                      "NASA Exoplanet Archive",
+                      "COCONUTS-2 A",
+                      "Chamaleon",
+                      "Imaging"
                     ]
                   }
                 ]
@@ -22563,7 +23337,7 @@
       "maxSystemsPerRegion": 16,
       "sourceRadiusPc": 100
     },
-    "selection": "Single-star, non-circumbinary confirmed planets with no published confirmation controversy; complete eligible host groups selected from a 100 pc source pool. Priority nearby hosts precede planet-rich hosts; the 31 highest-ranked real constellation regions are retained. This is a bounded demonstration, not a full nearby census.",
+    "selection": "Single-star, non-circumbinary confirmed planets with no published confirmation controversy; complete eligible host groups selected from a 100 pc source pool. Priority nearby hosts precede planet-rich hosts; the 31 highest-ranked real constellation regions are retained. Fifteen additional eligible nearby hosts are added to Solar Neighborhood without moving any existing constellation system. This is a bounded demonstration, not a full nearby census.",
     "priorityHosts": [
       "Barnard's star",
       "Ross 128",
@@ -22573,14 +23347,37 @@
       "LHS 1140",
       "eps Eri"
     ],
+    "nearbySelection": {
+      "hostNames": [
+        "GJ 887",
+        "GJ 1061",
+        "GJ 674",
+        "GJ 832",
+        "GJ 682",
+        "GJ 273",
+        "GJ 3378",
+        "GJ 1289",
+        "HD 192310",
+        "G 192-15",
+        "AU Mic",
+        "L 363-38",
+        "GJ 341",
+        "G 261-6",
+        "COCONUTS-2 A"
+      ],
+      "maxDistancePc": 15,
+      "selectionNote": "Additional single-star confirmed-planet hosts, ordered by their archive-reported distance, are selected from the pinned source pool only when absent from the existing constellation cohort. Complete eligible host groups are added after the Solar System without moving or replacing any existing system, planet or parent. This nearby selection is intentionally incomplete.",
+      "addedSystems": 15,
+      "addedPlanets": 26
+    },
     "counts": {
       "galaxies": 5,
       "regions": 32,
-      "systems": 435,
-      "exoplanetHosts": 434,
-      "planets": 741,
-      "exoplanets": 733,
-      "entities": 1214
+      "systems": 450,
+      "exoplanetHosts": 449,
+      "planets": 767,
+      "exoplanets": 759,
+      "entities": 1255
     },
     "descriptions": "Planet descriptions use source names, host relationships, discovery year/method and only positive orbital periods with a zero limit flag. Missing facts are omitted. No climate, surface, habitability or life claim is inferred for an exoplanet.",
     "stellarParameters": "Optional non-limited stellar temperature, radius and age are copied from a source row; stellar radius in Solar radii is multiplied by NASA's 695700 km nominal Solar radius. Composite fields can have different literature references, retained in the raw snapshot. Stellar age estimates above the approximately 13.8-billion-year age of the universe are omitted from display because this interface does not show their uncertainties; the raw NASA snapshot is unchanged.",

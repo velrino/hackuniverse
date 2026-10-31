@@ -190,3 +190,32 @@ test("the bundled factual demo preserves Solar identity and keeps curated scene 
     }
   }
 });
+
+test("Solar Neighborhood exposes sixteen distinct real systems with complete additional nearby host groups", () => {
+  const catalog = parseUniverseCatalog(normalizeDemoCatalog(authoring));
+  const nearbyNames = [
+    "GJ 887", "GJ 1061", "GJ 674", "GJ 832", "GJ 682", "GJ 273", "GJ 3378", "GJ 1289",
+    "HD 192310", "G 192-15", "AU Mic", "L 363-38", "GJ 341", "G 261-6", "COCONUTS-2 A",
+  ];
+  const nearbySystems = catalog.entities.filter((entity) => entity.kind === "system" && entity.parentId === "cloud-local-interstellar");
+  assert.deepEqual(nearbySystems.map(({ name }) => name), ["Solar System", ...nearbyNames]);
+  assert.equal(getSceneView(catalog, "cloud-local-interstellar").nodes.length, 16, "the first wider region must expose many selectable star systems");
+  const localSystemIds = new Set(nearbySystems.map(({ id }) => id));
+  assert.ok(catalog.planets.filter(({ parentId }) => localSystemIds.has(parentId!)).length > 8, "the initial region extends beyond the eight Solar System planets");
+
+  const sources = resolve(process.cwd(), "../assets/data/astronomy");
+  const manifest = JSON.parse(readFileSync(resolve(sources, "source-manifest.json"), "utf8")) as { rawSnapshot: string };
+  const rows = JSON.parse(readFileSync(resolve(sources, manifest.rawSnapshot), "utf8")) as { pl_name: string; hostname: string; sy_dist: number | null }[];
+  for (const hostName of nearbyNames) {
+    const system = nearbySystems.find(({ name }) => name === hostName)!;
+    const sourcePlanets = rows.filter(({ hostname }) => hostname === hostName);
+    assert.ok(sourcePlanets.length > 0, "every added nearby system is present in the pinned primary-source snapshot");
+    assert.ok(sourcePlanets.some(({ sy_dist }) => sy_dist !== null && sy_dist > 0 && sy_dist <= 15), "added nearby hosts stay within the curated 15-parsec selection");
+    assert.deepEqual(
+      catalog.planets.filter(({ parentId }) => parentId === system.id).map(({ name }) => name).sort(),
+      sourcePlanets.map(({ pl_name }) => pl_name).sort(),
+      "all eligible planets of an added host remain together in its real system",
+    );
+    assert.equal(catalog.entities.filter((entity) => entity.kind === "system" && entity.name === hostName).length, 1, "additional hosts never duplicate existing constellation systems");
+  }
+});

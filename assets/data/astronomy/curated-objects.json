@@ -9,9 +9,30 @@
   "solarRegion": {
     "id": "cloud-local-interstellar",
     "name": "Solar Neighborhood",
-    "description": "The Solar System is shown in this local navigation region. Other regions group nearby exoplanet hosts by their IAU sky constellations, not by physical interstellar-cloud membership.",
+    "description": "This local navigation region contains the Solar System and 15 additional confirmed planetary systems at archive-reported distances within 15 parsecs. It is a bounded selection of nearby hosts, not a complete census or a claim of shared physical interstellar-cloud membership. Other regions retain their IAU sky-constellation groupings.",
     "seed": 2328254348,
     "type": "demo"
+  },
+  "nearbySelection": {
+    "hostNames": [
+      "GJ 887",
+      "GJ 1061",
+      "GJ 674",
+      "GJ 832",
+      "GJ 682",
+      "GJ 273",
+      "GJ 3378",
+      "GJ 1289",
+      "HD 192310",
+      "G 192-15",
+      "AU Mic",
+      "L 363-38",
+      "GJ 341",
+      "G 261-6",
+      "COCONUTS-2 A"
+    ],
+    "maxDistancePc": 15,
+    "selectionNote": "Additional single-star confirmed-planet hosts, ordered by their archive-reported distance, are selected from the pinned source pool only when absent from the existing constellation cohort. Complete eligible host groups are added after the Solar System without moving or replacing any existing system, planet or parent. This nearby selection is intentionally incomplete."
   },
   "solarSystem": {
     "id": "system-solar",

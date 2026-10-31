@@ -25,6 +25,7 @@ export type ExplorerMenuProps = {
   onOpenChange: (open: boolean) => void;
   onNavigate: (id: string) => void;
   currentTarget: NavigationTarget;
+  discoveryTarget?: NavigationTarget;
   showOrbits: boolean;
   onToggleOrbits: () => void;
   autoOrbit: boolean;
@@ -90,7 +91,7 @@ export function ExplorerMenu(props: ExplorerMenuProps) {
 }
 
 /** Opening mounts fresh tab navigation while the parent retains the atlas draft. */
-function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, resetAvailable, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, tourAvailable, onStartTour, LanguagePicker, DesignLink, DataControls, AudioControls, query, page, setQuery, setPage }: MenuContentsProps) {
+function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, discoveryTarget, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, resetAvailable, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, tourAvailable, onStartTour, LanguagePicker, DesignLink, DataControls, AudioControls, query, page, setQuery, setPage }: MenuContentsProps) {
   const [tab, setTab] = useState<MenuTab>("pause");
   const resultsList = useRef<HTMLUListElement>(null);
   const id = useId();
@@ -103,6 +104,7 @@ function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, 
   const visibleResults = results.slice(currentPage * ATLAS_PAGE_SIZE, (currentPage + 1) * ATLAS_PAGE_SIZE);
   useEffect(() => { if (resultsList.current) resultsList.current.scrollTop = 0; }, [currentPage, query]);
   const breadcrumbs = getBreadcrumbs(catalog, currentTarget.id);
+  const discovery = discoveryTarget && catalog.entities.find((entity) => entity.id === discoveryTarget.id && entity.kind === discoveryTarget.kind);
   const navigate = (targetId: string) => { onNavigate(targetId); onOpenChange(false); };
 
   return (
@@ -119,6 +121,9 @@ function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, 
           <Button type="button" className="hud-button universe-menu-action" onClick={() => onOpenChange(false)}>
             <Play aria-hidden="true" />{copy.menuActions.resume}
           </Button>
+          {discovery && <Button type="button" variant="outline" className="hud-button universe-menu-action" onClick={() => navigate(discovery.id)}>
+            <Compass aria-hidden="true" />{copy.menuActions.nearbySystems}
+          </Button>}
           <Button type="button" variant="outline" className="hud-button universe-menu-action" disabled={!tourAvailable} onClick={onStartTour}>
             <Orbit aria-hidden="true" />{copy.tourTitle}
           </Button>
