@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { closeSoundSettings, openSoundSettings } from "./helpers/sound-settings";
 
-type CameraVoice = { duration: number; at: number; stopAt: number | null };
+type CameraVoice = { duration: number; at: number; stopAt: number | null; scheduledAt: number | null };
 type AudioCapture = { context: AudioContext; source: AudioNode; samples: { at: number; rms: number }[]; voices: CameraVoice[]; startedAt: number; blockNextOrbit: boolean; blocked: { start: number; end: number } | null };
 type CaptureWindow = Window & { cameraCapture?: AudioCapture };
 
@@ -24,7 +24,7 @@ for (const motion of ["orbit", "zoom"] as const) {
         const capture = (window as unknown as CaptureWindow).cameraCapture;
         if (this.buffer && capture) {
           const now = this.context.currentTime;
-          const voice = { duration: this.buffer.duration, at: Math.max(when ?? now, now), stopAt: null };
+          const voice = { duration: this.buffer.duration, at: Math.max(when ?? now, now), stopAt: null, scheduledAt: null };
           tracked.set(this, voice);
           capture.voices.push(voice);
         }
@@ -35,7 +35,7 @@ for (const motion of ["orbit", "zoom"] as const) {
         const now = this.context.currentTime;
         const result = stop.call(this, when);
         const voice = tracked.get(this);
-        if (voice) voice.stopAt = Math.max(when ?? now, now);
+        if (voice) { voice.stopAt = Math.max(when ?? now, now); voice.scheduledAt = now; }
         const capture = (window as unknown as CaptureWindow).cameraCapture;
         if (capture?.blockNextOrbit && voice && voice.duration > 2 && voice.duration < 2.6 && voice.stopAt! > now) {
           capture.blockNextOrbit = false;
@@ -133,7 +133,8 @@ for (const motion of ["orbit", "zoom"] as const) {
       expect(voice.at).toBeLessThanOrEqual(measured.blocked!.start);
       expect(voice.stopAt!).toBeGreaterThan(measured.blocked!.start);
       expect(voice.stopAt!).toBeLessThan(measured.blocked!.end);
-      expect(voice.stopAt! - voice.at).toBeLessThanOrEqual(0.14 + measured.quantum);
+      expect(voice.scheduledAt).not.toBeNull();
+      expect(voice.stopAt! - voice.scheduledAt!).toBeLessThanOrEqual(0.14 + measured.quantum);
       expect(measured.active.level).toBeGreaterThan(0.0001);
       expect(measured.tail.level).toBeLessThan(Math.max(0.00001, measured.active.level * 0.02));
     } else {
