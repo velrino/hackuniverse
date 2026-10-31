@@ -21,7 +21,9 @@ const en = {
   identity: identityEn,
   applicationIntro: {
     label: "Welcome to HackUniverse",
-    detail: "Welcome animation · 3 seconds.",
+    loadingLabel: "Preparing your universe",
+    detail: "Startup animation · 3 seconds.",
+    preparingDetail: "Preparing the scene…",
     entryDetail: "A whole universe to explore. Enter to begin your journey with sound.",
     enter: "Enter universe",
   },

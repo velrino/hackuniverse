@@ -15,6 +15,14 @@ The home route is a full-viewport 3D demo with **738 planets and 871 total entit
 
 Planet and star panel names/descriptions use shared `TypewriterText`, with a 25 ms nominal delay and 3,500 ms maximum duration. Only writing is animated; facts, demo markers and actions appear immediately. A hidden full-text reserve prevents card reflow, screen readers receive one complete copy, and reduced motion shows the full text immediately. The bounded cards keep scrolling available for long descriptions. See [the public API example](../web/README.md#typewriter-text).
 
+## Startup preparation
+
+On the first visit to any route, `ApplicationIntro` starts the three-second planetary animation automatically. The application stays mounted and inert behind it: scene code, catalog projection, first-frame rendering and enabled audio preparation proceed concurrently. The displayed percentage measures only the fixed animation; if scene preparation takes longer, the same loader switches to indeterminate progress until it settles. The host registers scene preparation independently of presentation readiness and releases it after the first rendered frame or an unavailable fallback. Unmounting also releases the registration. Routes without a scene do not wait for one.
+
+Only then does Welcome offer Enter universe when sound needs browser activation. Enter invokes the activation-sensitive audio APIs synchronously and releases the application without another loading screen. Audio playback permission, a full streamed music track and optional spacecraft assets are not startup dependencies. The automatic tour still waits for presentation readiness, and reduced motion continues to suppress its automatic run.
+
+The intro persists `hackuniverse.intro.v1.seen` before opening the loader. Refreshes, navigation and locale changes do not replay it. Its deadline survives effect replay, timers clean up on unmount, and a document guard covers unavailable storage. Returning visits retain ordinary operation-specific loading states without replaying the global intro.
+
 ## Guided demo tour
 
 `DemoUniverseHost` supplies an optional tour definition outside the canonical catalog schema. The automatic run waits for both scene readiness and the global welcome loader to close. It focuses Earth over 900 ms, then holds the arrived camera for three seconds with a gentle orbit when motion is enabled. Arrival acknowledgements start the hold; loading and camera approach do not consume it. The outer steps then widen through Solar System, Solar Neighborhood, Milky Way and universe at a constant perceptual zoom rate of `0.9` natural-log distance units per second. Durations derive from each distance ratio, with 350 ms initial acceleration and 450 ms final deceleration. Intermediate arrivals hand off immediately with no dwell, maintaining the apparent rate across hierarchy scales. Ordinary navigation easing remains unchanged.

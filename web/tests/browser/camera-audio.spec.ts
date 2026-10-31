@@ -258,7 +258,16 @@ test("a trusted wheel event delivered two seconds late cannot restart camera sou
   } finally { await cdp.detach(); }
 });
 
-test("touch pinch cancellation and finger release stop only their camera feedback", async ({ page, context }, testInfo) => {
+// This case verifies contact ownership, not renderer throughput. Bound the
+// software-rendered surface and avoid screencast/snapshot work so CI can
+// deliver genuinely fresh input. Busy-render deadlines have separate tests.
+const touchTest = test.extend({
+  deviceScaleFactor: 1,
+  trace: { mode: "retain-on-failure", screenshots: false, snapshots: false },
+});
+
+touchTest("touch pinch cancellation and finger release stop only their camera feedback", async ({ page, context, isMobile }, testInfo) => {
+  await page.setViewportSize(isMobile ? { width: 360, height: 640 } : { width: 640, height: 480 });
   const point = await prepareCamera(page);
   const directionBefore = cameraDirection(page.url());
   const cdp = await context.newCDPSession(page);

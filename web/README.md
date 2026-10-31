@@ -49,9 +49,7 @@ The current application uses this effect only for planet/star panel names and de
 
 ## First-visit welcome
 
-The shared `ApplicationIntro` displays the full-screen planetary welcome animation for three seconds on the first visit to any route. Its percentage follows actual elapsed animation time from 0 to 100, updating about every 50 ms, with a brief 100% completion frame before closing. It measures only this fixed welcome animation, not network activity, imports or provider work. It persists `hackuniverse.intro.v1.seen` in browser local storage before opening, so refreshes, later visits and page navigation do not replay it. Locale preference remains exclusively URL-driven.
-
-The intro is mounted once inside the application provider. It keeps its deadline across effect replay, cleans up timers on unmount and falls back to a document guard when storage is unavailable. The manual loading preview lives on the shared documentation site and remains independent of this application intro.
+The first-visit sequence is owned by `ApplicationIntro`; see [startup preparation](../docs/UNIVERSE-EXPLORER.md#startup-preparation) for loader timing, background scene preparation, the subsequent audio entry action and returning visits. The manual loading preview lives on the shared documentation site and remains independent of application startup.
 
 ## Run locally
 
@@ -70,7 +68,7 @@ After `npm run build`, run `npx playwright install chromium` and `npm run test:b
 
 Global PostHog analytics and exception tracking are optional and environment-configured. See [web observability](../docs/OBSERVABILITY.md) for setup, application event prefixes, error coverage and payload policy. No ingestion or personal API credential is committed; copy [`.env.example`](.env.example) to ignored `.env.local` for local configuration.
 
-The web app is deployed to [hackuniverse.vercel.app](https://hackuniverse.vercel.app) in the Vercel project `hackuniverse`, under the `velrino` scope. The first production deployment uses source commit `5761874`, with the Next.js preset, the default `npm run build` command and Node.js 24.x. The current UI requires no application environment variables.
+The web app is deployed to [universe.velrino.co](https://universe.velrino.co/) in the Vercel project `hackuniverse`, under the `velrino` scope. The previous `hackuniverse.vercel.app` address redirects to the custom domain while preserving paths and query parameters. The first production deployment uses source commit `5761874`, with the Next.js preset, the default `npm run build` command and Node.js 24.x. The current UI requires no application environment variables.
 
 Run the production deployment from this `web/` directory:
 
