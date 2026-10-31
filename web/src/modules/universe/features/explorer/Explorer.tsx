@@ -21,7 +21,7 @@ const neutralInput: ShipFlightInput = { throttle: 0, turn: 0, lift: 0, boost: fa
 const noTourSteps: readonly UniverseTourStep[] = [];
 
 export function Explorer() {
-  const { catalog, copy, management, audio, location, tour: tourDefinition, presentationReady = true, autoTour = true, formatNumber, components: { Scene, BrandLogo, LanguagePicker, DesignLink } } = useUniverseAdapters();
+  const { catalog, copy, management, audio, location, tour: tourDefinition, presentationReady = true, allowDemoReferences = false, autoTour = true, formatNumber, components: { Scene, BrandLogo, LanguagePicker, DesignLink } } = useUniverseAdapters();
   const { current, parent, view, navigate, planet } = useUniverseNavigation(catalog, management?.navigationRequest, location?.navigationRequest);
   const activeSystem = current.kind === "system" ? current : current.kind === "planet" ? getParent(catalog, current.id) : undefined;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -234,7 +234,7 @@ export function Explorer() {
         {(sceneStatus === "loading" || flightStatus === "loading") && <div className="universe-scene-state" role="status"><Orbit className="universe-loading-orbit" size={24} aria-hidden="true" /><p>{flightStatus === "loading" ? copy.flightLoading : copy.loading}</p></div>}
         {sceneStatus === "unavailable" && <section className="universe-scene-state universe-fallback" role="status"><h2>{copy.fallbackTitle}</h2><p>{copy.fallbackDescription}</p><Button className="hud-button" data-audio-ignore="true" onClick={() => changeMenu(true)}>{copy.library}</Button></section>}
         {flightStatus === "error" && <button type="button" data-audio-ignore="true" className="universe-flight-error" onClick={() => changeMenu(true)}>{copy.flightError}</button>}
-        {planet && !flightEnabled && !tour.active && <PlanetDetails planet={planet} copy={copy} onBack={goWiderManually} demo={catalog.mode === "demo" || planet.type === "demo"} actions={management && <management.SelectionActions target={{ kind: "planet", id: planet.id }} onInteraction={prepareManagement} />} />}
+        {planet && !flightEnabled && !tour.active && <PlanetDetails planet={planet} copy={copy} onBack={goWiderManually} demo={catalog.mode === "demo" || planet.type === "demo"} allowDemoReferences={allowDemoReferences} actions={management && <management.SelectionActions target={{ kind: "planet", id: planet.id }} onInteraction={prepareManagement} />} />}
         {selectedStar && !flightEnabled && !tour.active && <StarDetails star={selectedStar} systemName={current.name} planetCount={getPlanetCount(catalog, current.id)} copy={copy} onClose={() => setSelectedStarSystemId(null)} formatNumber={formatNumber} demo={catalog.mode === "demo" || current.type === "demo"} />}
         {parent && <Button type="button" variant="outline" data-audio-ignore="true" className="hud-button universe-scale-back" onClick={goWiderManually} title={`${copy.wider}: ${copy.kinds[parent.kind]}`}><Layers3 aria-hidden="true" /><span>{copy.kinds[parent.kind]}</span></Button>}
         {flightEnabled && !blocked && <><FlightControls copy={copy} onInput={setFlightInput} /><Button type="button" variant="outline" className="hud-button universe-flight-exit" onClick={() => setFlightEnabled(false)}><ArrowLeft aria-hidden="true" />{copy.exitFlight}</Button></>}

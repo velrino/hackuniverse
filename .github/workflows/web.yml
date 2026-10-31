@@ -30,6 +30,7 @@ jobs:
       - run: npm run lint
       - run: npx tsc --noEmit --incremental false
       - run: npm run test:i18n
+      - run: npm run test:demo
       - run: npm run test:catalog
       - run: npm run test:workspace
       - run: npm run test:storage

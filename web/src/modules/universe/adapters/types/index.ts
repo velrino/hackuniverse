@@ -43,6 +43,7 @@ export type UniverseAdapters = {
   copy: UniverseCopy;
   tour?: UniverseTourDefinition;
   presentationReady?: boolean;
+  allowDemoReferences?: boolean;
   autoTour?: boolean;
   management?: UniverseManagement;
   audio?: UniverseAudio;

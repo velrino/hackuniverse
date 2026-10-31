@@ -1,5 +1,6 @@
 import demoUniverse from "../../data/demo-universe.json";
 import { parseUniverseCatalog } from "../../domain/parse-catalog";
+import { normalizeDemoCatalog } from "./demo";
 
-/** One explicit, synthetic demo catalog; this creates no accounts or imports. */
-export const mockCatalog = parseUniverseCatalog(demoUniverse);
+/** Curated demo authoring normalizes into the same catalog used by every source. */
+export const mockCatalog = parseUniverseCatalog(normalizeDemoCatalog(demoUniverse));

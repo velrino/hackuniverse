@@ -1,0 +1,1 @@
+export { normalizeDemoCatalog } from "./normalize";

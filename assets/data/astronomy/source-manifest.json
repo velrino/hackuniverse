@@ -1,0 +1,19 @@
+{
+  "retrievedAt": "2026-10-31T10:53:10.392957+00:00",
+  "sourceRadiusPc": 100,
+  "table": "pscomppars",
+  "endpoint": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync",
+  "query": "select pl_name,hostname,pl_letter,pl_controv_flag,sy_snum,sy_pnum,cb_flag,sy_dist,ra,dec,disc_year,discoverymethod,pl_orbper,pl_orbperlim,pl_orbper_reflink,st_spectype,st_teff,st_tefflim,st_teff_reflink,st_rad,st_radlim,st_rad_reflink,st_age,st_agelim,st_age_reflink,sy_dist_reflink,disc_refname from pscomppars where pl_controv_flag=0 and sy_snum=1 and cb_flag=0 and hostname in (select hostname from pscomppars where sy_dist<=100 and ra is not null and dec is not null) order by hostname,pl_name",
+  "format": "json",
+  "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name%2Chostname%2Cpl_letter%2Cpl_controv_flag%2Csy_snum%2Csy_pnum%2Ccb_flag%2Csy_dist%2Cra%2Cdec%2Cdisc_year%2Cdiscoverymethod%2Cpl_orbper%2Cpl_orbperlim%2Cpl_orbper_reflink%2Cst_spectype%2Cst_teff%2Cst_tefflim%2Cst_teff_reflink%2Cst_rad%2Cst_radlim%2Cst_rad_reflink%2Cst_age%2Cst_agelim%2Cst_age_reflink%2Csy_dist_reflink%2Cdisc_refname+from+pscomppars+where+pl_controv_flag%3D0+and+sy_snum%3D1+and+cb_flag%3D0+and+hostname+in+%28select+hostname+from+pscomppars+where+sy_dist%3C%3D100+and+ra+is+not+null+and+dec+is+not+null%29+order+by+hostname%2Cpl_name&format=json",
+  "rawSnapshot": "nasa-pscomppars-2026-10-31.json",
+  "rawSha256": "95431efa9085a9180d947bc94024d8a4546916b0aa2b255f0f0956e172e8042e",
+  "constellationSnapshot": "iau-constellations-2026-10-31.json",
+  "constellationSha256": "36787433a22d0bb52150a2eb83f3ccb9e721bd7708b1ae6a16862b21286b7824",
+  "planetRows": 1341,
+  "hosts": 908,
+  "tableDocumentation": "https://exoplanetarchive.ipac.caltech.edu/docs/API_PS_columns.html",
+  "compositeCaveats": "https://exoplanetarchive.ipac.caltech.edu/docs/pscp_calc.html",
+  "attribution": "NASA Exoplanet Archive, operated by Caltech under contract with NASA's Exoplanet Exploration Program; individual parameter references are retained in the raw snapshot.",
+  "attributionGuidance": "https://exoplanetarchive.ipac.caltech.edu/docs/acknowledge.html"
+}

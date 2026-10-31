@@ -94,7 +94,7 @@ function EmptyState({ target, onInteraction }: UniverseActionContext) {
 }
 
 /** Application composition: local/demo selection stays outside the reusable universe renderer. */
-export function UniverseWorkspaceHost({ demoCatalog, demoTour }: { demoCatalog: UniverseCatalog; demoTour?: UniverseTourDefinition }) {
+export function UniverseWorkspaceHost({ demoCatalog, demoTour, demoPresentation }: { demoCatalog: UniverseCatalog; demoTour?: UniverseTourDefinition; demoPresentation?: ComponentProps<typeof UniverseHost>["presentation"] }) {
   const { locale } = useI18n();
   const copy = getWorkspaceCopy(locale);
   const identity = useIdentityDialog();
@@ -114,7 +114,7 @@ export function UniverseWorkspaceHost({ demoCatalog, demoTour }: { demoCatalog: 
   const error = session.local.error ? copy.storageErrors[session.local.error] : session.formError;
   return <WorkspaceContext value={{ session, copy, openLogin: identity.openLogin }}>
     <div className="workspace-host" data-source={session.source} data-transition={session.pending?.command.action ?? "idle"}>
-      <UniverseHost key={`${session.source}:${catalog.rootId}`} catalog={catalog} source={session.source} tour={session.source === "demo" ? demoTour : undefined} management={management} />
+      <UniverseHost key={`${session.source}:${catalog.rootId}`} catalog={catalog} source={session.source} tour={session.source === "demo" ? demoTour : undefined} presentation={session.source === "demo" ? demoPresentation : undefined} management={management} />
       {error && !session.editor && !session.deletion && !session.transfer && <div className="workspace-warning" role="alert"><p>{error}</p><Button type="button" variant="outline" onClick={() => { session.clearFormError(); session.local.retry(); }}>{copy.retry}</Button></div>}
       <div className="workspace-status" role="status" aria-live="polite">
         {session.busy ? <><Sparkles aria-hidden="true" size={14} />{session.transfer ? copy.transfer.importing : session.pending?.command.action === "delete" ? copy.destroying : copy.creating}</> : session.notice ? copy[session.notice] : session.source === "local" ? copy.sources.local : null}
