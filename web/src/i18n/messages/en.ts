@@ -9,6 +9,8 @@ const en = {
     changeLanguage: "Change language",
     close: "Close",
     pageTitle: "HackUniverse · Your universe starts here",
+    pageDescription: "Explore real galaxies, star systems, and planets in an open-source 3D universe. Discover the demo or build your own universe.",
+    socialImageAlt: "Dark space illustration with cyan orbits and the HackUniverse logo.",
   },
   languageDialog: {
     title: "Choose your language",

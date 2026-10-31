@@ -80,6 +80,10 @@ npx vercel@65.4.0 deploy --prod --yes --project hackuniverse --scope velrino
 
 This uploads the current local web source. If Git-based deployment is configured later for the monorepo, use `web` as its Root Directory. Keep credentials and local `.vercel` state out of Git.
 
+## Social link previews
+
+Public link previews include a static cyan cover and localized Open Graph/Twitter metadata. See the [social preview guide](../docs/SOCIAL-PREVIEWS.md) for the asset generator, crawler checks and platform caches.
+
 ## Global language
 
 English (`en`), Brazilian Portuguese (`pt-BR`) and Filipino (`fil`) use one shared language API on every route. Browser detection, query precedence, server/client consistency and one-language-per-row selectors follow the canonical [localization contract](../docs/LOCALIZATION.md). Use `?lang=fil` to open any page in Filipino. Manual changes update the URL in place and preserve the current page and input.

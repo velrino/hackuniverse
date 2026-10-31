@@ -11,6 +11,8 @@ const ptBR = {
     changeLanguage: "Mudar idioma",
     close: "Fechar",
     pageTitle: "HackUniverse · Seu universo começa aqui",
+    pageDescription: "Explore galáxias, sistemas estelares e planetas reais em um universo 3D de código aberto. Conheça a demonstração ou crie seu próprio universo.",
+    socialImageAlt: "Ilustração espacial escura com órbitas em ciano e a marca HackUniverse.",
   },
   languageDialog: {
     title: "Escolha seu idioma",

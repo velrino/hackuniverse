@@ -37,7 +37,29 @@ async function getRequestLocale() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const { locale } = await getRequestLocale();
-  return { title: messages[locale].common.pageTitle };
+  const { pageTitle: title, pageDescription: description, socialImageAlt: alt } = messages[locale].common;
+  const image = { url: "/brand/social-preview.png", width: 1200, height: 630, type: "image/png", alt };
+
+  return {
+    metadataBase: new URL("https://universe.velrino.co"),
+    title,
+    description,
+    openGraph: {
+      type: "website",
+      siteName: "HackUniverse",
+      url: "./",
+      title,
+      description,
+      locale: { en: "en_US", "pt-BR": "pt_BR", fil: "fil_PH" }[locale],
+      images: [image],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
+  };
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
