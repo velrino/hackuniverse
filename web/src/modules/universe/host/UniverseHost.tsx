@@ -63,14 +63,10 @@ export function UniverseHost({ catalog, tour, management, source, presentation }
     scaleHints: { ...translations.scaleHints, galaxy: regionPresentation.galaxyHint, cloud: regionPresentation.cloudHint },
   } : translations, [translations, regionPresentation]);
   const { format } = useI18n();
-  const { playCue, cameraMotion, stopCameraMotion, unlockFromGesture, interactionReceived, preferences, musicStatus, effectsStatus, musicError, effectsError } = useAudio();
-  const musicWaiting = preferences.musicEnabled && preferences.musicVolume > 0 && musicStatus !== "playing" && (musicStatus !== "error" || musicError === "blocked");
-  const effectsWaiting = preferences.effectsEnabled && preferences.effectsVolume > 0 && effectsStatus !== "ready" && (effectsStatus !== "error" || effectsError === "blocked");
-  const tourRequiresInteraction = !preferences.muted && !interactionReceived && (musicWaiting || effectsWaiting);
+  const { playCue, cameraMotion, stopCameraMotion, unlockFromGesture } = useAudio();
   const camera = useCameraLocation(catalog, source);
   const location = useMemo(() => ({ navigationRequest: camera.state.navigationRequest, Controls: CameraShareControls, Status: CameraLinkStatus }), [camera.state.navigationRequest]);
   const audio = useMemo<UniverseAudio>(() => ({
-    tourRequiresInteraction,
     onTourStart: unlockFromGesture,
     onTourZoomIntent: (direction) => cameraMotion("zoom", direction),
     onTourZoomEnd: () => stopCameraMotion("zoom"),
@@ -81,7 +77,7 @@ export function UniverseHost({ catalog, tour, management, source, presentation }
     onMenuOpenChange: (open) => playCue(open ? "menu-open" : "menu-close"),
     Controls: AudioControls,
     Toggle: AudioToggle,
-  }), [playCue, cameraMotion, stopCameraMotion, unlockFromGesture, tourRequiresInteraction]);
+  }), [playCue, cameraMotion, stopCameraMotion, unlockFromGesture]);
   const presentationReady = useApplicationIntroReady();
   const reducedMotion = useSyncExternalStore(subscribeMotion, getReducedMotion, () => true);
   const allowDemoReferences = Boolean(presentation?.factualReferences);

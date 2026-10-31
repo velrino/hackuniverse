@@ -9,7 +9,6 @@ export type UniverseTourDefinition = { storageKey: string; steps: readonly Unive
 export type UniverseActionContext = { target: NavigationTarget; onInteraction: () => void; disabled?: boolean };
 /** Optional interaction feedback supplied by the host; no audio provider enters the scene. */
 export type UniverseAudio = {
-  tourRequiresInteraction?: boolean;
   onTourStart?: () => void;
   onTourZoomIntent?: (direction: "in" | "out") => void;
   onTourZoomEnd?: () => void;

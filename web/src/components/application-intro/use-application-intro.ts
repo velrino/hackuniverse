@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { browserStorage } from "../../lib/storage";
 
 const storageKey = "hackuniverse.intro.v1.seen";
@@ -9,17 +9,15 @@ const progressIntervalMs = 50;
 const completionFrameMs = 50;
 let seenInDocument = false;
 
-type IntroPhase = "checking" | "entry" | "loading" | "ready";
+type IntroPhase = "checking" | "loading" | "ready";
 type IntroState = { phase: IntroPhase; visible: boolean; ready: boolean; progress: number };
 
-export function useApplicationIntro({ requireInteraction = false, preparationReady = true }: { requireInteraction?: boolean; preparationReady?: boolean } = {}) {
+export function useApplicationIntro({ preparationReady = true }: { preparationReady?: boolean } = {}) {
   const [state, setState] = useState<IntroState>({ phase: "checking", visible: false, ready: false, progress: 0 });
-  const [requested, setRequested] = useState(false);
   const checked = useRef(false);
   const skipped = useRef(false);
   const startedAt = useRef<number | null>(null);
   const released = useRef(false);
-  const start = useCallback(() => setRequested(true), []);
 
   useEffect(() => {
     const settle = () => {
@@ -52,7 +50,7 @@ export function useApplicationIntro({ requireInteraction = false, preparationRea
       const current = performance.now();
       const elapsed = Math.max(0, current - start);
       const complete = (animationComplete || current >= closeAt) && preparationReady;
-      const phase = !complete ? "loading" : requireInteraction && !requested ? "entry" : "ready";
+      const phase = complete ? "ready" : "loading";
       if (phase === "ready") released.current = true;
       setState({
         phase,
@@ -65,7 +63,7 @@ export function useApplicationIntro({ requireInteraction = false, preparationRea
       updateProgress();
     }, 0);
     // Once the animation finishes, real preparation owns the remaining wait.
-    // A readiness or interaction change re-evaluates this without restarting it.
+    // A readiness change re-evaluates this without restarting it.
     if (now >= closeAt) return () => window.clearTimeout(openTimer);
     const progressTimer = window.setInterval(() => updateProgress(), progressIntervalMs);
     const completeTimer = window.setTimeout(() => {
@@ -84,7 +82,7 @@ export function useApplicationIntro({ requireInteraction = false, preparationRea
       window.clearTimeout(completeTimer);
       window.clearTimeout(closeTimer);
     };
-  }, [requireInteraction, requested, preparationReady]);
+  }, [preparationReady]);
 
-  return { ...state, waitingForPreparation: state.progress >= 100 && !preparationReady, start };
+  return { ...state, waitingForPreparation: state.progress >= 100 && !preparationReady };
 }
