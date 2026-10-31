@@ -1,13 +1,23 @@
 import { expect, test, type Page } from "@playwright/test";
+import { closeSoundSettings, openSoundSettings } from "./helpers/sound-settings";
 
 type CameraVoice = { duration: number; started: number; stopped: number | null; fadeMs: number | null; ended: number | null; startContext: number; stopContext: number | null };
 type TouchPointer = { pointerId: number; startX: number; startY: number; x: number; y: number };
-type TouchPointerEvent = { type: string; pointerId: number; x: number; y: number };
+type TouchPointerEvent = { type: string; pointerId: number; x: number; y: number; buttons: number; inputTime: number; receivedAt: number; age: number };
 type TouchProbe = { active: TouchPointer[]; events: TouchPointerEvent[] };
 type ProbedWindow = Window & { cameraAudioProbe: CameraVoice[]; cameraWheelProbe: number[]; cameraWheelAudioProbe: (number | null)[]; cameraAudioQuantumMs: number; cameraPointerInput: number | null; cameraAudioClock: () => number; cameraTouchProbe: TouchProbe };
 
 async function voices(page: Page) {
   return page.evaluate(() => (window as unknown as ProbedWindow).cameraAudioProbe);
+}
+
+function cameraDirection(href: string) {
+  const pose = new URL(href).searchParams.get("camera")?.split(",").map(Number);
+  if (!pose || pose.length !== 6 || !pose.every(Number.isFinite)) throw new Error("The public camera URL has no valid pose");
+  const direction = [pose[0] - pose[3], pose[1] - pose[4], pose[2] - pose[5]];
+  const distance = Math.hypot(...direction);
+  if (!distance) throw new Error("The camera URL has zero viewing distance");
+  return direction.map((value) => value / distance);
 }
 
 async function prepareCamera(page: Page) {
@@ -36,7 +46,8 @@ async function prepareCamera(page: Page) {
     for (const type of ["pointerdown", "pointermove", "pointerup", "pointercancel"] as const) {
       document.addEventListener(type, (event) => {
         if (!event.isTrusted || event.pointerType !== "touch") return;
-        touchEvents.push({ type, pointerId: event.pointerId, x: event.clientX, y: event.clientY });
+        const receivedAt = performance.now();
+        touchEvents.push({ type, pointerId: event.pointerId, x: event.clientX, y: event.clientY, buttons: event.buttons, inputTime: event.timeStamp, receivedAt, age: receivedAt - event.timeStamp });
         if (type === "pointerdown") touchPointers.set(event.pointerId, { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, x: event.clientX, y: event.clientY });
         else if (type === "pointermove") {
           const pointer = touchPointers.get(event.pointerId);
@@ -70,10 +81,9 @@ async function prepareCamera(page: Page) {
     };
   });
   await page.goto("/?lang=en&source=demo&target=planet-earth&camera=1.865798,5.83956,9.92779,0,0,0");
-  await page.getByRole("button", { name: "Explorer menu", exact: true }).click();
-  await page.getByRole("tab", { name: "Settings", exact: true }).click();
-  await expect(page.getByRole("group", { name: "Sound", exact: true }).getByRole("status").filter({ hasText: /^Ready$/ })).toBeVisible();
-  await page.getByRole("button", { name: "Close", exact: true }).click();
+  const sound = await openSoundSettings(page);
+  await expect(sound.getByRole("status").filter({ hasText: /^Ready$/ })).toBeVisible();
+  await closeSoundSettings(page);
   return page.locator("canvas").evaluate((canvas) => {
     const rect = canvas.getBoundingClientRect();
     for (const y of [0.35, 0.45, 0.55]) for (const x of [0.2, 0.35, 0.45]) {
@@ -250,6 +260,7 @@ test("a trusted wheel event delivered two seconds late cannot restart camera sou
 
 test("touch pinch cancellation and finger release stop only their camera feedback", async ({ page, context }, testInfo) => {
   const point = await prepareCamera(page);
+  const directionBefore = cameraDirection(page.url());
   const cdp = await context.newCDPSession(page);
   await cdp.send("Emulation.setTouchEmulationEnabled", { enabled: true });
   const fingers = (spread: number) => [{ id: 0, x: point.x, y: point.y }, { id: 1, x: point.x + spread, y: point.y }];
@@ -280,12 +291,20 @@ test("touch pinch cancellation and finger release stop only their camera feedbac
   await expect.poll(async () => (await voices(page)).every((voice) => voice.ended !== null)).toBe(true);
   const beforeDrag = (await voices(page)).length;
   const downsBeforeDrag = await page.evaluate(() => (window as unknown as ProbedWindow).cameraTouchProbe.events.filter((event) => event.type === "pointerdown").length);
-  await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ id: remainingCdpId!, x: remaining.x + 40, y: remaining.y + 15 }] });
+  const eventsBeforeDrag = await page.evaluate(() => (window as unknown as ProbedWindow).cameraTouchProbe.events.length);
+  // A real drag has multiple fresh samples. Horizontal motion avoids a polar
+  // clamp; explicit pressure keeps the retained contact pressed on all hosts.
+  for (let step = 1; step <= 8; step++) {
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ id: remainingCdpId!, x: remaining.x + step * 5, y: remaining.y, force: 1 }] });
+    await page.waitForTimeout(35); // Model a continuous ~20 Hz physical drag.
+  }
   await expect.poll(() => page.evaluate(({ pointerId, x }) => (window as unknown as ProbedWindow).cameraTouchProbe.events.some((event) => event.type === "pointermove" && event.pointerId === pointerId && Math.abs(event.x - x) < 1), { pointerId: remaining.pointerId, x: remaining.x + 40 })).toBe(true);
   const continued = await page.evaluate(() => (window as unknown as ProbedWindow).cameraTouchProbe);
   await testInfo.attach("partial-touch-release-inventory", { body: JSON.stringify({ startedPointers, remaining, remainingCdpId, continued }, null, 2), contentType: "application/json" });
   expect(continued.active.map((pointer) => pointer.pointerId)).toEqual([remaining.pointerId]);
   expect(continued.events.filter((event) => event.type === "pointerdown")).toHaveLength(downsBeforeDrag);
+  const freshMoves = continued.events.slice(eventsBeforeDrag).filter((event) => event.type === "pointermove" && event.pointerId === remaining.pointerId && event.buttons !== 0 && event.age >= 0 && event.age <= 180);
+  expect(freshMoves.length).toBeGreaterThan(1);
   await expect.poll(async () => (await voices(page)).length).toBeGreaterThan(beforeDrag);
   const released = await page.evaluate(() => performance.now());
   await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
@@ -293,5 +312,9 @@ test("touch pinch cancellation and finger release stop only their camera feedbac
   const drag = (await voices(page))[beforeDrag];
   expect(drag.duration).toBeLessThan(3);
   expect(drag.ended! - released).toBeLessThan(250);
+  // Camera URLs publish after all pointers are released. With reduced motion,
+  // no automatic orbit can explain this change in normalized viewing direction.
+  await expect.poll(() => Math.hypot(...cameraDirection(page.url()).map((value, index) => value - directionBefore[index]))).toBeGreaterThan(0.01);
+  await testInfo.attach("touch-camera-direction", { body: JSON.stringify({ before: directionBefore, after: cameraDirection(page.url()) }), contentType: "application/json" });
   await cdp.detach();
 });

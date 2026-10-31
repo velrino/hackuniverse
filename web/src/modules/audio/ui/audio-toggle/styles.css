@@ -1,0 +1,2 @@
+.audio-toggle[data-slot="button"] { width: 44px; min-width: 44px; height: 44px; min-height: 44px; padding: 0; background: color-mix(in srgb, var(--hud-surface) 50%, transparent); color: var(--hud-muted); }
+.audio-toggle[data-slot="button"][aria-pressed="true"] { color: var(--hud-accent); }

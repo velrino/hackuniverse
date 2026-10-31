@@ -3,6 +3,8 @@ const ptBR = {
   title: "Som",
   introduction: "Música e efeitos começam quando o navegador permite. Suas chaves e volumes ficam salvos.",
   music: "Música", effects: "Efeitos sonoros",
+  muteSound: "Silenciar som", enableSound: "Ativar som", muted: "Silenciado",
+  mutedHint: "O som está silenciado. O botão de alto-falante restaura suas configurações de música e efeitos.",
   musicVolume: "Volume da música", effectsVolume: "Volume dos efeitos", retry: "Tentar o som novamente",
   waiting: "Aguardando interação",
   gestureHint: "Toque ou pressione uma tecla fora dos controles de som para permitir a reprodução. Canais desativados continuam desligados.",

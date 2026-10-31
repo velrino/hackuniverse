@@ -19,6 +19,7 @@ export type UniverseAudio = {
   onDestinationHover?: (id: string) => void;
   onMenuOpenChange?: (open: boolean) => void;
   Controls?: ComponentType;
+  Toggle?: ComponentType<{ className?: string }>;
 };
 export type UniverseLocation = {
   navigationRequest?: { token: string; target: NavigationTarget };

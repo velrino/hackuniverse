@@ -76,6 +76,6 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       controller.dispose();
     };
   }, [controller, unlockFromGesture]);
-  const value = useMemo(() => ({ ...snapshot, interactionReceived, playCue: controller.playCue, cameraMotion: controller.cameraMotion, stopCameraMotion: controller.stopCameraMotion, unlockFromGesture, setMusicEnabled: controller.setMusicEnabled, setEffectsEnabled: controller.setEffectsEnabled, enableMusic: controller.enableMusic, enableEffects: controller.enableEffects, setMusicVolume: controller.setMusicVolume, setEffectsVolume: controller.setEffectsVolume, retry: controller.retry }), [snapshot, controller, interactionReceived, unlockFromGesture]);
+  const value = useMemo(() => ({ ...snapshot, interactionReceived, playCue: controller.playCue, cameraMotion: controller.cameraMotion, stopCameraMotion: controller.stopCameraMotion, unlockFromGesture, setMuted: controller.setMuted, setMusicEnabled: controller.setMusicEnabled, setEffectsEnabled: controller.setEffectsEnabled, enableMusic: controller.enableMusic, enableEffects: controller.enableEffects, setMusicVolume: controller.setMusicVolume, setEffectsVolume: controller.setEffectsVolume, retry: controller.retry }), [snapshot, controller, interactionReceived, unlockFromGesture]);
   return <AudioContext value={value}>{children}</AudioContext>;
 }

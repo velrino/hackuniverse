@@ -2,6 +2,8 @@ const en = {
   title: "Sound",
   introduction: "Music and effects start when your browser allows. Your switches and volumes are saved.",
   music: "Music", effects: "Sound effects",
+  muteSound: "Mute sound", enableSound: "Enable sound", muted: "Muted",
+  mutedHint: "Sound is muted. The speaker button restores your saved music and effects settings.",
   musicVolume: "Music volume", effectsVolume: "Effects volume", retry: "Retry sound",
   waiting: "Waiting for interaction",
   gestureHint: "Tap or press a key outside the sound controls to allow playback. Disabled channels stay off.",

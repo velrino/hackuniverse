@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { closeSoundSettings, openSoundSettings } from "./helpers/sound-settings";
 
 type AudioCapture = { context: AudioContext; source: AudioNode; samples: { at: number; rms: number }[]; startedAt: number };
 type CaptureWindow = Window & { cameraCapture?: AudioCapture };
@@ -17,10 +18,9 @@ test("camera output becomes silent even while rendering blocks JavaScript cleanu
     } as AudioNode["connect"];
   });
   await page.goto("/?lang=en&source=demo&target=planet-earth&camera=1.865798,5.83956,9.92779,0,0,0");
-  await page.getByRole("button", { name: "Explorer menu", exact: true }).click();
-  await page.getByRole("tab", { name: "Settings", exact: true }).click();
-  await expect(page.getByRole("group", { name: "Sound", exact: true }).getByRole("status").filter({ hasText: /^Ready$/ })).toBeVisible();
-  await page.getByRole("button", { name: "Close", exact: true }).click();
+  const sound = await openSoundSettings(page);
+  await expect(sound.getByRole("status").filter({ hasText: /^Ready$/ })).toBeVisible();
+  await closeSoundSettings(page);
   await page.waitForTimeout(1100); // Finish the separate menu-closing effect.
   const point = await page.locator("canvas").evaluate((canvas) => {
     const rect = canvas.getBoundingClientRect();

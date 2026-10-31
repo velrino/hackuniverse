@@ -75,8 +75,9 @@ const ptBR = {
   fallbackDescription: "O 3D está indisponível neste dispositivo. Todos os planetas continuam acessíveis pelo atlas.",
   canvas: "Universo interativo em três dimensões. Arraste para orbitar e use a pinça ou a rolagem para aproximar. O atlas oferece uma alternativa acessível.",
   universeHome: "Voltar à visão inicial",
-  tabs: { goTo: "Ir para", settings: "Configurações", about: "Sobre" },
-  menuGroups: { workspace: "Espaço de trabalho e dados", view: "Visual e tour", flight: "Nave espacial", language: "Idioma", resources: "Recursos" },
+  tabs: { pause: "Pausa", goTo: "Ir para", settings: "Configurações", about: "Sobre" },
+  menuActions: { resume: "Retomar", reset: "Restaurar" },
+  menuGroups: { workspace: "Espaço de trabalho e dados", view: "Visual", flight: "Nave espacial", language: "Idioma", sound: "Som", sharing: "Compartilhar vista", resources: "Recursos" },
   about: {
     credit: "Criado por",
     author: "Denis Velrino",

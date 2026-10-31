@@ -2,6 +2,7 @@ export const audioCues = ["menu-open", "menu-close", "ui-select", "zoom-in", "zo
 export type AudioCue = (typeof audioCues)[number];
 export type CameraMotion = "orbit" | "zoom";
 export type AudioPreferences = Readonly<{
+  muted: boolean;
   musicEnabled: boolean;
   effectsEnabled: boolean;
   musicVolume: number;
