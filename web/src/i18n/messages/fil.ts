@@ -11,6 +11,8 @@ const fil = {
     changeLanguage: "Palitan ang wika",
     close: "Isara",
     pageTitle: "HackUniverse · Dito nagsisimula ang iyong uniberso",
+    pageDescription: "Tuklasin ang mga tunay na kalawakan, sistema ng bituin, at planeta sa isang open-source na 3D universe. Subukan ang demo o bumuo ng sarili mong uniberso.",
+    socialImageAlt: "Ilustrasyon ng madilim na kalawakan na may mga orbitang cyan at logo ng HackUniverse.",
   },
   languageDialog: {
     title: "Piliin ang iyong wika",
