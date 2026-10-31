@@ -23,7 +23,9 @@ const ptBR = {
   identity: identityPtBR,
   applicationIntro: {
     label: "Bem-vindo ao HackUniverse",
-    detail: "Animação de boas-vindas · 3 segundos.",
+    loadingLabel: "Preparando seu universo",
+    detail: "Animação de abertura · 3 segundos.",
+    preparingDetail: "Preparando a cena…",
     entryDetail: "Um universo inteiro para explorar. Entre para começar sua jornada com som.",
     enter: "Entrar no universo",
   },

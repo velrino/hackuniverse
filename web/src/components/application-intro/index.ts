@@ -1,2 +1,2 @@
 export { ApplicationIntro } from "./component";
-export { useApplicationIntroReady } from "./context";
+export { useApplicationIntroReady, useApplicationPreparation } from "./context";

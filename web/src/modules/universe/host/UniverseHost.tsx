@@ -1,10 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useRef, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { DesignSystemLink } from "@/modules/design-system";
 import { BrandLogo } from "@/components/brand-logo";
-import { useApplicationIntroReady } from "@/components/application-intro";
+import { useApplicationIntroReady, useApplicationPreparation } from "@/components/application-intro";
 import { InlineLanguageSelector, useI18n, useTranslations } from "@/i18n";
 import { AudioControls, AudioToggle, useAudio } from "@/modules/audio";
 import { UniverseRoot, type UniverseAdapters, type UniverseAudio, type UniverseCatalog, type UniverseManagement, type UniverseTourDefinition } from "@/modules/universe";
@@ -17,6 +17,11 @@ import { CameraLocationContext, CameraLinkStatus, CameraShareControls, useCamera
 const Scene = dynamic(() => import("../scene").then((module) => module.UniverseScene), { ssr: false });
 
 function ObservedScene(props: UniverseSceneProps) {
+  const [prepared, setPrepared] = useState(false);
+  useApplicationPreparation(prepared);
+  const { onReady, onUnavailable } = props;
+  const sceneReady = useCallback(() => { setPrepared(true); onReady(); }, [onReady]);
+  const sceneUnavailable = useCallback(() => { setPrepared(true); onUnavailable(); }, [onUnavailable]);
   const location = useCameraLocationContext();
   const controller = location?.controller;
   const target = useRef<NavigationTarget | null>(null);
@@ -38,7 +43,7 @@ function ObservedScene(props: UniverseSceneProps) {
     try { captureClientException(error, { source: "universe-scene", operation }); }
     finally { onError?.(error, operation); }
   }, [onError]);
-  return <Scene {...props} onError={reportError} cameraRestore={location?.state.restore} onCameraChange={cameraChanged} onCameraRestored={cameraRestored} onCameraReader={attachCamera} />;
+  return <Scene {...props} onReady={sceneReady} onUnavailable={sceneUnavailable} onError={reportError} cameraRestore={location?.state.restore} onCameraChange={cameraChanged} onCameraRestored={cameraRestored} onCameraReader={attachCamera} />;
 }
 const motionQuery = "(prefers-reduced-motion: reduce)";
 function subscribeMotion(change: () => void) {

@@ -12,12 +12,13 @@ let seenInDocument = false;
 type IntroPhase = "checking" | "entry" | "loading" | "ready";
 type IntroState = { phase: IntroPhase; visible: boolean; ready: boolean; progress: number };
 
-export function useApplicationIntro({ requireInteraction = false }: { requireInteraction?: boolean } = {}) {
+export function useApplicationIntro({ requireInteraction = false, preparationReady = true }: { requireInteraction?: boolean; preparationReady?: boolean } = {}) {
   const [state, setState] = useState<IntroState>({ phase: "checking", visible: false, ready: false, progress: 0 });
   const [requested, setRequested] = useState(false);
   const checked = useRef(false);
   const skipped = useRef(false);
   const startedAt = useRef<number | null>(null);
+  const released = useRef(false);
   const start = useCallback(() => setRequested(true), []);
 
   useEffect(() => {
@@ -32,12 +33,8 @@ export function useApplicationIntro({ requireInteraction = false }: { requireInt
         skipped.current ||= browserStorage.getItem(storageKey) === "1";
       } catch { /* The in-document guard remains available when storage is blocked. */ }
     }
-    if (skipped.current) return settle();
+    if (skipped.current || released.current) return settle();
     if (startedAt.current === null) {
-      if (requireInteraction && !requested) {
-        const timer = window.setTimeout(() => setState({ phase: "entry", visible: false, ready: false, progress: 0 }), 0);
-        return () => window.clearTimeout(timer);
-      }
       seenInDocument = true;
       try {
         // Persist before opening so a refresh during the intro skips it.
@@ -51,22 +48,26 @@ export function useApplicationIntro({ requireInteraction = false }: { requireInt
     const deadline = start + durationMs;
     const closeAt = deadline + completionFrameMs;
     const now = performance.now();
-    if (now >= closeAt) return settle();
-    const updateProgress = () => {
+    const updateProgress = (animationComplete = false) => {
       const current = performance.now();
       const elapsed = Math.max(0, current - start);
-      const complete = current >= closeAt;
+      const complete = (animationComplete || current >= closeAt) && preparationReady;
+      const phase = !complete ? "loading" : requireInteraction && !requested ? "entry" : "ready";
+      if (phase === "ready") released.current = true;
       setState({
-        phase: complete ? "ready" : "loading",
+        phase,
         visible: !complete,
-        ready: complete,
+        ready: phase === "ready",
         progress: Math.min(100, elapsed / durationMs * 100),
       });
     };
     const openTimer = window.setTimeout(() => {
       updateProgress();
     }, 0);
-    const progressTimer = window.setInterval(updateProgress, progressIntervalMs);
+    // Once the animation finishes, real preparation owns the remaining wait.
+    // A readiness or interaction change re-evaluates this without restarting it.
+    if (now >= closeAt) return () => window.clearTimeout(openTimer);
+    const progressTimer = window.setInterval(() => updateProgress(), progressIntervalMs);
     const completeTimer = window.setTimeout(() => {
       window.clearInterval(progressTimer);
       updateProgress();
@@ -74,8 +75,8 @@ export function useApplicationIntro({ requireInteraction = false }: { requireInt
     // Leave one short completion frame so 100% is visible before releasing the tour.
     const closeTimer = window.setTimeout(() => {
       window.clearInterval(progressTimer);
-      setState({ phase: "ready", visible: false, ready: true, progress: 100 });
-    }, closeAt - now);
+      updateProgress(true);
+    }, Math.ceil(closeAt - now));
 
     return () => {
       window.clearTimeout(openTimer);
@@ -83,7 +84,7 @@ export function useApplicationIntro({ requireInteraction = false }: { requireInt
       window.clearTimeout(completeTimer);
       window.clearTimeout(closeTimer);
     };
-  }, [requireInteraction, requested]);
+  }, [requireInteraction, requested, preparationReady]);
 
-  return { ...state, start };
+  return { ...state, waitingForPreparation: state.progress >= 100 && !preparationReady, start };
 }

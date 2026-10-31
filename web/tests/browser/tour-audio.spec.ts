@@ -4,7 +4,7 @@ type TourVoice = { duration: number; started: number; ended: number | null; stop
 type TourMusic = { media: HTMLMediaElement; context: AudioContext };
 type TourAudioProbe = { voices: TourVoice[]; music: TourMusic[]; effectsContext: BaseAudioContext | null; skip: { at: number; audioAt: number; quantum: number } | null };
 type ProbedWindow = Window & { tourAudioProbe: TourAudioProbe };
-type InitialState = { tourPhase: string | null; tourActive: string | null; introPhase: string | null; hasBeenActive: boolean; startCount: number; entryCount: number; startPoint: { x: number; y: number } | null; entryPoint: { x: number; y: number } | null; menuVisible: boolean; zoomCount: number; music: { paused: boolean; contextState: string }[] };
+type InitialState = { tourPhase: string | null; tourActive: string | null; introPhase: string | null; sceneBusy: string | null; hasBeenActive: boolean; startCount: number; entryCount: number; startPoint: { x: number; y: number } | null; entryPoint: { x: number; y: number } | null; menuVisible: boolean; zoomCount: number; music: { paused: boolean; contextState: string }[] };
 
 // Exercise the real first-visit permission boundary rather than relying on a
 // browser profile that may already permit autoplay. Reduced motion is covered
@@ -93,6 +93,7 @@ async function readBeforeGesture(cdp: CDPSession): Promise<InitialState> {
         tourPhase: main?.getAttribute('data-tour-phase') ?? null,
         tourActive: main?.getAttribute('data-tour-active') ?? null,
         introPhase: document.querySelector('[data-application-intro]')?.getAttribute('data-application-intro') ?? null,
+        sceneBusy: document.querySelector('.universe-scene[aria-busy]')?.getAttribute('aria-busy') ?? null,
         hasBeenActive: navigator.userActivation?.hasBeenActive ?? false,
         startCount: buttons.filter(button => button.textContent.trim() === 'Start tour').length,
         entryCount: buttons.filter(button => button.textContent.trim() === 'Enter universe').length,
@@ -169,9 +170,27 @@ test("a fresh tour starts music through its button and stops zoom feedback when 
 
 test("first global entry plays the welcome cue once and unlocks the following tour", async ({ page, isMobile }) => {
   await observeAudio(page);
+  await page.addInitScript(() => {
+    const phases: string[] = [];
+    (window as unknown as { introPhasesAfterEnter: string[] }).introPhasesAfterEnter = phases;
+    document.addEventListener("click", (event) => {
+      if (!event.isTrusted || !(event.target instanceof Element) || event.target.closest("button")?.textContent?.trim() !== "Enter universe") return;
+      const intro = document.querySelector("[data-application-intro]");
+      if (!intro) return;
+      phases.push(intro.getAttribute("data-application-intro")!);
+      // Observe native mutations without granting activation before the real click.
+      new MutationObserver((records) => {
+        for (const record of records) {
+          if (record.oldValue) phases.push(record.oldValue);
+          phases.push(intro.getAttribute("data-application-intro")!);
+        }
+      }).observe(intro, { attributes: true, attributeFilter: ["data-application-intro"], attributeOldValue: true });
+    }, true);
+  });
   await page.goto("/?lang=en&source=demo");
   const cdp = await page.context().newCDPSession(page);
-  await expect.poll(() => readBeforeGesture(cdp)).toMatchObject({ introPhase: "entry", entryCount: 1, startCount: 0 });
+  await expect.poll(() => readBeforeGesture(cdp)).toMatchObject({ introPhase: "loading", entryCount: 0, startCount: 0, hasBeenActive: false });
+  await expect.poll(() => readBeforeGesture(cdp), { timeout: 20000 }).toMatchObject({ introPhase: "entry", sceneBusy: "false", entryCount: 1, startCount: 0 });
   const initial = await readBeforeGesture(cdp);
   expect(initial.hasBeenActive).toBe(false);
   expect(initial.entryPoint).not.toBeNull();
@@ -180,13 +199,15 @@ test("first global entry plays the welcome cue once and unlocks the following to
   const main = page.locator("main");
   if (isMobile) await page.touchscreen.tap(initial.entryPoint!.x, initial.entryPoint!.y);
   else await page.mouse.click(initial.entryPoint!.x, initial.entryPoint!.y);
-  await expect(intro).toHaveAttribute("data-application-intro", "loading");
+  await expect(intro).toHaveAttribute("data-application-intro", "ready");
   await expect.poll(async () => (await readAudio(page)).menuOpen.length).toBe(1);
   await expect.poll(async () => (await readAudio(page)).music.some((music) => !music.paused && music.contextState === "running"), { timeout: 15000 }).toBe(true);
-  await expect(intro).toHaveAttribute("data-application-intro", "ready", { timeout: 10000 });
   await expect(main).toHaveAttribute("data-tour-active", "true", { timeout: 15000 });
   await expect(page.getByRole("button", { name: "Start tour", exact: true })).toHaveCount(0);
   await expect.poll(async () => (await readAudio(page)).zooms.length, { timeout: 15000 }).toBeGreaterThan(0);
+  const phasesAfterEnter = await page.evaluate(() => (window as unknown as { introPhasesAfterEnter: string[] }).introPhasesAfterEnter);
+  expect(phasesAfterEnter).toContain("ready");
+  expect(phasesAfterEnter).not.toContain("loading");
   expect((await readAudio(page)).menuOpen).toHaveLength(1);
   await page.getByRole("button", { name: "Skip tour", exact: true }).click();
   await expect(main).toHaveAttribute("data-tour-active", "false");
