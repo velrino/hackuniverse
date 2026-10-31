@@ -12,6 +12,7 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     ".catalog-tests/**",
+    ".i18n-tests/**",
     ".scene-tests/**",
     ".telemetry-tests/**",
     ".audio-tests/**",

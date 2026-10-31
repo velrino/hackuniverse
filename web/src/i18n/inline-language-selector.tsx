@@ -11,7 +11,7 @@ export function InlineLanguageSelector() {
   const common = useTranslations("common");
 
   return (
-    <div role="group" aria-label={common.changeLanguage} className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2">
+    <div role="group" aria-label={common.changeLanguage} className="grid grid-cols-1 gap-2">
       {languageOptions.map((option) => {
         const selected = option.locale === locale;
 
@@ -24,7 +24,7 @@ export function InlineLanguageSelector() {
             aria-pressed={selected}
             data-selected={selected}
             onClick={() => setLocale(option.locale)}
-            className="hud-option h-auto min-h-12 min-w-0 justify-start gap-2 rounded-none px-3 py-3 text-left font-normal"
+            className="hud-option h-auto min-h-12 w-full min-w-0 justify-start gap-2 rounded-none px-3 py-3 text-left font-normal"
           >
             <span aria-hidden="true" className="shrink-0 text-xl leading-none">{option.flag}</span>
             <span lang={option.locale} className="min-w-0 flex-1 text-xs leading-5 whitespace-normal">{option.fullLabel}</span>

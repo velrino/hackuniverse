@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noEmit": false,
+    "incremental": false,
+    "rootDir": "src",
+    "outDir": ".i18n-tests",
+    "types": ["node"],
+    "plugins": []
+  },
+  "include": ["src/i18n/config.test.ts"]
+}

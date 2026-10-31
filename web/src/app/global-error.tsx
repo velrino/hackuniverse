@@ -8,6 +8,8 @@ import { captureClientException } from "@/lib/telemetry/client";
 import "./globals.css";
 import "@/styles/hud.css";
 
+const titles = { en: "Page unavailable · HackUniverse", "pt-BR": "Página indisponível · HackUniverse", fil: "Hindi magamit ang pahina · HackUniverse" };
+
 // This boundary replaces the root layout, including its local font definition.
 const barlow = localFont({
   src: [
@@ -26,7 +28,7 @@ export default function GlobalError({ error, retry }: { error: unknown; retry: (
   return (
     <html lang={locale} className={`dark ${barlow.variable}`}>
       <body className="hud-body runtime-error-document">
-        <title>{locale === "pt-BR" ? "Página indisponível · HackUniverse" : "Page unavailable · HackUniverse"}</title>
+        <title>{titles[locale]}</title>
         <UIProvider appearance="sci-fi">
           <RuntimeErrorPage retry={retry} locale={locale} />
         </UIProvider>

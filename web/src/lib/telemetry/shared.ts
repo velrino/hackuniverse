@@ -1,3 +1,5 @@
+import { isLocale } from "../../i18n/config";
+
 export const telemetryApp = "hackuniverse-web";
 export const eventPrefix = "hackuniverse-";
 export type TelemetryEventName = `${typeof eventPrefix}${string}`;
@@ -36,7 +38,7 @@ export function sanitizeUrl(value: string, base = "https://hackuniverse.invalid"
     const url = new URL(value, base);
     if (url.protocol !== "https:" && url.protocol !== "http:") return "[redacted URL]";
     const languages = url.searchParams.getAll("lang");
-    const lang = languages.length === 1 && ["en", "pt-BR"].includes(languages[0]) ? languages[0] : null;
+    const lang = languages.length === 1 && isLocale(languages[0]) ? languages[0] : null;
     const path = redact(url.pathname);
     return `${url.origin}${path}${lang ? `?lang=${lang}` : ""}`;
   } catch { return "[redacted URL]"; }

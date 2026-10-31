@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
-import { defaultLocale, localeFromSearchParams, withLocale, type Locale } from "@/i18n/config";
+import { defaultLocale, localeFromLanguages, localeFromSearchParams, withLocale, type Locale } from "@/i18n/config";
 import "./runtime-error.css";
 
 const copy = {
@@ -21,10 +21,17 @@ const copy = {
     retry: "Tentar novamente",
     home: "Voltar ao universo",
   },
+  fil: {
+    eyebrow: "Hindi inaasahang pagkakaantala",
+    title: "Hindi maipakita ang pahinang ito.",
+    description: "May humadlang sa pahinang ito. Subukang muli o bumalik sa uniberso.",
+    retry: "Subukang muli",
+    home: "Bumalik sa uniberso",
+  },
 } satisfies Record<Locale, { eyebrow: string; title: string; description: string; retry: string; home: string }>;
 
 function readLocale() {
-  return localeFromSearchParams(new URLSearchParams(window.location.search));
+  return localeFromSearchParams(new URLSearchParams(window.location.search), localeFromLanguages(navigator.languages));
 }
 
 function subscribeLocale(onChange: () => void) {

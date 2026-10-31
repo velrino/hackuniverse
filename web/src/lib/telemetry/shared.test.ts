@@ -35,6 +35,7 @@ test("ingestion host rejects insecure, credential-bearing and query-bearing URLs
 test("page URLs retain only route and one allowlisted interface language", () => {
   assert.equal(sanitizeUrl("https://hackuniverse:password@app.example/design?lang=pt-BR&token=hackuniverse-secret#inputs"), "https://app.example/design?lang=pt-BR");
   assert.equal(sanitizeUrl("/example?lang=en&note=hackuniverse-private#fragment", "https://app.example"), "https://app.example/example?lang=en");
+  assert.equal(sanitizeUrl("/example?lang=fil&note=synthetic-private", "https://app.example"), "https://app.example/example?lang=fil");
   for (const query of ["lang=invalid", "lang=en&lang=pt-BR", "code=hackuniverse-secret", "lang="]) {
     assert.equal(sanitizeUrl(`https://app.example/design?${query}#private`), "https://app.example/design");
   }

@@ -33,7 +33,7 @@ export function LanguageSelector() {
           <span aria-hidden="true" className="text-lg leading-none">
             {current?.flag}
           </span>
-          <span>{locale === "en" ? "EN" : "PT"}</span>
+          <span>{current?.shortLabel}</span>
           <ChevronDown aria-hidden="true" className="size-3 text-[var(--hud-accent)]" />
         </Button>
       </DialogTrigger>
@@ -57,7 +57,7 @@ export function LanguageSelector() {
             </DialogDescription>
           </DialogHeader>
           <div aria-hidden="true" className="hud-rule mt-6" />
-          <div className="mt-7 grid gap-3">
+          <div className="mt-7 grid grid-cols-1 gap-3">
             {languageOptions.map((option) => {
               const selected = option.locale === locale;
 
@@ -71,7 +71,7 @@ export function LanguageSelector() {
                   aria-pressed={selected}
                   data-selected={selected}
                   onClick={() => setLocale(option.locale)}
-                  className="hud-option grid h-auto min-h-[78px] grid-cols-[32px_minmax(0,1fr)_24px] gap-3 rounded-none px-4 py-4 text-left font-normal"
+                  className="hud-option grid h-auto min-h-[78px] w-full min-w-0 grid-cols-[32px_minmax(0,1fr)_24px] gap-3 rounded-none px-4 py-4 text-left font-normal"
                 >
                   <span aria-hidden="true" className="text-[28px] leading-none">
                     {option.flag}

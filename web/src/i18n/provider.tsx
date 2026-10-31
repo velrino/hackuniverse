@@ -29,15 +29,17 @@ const I18nContext = createContext<I18nContextValue | null>(null);
 
 export function I18nProvider({
   initialLocale,
+  browserLocale,
   children,
 }: {
   initialLocale: Locale;
+  browserLocale: Locale;
   children: ReactNode;
 }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const locale = searchParams
-    ? localeFromSearchParams(searchParams)
+    ? localeFromSearchParams(searchParams, browserLocale)
     : initialLocale;
 
   const setLocale = useCallback((nextLocale: Locale) => {
