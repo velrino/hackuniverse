@@ -167,9 +167,26 @@ assert.equal(allPlanets.length, planetCount);
 const ids = [curated.universe.id, ...galaxies.flatMap((galaxy) => [galaxy.id, ...galaxy.clouds.flatMap((region) => [region.id, ...region.systems.flatMap((system) => [system.id, ...system.planets.map((planet) => planet.id)])])])];
 assert.equal(new Set(ids).size, ids.length, "Generated application IDs must be unique");
 
+/** Explicit canonical kinds support storage and aggregation without inferring a collection's role. */
+function withKinds(node, kind) {
+  assert.ok(node.kind === undefined || node.kind === kind, "Declared authoring kind must agree with its hierarchy");
+  const child = {
+    universe: ["galaxies", "galaxy"],
+    galaxy: ["clouds", "cloud"],
+    cloud: ["systems", "system"],
+    system: ["planets", "planet"],
+  }[kind];
+  return {
+    id: node.id,
+    kind,
+    ...node,
+    ...(child ? { [child[0]]: node[child[0]].map((value) => withKinds(value, child[1])) } : {}),
+  };
+}
+
 const output = {
   catalog: { schemaVersion: 1, mode: "demo", initialTarget: { kind: "planet", id: "planet-earth" } },
-  universe: { ...curated.universe, galaxies },
+  universe: withKinds({ ...curated.universe, galaxies }, "universe"),
   provenance: {
     source: "NASA Exoplanet Archive / Planetary Systems Composite Parameters",
     retrievedAt: manifest.retrievedAt,

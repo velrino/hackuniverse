@@ -210,7 +210,7 @@ function contextFixture() {
   return { view, candidates, active };
 }
 
-test("distant context reserves every hierarchy scale without exceeding marker or passive label budgets", () => {
+test("distant context maps every bounded catalog marker to a selectable destination while limiting captions", () => {
   const { view, candidates, active } = contextFixture();
   const shared = [new THREE.Texture(), new THREE.Texture(), new THREE.Texture()];
   let sharedDisposals = 0;
@@ -222,7 +222,10 @@ test("distant context reserves every hierarchy scale without exceeding marker or
     const positions = markers.geometry.getAttribute("position");
     const kinds = markers.geometry.getAttribute("markerKind");
     const extents = markers.geometry.getAttribute("markerExtent");
+    const indices = markers.geometry.getAttribute("markerIndex");
     assert.equal(positions.count, mobile ? 12 : 24);
+    assert.equal(visual.destinations.length, positions.count, "every rendered catalog marker retains a destination, including markers without captions");
+    assert.equal(new Set(visual.destinations.map(({ id }) => id)).size, positions.count);
     const counts = [0, 0, 0];
     for (let index = 0; index < positions.count; index++) {
       const kind = kinds.getX(index);
@@ -234,10 +237,18 @@ test("distant context reserves every hierarchy scale without exceeding marker or
       assert.ok(source, "every marker retains the real sibling's transformed coordinates");
       assert.equal(kind, source.node.kind === "galaxy" ? 2 : source.node.kind === "cloud" ? 1 : 0);
       assert.equal(active.some((branch) => branch.id === source.node.id), false);
+      const destination = visual.destinations[index];
+      assert.equal(indices.getX(index), index);
+      assert.equal(destination.id, source.node.id);
+      assert.equal(destination.kind, source.node.kind);
+      assert.equal(destination.name, source.node.name);
+      assert.ok(destination.position.distanceTo(source.position) < 1e-6);
+      near(destination.extent, extents.getX(index), Math.max(1e-6, destination.extent * 1e-6));
     }
     assert.deepEqual(counts, mobile ? [6, 4, 2] : [12, 8, 4]);
     assert.ok(visual.labels.length > 0 && visual.labels.length <= (mobile ? 2 : 4));
     for (const label of visual.labels) {
+      assert.ok(visual.destinations.includes(label), "captions reference the same selectable destination state");
       const source = candidates.find(({ node }) => node.id === label.id);
       assert.ok(source);
       assert.equal(label.name, source.node.name);
@@ -246,7 +257,7 @@ test("distant context reserves every hierarchy scale without exceeding marker or
     }
     const owned = new Set<THREE.Material | THREE.BufferGeometry>();
     visual.root.traverse((object) => {
-      assert.equal(object.userData.id, undefined, "context objects remain passive visual references");
+      assert.equal(object.userData.id, undefined, "batched catalog markers retain identity through their destination mapping rather than decorative particles");
       assert.equal(object instanceof THREE.Mesh, false, "context does not create physical planet bodies");
       if (object instanceof THREE.Points) { owned.add(object.geometry); owned.add(object.material as THREE.Material); }
       if (object instanceof THREE.Sprite) owned.add(object.material);
@@ -256,16 +267,37 @@ test("distant context reserves every hierarchy scale without exceeding marker or
     assert.ok(core); assert.equal(core.visible, false, "a deeper system view does not restore the white galactic core");
     const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100_000);
     camera.position.set(0, 0, 200);
+    camera.updateMatrixWorld(true);
     visual.update(2, camera, 800);
     for (const label of visual.labels) assert.ok(label.opacity >= 0 && label.opacity <= 0.48);
+    for (const destination of visual.destinations) {
+      const inCamera = destination.position.clone().applyMatrix4(visual.root.matrixWorld).applyMatrix4(camera.matrixWorldInverse);
+      const pixels = destination.extent * camera.projectionMatrix.elements[5] * 800 / Math.max(0.1, -inCamera.z);
+      near(destination.screenRadius, THREE.MathUtils.clamp(pixels, 2, 20) / 2);
+      assert.ok(destination.screenRadius >= 1 && destination.screenRadius <= 10);
+    }
     assert.equal(markers.material.uniforms.viewportHeight.value, 1200);
     assert.equal(markers.material.uniforms.pixelRatio.value, 1.5);
     // This is the material opacity that the existing hierarchy crossfade owns.
     markers.material.opacity = 0.13;
     markers.onBeforeRender({} as THREE.WebGLRenderer, new THREE.Scene(), camera, markers.geometry, markers.material, new THREE.Group());
     near(markers.material.uniforms.opacity.value as number, 0.13);
+    const geometry = markers.geometry;
+    assert.equal(markers.material.uniforms.hoveredIndex.value, -1);
+    visual.destinations[0].highlight(true);
+    assert.equal(markers.material.uniforms.hoveredIndex.value, 0);
+    visual.destinations[1].highlight(true);
+    visual.destinations[0].highlight(false);
+    assert.equal(markers.material.uniforms.hoveredIndex.value, 1, "leaving an older destination cannot clear a newer marker highlight");
+    visual.destinations[1].highlight(false);
+    assert.equal(markers.material.uniforms.hoveredIndex.value, -1);
+    assert.equal(markers.geometry, geometry, "hover reuses the existing batched geometry");
+    visual.destinations[0].highlight(true);
     assert.ok(Number.isFinite(visual.radius) && visual.radius > 0);
     owned.forEach((resource) => resource.dispose()); visual.root.clear();
+    assert.equal(markers.material.uniforms.hoveredIndex.value, -1, "disposing the owned material releases its marker highlight");
+    visual.destinations[0].highlight(true);
+    assert.equal(markers.material.uniforms.hoveredIndex.value, -1, "stale callbacks cannot reactivate a disposed marker");
     assert.equal(sharedDisposals, 0, "the caller disposes owned geometry/materials while keeping shared maps");
   }
   shared.forEach((texture) => texture.dispose());
@@ -275,7 +307,7 @@ test("distant context reserves every hierarchy scale without exceeding marker or
 test("an unavailable context anchor returns an empty safe presentation", () => {
   const maps = [new THREE.Texture(), new THREE.Texture(), new THREE.Texture()];
   const visual = createSurroundingContext({ key: "missing", mode: "cluster", nodes: [] }, { glowMap: maps[0], coronaMap: maps[1], galaxyPointMap: maps[2], pixelRatio: 1 }, { mobile: true, elapsed: 0 });
-  assert.equal(visual.root.children.length, 0); assert.equal(visual.labels.length, 0); assert.equal(visual.radius, 0);
+  assert.equal(visual.root.children.length, 0); assert.equal(visual.labels.length, 0); assert.equal(visual.destinations.length, 0); assert.equal(visual.radius, 0);
   visual.update(1, new THREE.PerspectiveCamera(), 800);
   assert.equal(visual.root.children.length, 0);
   maps.forEach((texture) => texture.dispose());

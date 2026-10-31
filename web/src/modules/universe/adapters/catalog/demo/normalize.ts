@@ -29,7 +29,8 @@ export function normalizeDemoCatalog(input: unknown): UniverseCatalogDocument {
 
   function visit(value: unknown, kind: EntityKind, parentId: unknown) {
     const node = record(value, `${kind} node`);
-    if (Object.hasOwn(node, "kind") || Object.hasOwn(node, "parentId")) invalid("node kind and parentId must be derived from the authored tree");
+    if (Object.hasOwn(node, "kind") && node.kind !== kind) invalid("node kind must match its authored tree position");
+    if (Object.hasOwn(node, "parentId")) invalid("node parentId must be derived from the authored tree");
     const branch = kind === "planet" ? null : children[kind];
     for (const field of childFields) {
       if (Object.hasOwn(node, field) && field !== branch?.field) invalid(`${kind} node has an unexpected child collection`);

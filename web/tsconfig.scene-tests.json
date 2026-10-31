@@ -21,6 +21,8 @@
     "src/modules/universe/scene/orbit-intent.test.ts",
     "src/modules/universe/scene/destination-hover-intent.test.ts",
     "src/modules/universe/scene/planet-presentation.test.ts",
+    "src/modules/universe/scene/view-coordinates.test.ts",
+    "src/modules/universe/scene/destination-picking.test.ts",
     "src/modules/universe/host/camera-location.test.ts"
   ]
 }

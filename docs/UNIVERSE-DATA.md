@@ -87,9 +87,22 @@ The browser workspace wraps multiple canonical single-root catalogs in its own v
 
 ## Factual bundled demo
 
-The current demo contains **767 real planets, 450 systems, 32 navigation regions and five named galaxies (1,255 entities)**. Eight planets belong to the Solar System; 759 confirmed, non-controversial exoplanets belong to 449 single-star hosts selected from the [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/). Only the Milky Way is populated. Andromeda, Triangulum, Whirlpool and Pinwheel remain empty destinations, without invented planets.
+The current demo contains **767 real planets, 450 systems, 32 navigation regions and 20 named galaxies (1,270 entities)**. Eight planets belong to the Solar System; 759 confirmed, non-controversial exoplanets belong to 449 single-star hosts selected from the [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/). Only the Milky Way is populated. The other 19 galaxies remain empty destinations, without invented planets.
 
-The authoring source nests `catalog`, `universe.galaxies[].clouds[].systems[].planets[]` and `provenance`. Each object owns its name, description, ID, seed and optional star/reference metadata. The [Demo adapter](../web/src/modules/universe/adapters/catalog/demo/normalize.ts) derives `kind` and `parentId`, preserves order, projects only canonical fields and uses the existing parser. Provenance and supplier fields are not copied into entities or Local exports.
+The 20 curated galaxy records include Bode's Galaxy (M81), Black Eye (M64), Sunflower (M63), Southern Pinwheel (M83), Messier 95/96/98/99/100, Sculptor (NGC 253), NGC 1300/1365/2403/2903 and Fireworks (NGC 6946), alongside the original five. Each record has a factual description and a primary NASA, ESA/Hubble or ESO source URL, retained in `provenance.galaxySources`. Appending these destinations preserves the existing galaxy IDs, order and seeds, as well as all system and planet relationships. The procedural spiral appearance remains illustrative, including for barred and flocculent galaxies.
+
+The authoring source nests `catalog`, `universe.galaxies[].clouds[].systems[].planets[]` and `provenance`. Each object owns an explicit canonical `kind`, name, description, ID, seed and optional star/reference metadata. The [Demo adapter](../web/src/modules/universe/adapters/catalog/demo/normalize.ts) checks that `kind` agrees with its place in the tree, derives `parentId`, preserves order, projects only canonical fields and uses the existing parser. Legacy private authoring without a declared kind can still derive it; every bundled object declares it. Provenance and supplier fields are not copied into entities or Local exports.
+
+`kind` describes the object category (`universe`, `galaxy`, `cloud`, `system`, `planet`); `type: "demo"` independently classifies its demonstration status. Keep these fields separate when importing into a future database or dashboard. The canonical document already stores both `kind` and the derived `parentId`, so aggregation does not depend on ID prefixes, names, tags or the supplier. For example, a future table of canonical entities could use:
+
+```sql
+SELECT kind, COUNT(*) AS total
+FROM universe_entities
+WHERE type = 'demo'
+GROUP BY kind;
+```
+
+The current bundled counts are one universe, 20 galaxies, 32 regions (`cloud`), 450 systems and 767 planets. This describes the data boundary; no database or dashboard is added by this change.
 
 The [source manifest](../assets/data/astronomy/source-manifest.json) records the dated NASA query, exact snapshot SHA-256, coordinate grouping and attribution. [generate-demo-source.py](../web/scripts/generate-demo-source.py) refreshes source snapshots; [generate-demo.mjs](../web/scripts/generate-demo.mjs) deterministically rebuilds the authoring JSON offline. Run `npm run test:demo` from `web/` to verify it. Descriptions use present discovery/orbital facts and omit missing or limited values, without invented surface, climate, life or habitability claims. Composite archive fields can come from different references and are not one physical solution.
 

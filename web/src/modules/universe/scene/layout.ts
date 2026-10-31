@@ -5,7 +5,9 @@ import { seededRandom } from "./textures";
 /** Normalized display units: each wider level covers a progressively larger region. */
 export function clusterScale(nodes: readonly Pick<SceneNode, "kind">[]) {
   const kind = nodes[0]?.kind;
-  if (kind === "galaxy" || kind === "universe") return { radius: 600, marker: 150 };
+  if (kind === "galaxy" || kind === "universe") {
+    return { radius: 600, marker: 150 * Math.min(1, Math.sqrt(5 / Math.max(1, nodes.length))) };
+  }
   if (kind === "cloud") return { radius: 220, marker: 46 };
   return { radius: 90, marker: 11 };
 }

@@ -140,7 +140,7 @@ test("the initial Demo neighborhood exposes multiple real systems from Pause", a
   await expect(menu).toBeHidden();
   await expect(page.locator("main")).toHaveAttribute("data-scale", "cloud");
   await expect(page.locator(".universe-context h1")).toHaveText(neighborhood.name);
-  const systemLabels = page.locator("button.universe-node-label[data-destination-id]");
+  const systemLabels = page.locator('button.universe-node-label[data-primary="true"][data-destination-kind="system"]');
   await expect(systemLabels).toHaveCount(nearbySystems.length);
   await expect.poll(async () => new Set(await page.locator("button.universe-node-label[data-destination-id]:visible").allTextContents()).size).toBeGreaterThan(1);
   const systemLabel = page.locator(`button.universe-node-label[data-destination-id="${nearbySystem.id}"]`);
