@@ -120,7 +120,7 @@ test("unavailable WebGL settles startup and leaves the atlas accessible", async 
   const menu = page.locator('.universe-explorer-menu[role="dialog"]');
   await menu.getByRole("tab", { name: "Go to", exact: true }).click();
   await menu.getByRole("textbox", { name: "Search planets", exact: true }).fill("earth");
-  await expect(menu.locator(".universe-menu-planets li")).toHaveCount(1);
+  await expect(menu.locator(".universe-menu-planet-text strong").filter({ hasText: /^Earth$/ })).toBeVisible();
 });
 
 test("a first visit outside the explorer finishes without waiting for a scene", async ({ page }) => {

@@ -1,6 +1,6 @@
 # Universe catalog contract
 
-The explorer consumes one application-owned, provider-neutral catalog. A supplier adapter converts its own input into this contract; the domain, navigation, UI and renderer do not consume supplier responses. The default [demo-universe.json](../web/src/modules/universe/data/demo-universe.json) is already canonical JSON, with no search envelopes or provider fields.
+The explorer consumes one application-owned, provider-neutral catalog. A supplier adapter converts its own input into this contract; the domain, navigation, UI and renderer do not consume supplier responses. The bundled [demo-universe.json](../web/src/modules/universe/data/demo-universe.json) uses organized authoring objects; its dedicated adapter produces this same canonical document before parsing. Authoring/source data and supplier envelopes never become alternate runtime or export contracts.
 
 ## Document and validated catalog
 
@@ -23,7 +23,7 @@ The five kinds form a strict hierarchy: `universe → galaxy → cloud → syste
 
 `UniverseGroup` covers the four grouping kinds. `UniversePlanet` adds an optional `reference: { label, href? }` and optional string `tags`. A planet need not be a website or have a URL. Provider names, operations, raw payloads, search queries and rankings are not canonical fields. When a discovery term is useful to the application, an adapter can project it into neutral tags.
 
-Every entity may explicitly carry `type: "demo"`. Absence means an ordinary object; neither catalog `mode` nor an ancestor's type assigns it implicitly. The parser accepts only this supported type when supplied, and adapters preserve an explicit application classification rather than deriving it from a supplier response. All 871 bundled entities currently carry the flag.
+Every entity may explicitly carry `type: "demo"`. Absence means an ordinary object; neither catalog `mode` nor an ancestor's type assigns it implicitly. The parser accepts only this supported type when supplied, and adapters preserve an explicit application classification rather than deriving it from a supplier response. All bundled entities carry the flag, including real astronomical objects: it identifies the bundled demonstration, not fictional content.
 
 This classification does not implement visibility, ownership or authorization. No hide-demo filter exists yet. A future filtered catalog must preserve a valid root and the ancestors needed by retained ordinary objects, then derive children and counts from the retained records. Hiding a marked ancestor must not discard its ordinary descendants; CSS-only hiding is not a data filter or an authorization boundary.
 
@@ -77,21 +77,29 @@ The [document catalog example](../web/src/modules/universe/data/examples/documen
 }
 ```
 
-References and tags can also be omitted entirely. Planet details use the canonical name and description, show reference metadata only when present, and do not construct a URL for a URLless object. Demo planet references remain illustrative and have no outbound action; a validated live planet href can expose an external link. System-star source links are separate factual references and can remain available in the demo.
+References and tags can also be omitted entirely. Planet details use the canonical name and description, show reference metadata only when present, and do not construct a URL for a URLless object. A host can identify its bundled demo references as factual and expose scientific source links. This presentation permission is supplied only for the factual Demo source; imported Local demo objects retain their previous reference behavior. Validated live references and system-star source links remain available.
 
 ## Default source and host composition
 
-The [default catalog adapter](../web/src/modules/universe/adapters/catalog/index.ts) imports the canonical demo JSON and parses it once. `DemoUniverseHost` supplies that dataset and its optional tour to `UniverseWorkspaceHost` for `/`. The workspace host chooses immutable Demo or editable Local data; Account currently opens only a login preview. The reusable `UniverseHost` requires an already validated `catalog` prop and does not choose a supplier or import the fixture itself. The universe hosts are available through `@/modules/universe/host`; import the workspace host through `@/modules/universe-workspace`.
+The [default catalog adapter](../web/src/modules/universe/adapters/catalog/index.ts) normalizes organized demo authoring JSON and validates it with the canonical parser. `DemoUniverseHost` supplies that dataset and its optional tour to `UniverseWorkspaceHost` for `/`. The workspace host chooses immutable Demo or editable Local data; Account currently opens only a login preview. The reusable `UniverseHost` requires an already validated `catalog` prop and does not choose a supplier or import the fixture itself. The universe hosts are available through `@/modules/universe/host`; import the workspace host through `@/modules/universe-workspace`.
 
 The browser workspace wraps multiple canonical single-root catalogs in its own versioned envelope, preserving this document contract and globally unique application IDs. Pure workspace operations validate the result after creation, edits and cascading deletion. Missing ancestors can be created as empty groups; demo records are never copied into a new workspace. Persistence, concurrent-tab locking, quotas and the future account boundary are documented in [the local workspace guide](LOCAL-WORKSPACE.md).
 
-The fixture contains **738 planets and 871 total entities**: 400 fictional website records, eight Solar System planets, 50 illustrative bodies around ten real-named neighbors and 280 URLless fictional bodies in seven added demo sectors. It has one universe, five galaxies, twenty clouds and 107 systems. The original four fictional galaxies retain 100 planets each across ten systems whose sizes are a permutation of `20, 15, 12, 10, 10, 8, 8, 6, 6, 5`. The initial target remains `{ kind: "planet", id: "planet-earth" }`. These are current data values, not runtime quotas.
+## Factual bundled demo
 
-The Milky Way contains eight clouds, 67 systems and 338 planets. Its unchanged Solar Neighborhood contains the Solar System and ten neighboring map markers, each with five invented bodies: eleven systems and 58 planets. Seven additional, explicitly fictional sectors each contain eight demo systems with five URLless bodies. These sectors do not claim real Milky Way membership or measurements. Solar Neighborhood retains the stable ID `cloud-local-interstellar`; its display rename does not change identity. The named markers and their layouts are not a confirmed exoplanet inventory, a physical interstellar-cloud model or measured distances. The Solar System's ordered records are Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune, with URLless references.
+The current demo contains **741 real planets, 435 systems, 32 navigation regions and five named galaxies (1,214 entities)**. Eight planets belong to the Solar System; 733 confirmed, non-controversial exoplanets belong to 434 single-star hosts selected from the [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/). Only the Milky Way is populated. Andromeda, Triangulum, Whirlpool and Pinwheel remain empty destinations, without invented planets.
 
-The Solar System's nested star is named Sun. Its `G2 V` spectral type, `5772 K` effective temperature and `695700 km` mean radius follow [NASA's Sun Fact Sheet](https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html). Its approximate age of `4.6` billion years and displayed reference follow [NASA Sun facts](https://science.nasa.gov/sun/facts/). The Sun is not an additional entity or planet, so the planet count stays 738. Other systems can provide descriptive star metadata without inventing measured physical facts.
+The authoring source nests `catalog`, `universe.galaxies[].clouds[].systems[].planets[]` and `provenance`. Each object owns its name, description, ID, seed and optional star/reference metadata. The [Demo adapter](../web/src/modules/universe/adapters/catalog/demo/normalize.ts) derives `kind` and `parentId`, preserves order, projects only canonical fields and uses the existing parser. Provenance and supplier fields are not copied into entities or Local exports.
 
-The provider-neutral migration preserved the original 400 planet records and 457 entities, including IDs, parents, seeds, names, descriptions and ordering. Solar System and neighborhood records were appended without changing that original sequence or rerolling existing seeds. The seven-sector expansion preserves the complete previous 528-record prefix exactly. Previous synthetic discovery queries became tags, and previous URLs became reference hrefs with hostname labels. The reserved `.example` links remain fictional. No provider response is required to edit the fixture, and loading it makes no provider, favicon, screenshot or content requests.
+The [source manifest](../assets/data/astronomy/source-manifest.json) records the dated NASA query, exact snapshot SHA-256, coordinate grouping and attribution. [generate-demo-source.py](../web/scripts/generate-demo-source.py) refreshes source snapshots; [generate-demo.mjs](../web/scripts/generate-demo.mjs) deterministically rebuilds the authoring JSON offline. Run `npm run test:demo` from `web/` to verify it. Descriptions use present discovery/orbital facts and omit missing or limited values, without invented surface, climate, life or habitability claims. Composite archive fields can come from different references and are not one physical solution.
+
+Real IAU constellations organize the exoplanet hosts by sky direction. They are observational navigation groups, not physical interstellar clouds or claims that their members are close in three-dimensional space. Demo presentation labels this level Region; the domain `cloud` kind and Local presentation are unchanged. Solar Neighborhood remains the stable Solar System tour stop.
+
+Authoring limits are **32 total regions, 16 systems per region, 512 exoplanet hosts and 1,024 total planets**, keeping complete eligible systems. The source pool contains single-star, non-circumbinary, non-controversial confirmed planets whose hosts are within 100 parsecs; the bundled selection is intentionally incomplete. These limits apply only to Demo selection, not the provider-neutral domain or Local storage. Renderer budgets and atlas pagination remain independent; see the [explorer guide](UNIVERSE-EXPLORER.md#scene-detail-and-scale) for measurements and limitations.
+
+Solar planet IDs, seeds and order remain Mercury through Neptune. The tour retains `planet-earth`, `system-solar`, `cloud-local-interstellar`, `galaxy-milky-way` and `universe-demo-atlas`; verified legacy names for Barnard's star, Ross 128 and Lalande 21185/GJ 411 retain their application identity. The Sun's `G2 V`, `5772 K`, `695700 km` and approximate `4.6` billion-year metadata keep their [NASA fact-sheet](https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html) and [NASA Sun facts](https://science.nasa.gov/sun/facts/) references. New real records never reuse unrelated fictional identities.
+
+This replaces the former fictional website/sector fixture. Local catalogs, `hackuniverse.workspace.v1`, account seeds and canonical import/export are unchanged. Links to removed fictional destinations use existing invalid-link recovery. Catalog loading makes no runtime NASA, Firecrawl, image or content requests.
 
 Keep IDs, parents, seeds and child ordering stable when editing display content. They control selection, deterministic appearance, orbital placement, hierarchy previews and camera continuity. A rendered central star is a selectable system anchor backed by optional system metadata, not another catalog record.
 
@@ -111,11 +119,30 @@ function catalogFromSearch(input: FirecrawlSearchInput) {
 }
 ```
 
-The [synthetic input example](../web/src/modules/universe/data/examples/firecrawl-search.json) includes application-owned groups, destination systems, IDs and visual seeds separately from a `success`/`data.web` search response. A batch's mapping connects each one-based result position to an application planet ID and seed. Mapping order is retained; provider ranking never defines object identity.
+The [synthetic REST-v2 Search input example](../web/src/modules/universe/data/examples/firecrawl-search.json) includes application-owned groups, destination systems, IDs and visual seeds separately from a `success`/`data.web` search response. A batch's mapping connects each one-based result position to an application planet ID and seed. Mapping order is retained; provider ranking never defines object identity.
 
 The normalizer validates supplier response shape, success, batch IDs, complete unique mappings, optional result positions, destination systems, result metadata and duplicate normalized website URLs. It projects title/description into canonical name/description, URL into a reference, and query into tags. Explicit group/mapping demo types and system-star context come from the application, not the provider ranking or catalog mode. Raw response fields and provider credentials are not copied. It rejects recognizable credential/signature parameters rather than silently stripping them; callers remain responsible for safe source data. The canonical parser then validates and freezes the resulting application tree.
 
 This is a local transformation, not a live integration: it performs no fetch, SDK call, import job or persistence. Additional suppliers implement the same outward document contract in their own adapters; they do not add supplier fields to domain types or conditionals to the renderer.
+
+### REST and Go SDK boundaries
+
+The existing normalizer accepts Firecrawl REST Search's `success/data.web` envelope, not every operation or SDK return. The current [Go SDK](https://docs.firecrawl.dev/sdks/go) unwraps responses: Scrape returns a document with flexible metadata/JSON, while Search returns result collections directly. REST Extract is an asynchronous job: [start](https://docs.firecrawl.dev/api-reference/endpoint/extract) and [status](https://docs.firecrawl.dev/api-reference/endpoint/extract-get) envelopes contain job state, not completed catalog content. Each adapter must validate its actual version, operation and completion before normalization. An unknown JSON shape or unfinished job is never passed directly to the renderer.
+
+Future Go or alternate-supplier integrations produce the same `UniverseCatalogDocument`. The host supplies application identity, groups, seeds and ordering; adapters project safe names, descriptions and references. Provider clients, credentials, raw pages, ranking, pagination and job state stay outside the contract. Crawling more pages does not create more planets: aggregation retains one application website identity. This demo refresh adds no Go backend or live ingestion.
+
+```mermaid
+flowchart LR
+  Demo[Organized demo objects] --> DemoAdapter[Demo adapter]
+  Firecrawl[Firecrawl REST or Go SDK] --> Supplier[Operation-specific adapter]
+  Other[Other suppliers] --> OtherAdapter[Supplier adapter]
+  DemoAdapter --> Document[UniverseCatalogDocument v1]
+  Supplier --> Document
+  OtherAdapter --> Document
+  Local[Local workspace] --> Document
+  Document --> Parse[parseUniverseCatalog]
+  Parse --> Host[UniverseHost]
+```
 
 ## Selectors and scene projection
 
@@ -129,6 +156,6 @@ Interface localization does not translate or rewrite catalog content, labels, ta
 
 ## Validation
 
-From `web/`, run `npm run test:catalog`. Native Node tests cover canonical and supplier boundaries, URLless/empty catalogs, hierarchy and input failures, safe projection, immutability, derived identity, adapter conversion and projection isolation. The runner compiles tests with the existing TypeScript dependency into ignored `.catalog-tests/` output. Fixture parity was also checked against the pre-migration 400-record dataset; no duplicate legacy fixture is committed. `npm run test:scene` separately checks tour continuity, distance bounds and shared orbital motion.
+From `web/`, run `npm run test:demo` and `npm run test:catalog`. Native Node tests cover canonical and supplier boundaries, URLless/empty catalogs, hierarchy and input failures, safe projection, immutability, derived identity, adapter conversion and projection isolation. The runner compiles tests with the existing TypeScript dependency into ignored `.catalog-tests/` output. Demo checks verify canonical parity, Solar/tour identity, factual snapshot membership/integrity and selection bounds. `npm run test:scene` separately checks tour continuity, distance bounds and shared orbital motion.
 
 `npm run test:workspace` separately checks local CRUD, the multi-universe envelope, persistence limits, conflicting snapshots and write-lock behavior; see [workspace validation](LOCAL-WORKSPACE.md#validation-and-roadmap).

@@ -1,0 +1,5456 @@
+{
+  "method": "Astropy get_constellation: ICRS coordinates precessed to B1875; Roman 1987 IAU boundaries",
+  "astropyVersion": "7.2.0",
+  "source": "https://docs.astropy.org/en/stable/api/astropy.coordinates.get_constellation.html",
+  "iauReference": "https://www.iau.org/IAU/Astronomy-FAQs/Constellations.aspx",
+  "hosts": {
+    "14 And": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 352.82415,
+      "decDeg": 39.2358367
+    },
+    "14 Her": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 242.6021014,
+      "decDeg": 43.8163621
+    },
+    "24 Boo": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 217.1555242,
+      "decDeg": 49.8446488
+    },
+    "24 Sex": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 155.8684866,
+      "decDeg": -0.9023998
+    },
+    "2MASS J01225093-2439505": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 20.7128012,
+      "decDeg": -24.6646128
+    },
+    "2MASS J02192210-3925225": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 34.8427046,
+      "decDeg": -39.4230767
+    },
+    "2MASS J12073346-3932539": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 181.8890906,
+      "decDeg": -39.5484399
+    },
+    "2MASS J21252752-8138278": {
+      "abbreviation": "Oct",
+      "name": "Octans",
+      "raDeg": 321.3662989,
+      "decDeg": -81.6414894
+    },
+    "2MASS J22362452+4751425": {
+      "abbreviation": "Lac",
+      "name": "Lacerta",
+      "raDeg": 339.1025931,
+      "decDeg": 47.861683
+    },
+    "2MASS J22501512+2325342": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 342.5634097,
+      "decDeg": 23.4259058
+    },
+    "4 UMa": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 130.0528099,
+      "decDeg": 64.3280504
+    },
+    "47 UMa": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 164.8647611,
+      "decDeg": 40.4304931
+    },
+    "51 Peg": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 344.3675399,
+      "decDeg": 20.7690958
+    },
+    "6 Lyn": {
+      "abbreviation": "Lyn",
+      "name": "Lynx",
+      "raDeg": 97.6960311,
+      "decDeg": 58.1611753
+    },
+    "61 Vir": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 199.596455,
+      "decDeg": -18.3157745
+    },
+    "7 CMa": {
+      "abbreviation": "CMa",
+      "name": "Canis Major",
+      "raDeg": 99.171276,
+      "decDeg": -19.2561808
+    },
+    "70 Vir": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 202.1064898,
+      "decDeg": 13.7763085
+    },
+    "AB Pic": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 94.8039208,
+      "decDeg": -58.0541184
+    },
+    "AF Lep": {
+      "abbreviation": "Lep",
+      "name": "Lepus",
+      "raDeg": 81.7699216,
+      "decDeg": -11.9011752
+    },
+    "AU Mic": {
+      "abbreviation": "Mic",
+      "name": "Microscopium",
+      "raDeg": 311.2911369,
+      "decDeg": -31.34245
+    },
+    "BD+14 4559": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 318.4010002,
+      "decDeg": 14.6893834
+    },
+    "BD+45 564": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 32.9470485,
+      "decDeg": 45.9242187
+    },
+    "BD+55 362": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 23.9636676,
+      "decDeg": 56.6982282
+    },
+    "BD+60 1417": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 190.8875453,
+      "decDeg": 60.0143636
+    },
+    "BD+63 1405": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 271.3979337,
+      "decDeg": 63.6700064
+    },
+    "BD-06 1339": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 88.2511811,
+      "decDeg": -5.9963378
+    },
+    "BD-08 2823": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 150.1971964,
+      "decDeg": -9.5165689
+    },
+    "BD-10 3166": {
+      "abbreviation": "Crt",
+      "name": "Crater",
+      "raDeg": 164.6191243,
+      "decDeg": -10.7704227
+    },
+    "BD-11 4672": {
+      "abbreviation": "Sct",
+      "name": "Scutum",
+      "raDeg": 278.3688659,
+      "decDeg": -11.6370481
+    },
+    "BD-17 63": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 7.1413494,
+      "decDeg": -16.2273254
+    },
+    "BD-210397": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 33.3024198,
+      "decDeg": -21.1962147
+    },
+    "Barnard's star": {
+      "abbreviation": "Oph",
+      "name": "Ophiuchus",
+      "raDeg": 269.4486144,
+      "decDeg": 4.7379808
+    },
+    "CD Cet": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 48.3530155,
+      "decDeg": 4.7751881
+    },
+    "CFBDSIR J145829+101343": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 224.6208333,
+      "decDeg": 10.2286111
+    },
+    "COCONUTS-2 A": {
+      "abbreviation": "Cha",
+      "name": "Chamaleon",
+      "raDeg": 117.300914,
+      "decDeg": -76.702696
+    },
+    "CWISEP J193518.59-154620.3": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 293.8262172,
+      "decDeg": -15.7725727
+    },
+    "DENIS-P J082303.1-491201": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 125.7620668,
+      "decDeg": -49.2003008
+    },
+    "DMPP-1": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 86.7761233,
+      "decDeg": -10.6303217
+    },
+    "DMPP-4": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 293.5826648,
+      "decDeg": 51.2358069
+    },
+    "DMPP-6": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 120.3857827,
+      "decDeg": -70.0234291
+    },
+    "DMPP-8": {
+      "abbreviation": "Oct",
+      "name": "Octans",
+      "raDeg": 305.3083517,
+      "decDeg": -81.6166664
+    },
+    "G 192-15": {
+      "abbreviation": "Aur",
+      "name": "Auriga",
+      "raDeg": 90.6220931,
+      "decDeg": 49.861939
+    },
+    "G 196-3": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 151.0884754,
+      "decDeg": 50.3861806
+    },
+    "G 261-6": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 291.07432,
+      "decDeg": 75.5558405
+    },
+    "G 264-012": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 326.6719598,
+      "decDeg": 66.803848
+    },
+    "G 9-40": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 134.7188514,
+      "decDeg": 21.0747961
+    },
+    "GJ 1002": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 1.6764641,
+      "decDeg": -7.5462123
+    },
+    "GJ 1061": {
+      "abbreviation": "Hor",
+      "name": "Horologium",
+      "raDeg": 54.0032486,
+      "decDeg": -44.5143104
+    },
+    "GJ 1132": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 153.7090696,
+      "decDeg": -47.1549358
+    },
+    "GJ 1148": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 175.4326081,
+      "decDeg": 42.7515862
+    },
+    "GJ 1151": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 177.7304866,
+      "decDeg": 48.3732334
+    },
+    "GJ 1214": {
+      "abbreviation": "Oph",
+      "name": "Ophiuchus",
+      "raDeg": 258.8313991,
+      "decDeg": 4.9606795
+    },
+    "GJ 1252": {
+      "abbreviation": "Tel",
+      "name": "Telescopium",
+      "raDeg": 306.9286462,
+      "decDeg": -56.4622865
+    },
+    "GJ 1265": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 333.4324675,
+      "decDeg": -17.6870623
+    },
+    "GJ 1289": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 355.7813464,
+      "decDeg": 36.5363314
+    },
+    "GJ 143": {
+      "abbreviation": "Ret",
+      "name": "Reticulum",
+      "raDeg": 51.7501882,
+      "decDeg": -63.500166
+    },
+    "GJ 160.2": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 61.6454173,
+      "decDeg": -20.8564724
+    },
+    "GJ 163": {
+      "abbreviation": "Dor",
+      "name": "Dorado",
+      "raDeg": 62.3228353,
+      "decDeg": -53.3711768
+    },
+    "GJ 179": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 73.0245495,
+      "decDeg": 6.4752347
+    },
+    "GJ 180": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 73.460097,
+      "decDeg": -17.776194
+    },
+    "GJ 2030": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 50.8237604,
+      "decDeg": -7.7950429
+    },
+    "GJ 2056": {
+      "abbreviation": "CMa",
+      "name": "Canis Major",
+      "raDeg": 108.0194945,
+      "decDeg": -24.8921008
+    },
+    "GJ 2126": {
+      "abbreviation": "Sco",
+      "name": "Scorpius",
+      "raDeg": 257.3606793,
+      "decDeg": -35.391719
+    },
+    "GJ 238": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 98.454881,
+      "decDeg": -58.5250316
+    },
+    "GJ 251": {
+      "abbreviation": "Gem",
+      "name": "Gemini",
+      "raDeg": 103.7002499,
+      "decDeg": 33.2664632
+    },
+    "GJ 27.1": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 9.9980016,
+      "decDeg": -44.2541679
+    },
+    "GJ 273": {
+      "abbreviation": "CMi",
+      "name": "Canis Minor",
+      "raDeg": 111.852091,
+      "decDeg": 5.225807
+    },
+    "GJ 3082": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 18.6432425,
+      "decDeg": -53.9407751
+    },
+    "GJ 3090": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 20.4384281,
+      "decDeg": -46.7147234
+    },
+    "GJ 3138": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 32.2977385,
+      "decDeg": -16.3392495
+    },
+    "GJ 317": {
+      "abbreviation": "Pyx",
+      "name": "Pyxis",
+      "raDeg": 130.2445254,
+      "decDeg": -23.452809
+    },
+    "GJ 328": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 133.7819507,
+      "decDeg": 1.5420011
+    },
+    "GJ 3293": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 67.1484425,
+      "decDeg": -25.1713396
+    },
+    "GJ 3323": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 75.4868824,
+      "decDeg": -6.9485133
+    },
+    "GJ 3341": {
+      "abbreviation": "Col",
+      "name": "Columba",
+      "raDeg": 78.9471415,
+      "decDeg": -31.2948458
+    },
+    "GJ 3378": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 90.2951302,
+      "decDeg": 59.5931917
+    },
+    "GJ 341": {
+      "abbreviation": "Car",
+      "name": "Carina",
+      "raDeg": 140.3993759,
+      "decDeg": -60.2811692
+    },
+    "GJ 3470": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 119.7735021,
+      "decDeg": 15.391209
+    },
+    "GJ 3512": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 130.3316616,
+      "decDeg": 59.4918364
+    },
+    "GJ 357": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 144.0074644,
+      "decDeg": -21.6650634
+    },
+    "GJ 3634": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 164.6433493,
+      "decDeg": -31.1443383
+    },
+    "GJ 367": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 146.121464,
+      "decDeg": -45.7790165
+    },
+    "GJ 3779": {
+      "abbreviation": "Com",
+      "name": "Coma Berenices",
+      "raDeg": 200.7335358,
+      "decDeg": 24.4639425
+    },
+    "GJ 3929": {
+      "abbreviation": "CrB",
+      "name": "Corona Borealis",
+      "raDeg": 239.5775678,
+      "decDeg": 35.4081141
+    },
+    "GJ 393": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 157.2288672,
+      "decDeg": 0.8378485
+    },
+    "GJ 3942": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 242.2645452,
+      "decDeg": 52.9441443
+    },
+    "GJ 3988": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 255.8503747,
+      "decDeg": 51.4089795
+    },
+    "GJ 3998": {
+      "abbreviation": "Oph",
+      "name": "Ophiuchus",
+      "raDeg": 259.0020507,
+      "decDeg": 11.0561751
+    },
+    "GJ 411": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 165.834471,
+      "decDeg": 35.972317
+    },
+    "GJ 422": {
+      "abbreviation": "Car",
+      "name": "Carina",
+      "raDeg": 168.9810458,
+      "decDeg": -57.5425629
+    },
+    "GJ 4274": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 335.7805478,
+      "decDeg": -17.6104078
+    },
+    "GJ 4276": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 336.3221454,
+      "decDeg": 59.412503
+    },
+    "GJ 433": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 173.8619194,
+      "decDeg": -32.5436302
+    },
+    "GJ 436": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 175.5505363,
+      "decDeg": 26.7030669
+    },
+    "GJ 463": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 185.7440496,
+      "decDeg": 64.0324311
+    },
+    "GJ 480": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 189.7134226,
+      "decDeg": 11.6950708
+    },
+    "GJ 486": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 191.981531,
+      "decDeg": 9.7494181
+    },
+    "GJ 504": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 199.192348,
+      "decDeg": 9.4249781
+    },
+    "GJ 508.2": {
+      "abbreviation": "CVn",
+      "name": "Canes Venatici",
+      "raDeg": 200.2443854,
+      "decDeg": 34.2776644
+    },
+    "GJ 514": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 202.5040424,
+      "decDeg": 10.3725387
+    },
+    "GJ 536": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 210.2597264,
+      "decDeg": -2.6522901
+    },
+    "GJ 581": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 229.8564725,
+      "decDeg": -7.7226935
+    },
+    "GJ 625": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 246.3557854,
+      "decDeg": 54.3033625
+    },
+    "GJ 649": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 254.5363221,
+      "decDeg": 25.7419719
+    },
+    "GJ 674": {
+      "abbreviation": "Ara",
+      "name": "Ara",
+      "raDeg": 262.1700476,
+      "decDeg": -46.8989826
+    },
+    "GJ 682": {
+      "abbreviation": "Sco",
+      "name": "Scorpius",
+      "raDeg": 264.2610245,
+      "decDeg": -44.3232519
+    },
+    "GJ 685": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 263.8960378,
+      "decDeg": 61.6793482
+    },
+    "GJ 687": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 264.1041731,
+      "decDeg": 68.3336741
+    },
+    "GJ 724": {
+      "abbreviation": "Sct",
+      "name": "Scutum",
+      "raDeg": 280.238365,
+      "decDeg": -13.3824997
+    },
+    "GJ 740": {
+      "abbreviation": "Ser",
+      "name": "Serpens",
+      "raDeg": 284.4997178,
+      "decDeg": 5.902867
+    },
+    "GJ 806": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 311.2697002,
+      "decDeg": 44.5002351
+    },
+    "GJ 832": {
+      "abbreviation": "Gru",
+      "name": "Grus",
+      "raDeg": 323.3912616,
+      "decDeg": -49.0125169
+    },
+    "GJ 849": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 332.4229938,
+      "decDeg": -4.6408317
+    },
+    "GJ 876": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 343.3239737,
+      "decDeg": -14.2665958
+    },
+    "GJ 887": {
+      "abbreviation": "PsA",
+      "name": "Pisces Austrinus",
+      "raDeg": 346.5027573,
+      "decDeg": -35.8473489
+    },
+    "GJ 9066": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 30.0588307,
+      "decDeg": 13.0443172
+    },
+    "GJ 9404": {
+      "abbreviation": "Com",
+      "name": "Coma Berenices",
+      "raDeg": 184.8472095,
+      "decDeg": 28.3827126
+    },
+    "GJ 96": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 35.5624031,
+      "decDeg": 47.8802075
+    },
+    "GJ 9689": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 303.467731,
+      "decDeg": 13.3888921
+    },
+    "GJ 9714": {
+      "abbreviation": "Mic",
+      "name": "Microscopium",
+      "raDeg": 315.4141767,
+      "decDeg": -32.5250028
+    },
+    "GJ 9773": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 333.1502333,
+      "decDeg": 8.5503355
+    },
+    "GJ 9827": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 351.7717763,
+      "decDeg": -1.2853435
+    },
+    "GU Psc": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 18.146485,
+      "decDeg": 17.0650029
+    },
+    "Gaia-4": {
+      "abbreviation": "CVn",
+      "name": "Canes Venatici",
+      "raDeg": 209.5063762,
+      "decDeg": 31.6954898
+    },
+    "Gaia-5": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 302.0408173,
+      "decDeg": 41.9415455
+    },
+    "Gl 378": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 150.5865513,
+      "decDeg": 48.0824515
+    },
+    "Gl 410": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 165.6604212,
+      "decDeg": 21.9669164
+    },
+    "Gl 686": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 264.4764878,
+      "decDeg": 18.5959509
+    },
+    "Gliese 12": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 3.9579137,
+      "decDeg": 13.5576175
+    },
+    "Gliese 48": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 15.6582402,
+      "decDeg": 71.6781735
+    },
+    "HAT-P-11": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 297.7101763,
+      "decDeg": 48.0818635
+    },
+    "HAT-P-17": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 324.5359781,
+      "decDeg": 30.4881882
+    },
+    "HAT-P-20": {
+      "abbreviation": "Gem",
+      "name": "Gemini",
+      "raDeg": 111.9164295,
+      "decDeg": 24.3361185
+    },
+    "HD 100508": {
+      "abbreviation": "Mus",
+      "name": "Musca",
+      "raDeg": 173.3014057,
+      "decDeg": -67.0546386
+    },
+    "HD 100777": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 173.9646303,
+      "decDeg": -4.7555425
+    },
+    "HD 10180": {
+      "abbreviation": "Hyi",
+      "name": "Hydrus",
+      "raDeg": 24.4731133,
+      "decDeg": -60.5114881
+    },
+    "HD 102117": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 176.2097267,
+      "decDeg": -58.7040134
+    },
+    "HD 102195": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 176.4254063,
+      "decDeg": 2.8209912
+    },
+    "HD 102843": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 177.5854673,
+      "decDeg": -1.2522989
+    },
+    "HD 103197": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 178.2201971,
+      "decDeg": -50.2927911
+    },
+    "HD 103720": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 179.1713308,
+      "decDeg": -2.7791393
+    },
+    "HD 103891": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 179.4382907,
+      "decDeg": -8.5486195
+    },
+    "HD 103949": {
+      "abbreviation": "Crv",
+      "name": "Corvus",
+      "raDeg": 179.5479558,
+      "decDeg": -23.9241221
+    },
+    "HD 104067": {
+      "abbreviation": "Crv",
+      "name": "Corvus",
+      "raDeg": 179.7923543,
+      "decDeg": -20.3556058
+    },
+    "HD 105618": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 182.4021288,
+      "decDeg": 11.2115695
+    },
+    "HD 105779": {
+      "abbreviation": "Crv",
+      "name": "Corvus",
+      "raDeg": 182.6612053,
+      "decDeg": -16.9564908
+    },
+    "HD 106252": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 183.3730583,
+      "decDeg": 10.0404302
+    },
+    "HD 106270": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 183.4049258,
+      "decDeg": -9.5135645
+    },
+    "HD 10647": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 25.6233526,
+      "decDeg": -53.7412852
+    },
+    "HD 10697": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 26.2324076,
+      "decDeg": 20.0826974
+    },
+    "HD 108147": {
+      "abbreviation": "Cru",
+      "name": "Crux ",
+      "raDeg": 186.4409852,
+      "decDeg": -64.0223492
+    },
+    "HD 108202": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 186.4613189,
+      "decDeg": -1.1109233
+    },
+    "HD 108236": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 186.5740627,
+      "decDeg": -51.3630519
+    },
+    "HD 108874": {
+      "abbreviation": "Com",
+      "name": "Coma Berenices",
+      "raDeg": 187.6126029,
+      "decDeg": 22.8794399
+    },
+    "HD 109246": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 188.027184,
+      "decDeg": 74.4893379
+    },
+    "HD 109271": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 188.397397,
+      "decDeg": -11.6215204
+    },
+    "HD 109286": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 188.3958418,
+      "decDeg": 7.2809064
+    },
+    "HD 109833": {
+      "abbreviation": "Mus",
+      "name": "Musca",
+      "raDeg": 189.7758591,
+      "decDeg": -74.5740205
+    },
+    "HD 109988": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 189.8154662,
+      "decDeg": -32.7263607
+    },
+    "HD 110537": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 190.7462412,
+      "decDeg": -4.0501059
+    },
+    "HD 11112": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 27.0881399,
+      "decDeg": -41.4944106
+    },
+    "HD 111232": {
+      "abbreviation": "Mus",
+      "name": "Musca",
+      "raDeg": 192.2159553,
+      "decDeg": -68.4246679
+    },
+    "HD 111998": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 193.2953521,
+      "decDeg": -3.5531133
+    },
+    "HD 112300": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 193.8988441,
+      "decDeg": 3.3972376
+    },
+    "HD 113538": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 196.233933,
+      "decDeg": -52.4463502
+    },
+    "HD 114082": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 197.3171237,
+      "decDeg": -60.3084347
+    },
+    "HD 114386": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 197.6652124,
+      "decDeg": -35.0561807
+    },
+    "HD 114783": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 198.1818436,
+      "decDeg": -2.2649921
+    },
+    "HD 11505": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 28.2750265,
+      "decDeg": -1.3284416
+    },
+    "HD 11506": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 28.2106607,
+      "decDeg": -19.507396
+    },
+    "HD 115404 A": {
+      "abbreviation": "Com",
+      "name": "Coma Berenices",
+      "raDeg": 199.2155793,
+      "decDeg": 17.0160384
+    },
+    "HD 115954": {
+      "abbreviation": "CVn",
+      "name": "Canes Venatici",
+      "raDeg": 199.9853694,
+      "decDeg": 38.3691383
+    },
+    "HD 117207": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 202.3368806,
+      "decDeg": -35.5713041
+    },
+    "HD 117618": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 203.1066418,
+      "decDeg": -47.2719049
+    },
+    "HD 118203": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 203.509956,
+      "decDeg": 53.7281876
+    },
+    "HD 11977": {
+      "abbreviation": "Hyi",
+      "name": "Hydrus",
+      "raDeg": 28.7347403,
+      "decDeg": -67.6469871
+    },
+    "HD 121504": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 209.3199062,
+      "decDeg": -56.0404085
+    },
+    "HD 12235": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 30.0391601,
+      "decDeg": 3.0959098
+    },
+    "HD 122562": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 210.5886904,
+      "decDeg": 20.8810286
+    },
+    "HD 124330": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 212.8207093,
+      "decDeg": 54.4089731
+    },
+    "HD 12484": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 30.6115322,
+      "decDeg": 2.8158078
+    },
+    "HD 125271": {
+      "abbreviation": "Aps",
+      "name": "Apus",
+      "raDeg": 216.6474037,
+      "decDeg": -81.4542756
+    },
+    "HD 125595": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 215.3434326,
+      "decDeg": -40.3942443
+    },
+    "HD 126105": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 216.0016789,
+      "decDeg": -19.801096
+    },
+    "HD 126525": {
+      "abbreviation": "Lup",
+      "name": "Lupus",
+      "raDeg": 216.8852514,
+      "decDeg": -51.9329118
+    },
+    "HD 12661": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 31.1423525,
+      "decDeg": 25.4135632
+    },
+    "HD 127195": {
+      "abbreviation": "Lup",
+      "name": "Lupus",
+      "raDeg": 217.8714193,
+      "decDeg": -47.7292571
+    },
+    "HD 127506": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 217.6848544,
+      "decDeg": 35.4546059
+    },
+    "HD 128311": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 219.0032292,
+      "decDeg": 9.7454368
+    },
+    "HD 128356": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 219.2702793,
+      "decDeg": -25.8031728
+    },
+    "HD 128717": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 219.0881687,
+      "decDeg": 57.5609512
+    },
+    "HD 129445": {
+      "abbreviation": "Cir",
+      "name": "Circinus",
+      "raDeg": 221.5104196,
+      "decDeg": -68.7629901
+    },
+    "HD 130322": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 221.8857975,
+      "decDeg": -0.2820782
+    },
+    "HD 132406": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 224.2276121,
+      "decDeg": 53.3809615
+    },
+    "HD 134060": {
+      "abbreviation": "Cir",
+      "name": "Circinus",
+      "raDeg": 227.6847587,
+      "decDeg": -61.4223747
+    },
+    "HD 134606": {
+      "abbreviation": "Aps",
+      "name": "Apus",
+      "raDeg": 228.8103897,
+      "decDeg": -70.5203328
+    },
+    "HD 134987": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 228.3675397,
+      "decDeg": -25.3096721
+    },
+    "HD 135625": {
+      "abbreviation": "Lup",
+      "name": "Lupus",
+      "raDeg": 229.4511514,
+      "decDeg": -45.9225871
+    },
+    "HD 135694": {
+      "abbreviation": "UMi",
+      "name": "Ursa Minor",
+      "raDeg": 227.8678636,
+      "decDeg": 71.8412965
+    },
+    "HD 135872": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 229.4213643,
+      "decDeg": -5.2024735
+    },
+    "HD 136118": {
+      "abbreviation": "Ser",
+      "name": "Serpens",
+      "raDeg": 229.7306046,
+      "decDeg": -1.5922913
+    },
+    "HD 136352": {
+      "abbreviation": "Lup",
+      "name": "Lupus",
+      "raDeg": 230.4401147,
+      "decDeg": -48.3188174
+    },
+    "HD 136925": {
+      "abbreviation": "Ser",
+      "name": "Serpens",
+      "raDeg": 230.7157509,
+      "decDeg": 13.3663117
+    },
+    "HD 13724": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 33.0859626,
+      "decDeg": -46.8166738
+    },
+    "HD 137388": {
+      "abbreviation": "Aps",
+      "name": "Apus",
+      "raDeg": 233.915082,
+      "decDeg": -80.2044169
+    },
+    "HD 13808": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 33.1780708,
+      "decDeg": -53.7437591
+    },
+    "HD 13908": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 34.5609102,
+      "decDeg": 65.5941901
+    },
+    "HD 13931": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 34.1979991,
+      "decDeg": 43.7722065
+    },
+    "HD 1397": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 4.4471631,
+      "decDeg": -66.3589285
+    },
+    "HD 140901": {
+      "abbreviation": "Lup",
+      "name": "Lupus",
+      "raDeg": 236.8689866,
+      "decDeg": -37.9172333
+    },
+    "HD 141004": {
+      "abbreviation": "Ser",
+      "name": "Serpens",
+      "raDeg": 236.6099205,
+      "decDeg": 7.3527684
+    },
+    "HD 141399": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 236.7235392,
+      "decDeg": 46.986288
+    },
+    "HD 141937": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 238.0735585,
+      "decDeg": -18.4359716
+    },
+    "HD 142415": {
+      "abbreviation": "Nor",
+      "name": "Norma",
+      "raDeg": 239.418989,
+      "decDeg": -60.2006948
+    },
+    "HD 143105": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 238.4023547,
+      "decDeg": 68.7199779
+    },
+    "HD 143361": {
+      "abbreviation": "Nor",
+      "name": "Norma",
+      "raDeg": 240.4588405,
+      "decDeg": -44.4350575
+    },
+    "HD 145377": {
+      "abbreviation": "Sco",
+      "name": "Scorpius",
+      "raDeg": 242.9019658,
+      "decDeg": -27.0781199
+    },
+    "HD 1461": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 4.6762645,
+      "decDeg": -8.0536206
+    },
+    "HD 147018": {
+      "abbreviation": "TrA",
+      "name": "Triangulum Australe",
+      "raDeg": 245.7490012,
+      "decDeg": -61.6901291
+    },
+    "HD 148156": {
+      "abbreviation": "Nor",
+      "name": "Norma",
+      "raDeg": 247.0723035,
+      "decDeg": -46.3175085
+    },
+    "HD 148164": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 246.4351678,
+      "decDeg": 11.9190729
+    },
+    "HD 149026": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 247.6229827,
+      "decDeg": 38.3475349
+    },
+    "HD 149143": {
+      "abbreviation": "Oph",
+      "name": "Ophiuchus",
+      "raDeg": 248.2126715,
+      "decDeg": 2.0844547
+    },
+    "HD 149806": {
+      "abbreviation": "Oph",
+      "name": "Ophiuchus",
+      "raDeg": 249.2855187,
+      "decDeg": 0.2546794
+    },
+    "HD 150706": {
+      "abbreviation": "UMi",
+      "name": "Ursa Minor",
+      "raDeg": 247.8255687,
+      "decDeg": 79.7894032
+    },
+    "HD 151450": {
+      "abbreviation": "Oph",
+      "name": "Ophiuchus",
+      "raDeg": 252.0080127,
+      "decDeg": -15.964345
+    },
+    "HD 152079": {
+      "abbreviation": "Ara",
+      "name": "Ara",
+      "raDeg": 253.3732313,
+      "decDeg": -46.3333582
+    },
+    "HD 15337": {
+      "abbreviation": "For",
+      "name": "Fornax",
+      "raDeg": 36.8678846,
+      "decDeg": -27.6361171
+    },
+    "HD 153557": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 254.4706516,
+      "decDeg": 47.3678558
+    },
+    "HD 153950": {
+      "abbreviation": "Sco",
+      "name": "Scorpius",
+      "raDeg": 256.1292826,
+      "decDeg": -43.3103753
+    },
+    "HD 154088": {
+      "abbreviation": "Oph",
+      "name": "Ophiuchus",
+      "raDeg": 256.1164214,
+      "decDeg": -28.5838342
+    },
+    "HD 154345": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 255.6524619,
+      "decDeg": 47.0855544
+    },
+    "HD 154672": {
+      "abbreviation": "Ara",
+      "name": "Ara",
+      "raDeg": 257.520697,
+      "decDeg": -56.4498041
+    },
+    "HD 154857": {
+      "abbreviation": "Ara",
+      "name": "Ara",
+      "raDeg": 257.816194,
+      "decDeg": -56.681038
+    },
+    "HD 155193": {
+      "abbreviation": "Oph",
+      "name": "Ophiuchus",
+      "raDeg": 257.4208876,
+      "decDeg": 10.0381003
+    },
+    "HD 155358": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 257.3930947,
+      "decDeg": 33.3549277
+    },
+    "HD 155918": {
+      "abbreviation": "Aps",
+      "name": "Apus",
+      "raDeg": 260.5364025,
+      "decDeg": -75.349239
+    },
+    "HD 156098": {
+      "abbreviation": "Sco",
+      "name": "Scorpius",
+      "raDeg": 259.264687,
+      "decDeg": -32.6630768
+    },
+    "HD 156279": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 258.0966686,
+      "decDeg": 63.3527828
+    },
+    "HD 156411": {
+      "abbreviation": "Ara",
+      "name": "Ara",
+      "raDeg": 259.9639522,
+      "decDeg": -48.5502313
+    },
+    "HD 156668": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 259.4183491,
+      "decDeg": 29.228161
+    },
+    "HD 158038": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 261.4395312,
+      "decDeg": 27.3030721
+    },
+    "HD 158259": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 261.3495847,
+      "decDeg": 52.7904721
+    },
+    "HD 15906": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 38.2712534,
+      "decDeg": -10.352178
+    },
+    "HD 159243": {
+      "abbreviation": "Oph",
+      "name": "Ophiuchus",
+      "raDeg": 263.3395365,
+      "decDeg": 5.7008254
+    },
+    "HD 159868": {
+      "abbreviation": "Sco",
+      "name": "Scorpius",
+      "raDeg": 264.7466665,
+      "decDeg": -43.1462347
+    },
+    "HD 1605": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 5.1317548,
+      "decDeg": 30.9750611
+    },
+    "HD 160691": {
+      "abbreviation": "Ara",
+      "name": "Ara",
+      "raDeg": 266.0361585,
+      "decDeg": -51.8348751
+    },
+    "HD 16175": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 39.2577379,
+      "decDeg": 42.0624526
+    },
+    "HD 162020": {
+      "abbreviation": "Sco",
+      "name": "Scorpius",
+      "raDeg": 267.6599252,
+      "decDeg": -40.3184646
+    },
+    "HD 163607": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 268.4181383,
+      "decDeg": 56.3924701
+    },
+    "HD 164604": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 270.7787177,
+      "decDeg": -28.5608343
+    },
+    "HD 164922": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 270.6304652,
+      "decDeg": 26.3104077
+    },
+    "HD 165131": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 271.3444007,
+      "decDeg": -21.6737039
+    },
+    "HD 165155": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 271.4893395,
+      "decDeg": -29.9172536
+    },
+    "HD 166724": {
+      "abbreviation": "CrA",
+      "name": "Corona Australis",
+      "raDeg": 273.4988604,
+      "decDeg": -42.5757218
+    },
+    "HD 167042": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 272.6326268,
+      "decDeg": 54.2876184
+    },
+    "HD 167677": {
+      "abbreviation": "Ser",
+      "name": "Serpens",
+      "raDeg": 274.2067844,
+      "decDeg": -11.4067857
+    },
+    "HD 168009": {
+      "abbreviation": "Lyr",
+      "name": "Lyra",
+      "raDeg": 273.8847918,
+      "decDeg": 45.2088229
+    },
+    "HD 168443": {
+      "abbreviation": "Ser",
+      "name": "Serpens",
+      "raDeg": 275.0159879,
+      "decDeg": -9.5966905
+    },
+    "HD 168746": {
+      "abbreviation": "Ser",
+      "name": "Serpens",
+      "raDeg": 275.4573269,
+      "decDeg": -11.9229757
+    },
+    "HD 168863": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 275.6642157,
+      "decDeg": -18.0219726
+    },
+    "HD 16905": {
+      "abbreviation": "Hor",
+      "name": "Horologium",
+      "raDeg": 40.0136203,
+      "decDeg": -61.3550396
+    },
+    "HD 169830": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 276.9561859,
+      "decDeg": -29.8167919
+    },
+    "HD 171238": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 278.6818389,
+      "decDeg": -28.0727849
+    },
+    "HD 17156": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 42.4366123,
+      "decDeg": 71.7530882
+    },
+    "HD 175167": {
+      "abbreviation": "Pav",
+      "name": "Pavo",
+      "raDeg": 285.0033888,
+      "decDeg": -69.9450664
+    },
+    "HD 175607": {
+      "abbreviation": "Pav",
+      "name": "Pavo",
+      "raDeg": 285.2742901,
+      "decDeg": -66.1943379
+    },
+    "HD 17674": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 42.7684964,
+      "decDeg": 30.2865981
+    },
+    "HD 176986": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 285.7739138,
+      "decDeg": -11.044941
+    },
+    "HD 177565": {
+      "abbreviation": "CrA",
+      "name": "Corona Australis",
+      "raDeg": 286.7175787,
+      "decDeg": -37.8122394
+    },
+    "HD 179079": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 287.7903733,
+      "decDeg": -2.6387703
+    },
+    "HD 179949": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 288.8890182,
+      "decDeg": -24.1797939
+    },
+    "HD 181234": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 289.9998695,
+      "decDeg": -9.32497
+    },
+    "HD 18143": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 43.9140248,
+      "decDeg": 26.8723829
+    },
+    "HD 181433": {
+      "abbreviation": "Pav",
+      "name": "Pavo",
+      "raDeg": 291.2873731,
+      "decDeg": -66.4677838
+    },
+    "HD 181720": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 290.7212224,
+      "decDeg": -32.9208401
+    },
+    "HD 183263": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 292.1022982,
+      "decDeg": 8.3579183
+    },
+    "HD 183579": {
+      "abbreviation": "Tel",
+      "name": "Telescopium",
+      "raDeg": 293.2866147,
+      "decDeg": -54.5327284
+    },
+    "HD 184010": {
+      "abbreviation": "Vul",
+      "name": "Vulpecula",
+      "raDeg": 292.8401421,
+      "decDeg": 26.6172796
+    },
+    "HD 185283": {
+      "abbreviation": "Tel",
+      "name": "Telescopium",
+      "raDeg": 295.3233609,
+      "decDeg": -56.3221096
+    },
+    "HD 187085": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 297.3915731,
+      "decDeg": -37.7809929
+    },
+    "HD 187123": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 296.7428786,
+      "decDeg": 34.41899
+    },
+    "HD 188641": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 299.4048303,
+      "decDeg": -37.7448845
+    },
+    "HD 189567": {
+      "abbreviation": "Pav",
+      "name": "Pavo",
+      "raDeg": 301.3959616,
+      "decDeg": -67.3237992
+    },
+    "HD 190007": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 300.6956339,
+      "decDeg": 3.3266992
+    },
+    "HD 190228": {
+      "abbreviation": "Vul",
+      "name": "Vulpecula",
+      "raDeg": 300.7537294,
+      "decDeg": 28.3065564
+    },
+    "HD 190647": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 301.8318167,
+      "decDeg": -35.5395236
+    },
+    "HD 191806": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 302.368758,
+      "decDeg": 52.2767265
+    },
+    "HD 191939": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 302.0256247,
+      "decDeg": 66.8503014
+    },
+    "HD 192263": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 303.4990864,
+      "decDeg": -0.8657574
+    },
+    "HD 192310": {
+      "abbreviation": "Cap",
+      "name": "Capricornus",
+      "raDeg": 303.8284712,
+      "decDeg": -27.0337556
+    },
+    "HD 192699": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 304.0248392,
+      "decDeg": 4.5805708
+    },
+    "HD 194490": {
+      "abbreviation": "Tel",
+      "name": "Telescopium",
+      "raDeg": 306.9980087,
+      "decDeg": -51.6644646
+    },
+    "HD 199509": {
+      "abbreviation": "Oct",
+      "name": "Octans",
+      "raDeg": 317.3445632,
+      "decDeg": -82.0274926
+    },
+    "HD 20003": {
+      "abbreviation": "Hyi",
+      "name": "Hydrus",
+      "raDeg": 46.9090081,
+      "decDeg": -72.3219221
+    },
+    "HD 200964": {
+      "abbreviation": "Equ",
+      "name": "Equuleus",
+      "raDeg": 316.6664183,
+      "decDeg": 3.8033357
+    },
+    "HD 202206": {
+      "abbreviation": "Cap",
+      "name": "Capricornus",
+      "raDeg": 318.7405221,
+      "decDeg": -20.7897284
+    },
+    "HD 203030": {
+      "abbreviation": "Vul",
+      "name": "Vulpecula",
+      "raDeg": 319.7432238,
+      "decDeg": 26.2305846
+    },
+    "HD 20329": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 49.178124,
+      "decDeg": 15.6563542
+    },
+    "HD 203387": {
+      "abbreviation": "Cap",
+      "name": "Capricornus",
+      "raDeg": 320.561782,
+      "decDeg": -16.8345229
+    },
+    "HD 2039": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 6.0851069,
+      "decDeg": -56.649988
+    },
+    "HD 204313": {
+      "abbreviation": "Cap",
+      "name": "Capricornus",
+      "raDeg": 322.0510568,
+      "decDeg": -21.7274194
+    },
+    "HD 205158": {
+      "abbreviation": "Ind",
+      "name": "Indus",
+      "raDeg": 323.9186227,
+      "decDeg": -59.6933144
+    },
+    "HD 205739": {
+      "abbreviation": "PsA",
+      "name": "Pisces Austrinus",
+      "raDeg": 324.5351273,
+      "decDeg": -31.7378373
+    },
+    "HD 206255": {
+      "abbreviation": "Ind",
+      "name": "Indus",
+      "raDeg": 325.5917768,
+      "decDeg": -50.0935884
+    },
+    "HD 206893": {
+      "abbreviation": "Cap",
+      "name": "Capricornus",
+      "raDeg": 326.3416874,
+      "decDeg": -12.7833522
+    },
+    "HD 207496": {
+      "abbreviation": "Oct",
+      "name": "Octans",
+      "raDeg": 328.7181708,
+      "decDeg": -77.3388025
+    },
+    "HD 207897": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 325.2016451,
+      "decDeg": 84.3337613
+    },
+    "HD 20794": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 49.9997666,
+      "decDeg": -43.0666533
+    },
+    "HD 208487": {
+      "abbreviation": "Gru",
+      "name": "Grus",
+      "raDeg": 329.3332489,
+      "decDeg": -37.7641354
+    },
+    "HD 20868": {
+      "abbreviation": "For",
+      "name": "Fornax",
+      "raDeg": 50.1794053,
+      "decDeg": -33.72969
+    },
+    "HD 208897": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 329.7490639,
+      "decDeg": 19.0201591
+    },
+    "HD 209458": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 330.7950219,
+      "decDeg": 18.8842419
+    },
+    "HD 210193": {
+      "abbreviation": "Gru",
+      "name": "Grus",
+      "raDeg": 332.3951324,
+      "decDeg": -41.225205
+    },
+    "HD 210277": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 332.3748117,
+      "decDeg": -7.5505962
+    },
+    "HD 210702": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 332.9638643,
+      "decDeg": 16.0404806
+    },
+    "HD 211403": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 333.8158177,
+      "decDeg": 58.2755601
+    },
+    "HD 211810": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 334.5286724,
+      "decDeg": 61.1349912
+    },
+    "HD 211970": {
+      "abbreviation": "Gru",
+      "name": "Grus",
+      "raDeg": 335.5661579,
+      "decDeg": -54.5596006
+    },
+    "HD 213472": {
+      "abbreviation": "Lac",
+      "name": "Lacerta",
+      "raDeg": 337.7069969,
+      "decDeg": 40.7222277
+    },
+    "HD 213519": {
+      "abbreviation": "Lac",
+      "name": "Lacerta",
+      "raDeg": 337.7727845,
+      "decDeg": 45.1452472
+    },
+    "HD 213885": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 338.9837166,
+      "decDeg": -59.864829
+    },
+    "HD 21411": {
+      "abbreviation": "For",
+      "name": "Fornax",
+      "raDeg": 51.5474155,
+      "decDeg": -30.6168403
+    },
+    "HD 215152": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 340.8380941,
+      "decDeg": -6.4020685
+    },
+    "HD 21520": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 51.6403449,
+      "decDeg": -43.6136649
+    },
+    "HD 215497": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 341.652714,
+      "decDeg": -56.5997984
+    },
+    "HD 216435": {
+      "abbreviation": "Gru",
+      "name": "Grus",
+      "raDeg": 343.4094703,
+      "decDeg": -48.5986332
+    },
+    "HD 216437": {
+      "abbreviation": "Ind",
+      "name": "Indus",
+      "raDeg": 343.6639631,
+      "decDeg": -70.0733957
+    },
+    "HD 216520": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 341.8768719,
+      "decDeg": 83.6975307
+    },
+    "HD 216770": {
+      "abbreviation": "PsA",
+      "name": "Pisces Austrinus",
+      "raDeg": 343.9748751,
+      "decDeg": -26.6595286
+    },
+    "HD 21693": {
+      "abbreviation": "Ret",
+      "name": "Reticulum",
+      "raDeg": 51.8040469,
+      "decDeg": -58.3232726
+    },
+    "HD 217107": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 344.5647243,
+      "decDeg": -2.3954489
+    },
+    "HD 217958": {
+      "abbreviation": "PsA",
+      "name": "Pisces Austrinus",
+      "raDeg": 346.136577,
+      "decDeg": -25.6917758
+    },
+    "HD 218566": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 347.297417,
+      "decDeg": -2.2611645
+    },
+    "HD 219077": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 348.5319387,
+      "decDeg": -62.7018297
+    },
+    "HD 219134": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 348.3372026,
+      "decDeg": 57.1696255
+    },
+    "HD 219666": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 349.5592665,
+      "decDeg": -56.9039857
+    },
+    "HD 219828": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 349.6947029,
+      "decDeg": 18.6457524
+    },
+    "HD 220197": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 350.4946927,
+      "decDeg": 16.6323305
+    },
+    "HD 220689": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 351.4707282,
+      "decDeg": -20.6167923
+    },
+    "HD 220773": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 351.6144715,
+      "decDeg": 8.6428871
+    },
+    "HD 221287": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 352.836223,
+      "decDeg": -58.209754
+    },
+    "HD 221416": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 353.0331863,
+      "decDeg": -21.8012007
+    },
+    "HD 221420": {
+      "abbreviation": "Oct",
+      "name": "Octans",
+      "raDeg": 353.3319001,
+      "decDeg": -77.3853286
+    },
+    "HD 221585": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 353.2293802,
+      "decDeg": 63.1556146
+    },
+    "HD 222076": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 354.531982,
+      "decDeg": -70.9032461
+    },
+    "HD 222155": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 354.5025617,
+      "decDeg": 48.9960191
+    },
+    "HD 222237": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 354.9078642,
+      "decDeg": -72.7253271
+    },
+    "HD 224538": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 359.7164302,
+      "decDeg": -61.5868613
+    },
+    "HD 224693": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 359.9749837,
+      "decDeg": -22.4279999
+    },
+    "HD 22496": {
+      "abbreviation": "Hor",
+      "name": "Horologium",
+      "raDeg": 53.7565398,
+      "decDeg": -48.4178173
+    },
+    "HD 22781": {
+      "abbreviation": "Per",
+      "name": "Perseus",
+      "raDeg": 55.2065581,
+      "decDeg": 31.8258855
+    },
+    "HD 22946": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 54.819538,
+      "decDeg": -42.7630276
+    },
+    "HD 23079": {
+      "abbreviation": "Ret",
+      "name": "Reticulum",
+      "raDeg": 54.9281897,
+      "decDeg": -52.9162344
+    },
+    "HD 23127": {
+      "abbreviation": "Ret",
+      "name": "Reticulum",
+      "raDeg": 54.8491271,
+      "decDeg": -60.077229
+    },
+    "HD 23472": {
+      "abbreviation": "Ret",
+      "name": "Reticulum",
+      "raDeg": 55.4590314,
+      "decDeg": -62.7672667
+    },
+    "HD 235088": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 300.6154535,
+      "decDeg": 53.3774418
+    },
+    "HD 238090": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 183.0886375,
+      "decDeg": 54.486153
+    },
+    "HD 24040": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 57.5962104,
+      "decDeg": 17.4752873
+    },
+    "HD 24085": {
+      "abbreviation": "Hyi",
+      "name": "Hydrus",
+      "raDeg": 56.2563447,
+      "decDeg": -70.0245193
+    },
+    "HD 25015": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 59.4335463,
+      "decDeg": -20.2673347
+    },
+    "HD 25463": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 60.7483361,
+      "decDeg": 9.2077676
+    },
+    "HD 25912": {
+      "abbreviation": "Dor",
+      "name": "Dorado",
+      "raDeg": 60.9074988,
+      "decDeg": -51.9315058
+    },
+    "HD 260655": {
+      "abbreviation": "Gem",
+      "name": "Gemini",
+      "raDeg": 99.2915429,
+      "decDeg": 17.5662696
+    },
+    "HD 26161": {
+      "abbreviation": "Per",
+      "name": "Perseus",
+      "raDeg": 62.4122255,
+      "decDeg": 31.6524346
+    },
+    "HD 27631": {
+      "abbreviation": "Hor",
+      "name": "Horologium",
+      "raDeg": 64.9392168,
+      "decDeg": -41.9606604
+    },
+    "HD 27894": {
+      "abbreviation": "Ret",
+      "name": "Reticulum",
+      "raDeg": 65.1975693,
+      "decDeg": -59.4096776
+    },
+    "HD 27969": {
+      "abbreviation": "Per",
+      "name": "Perseus",
+      "raDeg": 66.7068364,
+      "decDeg": 42.90872
+    },
+    "HD 28185": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 66.6100461,
+      "decDeg": -10.5510754
+    },
+    "HD 28192": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 66.7032517,
+      "decDeg": -1.7244842
+    },
+    "HD 28471": {
+      "abbreviation": "Ret",
+      "name": "Reticulum",
+      "raDeg": 66.2875166,
+      "decDeg": -64.0786861
+    },
+    "HD 285507": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 61.755663,
+      "decDeg": 15.3349441
+    },
+    "HD 285968": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 70.7353853,
+      "decDeg": 18.953358
+    },
+    "HD 29021": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 69.4681379,
+      "decDeg": 60.6762985
+    },
+    "HD 290327": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 80.8399887,
+      "decDeg": -2.2780391
+    },
+    "HD 29399": {
+      "abbreviation": "Ret",
+      "name": "Reticulum",
+      "raDeg": 68.3903471,
+      "decDeg": -62.8237576
+    },
+    "HD 29985": {
+      "abbreviation": "Cae",
+      "name": "Caelum",
+      "raDeg": 70.5216589,
+      "decDeg": -33.9210696
+    },
+    "HD 30177": {
+      "abbreviation": "Dor",
+      "name": "Dorado",
+      "raDeg": 70.4770964,
+      "decDeg": -58.0208085
+    },
+    "HD 30562": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 72.1529519,
+      "decDeg": -5.6751152
+    },
+    "HD 30669": {
+      "abbreviation": "Cae",
+      "name": "Caelum",
+      "raDeg": 72.1198522,
+      "decDeg": -28.4190757
+    },
+    "HD 307842": {
+      "abbreviation": "Car",
+      "name": "Carina",
+      "raDeg": 159.3412205,
+      "decDeg": -63.6556923
+    },
+    "HD 31253": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 73.6822877,
+      "decDeg": 12.3520103
+    },
+    "HD 31527": {
+      "abbreviation": "Lep",
+      "name": "Lepus",
+      "raDeg": 73.9096193,
+      "decDeg": -23.2413163
+    },
+    "HD 3167": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 8.7401487,
+      "decDeg": 4.3807215
+    },
+    "HD 32963": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 76.9820146,
+      "decDeg": 26.3276805
+    },
+    "HD 330075": {
+      "abbreviation": "Nor",
+      "name": "Norma",
+      "raDeg": 237.4054997,
+      "decDeg": -49.9639199
+    },
+    "HD 331093": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 295.6200054,
+      "decDeg": 31.7395451
+    },
+    "HD 332231": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 306.741134,
+      "decDeg": 33.7443882
+    },
+    "HD 33564": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 80.6378979,
+      "decDeg": 79.2318488
+    },
+    "HD 34445": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 79.4207483,
+      "decDeg": 7.3527156
+    },
+    "HD 35759": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 82.8886636,
+      "decDeg": 64.3183753
+    },
+    "HD 35843": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 81.3488924,
+      "decDeg": -44.4312849
+    },
+    "HD 3651": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 9.8387218,
+      "decDeg": 21.2488844
+    },
+    "HD 37124": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 84.2599947,
+      "decDeg": 20.7289784
+    },
+    "HD 37605": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 85.0074276,
+      "decDeg": 6.0595116
+    },
+    "HD 3765": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 10.2072994,
+      "decDeg": 40.1842918
+    },
+    "HD 38283": {
+      "abbreviation": "Men",
+      "name": "Mensa",
+      "raDeg": 84.2605324,
+      "decDeg": -73.6998131
+    },
+    "HD 38801": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 86.9963141,
+      "decDeg": -8.3280256
+    },
+    "HD 39091": {
+      "abbreviation": "Men",
+      "name": "Mensa",
+      "raDeg": 84.2992798,
+      "decDeg": -80.4646041
+    },
+    "HD 39194": {
+      "abbreviation": "Men",
+      "name": "Mensa",
+      "raDeg": 86.129071,
+      "decDeg": -70.1382377
+    },
+    "HD 39855": {
+      "abbreviation": "Lep",
+      "name": "Lepus",
+      "raDeg": 88.6260731,
+      "decDeg": -19.7044472
+    },
+    "HD 40307": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 88.5172191,
+      "decDeg": -60.0237289
+    },
+    "HD 42012": {
+      "abbreviation": "Aur",
+      "name": "Auriga",
+      "raDeg": 92.485473,
+      "decDeg": 34.1341722
+    },
+    "HD 4203": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 11.1722288,
+      "decDeg": 20.4483925
+    },
+    "HD 4208": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 11.1125532,
+      "decDeg": -26.5150392
+    },
+    "HD 42618": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 93.0032173,
+      "decDeg": 6.7819742
+    },
+    "HD 4308": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 11.1652594,
+      "decDeg": -65.6527159
+    },
+    "HD 43197": {
+      "abbreviation": "CMa",
+      "name": "Canis Major",
+      "raDeg": 93.3993231,
+      "decDeg": -29.8971929
+    },
+    "HD 44219": {
+      "abbreviation": "Mon",
+      "name": "Monoceros",
+      "raDeg": 95.0599971,
+      "decDeg": -10.7250799
+    },
+    "HD 45184": {
+      "abbreviation": "CMa",
+      "name": "Canis Major",
+      "raDeg": 96.1820205,
+      "decDeg": -28.7806402
+    },
+    "HD 45350": {
+      "abbreviation": "Aur",
+      "name": "Auriga",
+      "raDeg": 97.1902262,
+      "decDeg": 38.9627315
+    },
+    "HD 45364": {
+      "abbreviation": "CMa",
+      "name": "Canis Major",
+      "raDeg": 96.4105736,
+      "decDeg": -31.4810037
+    },
+    "HD 45652": {
+      "abbreviation": "Mon",
+      "name": "Monoceros",
+      "raDeg": 97.3058709,
+      "decDeg": 10.9336212
+    },
+    "HD 457": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 2.2492922,
+      "decDeg": -39.7372401
+    },
+    "HD 47186": {
+      "abbreviation": "CMa",
+      "name": "Canis Major",
+      "raDeg": 99.0367212,
+      "decDeg": -27.6234285
+    },
+    "HD 47366": {
+      "abbreviation": "CMa",
+      "name": "Canis Major",
+      "raDeg": 99.4200181,
+      "decDeg": -12.9856593
+    },
+    "HD 48265": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 100.0073683,
+      "decDeg": -48.5418284
+    },
+    "HD 48948": {
+      "abbreviation": "Lyn",
+      "name": "Lynx",
+      "raDeg": 102.489811,
+      "decDeg": 60.3373133
+    },
+    "HD 49674": {
+      "abbreviation": "Aur",
+      "name": "Auriga",
+      "raDeg": 102.8773483,
+      "decDeg": 40.8672284
+    },
+    "HD 50499": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 103.008075,
+      "decDeg": -33.915267
+    },
+    "HD 50554": {
+      "abbreviation": "Gem",
+      "name": "Gemini",
+      "raDeg": 103.678273,
+      "decDeg": 24.2451409
+    },
+    "HD 51608": {
+      "abbreviation": "Car",
+      "name": "Carina",
+      "raDeg": 103.7137102,
+      "decDeg": -55.2600189
+    },
+    "HD 52265": {
+      "abbreviation": "Mon",
+      "name": "Monoceros",
+      "raDeg": 105.0746449,
+      "decDeg": -5.3668142
+    },
+    "HD 5278": {
+      "abbreviation": "Oct",
+      "name": "Octans",
+      "raDeg": 12.5467785,
+      "decDeg": -83.7437671
+    },
+    "HD 55696": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 108.0622029,
+      "decDeg": -38.174639
+    },
+    "HD 564": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 2.4694459,
+      "decDeg": -50.2678998
+    },
+    "HD 56957": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 109.3253986,
+      "decDeg": -40.6560651
+    },
+    "HD 60532": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 113.5130656,
+      "decDeg": -22.2958661
+    },
+    "HD 60779": {
+      "abbreviation": "Mon",
+      "name": "Monoceros",
+      "raDeg": 114.0047579,
+      "decDeg": -3.151291
+    },
+    "HD 62364": {
+      "abbreviation": "Men",
+      "name": "Mensa",
+      "raDeg": 113.9052658,
+      "decDeg": -75.5442707
+    },
+    "HD 62509": {
+      "abbreviation": "Gem",
+      "name": "Gemini",
+      "raDeg": 116.328824,
+      "decDeg": 28.026127
+    },
+    "HD 62549": {
+      "abbreviation": "Mon",
+      "name": "Monoceros",
+      "raDeg": 116.0821439,
+      "decDeg": -5.0541223
+    },
+    "HD 63433": {
+      "abbreviation": "Gem",
+      "name": "Gemini",
+      "raDeg": 117.4793699,
+      "decDeg": 27.3631342
+    },
+    "HD 63454": {
+      "abbreviation": "Cha",
+      "name": "Chamaleon",
+      "raDeg": 114.8406393,
+      "decDeg": -78.2791464
+    },
+    "HD 63765": {
+      "abbreviation": "Car",
+      "name": "Carina",
+      "raDeg": 116.9582617,
+      "decDeg": -54.265345
+    },
+    "HD 63935": {
+      "abbreviation": "CMi",
+      "name": "Canis Minor",
+      "raDeg": 117.9246417,
+      "decDeg": 9.3852412
+    },
+    "HD 64114": {
+      "abbreviation": "Mon",
+      "name": "Monoceros",
+      "raDeg": 117.982556,
+      "decDeg": -11.0337221
+    },
+    "HD 6434": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 16.1663441,
+      "decDeg": -39.4904909
+    },
+    "HD 66141": {
+      "abbreviation": "CMi",
+      "name": "Canis Minor",
+      "raDeg": 120.5662825,
+      "decDeg": 2.3350265
+    },
+    "HD 66428": {
+      "abbreviation": "Mon",
+      "name": "Monoceros",
+      "raDeg": 120.8691654,
+      "decDeg": -1.1636019
+    },
+    "HD 67087": {
+      "abbreviation": "Gem",
+      "name": "Gemini",
+      "raDeg": 121.9155672,
+      "decDeg": 31.5511553
+    },
+    "HD 68402": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 121.3474609,
+      "decDeg": -74.4100732
+    },
+    "HD 68475": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 122.7192621,
+      "decDeg": -42.8128841
+    },
+    "HD 6860": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 17.432979,
+      "decDeg": 35.620499
+    },
+    "HD 68988": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 124.5935429,
+      "decDeg": 61.4608518
+    },
+    "HD 69123": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 123.55499,
+      "decDeg": -35.4899246
+    },
+    "HD 69830": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 124.6010091,
+      "decDeg": -12.6364246
+    },
+    "HD 70573": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 125.7079153,
+      "decDeg": 1.8591088
+    },
+    "HD 70642": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 125.3661079,
+      "decDeg": -39.7044432
+    },
+    "HD 7199": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 17.6979344,
+      "decDeg": -66.1886947
+    },
+    "HD 72659": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 128.5128072,
+      "decDeg": -1.5686323
+    },
+    "HD 72892": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 128.7195554,
+      "decDeg": -14.4574311
+    },
+    "HD 73256": {
+      "abbreviation": "Pyx",
+      "name": "Pyxis",
+      "raDeg": 129.0949961,
+      "decDeg": -30.0373339
+    },
+    "HD 73267": {
+      "abbreviation": "Pyx",
+      "name": "Pyxis",
+      "raDeg": 129.0735123,
+      "decDeg": -34.4594469
+    },
+    "HD 73344": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 129.6894456,
+      "decDeg": 23.6852651
+    },
+    "HD 73526": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 129.318331,
+      "decDeg": -41.3184231
+    },
+    "HD 73534": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 129.8153421,
+      "decDeg": 12.9599703
+    },
+    "HD 73583": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 129.6883026,
+      "decDeg": -13.2565267
+    },
+    "HD 74156": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 130.6047813,
+      "decDeg": 4.5772338
+    },
+    "HD 74698": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 130.0744755,
+      "decDeg": -71.8768726
+    },
+    "HD 75302": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 132.3015641,
+      "decDeg": 3.4850141
+    },
+    "HD 75784": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 133.0992289,
+      "decDeg": 13.2330548
+    },
+    "HD 75898": {
+      "abbreviation": "Lyn",
+      "name": "Lynx",
+      "raDeg": 133.4611999,
+      "decDeg": 33.0566885
+    },
+    "HD 76700": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 133.4782248,
+      "decDeg": -66.8004747
+    },
+    "HD 77338": {
+      "abbreviation": "Pyx",
+      "name": "Pyxis",
+      "raDeg": 135.3022475,
+      "decDeg": -25.5282343
+    },
+    "HD 77946": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 136.777644,
+      "decDeg": 46.6724251
+    },
+    "HD 7924": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 20.4956562,
+      "decDeg": 76.7101475
+    },
+    "HD 80869": {
+      "abbreviation": "LMi",
+      "name": "Leo Minor",
+      "raDeg": 140.7912931,
+      "decDeg": 33.9048294
+    },
+    "HD 80883": {
+      "abbreviation": "Car",
+      "name": "Carina",
+      "raDeg": 139.9331831,
+      "decDeg": -59.4780815
+    },
+    "HD 80913": {
+      "abbreviation": "Cha",
+      "name": "Chamaleon",
+      "raDeg": 138.1021548,
+      "decDeg": -81.768451
+    },
+    "HD 81040": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 140.9455027,
+      "decDeg": 20.3646078
+    },
+    "HD 81688": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 142.1665753,
+      "decDeg": 45.6009241
+    },
+    "HD 82943": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 143.7114034,
+      "decDeg": -12.1302976
+    },
+    "HD 8326": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 20.5314418,
+      "decDeg": -26.8940678
+    },
+    "HD 83443": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 144.2994103,
+      "decDeg": -43.272721
+    },
+    "HD 85390": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 147.5105663,
+      "decDeg": -49.7905254
+    },
+    "HD 8574": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 21.3033807,
+      "decDeg": 28.5660169
+    },
+    "HD 86065": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 148.9256674,
+      "decDeg": -18.1069385
+    },
+    "HD 86226": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 149.1235154,
+      "decDeg": -24.0991859
+    },
+    "HD 86264": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 149.2409308,
+      "decDeg": -15.8953993
+    },
+    "HD 86728": {
+      "abbreviation": "LMi",
+      "name": "Leo Minor",
+      "raDeg": 150.250054,
+      "decDeg": 31.9218216
+    },
+    "HD 87883": {
+      "abbreviation": "LMi",
+      "name": "Leo Minor",
+      "raDeg": 152.1794175,
+      "decDeg": 34.2419984
+    },
+    "HD 88072": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 152.3467466,
+      "decDeg": 2.371054
+    },
+    "HD 88133": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 152.5319349,
+      "decDeg": 18.1857284
+    },
+    "HD 88986": {
+      "abbreviation": "LMi",
+      "name": "Leo Minor",
+      "raDeg": 154.1166869,
+      "decDeg": 28.6820708
+    },
+    "HD 89307": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 154.5874958,
+      "decDeg": 12.6209392
+    },
+    "HD 89839": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 155.168879,
+      "decDeg": -53.6640291
+    },
+    "HD 90156": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 155.9801144,
+      "decDeg": -29.645103
+    },
+    "HD 9174": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 22.5043352,
+      "decDeg": -19.6052945
+    },
+    "HD 92788": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 160.7021351,
+      "decDeg": -2.1847173
+    },
+    "HD 93083": {
+      "abbreviation": "Ant",
+      "name": "Antlia",
+      "raDeg": 161.0866672,
+      "decDeg": -33.5776794
+    },
+    "HD 93351": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 161.6779279,
+      "decDeg": -1.6885763
+    },
+    "HD 93385": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 161.5627065,
+      "decDeg": -41.464604
+    },
+    "HD 9446": {
+      "abbreviation": "Tri",
+      "name": "Triangulum",
+      "raDeg": 23.3350424,
+      "decDeg": 29.2649187
+    },
+    "HD 94771": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 163.9746776,
+      "decDeg": -35.1145225
+    },
+    "HD 94834": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 164.3126363,
+      "decDeg": 24.1429374
+    },
+    "HD 94890": {
+      "abbreviation": "Ant",
+      "name": "Antlia",
+      "raDeg": 164.1797804,
+      "decDeg": -37.1383035
+    },
+    "HD 95086": {
+      "abbreviation": "Car",
+      "name": "Carina",
+      "raDeg": 164.2621032,
+      "decDeg": -68.6672917
+    },
+    "HD 95338": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 164.8563364,
+      "decDeg": -56.6235564
+    },
+    "HD 95544": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 166.3231784,
+      "decDeg": 81.0389868
+    },
+    "HD 95872": {
+      "abbreviation": "Crt",
+      "name": "Crater",
+      "raDeg": 165.8658796,
+      "decDeg": -22.0943303
+    },
+    "HD 96700": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 166.9742616,
+      "decDeg": -30.1751383
+    },
+    "HD 97037": {
+      "abbreviation": "Crt",
+      "name": "Crater",
+      "raDeg": 167.5545621,
+      "decDeg": -7.3901483
+    },
+    "HD 97658": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 168.6376584,
+      "decDeg": 25.7105962
+    },
+    "HD 98649": {
+      "abbreviation": "Crt",
+      "name": "Crater",
+      "raDeg": 170.2147665,
+      "decDeg": -23.2181063
+    },
+    "HD 99109": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 171.0715576,
+      "decDeg": -1.529761
+    },
+    "HIP 10090": {
+      "abbreviation": "For",
+      "name": "Fornax",
+      "raDeg": 32.4351198,
+      "decDeg": -30.7470844
+    },
+    "HIP 105854": {
+      "abbreviation": "Mic",
+      "name": "Microscopium",
+      "raDeg": 321.5962275,
+      "decDeg": -37.8294782
+    },
+    "HIP 107772": {
+      "abbreviation": "Gru",
+      "name": "Grus",
+      "raDeg": 327.4977057,
+      "decDeg": -41.2440371
+    },
+    "HIP 109384": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 332.408972,
+      "decDeg": 71.313956
+    },
+    "HIP 111909": {
+      "abbreviation": "Gru",
+      "name": "Grus",
+      "raDeg": 340.0304354,
+      "decDeg": -49.5985391
+    },
+    "HIP 113103": {
+      "abbreviation": "Gru",
+      "name": "Grus",
+      "raDeg": 343.5723794,
+      "decDeg": -43.0102291
+    },
+    "HIP 12961": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 41.6800749,
+      "decDeg": -23.0860048
+    },
+    "HIP 14810": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 47.809275,
+      "decDeg": 21.0971302
+    },
+    "HIP 18606": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 59.7181058,
+      "decDeg": -5.4706979
+    },
+    "HIP 34222": {
+      "abbreviation": "Gem",
+      "name": "Gemini",
+      "raDeg": 106.4257786,
+      "decDeg": 27.4704132
+    },
+    "HIP 35173": {
+      "abbreviation": "Mon",
+      "name": "Monoceros",
+      "raDeg": 109.0449329,
+      "decDeg": -3.6661273
+    },
+    "HIP 35965": {
+      "abbreviation": "Car",
+      "name": "Carina",
+      "raDeg": 111.2025182,
+      "decDeg": -51.3257507
+    },
+    "HIP 39017": {
+      "abbreviation": "Mon",
+      "name": "Monoceros",
+      "raDeg": 119.7665756,
+      "decDeg": -4.3326006
+    },
+    "HIP 39330": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 120.6116831,
+      "decDeg": -46.3353155
+    },
+    "HIP 4845": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 15.5881733,
+      "decDeg": -10.4246208
+    },
+    "HIP 48714": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 149.0332672,
+      "decDeg": 62.7859505
+    },
+    "HIP 5158": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 16.5094891,
+      "decDeg": -22.4536134
+    },
+    "HIP 54373": {
+      "abbreviation": "Crt",
+      "name": "Crater",
+      "raDeg": 166.8643532,
+      "decDeg": -19.2916857
+    },
+    "HIP 54515": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 167.3066308,
+      "decDeg": -1.3332838
+    },
+    "HIP 54597": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 167.6082179,
+      "decDeg": -29.4143018
+    },
+    "HIP 55507": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 170.5227246,
+      "decDeg": 46.907803
+    },
+    "HIP 56998": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 175.2563039,
+      "decDeg": -44.4041485
+    },
+    "HIP 57274": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 176.1705487,
+      "decDeg": 30.9576484
+    },
+    "HIP 5763": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 18.495343,
+      "decDeg": 16.4942738
+    },
+    "HIP 65407": {
+      "abbreviation": "CVn",
+      "name": "Canes Venatici",
+      "raDeg": 201.087663,
+      "decDeg": 48.8847322
+    },
+    "HIP 66074": {
+      "abbreviation": "UMi",
+      "name": "Ursa Minor",
+      "raDeg": 203.1635632,
+      "decDeg": 75.0071038
+    },
+    "HIP 67851": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 208.465364,
+      "decDeg": -35.3146536
+    },
+    "HIP 71135": {
+      "abbreviation": "Lup",
+      "name": "Lupus",
+      "raDeg": 218.2158073,
+      "decDeg": -52.6464757
+    },
+    "HIP 74890": {
+      "abbreviation": "Lup",
+      "name": "Lupus",
+      "raDeg": 229.5714974,
+      "decDeg": -41.4210961
+    },
+    "HIP 75092": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 230.1724206,
+      "decDeg": -25.9910525
+    },
+    "HIP 79431": {
+      "abbreviation": "Sco",
+      "name": "Scorpius",
+      "raDeg": 243.1742467,
+      "decDeg": -18.8764247
+    },
+    "HIP 86221": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 264.294875,
+      "decDeg": 27.896391
+    },
+    "HIP 8923": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 28.7250931,
+      "decDeg": -11.5113361
+    },
+    "HIP 91258": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 279.2211173,
+      "decDeg": 61.7015065
+    },
+    "HIP 948": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 2.9276336,
+      "decDeg": -39.2304879
+    },
+    "HIP 9618": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 30.9050061,
+      "decDeg": 21.2813274
+    },
+    "HIP 97166": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 296.2446203,
+      "decDeg": 74.0628577
+    },
+    "HIP 98599": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 300.4090608,
+      "decDeg": -22.1110649
+    },
+    "HIP 99770": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 303.6338344,
+      "decDeg": 36.8066046
+    },
+    "HN Lib": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 218.5684823,
+      "decDeg": -12.5170062
+    },
+    "HN Peg": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 326.1315705,
+      "decDeg": 14.7714524
+    },
+    "HR 2562": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 102.5042716,
+      "decDeg": -60.2486775
+    },
+    "HR 810": {
+      "abbreviation": "Hor",
+      "name": "Horologium",
+      "raDeg": 40.6417178,
+      "decDeg": -50.7993484
+    },
+    "HR 8799": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 346.8701486,
+      "decDeg": 21.1340376
+    },
+    "HS Psc": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 24.347379,
+      "decDeg": 26.9528036
+    },
+    "K2-116": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 336.1523363,
+      "decDeg": -11.5793181
+    },
+    "K2-129": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 289.1485491,
+      "decDeg": -25.6463233
+    },
+    "K2-133": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 70.1493775,
+      "decDeg": 25.0098135
+    },
+    "K2-137": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 186.870426,
+      "decDeg": -6.1952168
+    },
+    "K2-141": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 350.9170464,
+      "decDeg": -1.1891827
+    },
+    "K2-146": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 130.0266951,
+      "decDeg": 19.0923416
+    },
+    "K2-147": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 293.8330329,
+      "decDeg": -28.498475
+    },
+    "K2-155": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 65.469614,
+      "decDeg": 21.3532633
+    },
+    "K2-167": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 336.5761233,
+      "decDeg": -18.011665
+    },
+    "K2-174": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 60.7929729,
+      "decDeg": 16.347166
+    },
+    "K2-18": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 172.560141,
+      "decDeg": 7.5878315
+    },
+    "K2-184": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 129.1405227,
+      "decDeg": 14.4618826
+    },
+    "K2-209": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 14.6903464,
+      "decDeg": 1.382807
+    },
+    "K2-21": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 340.3037846,
+      "decDeg": -14.4893256
+    },
+    "K2-233": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 230.4799011,
+      "decDeg": -20.2317975
+    },
+    "K2-239": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 160.5941265,
+      "decDeg": 4.4413751
+    },
+    "K2-240": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 227.849371,
+      "decDeg": -17.8754464
+    },
+    "K2-25": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 63.2739346,
+      "decDeg": 15.2477027
+    },
+    "K2-257": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 188.278284,
+      "decDeg": -1.9532879
+    },
+    "K2-26": {
+      "abbreviation": "Gem",
+      "name": "Gemini",
+      "raDeg": 94.2064312,
+      "decDeg": 24.5958335
+    },
+    "K2-28": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 335.6233145,
+      "decDeg": -7.9563525
+    },
+    "K2-286": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 233.3698192,
+      "decDeg": -16.7737113
+    },
+    "K2-291": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 76.44594,
+      "decDeg": 21.548199
+    },
+    "K2-3": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 172.3353708,
+      "decDeg": -1.4551364
+    },
+    "K2-315": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 228.0210932,
+      "decDeg": -20.1081634
+    },
+    "K2-321": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 156.4054989,
+      "decDeg": 2.5138829
+    },
+    "K2-344": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 136.3614923,
+      "decDeg": 21.6685886
+    },
+    "K2-354": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 129.1299193,
+      "decDeg": 10.1472175
+    },
+    "K2-384": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 20.4998403,
+      "decDeg": 0.7509701
+    },
+    "K2-394": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 71.110002,
+      "decDeg": 16.5185817
+    },
+    "K2-400": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 154.5110307,
+      "decDeg": 3.6969271
+    },
+    "K2-406": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 230.8872242,
+      "decDeg": -25.3706149
+    },
+    "K2-415": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 137.2015437,
+      "decDeg": 11.8622503
+    },
+    "K2-417": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 350.1417675,
+      "decDeg": -10.0365901
+    },
+    "K2-65": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 333.2125206,
+      "decDeg": -10.9261373
+    },
+    "K2-72": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 334.6227504,
+      "decDeg": -9.6120084
+    },
+    "K2-85": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 59.464829,
+      "decDeg": 18.4649505
+    },
+    "K2-89": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 57.0671234,
+      "decDeg": 20.4594885
+    },
+    "K2-9": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 176.263724,
+      "decDeg": 0.0054085
+    },
+    "K2-91": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 63.2182348,
+      "decDeg": 24.2047218
+    },
+    "KELT-11": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 161.7069053,
+      "decDeg": -9.3993646
+    },
+    "KOBE-1": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 19.1660378,
+      "decDeg": 25.3310358
+    },
+    "Kepler-138": {
+      "abbreviation": "Lyr",
+      "name": "Lyra",
+      "raDeg": 290.3814122,
+      "decDeg": 43.2930645
+    },
+    "Kepler-1582": {
+      "abbreviation": "Lyr",
+      "name": "Lyra",
+      "raDeg": 289.3765441,
+      "decDeg": 41.1580845
+    },
+    "Kepler-1649": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 292.5029676,
+      "decDeg": 41.8299933
+    },
+    "Kepler-37": {
+      "abbreviation": "Lyr",
+      "name": "Lyra",
+      "raDeg": 284.0592503,
+      "decDeg": 44.5183733
+    },
+    "Kepler-408": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 284.7862158,
+      "decDeg": 48.4232622
+    },
+    "Kepler-409": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 293.6792058,
+      "decDeg": 46.8527337
+    },
+    "Kepler-42": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 292.2196,
+      "decDeg": 44.6173667
+    },
+    "Kepler-446": {
+      "abbreviation": "Lyr",
+      "name": "Lyra",
+      "raDeg": 282.2501047,
+      "decDeg": 44.921002
+    },
+    "Kepler-93": {
+      "abbreviation": "Lyr",
+      "name": "Lyra",
+      "raDeg": 291.4181275,
+      "decDeg": 38.6723124
+    },
+    "L 168-9": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 350.0285917,
+      "decDeg": -60.0657292
+    },
+    "L 363-38": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 10.8555443,
+      "decDeg": -41.2952926
+    },
+    "L 98-59": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 124.5328604,
+      "decDeg": -68.3144658
+    },
+    "LHS 1140": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 11.248632,
+      "decDeg": -15.2741085
+    },
+    "LHS 1478": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 44.3388743,
+      "decDeg": 76.5514045
+    },
+    "LHS 1815": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 91.0899861,
+      "decDeg": -55.3115376
+    },
+    "LHS 1903": {
+      "abbreviation": "Lyn",
+      "name": "Lynx",
+      "raDeg": 107.865826,
+      "decDeg": 48.3279327
+    },
+    "LHS 3154": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 241.6367309,
+      "decDeg": 40.9068221
+    },
+    "LHS 3844": {
+      "abbreviation": "Ind",
+      "name": "Indus",
+      "raDeg": 340.4962038,
+      "decDeg": -69.1721081
+    },
+    "LHS 475": {
+      "abbreviation": "Oct",
+      "name": "Octans",
+      "raDeg": 290.2379403,
+      "decDeg": -82.5597883
+    },
+    "LP 261-75 A": {
+      "abbreviation": "LMi",
+      "name": "Leo Minor",
+      "raDeg": 147.7685281,
+      "decDeg": 35.9685562
+    },
+    "LP 714-47": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 64.1902212,
+      "decDeg": -12.0848643
+    },
+    "LP 791-18": {
+      "abbreviation": "Crt",
+      "name": "Crater",
+      "raDeg": 165.6904843,
+      "decDeg": -16.4064445
+    },
+    "LP 890-9": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 64.1309096,
+      "decDeg": -28.3157909
+    },
+    "LSPM J2116+0234": {
+      "abbreviation": "Equ",
+      "name": "Equuleus",
+      "raDeg": 319.1147513,
+      "decDeg": 2.5807711
+    },
+    "LTT 9779": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 358.6688767,
+      "decDeg": -37.6282237
+    },
+    "PZ Tel": {
+      "abbreviation": "Tel",
+      "name": "Telescopium",
+      "raDeg": 283.2745823,
+      "decDeg": -50.1808952
+    },
+    "Ross 128": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 176.9376036,
+      "decDeg": 0.7992898
+    },
+    "Ross 176": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 305.6897438,
+      "decDeg": 47.3086191
+    },
+    "Ross 508": {
+      "abbreviation": "Ser",
+      "name": "Serpens",
+      "raDeg": 230.9613022,
+      "decDeg": 17.4605347
+    },
+    "TIC 139702105": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 66.498034,
+      "decDeg": -18.214545
+    },
+    "TIC 231949697": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 94.2576817,
+      "decDeg": -43.3661845
+    },
+    "TIC 88692598": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 149.2109097,
+      "decDeg": 47.7706699
+    },
+    "TOI-1011": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 113.9847611,
+      "decDeg": -32.8419988
+    },
+    "TOI-1054": {
+      "abbreviation": "Tel",
+      "name": "Telescopium",
+      "raDeg": 302.1141738,
+      "decDeg": -54.3175014
+    },
+    "TOI-1062": {
+      "abbreviation": "Hyi",
+      "name": "Hydrus",
+      "raDeg": 38.1209678,
+      "decDeg": -78.0236828
+    },
+    "TOI-1064": {
+      "abbreviation": "Tel",
+      "name": "Telescopium",
+      "raDeg": 296.0039349,
+      "decDeg": -47.5620305
+    },
+    "TOI-1075": {
+      "abbreviation": "Pav",
+      "name": "Pavo",
+      "raDeg": 309.9712091,
+      "decDeg": -65.4496994
+    },
+    "TOI-1080": {
+      "abbreviation": "Tel",
+      "name": "Telescopium",
+      "raDeg": 276.3683249,
+      "decDeg": -52.214573
+    },
+    "TOI-1105": {
+      "abbreviation": "Oct",
+      "name": "Octans",
+      "raDeg": 146.0539694,
+      "decDeg": -89.4715133
+    },
+    "TOI-1130": {
+      "abbreviation": "CrA",
+      "name": "Corona Australis",
+      "raDeg": 286.3760037,
+      "decDeg": -41.4376399
+    },
+    "TOI-1136": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 192.1848981,
+      "decDeg": 64.8552755
+    },
+    "TOI-1154": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 254.924043,
+      "decDeg": 64.6992141
+    },
+    "TOI-1174": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 209.2171751,
+      "decDeg": 68.6182106
+    },
+    "TOI-1180": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 214.5557741,
+      "decDeg": 82.1937642
+    },
+    "TOI-1184": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 272.2045196,
+      "decDeg": 60.6787845
+    },
+    "TOI-1203": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 168.2267358,
+      "decDeg": -34.4069371
+    },
+    "TOI-122": {
+      "abbreviation": "Tuc",
+      "name": "Tucana",
+      "raDeg": 332.9482355,
+      "decDeg": -58.946085
+    },
+    "TOI-1224": {
+      "abbreviation": "Hyi",
+      "name": "Hydrus",
+      "raDeg": 37.1978356,
+      "decDeg": -80.8991053
+    },
+    "TOI-1231": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 156.74726,
+      "decDeg": -52.4678724
+    },
+    "TOI-1235": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 152.2182549,
+      "decDeg": 69.2766204
+    },
+    "TOI-1238": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 201.3823387,
+      "decDeg": 68.8360678
+    },
+    "TOI-1243": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 135.7326412,
+      "decDeg": 71.6364158
+    },
+    "TOI-1245": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 283.5355298,
+      "decDeg": 69.6335338
+    },
+    "TOI-1260": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 157.1440712,
+      "decDeg": 65.8541986
+    },
+    "TOI-1262": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 180.7265015,
+      "decDeg": 74.0610093
+    },
+    "TOI-1266": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 197.9965833,
+      "decDeg": 65.8336973
+    },
+    "TOI-1278": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 320.4784442,
+      "decDeg": 35.648625
+    },
+    "TOI-128": {
+      "abbreviation": "Men",
+      "name": "Mensa",
+      "raDeg": 79.5209381,
+      "decDeg": -80.964384
+    },
+    "TOI-1301": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 275.8625432,
+      "decDeg": 71.5817479
+    },
+    "TOI-139": {
+      "abbreviation": "PsA",
+      "name": "Pisces Austrinus",
+      "raDeg": 336.4024144,
+      "decDeg": -34.9097131
+    },
+    "TOI-1410": {
+      "abbreviation": "Lac",
+      "name": "Lacerta",
+      "raDeg": 334.8828486,
+      "decDeg": 42.5603141
+    },
+    "TOI-1411": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 232.946047,
+      "decDeg": 47.0555507
+    },
+    "TOI-1416": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 216.9234892,
+      "decDeg": 41.9529862
+    },
+    "TOI-1432": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 329.401792,
+      "decDeg": 36.321404
+    },
+    "TOI-1435": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 203.5379464,
+      "decDeg": 67.6212303
+    },
+    "TOI-1442": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 287.2921006,
+      "decDeg": 74.1742762
+    },
+    "TOI-1443": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 297.398678,
+      "decDeg": 76.1391776
+    },
+    "TOI-1448": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 316.324003,
+      "decDeg": 57.7710946
+    },
+    "TOI-1451": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 186.5242821,
+      "decDeg": 61.2589289
+    },
+    "TOI-1466": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 307.3965319,
+      "decDeg": 61.5507253
+    },
+    "TOI-1467": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 19.1146441,
+      "decDeg": 49.2331382
+    },
+    "TOI-1468": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 16.6538724,
+      "decDeg": 19.2249195
+    },
+    "TOI-1470": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 10.0891431,
+      "decDeg": 61.2133868
+    },
+    "TOI-1630": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 352.0166759,
+      "decDeg": 75.5526069
+    },
+    "TOI-1648": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 45.4011794,
+      "decDeg": 69.2299235
+    },
+    "TOI-1680": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 292.313979,
+      "decDeg": 65.9738018
+    },
+    "TOI-1683": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 65.9796504,
+      "decDeg": 27.8223701
+    },
+    "TOI-1685": {
+      "abbreviation": "Per",
+      "name": "Perseus",
+      "raDeg": 68.5939529,
+      "decDeg": 43.0370395
+    },
+    "TOI-1693": {
+      "abbreviation": "Aur",
+      "name": "Auriga",
+      "raDeg": 90.3083455,
+      "decDeg": 34.7730904
+    },
+    "TOI-1695": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 21.9217346,
+      "decDeg": 72.2966148
+    },
+    "TOI-1696": {
+      "abbreviation": "Per",
+      "name": "Perseus",
+      "raDeg": 65.280648,
+      "decDeg": 48.8198312
+    },
+    "TOI-1718": {
+      "abbreviation": "Gem",
+      "name": "Gemini",
+      "raDeg": 112.0180254,
+      "decDeg": 30.3217322
+    },
+    "TOI-1728": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 120.6116787,
+      "decDeg": 64.7971531
+    },
+    "TOI-1732": {
+      "abbreviation": "Lyn",
+      "name": "Lynx",
+      "raDeg": 111.8014509,
+      "decDeg": 53.0452684
+    },
+    "TOI-1736": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 43.4344615,
+      "decDeg": 69.101345
+    },
+    "TOI-1739": {
+      "abbreviation": "UMi",
+      "name": "Ursa Minor",
+      "raDeg": 240.172481,
+      "decDeg": 83.2586589
+    },
+    "TOI-1742": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 257.3288678,
+      "decDeg": 71.8766724
+    },
+    "TOI-1743": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 257.7473322,
+      "decDeg": 71.8722039
+    },
+    "TOI-1749": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 282.7372281,
+      "decDeg": 64.419466
+    },
+    "TOI-1756": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 306.3287741,
+      "decDeg": 77.6364119
+    },
+    "TOI-1758": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 354.741581,
+      "decDeg": 75.6852317
+    },
+    "TOI-1759": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 326.8516615,
+      "decDeg": 62.7538164
+    },
+    "TOI-1772": {
+      "abbreviation": "LMi",
+      "name": "Leo Minor",
+      "raDeg": 156.837704,
+      "decDeg": 34.3909497
+    },
+    "TOI-1774": {
+      "abbreviation": "LMi",
+      "name": "Leo Minor",
+      "raDeg": 148.1619305,
+      "decDeg": 35.111008
+    },
+    "TOI-1776": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 164.7772913,
+      "decDeg": 40.9837182
+    },
+    "TOI-1777": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 151.807032,
+      "decDeg": 46.1148814
+    },
+    "TOI-178": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 7.3020115,
+      "decDeg": -30.4541159
+    },
+    "TOI-1782": {
+      "abbreviation": "UMi",
+      "name": "Ursa Minor",
+      "raDeg": 213.0787718,
+      "decDeg": 74.4117909
+    },
+    "TOI-1799": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 167.2329152,
+      "decDeg": 34.3030149
+    },
+    "TOI-1806": {
+      "abbreviation": "LMi",
+      "name": "Leo Minor",
+      "raDeg": 166.1181474,
+      "decDeg": 30.4585763
+    },
+    "TOI-1807": {
+      "abbreviation": "CVn",
+      "name": "Canes Venatici",
+      "raDeg": 201.2826259,
+      "decDeg": 38.9223671
+    },
+    "TOI-181": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 352.1725409,
+      "decDeg": -34.4914099
+    },
+    "TOI-1823": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 196.2197201,
+      "decDeg": 63.753261
+    },
+    "TOI-1824": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 197.7312286,
+      "decDeg": 61.7448492
+    },
+    "TOI-1846": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 257.9549645,
+      "decDeg": 54.5278483
+    },
+    "TOI-1860": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 226.4567308,
+      "decDeg": 64.0476821
+    },
+    "TOI-1898": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 144.5553,
+      "decDeg": 23.5467464
+    },
+    "TOI-198": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 2.2715087,
+      "decDeg": -27.1217452
+    },
+    "TOI-2015": {
+      "abbreviation": "CrB",
+      "name": "Corona Borealis",
+      "raDeg": 232.1326528,
+      "decDeg": 27.361073
+    },
+    "TOI-2018": {
+      "abbreviation": "CrB",
+      "name": "Corona Borealis",
+      "raDeg": 229.8374423,
+      "decDeg": 29.2078771
+    },
+    "TOI-206": {
+      "abbreviation": "Dor",
+      "name": "Dorado",
+      "raDeg": 73.7382202,
+      "decDeg": -62.521874
+    },
+    "TOI-2068": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 186.27356,
+      "decDeg": 60.4183455
+    },
+    "TOI-2076": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 217.3920159,
+      "decDeg": 39.7903991
+    },
+    "TOI-2081": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 264.3022634,
+      "decDeg": 53.0255666
+    },
+    "TOI-2093": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 302.7375229,
+      "decDeg": 70.8696532
+    },
+    "TOI-2094": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 254.1425333,
+      "decDeg": 70.0273157
+    },
+    "TOI-2095": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 285.6365235,
+      "decDeg": 75.4185135
+    },
+    "TOI-2096": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 151.6186989,
+      "decDeg": 74.8272107
+    },
+    "TOI-2104": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 151.6122146,
+      "decDeg": 83.0878397
+    },
+    "TOI-2120": {
+      "abbreviation": "Cas",
+      "name": "Cassiopeia",
+      "raDeg": 23.507315,
+      "decDeg": 65.5139877
+    },
+    "TOI-2128": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 256.9817998,
+      "decDeg": 32.1053027
+    },
+    "TOI-213": {
+      "abbreviation": "Hyi",
+      "name": "Hydrus",
+      "raDeg": 38.8872913,
+      "decDeg": -71.6242471
+    },
+    "TOI-2133": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 261.2438308,
+      "decDeg": 32.7983974
+    },
+    "TOI-2134": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 271.9355015,
+      "decDeg": 39.0729269
+    },
+    "TOI-2136": {
+      "abbreviation": "Lyr",
+      "name": "Lyra",
+      "raDeg": 281.1763433,
+      "decDeg": 36.5631318
+    },
+    "TOI-2141": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 258.7623456,
+      "decDeg": 18.3403449
+    },
+    "TOI-2194": {
+      "abbreviation": "Sgr",
+      "name": "Sagittarius",
+      "raDeg": 299.1563393,
+      "decDeg": -31.3351812
+    },
+    "TOI-220": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 91.7996988,
+      "decDeg": -61.9972098
+    },
+    "TOI-2211": {
+      "abbreviation": "Mic",
+      "name": "Microscopium",
+      "raDeg": 308.5390859,
+      "decDeg": -29.6726127
+    },
+    "TOI-2257": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 194.7396141,
+      "decDeg": 77.6617157
+    },
+    "TOI-2266": {
+      "abbreviation": "CrB",
+      "name": "Corona Borealis",
+      "raDeg": 245.2800398,
+      "decDeg": 31.5770413
+    },
+    "TOI-2274": {
+      "abbreviation": "Lyr",
+      "name": "Lyra",
+      "raDeg": 277.459311,
+      "decDeg": 40.5414117
+    },
+    "TOI-2285": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 332.5632644,
+      "decDeg": 58.7060934
+    },
+    "TOI-2287": {
+      "abbreviation": "UMi",
+      "name": "Ursa Minor",
+      "raDeg": 222.7507902,
+      "decDeg": 85.8953909
+    },
+    "TOI-2293": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 115.5933766,
+      "decDeg": 70.4040765
+    },
+    "TOI-2322": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 116.9731027,
+      "decDeg": -71.0019671
+    },
+    "TOI-2345": {
+      "abbreviation": "For",
+      "name": "Fornax",
+      "raDeg": 43.884794,
+      "decDeg": -34.9779745
+    },
+    "TOI-237": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 353.2435381,
+      "decDeg": -29.416487
+    },
+    "TOI-238": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 349.2310814,
+      "decDeg": -18.6066463
+    },
+    "TOI-2406": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 8.8060544,
+      "decDeg": -3.3720833
+    },
+    "TOI-2407": {
+      "abbreviation": "Hor",
+      "name": "Horologium",
+      "raDeg": 49.746545,
+      "decDeg": -46.458025
+    },
+    "TOI-2411": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 20.9224567,
+      "decDeg": -8.7017944
+    },
+    "TOI-2427": {
+      "abbreviation": "For",
+      "name": "Fornax",
+      "raDeg": 52.2917315,
+      "decDeg": -31.3628665
+    },
+    "TOI-2431": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 37.7652989,
+      "decDeg": 8.3816255
+    },
+    "TOI-244": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 10.5697537,
+      "decDeg": -36.7179743
+    },
+    "TOI-2441": {
+      "abbreviation": "Car",
+      "name": "Carina",
+      "raDeg": 91.4101516,
+      "decDeg": -51.6796138
+    },
+    "TOI-2443": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 40.1798608,
+      "decDeg": 1.1996757
+    },
+    "TOI-2445": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 43.3161555,
+      "decDeg": 0.0523366
+    },
+    "TOI-2453": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 74.8374845,
+      "decDeg": 12.9363528
+    },
+    "TOI-2459": {
+      "abbreviation": "Col",
+      "name": "Columba",
+      "raDeg": 82.1433321,
+      "decDeg": -39.3730456
+    },
+    "TOI-248": {
+      "abbreviation": "Hor",
+      "name": "Horologium",
+      "raDeg": 34.6842828,
+      "decDeg": -54.8597252
+    },
+    "TOI-251": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 353.0620655,
+      "decDeg": -37.2558629
+    },
+    "TOI-2540": {
+      "abbreviation": "Col",
+      "name": "Columba",
+      "raDeg": 82.5585484,
+      "decDeg": -42.6979461
+    },
+    "TOI-257": {
+      "abbreviation": "Hor",
+      "name": "Horologium",
+      "raDeg": 47.5172608,
+      "decDeg": -50.8322632
+    },
+    "TOI-260": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 4.7730178,
+      "decDeg": -9.9661505
+    },
+    "TOI-262": {
+      "abbreviation": "For",
+      "name": "Fornax",
+      "raDeg": 32.534687,
+      "decDeg": -31.0706272
+    },
+    "TOI-269": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 75.8462827,
+      "decDeg": -54.1777213
+    },
+    "TOI-270": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 68.4160804,
+      "decDeg": -51.9573937
+    },
+    "TOI-2768": {
+      "abbreviation": "CMa",
+      "name": "Canis Major",
+      "raDeg": 99.3641336,
+      "decDeg": -15.4812031
+    },
+    "TOI-277": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 19.0766985,
+      "decDeg": -20.9532772
+    },
+    "TOI-283": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 118.5693065,
+      "decDeg": -65.441482
+    },
+    "TOI-286": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 90.9842762,
+      "decDeg": -60.6663348
+    },
+    "TOI-3235": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 207.4738488,
+      "decDeg": -46.0665139
+    },
+    "TOI-3353": {
+      "abbreviation": "Men",
+      "name": "Mensa",
+      "raDeg": 106.5298146,
+      "decDeg": -75.8195594
+    },
+    "TOI-3493": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 205.7990331,
+      "decDeg": -22.5854441
+    },
+    "TOI-3785": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 130.9002258,
+      "decDeg": 63.0780768
+    },
+    "TOI-3884": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 181.5718341,
+      "decDeg": 12.5070258
+    },
+    "TOI-406": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 49.2626428,
+      "decDeg": -42.2441492
+    },
+    "TOI-4184": {
+      "abbreviation": "Hyi",
+      "name": "Hydrus",
+      "raDeg": 43.8284749,
+      "decDeg": -79.4147039
+    },
+    "TOI-4307": {
+      "abbreviation": "Men",
+      "name": "Mensa",
+      "raDeg": 81.3274982,
+      "decDeg": -75.6937336
+    },
+    "TOI-431": {
+      "abbreviation": "Lep",
+      "name": "Lepus",
+      "raDeg": 83.2692502,
+      "decDeg": -26.7238698
+    },
+    "TOI-4310": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 351.9035311,
+      "decDeg": -25.5084621
+    },
+    "TOI-4324": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 145.6464731,
+      "decDeg": -19.2356989
+    },
+    "TOI-4342": {
+      "abbreviation": "Oct",
+      "name": "Octans",
+      "raDeg": 324.3894196,
+      "decDeg": -77.9791468
+    },
+    "TOI-4363": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 37.1105554,
+      "decDeg": -12.5493631
+    },
+    "TOI-4364": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 80.066927,
+      "decDeg": -4.2392481
+    },
+    "TOI-4438": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 270.3172389,
+      "decDeg": 35.5948992
+    },
+    "TOI-444": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 64.1839982,
+      "decDeg": -26.7664071
+    },
+    "TOI-4443": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 274.2686643,
+      "decDeg": 21.9095459
+    },
+    "TOI-4479": {
+      "abbreviation": "Vul",
+      "name": "Vulpecula",
+      "raDeg": 316.0969388,
+      "decDeg": 24.6536739
+    },
+    "TOI-4527": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 19.4722574,
+      "decDeg": 5.4711996
+    },
+    "TOI-4529": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 16.9688462,
+      "decDeg": 12.8809549
+    },
+    "TOI-4552": {
+      "abbreviation": "Ara",
+      "name": "Ara",
+      "raDeg": 264.7142556,
+      "decDeg": -47.6370457
+    },
+    "TOI-4559": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 211.0135378,
+      "decDeg": -30.0141252
+    },
+    "TOI-4567": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 128.5065853,
+      "decDeg": -66.7685487
+    },
+    "TOI-4602": {
+      "abbreviation": "Per",
+      "name": "Perseus",
+      "raDeg": 60.6003316,
+      "decDeg": 31.3298354
+    },
+    "TOI-4616": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 14.8180883,
+      "decDeg": 13.8607948
+    },
+    "TOI-4641": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 42.5582023,
+      "decDeg": 25.3335334
+    },
+    "TOI-469": {
+      "abbreviation": "Lep",
+      "name": "Lepus",
+      "raDeg": 93.0578446,
+      "decDeg": -14.6493167
+    },
+    "TOI-480": {
+      "abbreviation": "Lep",
+      "name": "Lepus",
+      "raDeg": 88.3784618,
+      "decDeg": -16.2653974
+    },
+    "TOI-4860": {
+      "abbreviation": "Crv",
+      "name": "Corvus",
+      "raDeg": 183.563961,
+      "decDeg": -13.1748411
+    },
+    "TOI-4898": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 197.3416711,
+      "decDeg": -32.8294537
+    },
+    "TOI-500": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 106.559098,
+      "decDeg": -47.5878156
+    },
+    "TOI-5082": {
+      "abbreviation": "Gem",
+      "name": "Gemini",
+      "raDeg": 106.569578,
+      "decDeg": 22.6831477
+    },
+    "TOI-512": {
+      "abbreviation": "Col",
+      "name": "Columba",
+      "raDeg": 96.6467023,
+      "decDeg": -38.6072095
+    },
+    "TOI-5159": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 142.7859562,
+      "decDeg": 20.0193431
+    },
+    "TOI-5205": {
+      "abbreviation": "Vul",
+      "name": "Vulpecula",
+      "raDeg": 313.7706819,
+      "decDeg": 24.360977
+    },
+    "TOI-521": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 123.3442567,
+      "decDeg": 12.2221079
+    },
+    "TOI-5319": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 35.2135563,
+      "decDeg": 23.5204408
+    },
+    "TOI-5388": {
+      "abbreviation": "LMi",
+      "name": "Leo Minor",
+      "raDeg": 152.1765169,
+      "decDeg": 35.5475571
+    },
+    "TOI-540": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 76.3096949,
+      "decDeg": -47.9375391
+    },
+    "TOI-544": {
+      "abbreviation": "Ori",
+      "name": "Orion",
+      "raDeg": 82.2900716,
+      "decDeg": -0.3428983
+    },
+    "TOI-5486": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 190.5495041,
+      "decDeg": 3.7886012
+    },
+    "TOI-5489": {
+      "abbreviation": "Cnc",
+      "name": "Cancer",
+      "raDeg": 128.691294,
+      "decDeg": 11.4895882
+    },
+    "TOI-5531": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 148.4721661,
+      "decDeg": 19.5943772
+    },
+    "TOI-5532": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 41.3804035,
+      "decDeg": 5.1507331
+    },
+    "TOI-5605": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 150.5380078,
+      "decDeg": 50.1453867
+    },
+    "TOI-561": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 148.1851516,
+      "decDeg": 6.216103
+    },
+    "TOI-5696": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 161.1569248,
+      "decDeg": 6.3334749
+    },
+    "TOI-5704": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 169.8248694,
+      "decDeg": 44.9890782
+    },
+    "TOI-5713": {
+      "abbreviation": "UMa",
+      "name": "Ursa Major",
+      "raDeg": 208.4587323,
+      "decDeg": 52.6027628
+    },
+    "TOI-5716": {
+      "abbreviation": "UMi",
+      "name": "Ursa Minor",
+      "raDeg": 201.9007989,
+      "decDeg": 73.1774325
+    },
+    "TOI-5720": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 170.3135774,
+      "decDeg": 25.2732942
+    },
+    "TOI-5728": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 260.3509363,
+      "decDeg": 67.5504212
+    },
+    "TOI-5730": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 175.5654299,
+      "decDeg": 24.1924943
+    },
+    "TOI-5734": {
+      "abbreviation": "Aur",
+      "name": "Auriga",
+      "raDeg": 111.2558179,
+      "decDeg": 37.2311218
+    },
+    "TOI-5736": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 213.7583971,
+      "decDeg": 49.5009379
+    },
+    "TOI-5739": {
+      "abbreviation": "Boo",
+      "name": "Boötes",
+      "raDeg": 205.1695358,
+      "decDeg": 19.1998592
+    },
+    "TOI-5788": {
+      "abbreviation": "Lyr",
+      "name": "Lyra",
+      "raDeg": 287.4249017,
+      "decDeg": 31.7615284
+    },
+    "TOI-5789": {
+      "abbreviation": "Sge",
+      "name": "Sagitta",
+      "raDeg": 302.7734475,
+      "decDeg": 16.1897138
+    },
+    "TOI-5799": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 301.630179,
+      "decDeg": 15.9891418
+    },
+    "TOI-5800": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 305.0655462,
+      "decDeg": -7.4119237
+    },
+    "TOI-5803": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 327.2487497,
+      "decDeg": 6.2781777
+    },
+    "TOI-5807": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 308.5672242,
+      "decDeg": 43.3606897
+    },
+    "TOI-5947": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 336.6946071,
+      "decDeg": 18.5834311
+    },
+    "TOI-5961": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 349.2160437,
+      "decDeg": 5.6958866
+    },
+    "TOI-5997": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 263.1525777,
+      "decDeg": 33.5705564
+    },
+    "TOI-6000": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 292.6062979,
+      "decDeg": 68.1545924
+    },
+    "TOI-6002": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 299.6142524,
+      "decDeg": 32.2871702
+    },
+    "TOI-6008": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 310.4487344,
+      "decDeg": 49.6468992
+    },
+    "TOI-6041": {
+      "abbreviation": "Per",
+      "name": "Perseus",
+      "raDeg": 46.0610334,
+      "decDeg": 43.5576668
+    },
+    "TOI-6054": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 56.337007,
+      "decDeg": 60.350917
+    },
+    "TOI-6086": {
+      "abbreviation": "Her",
+      "name": "Hercules",
+      "raDeg": 265.3704236,
+      "decDeg": 30.3037755
+    },
+    "TOI-6098": {
+      "abbreviation": "Pup",
+      "name": "Puppis",
+      "raDeg": 118.9367947,
+      "decDeg": -48.0417719
+    },
+    "TOI-620": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 142.1734459,
+      "decDeg": -12.1671652
+    },
+    "TOI-6255": {
+      "abbreviation": "Lac",
+      "name": "Lacerta",
+      "raDeg": 331.5031606,
+      "decDeg": 39.2988284
+    },
+    "TOI-6281": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 172.3785238,
+      "decDeg": -40.6094246
+    },
+    "TOI-6310": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 37.7611169,
+      "decDeg": 25.4132904
+    },
+    "TOI-6324": {
+      "abbreviation": "Cep",
+      "name": "Cepheus",
+      "raDeg": 330.844543,
+      "decDeg": 67.4986773
+    },
+    "TOI-654": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 164.7245509,
+      "decDeg": -5.5475446
+    },
+    "TOI-663": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 160.0658525,
+      "decDeg": -8.5110827
+    },
+    "TOI-6662": {
+      "abbreviation": "Cam",
+      "name": "Camelopardalis",
+      "raDeg": 84.8560007,
+      "decDeg": 74.7674107
+    },
+    "TOI-6699": {
+      "abbreviation": "Pav",
+      "name": "Pavo",
+      "raDeg": 317.0695839,
+      "decDeg": -63.2504996
+    },
+    "TOI-6716": {
+      "abbreviation": "CMa",
+      "name": "Canis Major",
+      "raDeg": 111.657082,
+      "decDeg": -30.5521801
+    },
+    "TOI-672": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 167.9908627,
+      "decDeg": -39.3281151
+    },
+    "TOI-674": {
+      "abbreviation": "Ant",
+      "name": "Antlia",
+      "raDeg": 164.5865592,
+      "decDeg": -36.8581092
+    },
+    "TOI-682": {
+      "abbreviation": "Crt",
+      "name": "Crater",
+      "raDeg": 167.88543,
+      "decDeg": -22.0727803
+    },
+    "TOI-6894": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 173.4691418,
+      "decDeg": 12.4510906
+    },
+    "TOI-697": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 69.7042208,
+      "decDeg": -36.6813257
+    },
+    "TOI-700": {
+      "abbreviation": "Dor",
+      "name": "Dorado",
+      "raDeg": 97.0957165,
+      "decDeg": -65.5786149
+    },
+    "TOI-712": {
+      "abbreviation": "Dor",
+      "name": "Dorado",
+      "raDeg": 92.9361063,
+      "decDeg": -65.8258386
+    },
+    "TOI-715": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 113.8523276,
+      "decDeg": -73.5774089
+    },
+    "TOI-7166": {
+      "abbreviation": "Equ",
+      "name": "Equuleus",
+      "raDeg": 320.6806363,
+      "decDeg": 8.8893975
+    },
+    "TOI-7182": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 359.2621221,
+      "decDeg": 9.7846592
+    },
+    "TOI-733": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 159.4093183,
+      "decDeg": -40.888259
+    },
+    "TOI-7384": {
+      "abbreviation": "Col",
+      "name": "Columba",
+      "raDeg": 83.1031834,
+      "decDeg": -39.8342501
+    },
+    "TOI-7391": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 286.4690511,
+      "decDeg": 70.6374855
+    },
+    "TOI-756": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 192.103738,
+      "decDeg": -45.4704709
+    },
+    "TOI-757": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 187.9948428,
+      "decDeg": -35.5544523
+    },
+    "TOI-763": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 194.468098,
+      "decDeg": -39.7580613
+    },
+    "TOI-771": {
+      "abbreviation": "Car",
+      "name": "Carina",
+      "raDeg": 164.1138903,
+      "decDeg": -72.9851736
+    },
+    "TOI-776": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 178.577997,
+      "decDeg": -37.5533568
+    },
+    "TOI-782": {
+      "abbreviation": "Crv",
+      "name": "Corvus",
+      "raDeg": 183.9203614,
+      "decDeg": -18.9103377
+    },
+    "TOI-783": {
+      "abbreviation": "Cen",
+      "name": "Centaurus",
+      "raDeg": 172.1556368,
+      "decDeg": -54.7842227
+    },
+    "TOI-789": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 115.2702252,
+      "decDeg": -71.303764
+    },
+    "TOI-797": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 108.5630862,
+      "decDeg": -74.6030949
+    },
+    "TOI-808": {
+      "abbreviation": "Vel",
+      "name": "Vela",
+      "raDeg": 133.7485497,
+      "decDeg": -44.2886304
+    },
+    "TOI-824": {
+      "abbreviation": "Cir",
+      "name": "Circinus",
+      "raDeg": 222.1654705,
+      "decDeg": -57.5888666
+    },
+    "TOI-833": {
+      "abbreviation": "Car",
+      "name": "Carina",
+      "raDeg": 145.645472,
+      "decDeg": -62.4758857
+    },
+    "TOI-836": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 225.0798831,
+      "decDeg": -24.4542022
+    },
+    "TOI-871": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 74.7376264,
+      "decDeg": -50.6274153
+    },
+    "TOI-873": {
+      "abbreviation": "Ret",
+      "name": "Reticulum",
+      "raDeg": 56.7366363,
+      "decDeg": -63.3368784
+    },
+    "TOI-880": {
+      "abbreviation": "CMa",
+      "name": "Canis Major",
+      "raDeg": 94.1644734,
+      "decDeg": -13.987337
+    },
+    "TOI-904": {
+      "abbreviation": "Men",
+      "name": "Mensa",
+      "raDeg": 89.3712733,
+      "decDeg": -83.1297264
+    },
+    "TOI-912": {
+      "abbreviation": "Aps",
+      "name": "Apus",
+      "raDeg": 229.3285665,
+      "decDeg": -80.4733446
+    },
+    "TOI-913": {
+      "abbreviation": "Aps",
+      "name": "Apus",
+      "raDeg": 234.5723244,
+      "decDeg": -80.8034265
+    },
+    "TOI-969": {
+      "abbreviation": "CMi",
+      "name": "Canis Minor",
+      "raDeg": 115.1366858,
+      "decDeg": 2.0985879
+    },
+    "TRAPPIST-1": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 346.6263919,
+      "decDeg": -5.0434618
+    },
+    "TWA 7": {
+      "abbreviation": "Ant",
+      "name": "Antlia",
+      "raDeg": 160.6248102,
+      "decDeg": -33.6712596
+    },
+    "TYC 2187-512-1": {
+      "abbreviation": "Peg",
+      "name": "Pegasus",
+      "raDeg": 320.5266829,
+      "decDeg": 22.9319351
+    },
+    "TYC 8998-760-1": {
+      "abbreviation": "Mus",
+      "name": "Musca",
+      "raDeg": 201.3001096,
+      "decDeg": -64.9391566
+    },
+    "Teegarden's Star": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 43.2691449,
+      "decDeg": 16.8649024
+    },
+    "UCAC3 113-933": {
+      "abbreviation": "Scl",
+      "name": "Sculptor",
+      "raDeg": 5.2758121,
+      "decDeg": -33.8031679
+    },
+    "UCAC4 328-061594": {
+      "abbreviation": "Hya",
+      "name": "Hydra",
+      "raDeg": 152.6991091,
+      "decDeg": -24.4532674
+    },
+    "WASP-107": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 188.3864277,
+      "decDeg": -10.1462141
+    },
+    "WASP-189": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 225.686732,
+      "decDeg": -3.0314874
+    },
+    "WASP-29": {
+      "abbreviation": "Phe",
+      "name": "Phoenix",
+      "raDeg": 357.8791976,
+      "decDeg": -39.9071215
+    },
+    "WASP-43": {
+      "abbreviation": "Sex",
+      "name": "Sextans",
+      "raDeg": 154.9081869,
+      "decDeg": -9.8064431
+    },
+    "WASP-69": {
+      "abbreviation": "Aqr",
+      "name": "Aquarius",
+      "raDeg": 315.0259661,
+      "decDeg": -5.094857
+    },
+    "WASP-80": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 303.1667996,
+      "decDeg": -2.1444369
+    },
+    "WD 0806-661": {
+      "abbreviation": "Vol",
+      "name": "Volans",
+      "raDeg": 121.7275683,
+      "decDeg": -66.3058835
+    },
+    "WISEP J121756.91+162640.2 A": {
+      "abbreviation": "Com",
+      "name": "Coma Berenices",
+      "raDeg": 184.487125,
+      "decDeg": 16.4445
+    },
+    "Wolf 1061": {
+      "abbreviation": "Oph",
+      "name": "Ophiuchus",
+      "raDeg": 247.5748276,
+      "decDeg": -12.6676866
+    },
+    "Wolf 1069": {
+      "abbreviation": "Cyg",
+      "name": "Cygnus",
+      "raDeg": 306.5242477,
+      "decDeg": 58.5753044
+    },
+    "Wolf 327": {
+      "abbreviation": "LMi",
+      "name": "Leo Minor",
+      "raDeg": 148.3783199,
+      "decDeg": 35.570548
+    },
+    "Wolf 503": {
+      "abbreviation": "Vir",
+      "name": "Virgo",
+      "raDeg": 206.8461979,
+      "decDeg": -6.1393369
+    },
+    "YZ Cet": {
+      "abbreviation": "Cet",
+      "name": "Cetus",
+      "raDeg": 18.1330792,
+      "decDeg": -16.9962434
+    },
+    "alf Ari": {
+      "abbreviation": "Ari",
+      "name": "Aries",
+      "raDeg": 31.793286,
+      "decDeg": 23.462421
+    },
+    "bet Pic": {
+      "abbreviation": "Pic",
+      "name": "Pictor",
+      "raDeg": 86.8212337,
+      "decDeg": -51.066148
+    },
+    "bet UMi": {
+      "abbreviation": "UMi",
+      "name": "Ursa Minor",
+      "raDeg": 222.676495,
+      "decDeg": 74.155548
+    },
+    "eps CrB": {
+      "abbreviation": "CrB",
+      "name": "Corona Borealis",
+      "raDeg": 239.3965057,
+      "decDeg": 26.8776171
+    },
+    "eps Eri": {
+      "abbreviation": "Eri",
+      "name": "Eridanus",
+      "raDeg": 53.2284306,
+      "decDeg": -9.4581715
+    },
+    "eps Tau": {
+      "abbreviation": "Tau",
+      "name": "Taurus",
+      "raDeg": 67.1546573,
+      "decDeg": 19.1802782
+    },
+    "gam Lib": {
+      "abbreviation": "Lib",
+      "name": "Libra",
+      "raDeg": 233.8818636,
+      "decDeg": -14.789502
+    },
+    "gam Psc": {
+      "abbreviation": "Psc",
+      "name": "Pisces",
+      "raDeg": 349.2946794,
+      "decDeg": 3.2823664
+    },
+    "iot Dra": {
+      "abbreviation": "Dra",
+      "name": "Draco",
+      "raDeg": 231.2323227,
+      "decDeg": 58.9661403
+    },
+    "kap And": {
+      "abbreviation": "And",
+      "name": "Andromeda",
+      "raDeg": 355.1025974,
+      "decDeg": 44.3338511
+    },
+    "kap CrB": {
+      "abbreviation": "CrB",
+      "name": "Corona Borealis",
+      "raDeg": 237.8080012,
+      "decDeg": 35.6558818
+    },
+    "mu Leo": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 148.1898673,
+      "decDeg": 26.0067142
+    },
+    "nu Oph": {
+      "abbreviation": "Oph",
+      "name": "Ophiuchus",
+      "raDeg": 269.7566013,
+      "decDeg": -9.7741342
+    },
+    "omi CrB": {
+      "abbreviation": "CrB",
+      "name": "Corona Borealis",
+      "raDeg": 230.0350768,
+      "decDeg": 29.6160222
+    },
+    "rho CrB": {
+      "abbreviation": "CrB",
+      "name": "Corona Borealis",
+      "raDeg": 240.2600639,
+      "decDeg": 33.3001861
+    },
+    "ups Leo": {
+      "abbreviation": "Leo",
+      "name": "Leo",
+      "raDeg": 174.2372188,
+      "decDeg": -0.8235643
+    },
+    "xi Aql": {
+      "abbreviation": "Aql",
+      "name": "Aquila",
+      "raDeg": 298.5624491,
+      "decDeg": 8.4611051
+    }
+  }
+}

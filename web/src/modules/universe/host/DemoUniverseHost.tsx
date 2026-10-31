@@ -3,6 +3,7 @@
 import { mockCatalog } from "../adapters/catalog";
 import { UniverseWorkspaceHost } from "@/modules/universe-workspace";
 import type { UniverseTourDefinition } from "../adapters/types";
+import { useTranslations } from "@/i18n";
 
 const tour: UniverseTourDefinition = {
   storageKey: "hackuniverse.demo-tour.v1.seen",
@@ -17,5 +18,6 @@ const tour: UniverseTourDefinition = {
 
 /** The bundled demo is one source selection, outside the reusable host. */
 export function DemoUniverseHost() {
-  return <UniverseWorkspaceHost demoCatalog={mockCatalog} demoTour={tour} />;
+  const copy = useTranslations("universe");
+  return <UniverseWorkspaceHost demoCatalog={mockCatalog} demoTour={tour} demoPresentation={{ regions: copy.demoRegions, factualReferences: true }} />;
 }

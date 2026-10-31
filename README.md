@@ -1,5 +1,7 @@
 # HackUniverse
 
+Earlier interface walkthrough; the screenshots below show the current factual catalog.
+
 https://github.com/user-attachments/assets/71ee72c3-f5f6-4b40-8359-383dcdcb93ad
 
 **TL;DR:** Turn websites into planets and organize them into systems, galaxies and universes. The web app includes immersive exploration, a searchable atlas, planet/star details, optional flight and a browser-local editor. Its provider-neutral catalog keeps the bundled Demo separate from your Local universes; a Firecrawl search adapter demonstrates normalization. Account authentication, synchronization, live ingestion and the Go API remain planned. New accounts will start with zero planets.
@@ -8,13 +10,13 @@ https://github.com/user-attachments/assets/71ee72c3-f5f6-4b40-8359-383dcdcb93ad
 
 ## Product tour
 
-Select any screenshot below to open it at full resolution. The catalog and astronomical layouts are illustrative demo data.
+Select any screenshot below to open it at full resolution. Names and descriptions use sourced astronomical records; rendered positions and appearances are illustrative.
 
 | Explore the map | Inspect and navigate |
 |:---:|:---:|
 | **Focus Earth within its intact system**<br><a href="assets/demo/images/02-earth-planet-details.png"><img src="assets/demo/images/02-earth-planet-details.png" alt="Earth selected in the Solar System with its planet details panel" width="100%" /></a> | **Find planets in the searchable atlas**<br><a href="assets/demo/images/03-mission-controls-atlas.png"><img src="assets/demo/images/03-mission-controls-atlas.png" alt="Mission Controls showing atlas search, planet results and hierarchy breadcrumbs" width="100%" /></a> |
-| **See the universe at a glance**<br><a href="assets/demo/images/04-universe-galaxy-overview.png"><img src="assets/demo/images/04-universe-galaxy-overview.png" alt="Universe overview with five labeled spiral galaxies" width="100%" /></a> | **Explore the illustrative Milky Way**<br><a href="assets/demo/images/05-milky-way-galaxy-overview.png"><img src="assets/demo/images/05-milky-way-galaxy-overview.png" alt="Milky Way overview showing Solar Neighborhood and seven fictional demo sectors" width="100%" /></a> |
-| **Zoom into a stellar cloud**<br><a href="assets/demo/images/06-mosaic-fold-cloud-overview.png"><img src="assets/demo/images/06-mosaic-fold-cloud-overview.png" alt="Mosaic Fold stellar cloud with neighboring star-system previews" width="100%" /></a> | **Inspect a procedural star system**<br><a href="assets/demo/images/07-ochre-cadence-star-system.png"><img src="assets/demo/images/07-ochre-cadence-star-system.png" alt="Ochre Cadence demo system with varied planets, rings and cyan orbital paths" width="100%" /></a> |
+| **See the universe at a glance**<br><a href="assets/demo/images/04-universe-galaxy-overview.png"><img src="assets/demo/images/04-universe-galaxy-overview.png" alt="Universe overview with five labeled spiral galaxies" width="100%" /></a> | **Explore the Milky Way catalog**<br><a href="assets/demo/images/05-milky-way-galaxy-overview.png"><img src="assets/demo/images/05-milky-way-galaxy-overview.png" alt="Milky Way overview showing Solar Neighborhood and 31 real constellation regions" width="100%" /></a> |
+| **Zoom into a sky region**<br><a href="assets/demo/images/06-constellation-region-overview.png"><img src="assets/demo/images/06-constellation-region-overview.png" alt="Aquarius sky region with confirmed planetary-system previews" width="100%" /></a> | **Inspect TRAPPIST-1**<br><a href="assets/demo/images/07-trappist-1-star-system.png"><img src="assets/demo/images/07-trappist-1-star-system.png" alt="TRAPPIST-1 with seven confirmed planets and illustrative cyan orbital paths" width="100%" /></a> |
 
 **Preview the shared planetary loader** — This component-gallery example uses simulated progress; no website is being imported.
 
@@ -36,11 +38,11 @@ Use these shared components and tokens when building new pages. The [visual refe
 
 ## Universe demo
 
-The home provides a mobile-first, full-screen 3D demo with [738 planets and 871 total entities](web/src/modules/universe/data/demo-universe.json) across 107 systems, 20 stellar clouds and five galaxies. The Milky Way contains the unchanged Solar Neighborhood plus seven clearly fictional demo sectors: 67 systems and 338 planets in total. Its layouts are illustrative, not a measured Milky Way map or confirmed exoplanet inventory. All previous 528 records retain their IDs, seeds and order.
+The home provides a mobile-first, full-screen 3D demo with [741 real planets and 1,214 entities](web/src/modules/universe/data/demo-universe.json) across 435 systems, 32 navigation regions and five real galaxies. Eight planets belong to the Solar System and 733 are confirmed exoplanets from the NASA Exoplanet Archive. The real IAU constellation regions are sky-direction groupings, not physical clouds. Only the Milky Way contains planetary systems. Names/descriptions are sourced; visual sizes, colors, spacing and motion are illustrative. Solar/tour identity is preserved. [Source selection and bounds](docs/UNIVERSE-DATA.md#factual-bundled-demo) keep the demonstration independent of Local catalogs and live ingestion.
 
 A once-per-browser startup loader runs while the scene prepares in the background, before the welcome entry. Its initial three-second percentage measures animation time; longer scene preparation uses indeterminate progress. See the [startup guide](docs/UNIVERSE-EXPLORER.md#startup-preparation). Start on Earth, watch the first-visit tour widen to the universe, or replay it from your current view. Galaxies have luminous multicolor particles by default and a stronger hover state that preserves their hues. Surrounding spiral particles and neighboring-group stars remain visible as you zoom through the hierarchy. Selecting a planet preserves its whole system; selecting a central star frames that system and opens its details. Planet/star names and descriptions use the shared accessible writing effect while facts and actions appear immediately. One hamburger opens Go to, Settings and About. Optional third-person flight stays inside the active system, and the Space Jump cutscene remains temporarily disabled.
 
-The default JSON is canonical, and every bundled entity is explicitly marked `type: "demo"`. This optional object classification is independent of catalog mode; a future hide-demo filter is not implemented. The reusable host also accepts validated catalogs with optional references, URLless objects and an empty root. See the [explorer guide](docs/UNIVERSE-EXPLORER.md), [catalog contract and adapter examples](docs/UNIVERSE-DATA.md) and [spacecraft credits](docs/ASSET-CREDITS.md). This demo does not create real account content or make provider requests.
+Organized Demo authoring objects normalize into the same provider-neutral canonical contract, and every bundled entity is explicitly marked `type: "demo"`. This flag identifies the demonstration, not fictional content. This optional object classification is independent of catalog mode; a future hide-demo filter is not implemented. The reusable host also accepts validated catalogs with optional references, URLless objects and an empty root. See the [explorer guide](docs/UNIVERSE-EXPLORER.md), [catalog contract and adapter examples](docs/UNIVERSE-DATA.md) and [spacecraft credits](docs/ASSET-CREDITS.md). This demo does not create real account content or make provider requests.
 
 ## Local workspace
 

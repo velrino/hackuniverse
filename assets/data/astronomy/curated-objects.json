@@ -1,0 +1,208 @@
+{
+  "universe": {
+    "id": "universe-demo-atlas",
+    "name": "Universe",
+    "description": "A bounded demonstration catalog of the Solar System, confirmed exoplanets and five named galaxies. The spatial layout and procedural appearances are illustrations, not a measured three-dimensional model.",
+    "seed": 3983766564,
+    "type": "demo"
+  },
+  "solarRegion": {
+    "id": "cloud-local-interstellar",
+    "name": "Solar Neighborhood",
+    "description": "The Solar System is shown in this local navigation region. Other regions group nearby exoplanet hosts by their IAU sky constellations, not by physical interstellar-cloud membership.",
+    "seed": 2328254348,
+    "type": "demo"
+  },
+  "solarSystem": {
+    "id": "system-solar",
+    "name": "Solar System",
+    "description": "The Solar System contains the Sun and eight planets. Planet sizes, distances, surfaces and orbital motion in this map are illustrative.",
+    "seed": 2283689132,
+    "type": "demo",
+    "star": {
+      "name": "Sun",
+      "description": "The Sun is the star at the center of the Solar System. NASA lists its effective temperature as 5772 kelvin and its mean radius as 695700 kilometers.",
+      "spectralType": "G2 V",
+      "temperatureK": 5772,
+      "radiusKm": 695700,
+      "ageBillionYears": 4.6,
+      "reference": {
+        "label": "NASA",
+        "href": "https://science.nasa.gov/sun/facts/"
+      }
+    },
+    "planets": [
+      {
+        "id": "planet-mercury",
+        "name": "Mercury",
+        "description": "Mercury is the smallest planet in the Solar System and the closest planet to the Sun.",
+        "seed": 195956,
+        "type": "demo",
+        "reference": {
+          "label": "NASA / Mercury",
+          "href": "https://science.nasa.gov/mercury/facts/"
+        },
+        "tags": [
+          "Solar System",
+          "Milky Way",
+          "real planet",
+          "terrestrial planet"
+        ]
+      },
+      {
+        "id": "planet-venus",
+        "name": "Venus",
+        "description": "Venus is the second planet from the Sun. Its dense atmosphere traps heat, making it the hottest planet in the Solar System.",
+        "seed": 250848,
+        "type": "demo",
+        "reference": {
+          "label": "NASA / Venus",
+          "href": "https://science.nasa.gov/venus/venus-facts/"
+        },
+        "tags": [
+          "Solar System",
+          "Milky Way",
+          "real planet",
+          "terrestrial planet"
+        ]
+      },
+      {
+        "id": "planet-earth",
+        "name": "Earth",
+        "description": "Earth is the third planet from the Sun and the only world currently known to support life.",
+        "seed": 102729,
+        "type": "demo",
+        "reference": {
+          "label": "NASA / Earth",
+          "href": "https://science.nasa.gov/earth/facts/"
+        },
+        "tags": [
+          "Solar System",
+          "Milky Way",
+          "real planet",
+          "terrestrial planet"
+        ]
+      },
+      {
+        "id": "planet-mars",
+        "name": "Mars",
+        "description": "Mars is the fourth planet from the Sun. Iron minerals in its surface material give it a reddish appearance.",
+        "seed": 294251,
+        "type": "demo",
+        "reference": {
+          "label": "NASA / Mars",
+          "href": "https://science.nasa.gov/mars/facts/"
+        },
+        "tags": [
+          "Solar System",
+          "Milky Way",
+          "real planet",
+          "terrestrial planet"
+        ]
+      },
+      {
+        "id": "planet-jupiter",
+        "name": "Jupiter",
+        "description": "Jupiter is the largest planet in the Solar System. It is a gas giant, made mostly of hydrogen and helium.",
+        "seed": 135039,
+        "type": "demo",
+        "reference": {
+          "label": "NASA / Jupiter",
+          "href": "https://science.nasa.gov/jupiter/jupiter-facts/"
+        },
+        "tags": [
+          "Solar System",
+          "Milky Way",
+          "real planet",
+          "gas giant"
+        ]
+      },
+      {
+        "id": "planet-saturn",
+        "name": "Saturn",
+        "description": "Saturn is a gas giant surrounded by prominent rings composed mostly of pieces of ice.",
+        "seed": 172995,
+        "type": "demo",
+        "reference": {
+          "label": "NASA / Saturn",
+          "href": "https://science.nasa.gov/saturn/facts/"
+        },
+        "tags": [
+          "Solar System",
+          "Milky Way",
+          "real planet",
+          "gas giant"
+        ]
+      },
+      {
+        "id": "planet-uranus",
+        "name": "Uranus",
+        "description": "Uranus is an ice giant with a rotation axis tilted by about 98 degrees. It is the seventh planet from the Sun.",
+        "seed": 240172,
+        "type": "demo",
+        "reference": {
+          "label": "NASA / Uranus",
+          "href": "https://science.nasa.gov/uranus/facts/"
+        },
+        "tags": [
+          "Solar System",
+          "Milky Way",
+          "real planet",
+          "ice giant"
+        ]
+      },
+      {
+        "id": "planet-neptune",
+        "name": "Neptune",
+        "description": "Neptune is an ice giant and the eighth planet from the Sun. It is the most distant of the eight Solar System planets.",
+        "seed": 105756,
+        "type": "demo",
+        "reference": {
+          "label": "NASA / Neptune",
+          "href": "https://science.nasa.gov/neptune/facts/"
+        },
+        "tags": [
+          "Solar System",
+          "Milky Way",
+          "real planet",
+          "ice giant"
+        ]
+      }
+    ]
+  },
+  "galaxies": [
+    {
+      "id": "galaxy-milky-way",
+      "name": "Milky Way",
+      "description": "The Milky Way is the galaxy containing the Solar System. This demonstration includes a bounded selection of its confirmed nearby planetary systems.",
+      "seed": 3500290604,
+      "source": "https://science.nasa.gov/universe/galaxies/"
+    },
+    {
+      "id": "galaxy-andromeda",
+      "name": "Andromeda",
+      "description": "Andromeda, also called Messier 31, is a large spiral galaxy in the Local Group. This demonstration does not place confirmed exoplanets in this galaxy.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-31/"
+    },
+    {
+      "id": "galaxy-triangulum",
+      "name": "Triangulum",
+      "description": "Triangulum, also called Messier 33, is a spiral galaxy in the Local Group. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/asset/hubble/triangulum-galaxy-messier-33-m33/"
+    },
+    {
+      "id": "galaxy-whirlpool",
+      "name": "Whirlpool",
+      "description": "Whirlpool, also called Messier 51, is a spiral galaxy whose prominent arms contain star-forming regions. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-51/"
+    },
+    {
+      "id": "galaxy-pinwheel",
+      "name": "Pinwheel",
+      "description": "Pinwheel, also called Messier 101, is a face-on spiral galaxy. No planetary systems are included here in this demonstration.",
+      "source": "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-101/"
+    }
+  ],
+  "solarFactsSource": "https://science.nasa.gov/solar-system/planets/",
+  "sunRadiusKm": 695700
+}

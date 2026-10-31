@@ -13,6 +13,7 @@ import type { UniverseSceneProps } from "../scene";
 import type { CameraLinkSource, UniverseCameraPose } from "../domain/camera-link";
 import type { NavigationTarget } from "../domain/types";
 import { CameraLocationContext, CameraLinkStatus, CameraShareControls, useCameraLocation, useCameraLocationContext } from "./use-camera-location";
+import type { UniverseCopy } from "../messages";
 
 const Scene = dynamic(() => import("../scene").then((module) => module.UniverseScene), { ssr: false });
 
@@ -53,8 +54,14 @@ function subscribeMotion(change: () => void) {
 }
 const getReducedMotion = () => window.matchMedia(motionQuery).matches;
 
-export function UniverseHost({ catalog, tour, management, source }: { catalog: UniverseCatalog; tour?: UniverseTourDefinition; management?: UniverseManagement; source?: CameraLinkSource }) {
-  const copy = useTranslations("universe");
+export function UniverseHost({ catalog, tour, management, source, presentation }: { catalog: UniverseCatalog; tour?: UniverseTourDefinition; management?: UniverseManagement; source?: CameraLinkSource; presentation?: { regions: UniverseCopy["demoRegions"]; factualReferences: boolean } }) {
+  const translations = useTranslations("universe");
+  const regionPresentation = presentation?.regions;
+  const copy = useMemo(() => regionPresentation ? {
+    ...translations,
+    kinds: { ...translations.kinds, cloud: regionPresentation.label },
+    scaleHints: { ...translations.scaleHints, galaxy: regionPresentation.galaxyHint, cloud: regionPresentation.cloudHint },
+  } : translations, [translations, regionPresentation]);
   const { format } = useI18n();
   const { playCue, cameraMotion, stopCameraMotion, unlockFromGesture, interactionReceived, preferences, musicStatus, effectsStatus, musicError, effectsError } = useAudio();
   const musicWaiting = preferences.musicEnabled && preferences.musicVolume > 0 && musicStatus !== "playing" && (musicStatus !== "error" || musicError === "blocked");
@@ -77,6 +84,7 @@ export function UniverseHost({ catalog, tour, management, source }: { catalog: U
   }), [playCue, cameraMotion, stopCameraMotion, unlockFromGesture, tourRequiresInteraction]);
   const presentationReady = useApplicationIntroReady();
   const reducedMotion = useSyncExternalStore(subscribeMotion, getReducedMotion, () => true);
-  const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, tour, management, audio, location, presentationReady, autoTour: camera.state.ready && !camera.state.suppressAutoTour && !reducedMotion, formatNumber: format.number, components: { Scene: ObservedScene, BrandLogo, LanguagePicker: InlineLanguageSelector, DesignLink: DesignSystemLink } }), [catalog, copy, tour, management, audio, location, presentationReady, camera.state.ready, camera.state.suppressAutoTour, reducedMotion, format.number]);
+  const allowDemoReferences = Boolean(presentation?.factualReferences);
+  const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, tour, management, audio, location, presentationReady, allowDemoReferences, autoTour: camera.state.ready && !camera.state.suppressAutoTour && !reducedMotion, formatNumber: format.number, components: { Scene: ObservedScene, BrandLogo, LanguagePicker: InlineLanguageSelector, DesignLink: DesignSystemLink } }), [catalog, copy, tour, management, audio, location, presentationReady, allowDemoReferences, camera.state.ready, camera.state.suppressAutoTour, reducedMotion, format.number]);
   return <CameraLocationContext value={{ ...camera, source }}><UniverseRoot adapters={adapters} /></CameraLocationContext>;
 }

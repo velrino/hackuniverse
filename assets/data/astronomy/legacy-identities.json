@@ -1,0 +1,26 @@
+{
+  "hostSystems": {
+    "Barnard's star": {
+      "id": "system-barnards-star",
+      "seed": 4005782923,
+      "previousName": "Barnard's Star",
+      "verificationUrl": "https://exoplanetarchive.ipac.caltech.edu/cgi-bin/Lookup/nph-aliaslookup.py?objname=Barnard%27s+Star",
+      "verifiedOn": "2026-10-31"
+    },
+    "GJ 411": {
+      "id": "system-lalande-21185",
+      "seed": 2813036774,
+      "previousName": "Lalande 21185",
+      "verificationUrl": "https://exoplanetarchive.ipac.caltech.edu/cgi-bin/Lookup/nph-aliaslookup.py?objname=Lalande+21185",
+      "verifiedOn": "2026-10-31"
+    },
+    "Ross 128": {
+      "id": "system-ross-128",
+      "seed": 291325982,
+      "previousName": "Ross 128",
+      "verificationUrl": "https://exoplanetarchive.ipac.caltech.edu/cgi-bin/Lookup/nph-aliaslookup.py?objname=Ross+128",
+      "verifiedOn": "2026-10-31"
+    }
+  },
+  "note": "Aliases identify existing real objects only; confirmation and membership come exclusively from the filtered planetary table."
+}
