@@ -3,23 +3,28 @@
 import { FullScreenLoader } from "@/components/ui/full-screen-loader";
 import { useTranslations } from "@/i18n";
 import { useAudio } from "@/modules/audio";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { ApplicationIntroReadyContext, ApplicationPreparationContext } from "./context";
 import { useApplicationIntro } from "./use-application-intro";
 import "./styles.css";
 
 export function ApplicationIntro({ children }: { children: ReactNode }) {
-  const [preparing, setPreparing] = useState<ReadonlySet<symbol>>(() => new Set());
+  const pathname = usePathname();
+  const [preparation, setPreparation] = useState<{ registered: boolean; pending: ReadonlySet<symbol> }>(() => ({ registered: false, pending: new Set() }));
   const registerPreparation = useCallback(() => {
     const token = Symbol();
-    setPreparing((current) => new Set(current).add(token));
-    return () => setPreparing((current) => {
-      const next = new Set(current);
+    setPreparation((current) => ({ registered: true, pending: new Set(current.pending).add(token) }));
+    return () => setPreparation((current) => {
+      const next = new Set(current.pending);
       next.delete(token);
-      return next;
+      return { registered: true, pending: next };
     });
   }, []);
-  const { phase, visible, ready, progress, waitingForPreparation } = useApplicationIntro({ preparationReady: preparing.size === 0 });
+  // The page can hydrate after the layout. An explorer's empty registry is
+  // not settled until its first scene participant has actually registered.
+  const preparationReady = (pathname !== "/" || preparation.registered) && preparation.pending.size === 0;
+  const { phase, visible, ready } = useApplicationIntro({ preparationReady });
   const copy = useTranslations("applicationIntro");
   const { preferences, effectsStatus, playCue } = useAudio();
   const played = useRef(false);
@@ -38,7 +43,7 @@ export function ApplicationIntro({ children }: { children: ReactNode }) {
       <ApplicationPreparationContext.Provider value={registerPreparation}>
         <div className="application-intro-content" data-application-intro={phase} inert={!ready}>{children}</div>
       </ApplicationPreparationContext.Provider>
-      {visible && <FullScreenLoader progress={waitingForPreparation ? undefined : progress} label={copy.loadingLabel} detail={waitingForPreparation ? copy.preparingDetail : copy.detail} />}
+      {visible && <FullScreenLoader label={copy.loadingLabel} detail={copy.preparingDetail} />}
     </ApplicationIntroReadyContext.Provider>
   );
 }

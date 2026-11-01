@@ -15,6 +15,7 @@ for (const locale of ["en", "pt-BR"] as const) {
     await page.goto(`/?lang=${locale}&check=startup#entry`);
     await expect.poll(() => readStartup(cdp)).toMatchObject({ phase: "loading", sceneBusy: true, canvasCount: 1, entryCount: 0, activated: false });
     await expect.poll(() => readStartup(cdp), { timeout: 10000 }).toMatchObject({ phase: "loading", sceneBusy: true, indeterminate: true, progress: null, entryCount: 0, activated: false });
+    expect((await readStartup(cdp)).phases).not.toContain("ready");
     await cdp.send("Runtime.evaluate", { expression: "window.startupProbe.releaseFrames()", userGesture: false });
     await expect.poll(() => readStartup(cdp), { timeout: 15000 }).toMatchObject({ phase: "ready", sceneBusy: false, entryCount: 0, activated: false, menuOpen: [] });
     const complete = await readStartup(cdp);
@@ -54,8 +55,8 @@ test("a first visit outside the explorer finishes without waiting for a scene", 
   await observeStartup(page);
   await page.addInitScript(() => localStorage.setItem("hackuniverse.audio.v1", JSON.stringify({ schemaVersion: 1, musicEnabled: false, effectsEnabled: false, musicVolume: 0.35, effectsVolume: 0.5 })));
   await page.goto("/example?lang=pt-BR");
-  await expect(page.locator("[data-application-intro]")).toHaveAttribute("data-application-intro", "loading");
   await expect(page.locator("[data-application-intro]")).toHaveAttribute("data-application-intro", "ready", { timeout: 10000 });
+  await expect(page.locator(".application-intro-entry, .universe-tour-entry, .vui-full-screen-loader")).toHaveCount(0);
   await expect(page.locator("canvas")).toHaveCount(0);
   await expect(page.getByRole("textbox")).toBeVisible();
 });

@@ -2,9 +2,10 @@ import { expect, test, type CDPSession, type Page } from "@playwright/test";
 
 type TourVoice = { duration: number; started: number; ended: number | null; stopContext: number | null };
 type TourMusic = { media: HTMLMediaElement; context: AudioContext };
-type TourAudioProbe = { voices: TourVoice[]; music: TourMusic[]; effectsContext: BaseAudioContext | null; skip: { at: number; audioAt: number; quantum: number } | null };
+type TourState = { phase: string | null; scale: string | null; name: string | null };
+type TourAudioProbe = { voices: TourVoice[]; music: TourMusic[]; tourStates: TourState[]; effectsContext: BaseAudioContext | null; skip: { at: number; audioAt: number; quantum: number } | null };
 type ProbedWindow = Window & { tourAudioProbe: TourAudioProbe };
-type InitialState = { tourPhase: string | null; tourActive: string | null; introPhase: string | null; sceneBusy: string | null; hasBeenActive: boolean; startCount: number; entryCount: number; menuPoint: { x: number; y: number } | null; skipPoint: { x: number; y: number } | null; menuVisible: boolean; zoomCount: number; menuOpenCount: number; music: { paused: boolean; contextState: string }[] };
+type InitialState = { tourPhase: string | null; tourActive: string | null; tourStates: TourState[]; introPhase: string | null; sceneBusy: string | null; hasBeenActive: boolean; startCount: number; entryCount: number; menuPoint: { x: number; y: number } | null; skipPoint: { x: number; y: number } | null; menuVisible: boolean; zoomCount: number; menuOpenCount: number; music: { paused: boolean; contextState: string }[] };
 
 // Exercise the real first-visit permission boundary rather than relying on a
 // browser profile that may already permit autoplay. Reduced motion is covered
@@ -22,8 +23,20 @@ async function observeAudio(page: Page, { muted = false, introSeen = false, tour
     if (introSeen) localStorage.setItem("hackuniverse.intro.v1.seen", "1");
     if (tourSeen) localStorage.setItem("hackuniverse.demo-tour.v1.seen", "1");
     if (muted) localStorage.setItem("hackuniverse.audio.v1", JSON.stringify({ schemaVersion: 1, musicEnabled: false, effectsEnabled: false, musicVolume: 0.35, effectsVolume: 0.5 }));
-    const probe: TourAudioProbe = { voices: [], music: [], effectsContext: null, skip: null };
+    const probe: TourAudioProbe = { voices: [], music: [], tourStates: [], effectsContext: null, skip: null };
     (window as unknown as ProbedWindow).tourAudioProbe = probe;
+    const observer = new MutationObserver(() => {
+      const main = document.querySelector('main[data-tour-active="true"]');
+      if (!main) return;
+      const state = {
+        phase: main.getAttribute("data-tour-phase"),
+        scale: main.getAttribute("data-scale"),
+        name: main.querySelector(".universe-context h1")?.textContent ?? null,
+      };
+      const previous = probe.tourStates.at(-1);
+      if (!previous || state.phase !== previous.phase || state.scale !== previous.scale || state.name !== previous.name) probe.tourStates.push(state);
+    });
+    observer.observe(document, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-tour-active", "data-tour-phase", "data-scale"] });
     const mediaSource = AudioContext.prototype.createMediaElementSource;
     AudioContext.prototype.createMediaElementSource = function (media) {
       const source = mediaSource.call(this, media);
@@ -92,6 +105,7 @@ async function readBeforeGesture(cdp: CDPSession): Promise<InitialState> {
       return {
         tourPhase: main?.getAttribute('data-tour-phase') ?? null,
         tourActive: main?.getAttribute('data-tour-active') ?? null,
+        tourStates: probe?.tourStates ?? [],
         introPhase: document.querySelector('[data-application-intro]')?.getAttribute('data-application-intro') ?? null,
         sceneBusy: document.querySelector('.universe-scene[aria-busy]')?.getAttribute('aria-busy') ?? null,
         hasBeenActive: navigator.userActivation?.hasBeenActive ?? false,
@@ -169,13 +183,17 @@ test("a manual tour preserves the sound mix and releases camera voices when skip
   await expect.poll(async () => (await readAudio(page)).music.some((music) => !music.paused && music.contextState === "running" && music.currentTime > musicBeforeSkip + 0.1)).toBe(true);
 });
 
-test("blocked autoplay never gates the tour and a late gesture cannot replay the startup cue", async ({ page, isMobile }) => {
+test("the automatic tour leaves Earth without holding and blocked autoplay never gates it", async ({ page, isMobile }) => {
   await observeAudio(page);
   await page.goto("/?lang=en&source=demo");
   const cdp = await page.context().newCDPSession(page);
-  await expect.poll(() => readBeforeGesture(cdp)).toMatchObject({ introPhase: "loading", entryCount: 0, startCount: 0, hasBeenActive: false });
   await expect.poll(() => readBeforeGesture(cdp), { timeout: 20000 }).toMatchObject({ introPhase: "ready", sceneBusy: "false", tourActive: "true", entryCount: 0, startCount: 0, hasBeenActive: false, menuOpenCount: 0 });
+  await expect.poll(async () => (await readBeforeGesture(cdp)).tourStates.some((state) => state.scale === "system" && state.name === "Solar System"), { timeout: 15000 }).toBe(true);
   const initial = await readBeforeGesture(cdp);
+  const solarIndex = initial.tourStates.findIndex((state) => state.scale === "system" && state.name === "Solar System");
+  const earthStates = initial.tourStates.slice(0, solarIndex).filter((state) => state.scale === "planet" && state.name === "Earth");
+  expect(earthStates.map((state) => state.phase)).toContain("arriving");
+  expect(earthStates.map((state) => state.phase)).not.toContain("holding");
   expect(initial.zoomCount).toBe(0);
   expect(initial.music.every((music) => music.paused || music.contextState !== "running")).toBe(true);
   expect(initial.skipPoint).not.toBeNull();

@@ -22,13 +22,15 @@ test("menu-open plays once during preparation and does not replay after refresh"
 
 for (const silence of ["master mute", "effects disabled", "zero effects volume"] as const) {
   test(`startup cue respects ${silence}`, async ({ page }) => {
-    await observeStartup(page);
+    await observeStartup(page, true);
     await page.addInitScript((silence) => localStorage.setItem("hackuniverse.audio.v1", JSON.stringify({
       schemaVersion: 1, muted: silence === "master mute", musicEnabled: false,
       effectsEnabled: silence !== "effects disabled", musicVolume: 0.35, effectsVolume: silence === "zero effects volume" ? 0 : 0.5,
     })), silence);
     const cdp = await page.context().newCDPSession(page);
     await page.goto("/?lang=en&check=startup-silence");
+    await expect.poll(() => readStartup(cdp), { timeout: 15000 }).toMatchObject({ phase: "loading", sceneBusy: true, indeterminate: true, menuOpen: [] });
+    await cdp.send("Runtime.evaluate", { expression: "window.startupProbe.releaseFrames()", userGesture: false });
     await expect.poll(() => readStartup(cdp), { timeout: 15000 }).toMatchObject({ phase: "ready", entryCount: 0, menuOpen: [] });
     await cdp.detach();
   });
