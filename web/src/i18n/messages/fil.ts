@@ -26,7 +26,6 @@ const fil = {
   applicationIntro: {
     label: "Maligayang pagdating sa HackUniverse",
     loadingLabel: "Inihahanda ang iyong uniberso",
-    detail: "Animasyon sa pagbubukas · 3 segundo.",
     preparingDetail: "Inihahanda ang tanawin…",
     entryDetail: "Isang buong unibersong matutuklasan. Pumasok upang simulan ang iyong paglalakbay na may tunog.",
     enter: "Pumasok sa uniberso",

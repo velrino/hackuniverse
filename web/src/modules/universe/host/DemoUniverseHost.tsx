@@ -8,7 +8,7 @@ import { useTranslations } from "@/i18n";
 const tour: UniverseTourDefinition = {
   storageKey: "hackuniverse.demo-tour.v1.seen",
   steps: [
-    { target: { kind: "planet", id: "planet-earth" }, holdMs: 3000 },
+    { target: { kind: "planet", id: "planet-earth" }, holdMs: 0 },
     { target: { kind: "system", id: "system-solar" } },
     { target: { kind: "cloud", id: "cloud-local-interstellar" } },
     { target: { kind: "galaxy", id: "galaxy-milky-way" } },
