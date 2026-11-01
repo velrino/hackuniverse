@@ -4,6 +4,8 @@ import { brandLogoSrc } from "./src/configs/brand";
 const brandLogoUrl = new URL(brandLogoSrc, "https://hackuniverse.invalid");
 
 const nextConfig: NextConfig = {
+  // Preserve error details for scripts served from a CORS-enabled asset origin.
+  crossOrigin: "anonymous",
   allowedDevOrigins: ["[::1]"],
   images: {
     localPatterns: [

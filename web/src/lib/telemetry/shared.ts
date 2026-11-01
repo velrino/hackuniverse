@@ -57,7 +57,7 @@ export function sanitizeText(value: string): string {
 const blockedFields = /^(?:\$set|\$set_once|headers?|cookies?|body|request|response|authorization|password|secret|api[_-]?key|access[_-]?token|refresh[_-]?token|vars|pre_context|post_context|context_line|data)$/i;
 const contextFields = new Set([
   "source", "operation", "route", "path", "pathname", "method", "route_type", "router_kind", "render_source", "digest",
-  "runtime", "environment", "release", "native_event", "exception_type", "exception_message", "exception_level", "handled", "exception_id", "validation_id",
+  "runtime", "environment", "release", "native_event", "exception_diagnostic", "exception_type", "exception_message", "exception_level", "handled", "exception_id", "validation_id",
 ]);
 const sdkFields = new Set([
   "distinct_id", "$device_id", "$session_id", "$window_id", "$insert_id", "$lib", "$lib_version", "$browser", "$browser_version",
@@ -110,6 +110,19 @@ export function eventContext(runtime: TelemetryRuntime, extra: Record<string, un
   };
 }
 
+/** Classify missing browser evidence without guessing the script origin or cause. */
+function exceptionDiagnostic(properties: Record<string, unknown>): "opaque-script-error" | "details-available" | undefined {
+  if (properties.source !== "browser-automatic" || !Array.isArray(properties.$exception_list)) return;
+  const exceptions = properties.$exception_list as { value?: unknown; mechanism?: { synthetic?: unknown }; stacktrace?: { frames?: unknown[] } }[];
+  if (exceptions.length === 0) return;
+  const opaque = exceptions.every((exception) => exception
+    && exception.value === "Script error."
+    && exception.mechanism?.synthetic === true
+    && !exception.stacktrace?.frames?.length);
+  const sources = properties.$exception_sources;
+  return opaque && (!Array.isArray(sources) || sources.length === 0) ? "opaque-script-error" : "details-available";
+}
+
 /** One transport policy for automatic, manual, client and server events. */
 export function sanitizeTelemetryEvent<T extends { event: string; properties?: Record<string, unknown> }>(event: T): T {
   const properties: Record<string, unknown> = {};
@@ -121,6 +134,12 @@ export function sanitizeTelemetryEvent<T extends { event: string; properties?: R
         : typeof value === "string" && ["path", "pathname", "route", "$pathname"].includes(key) ? sanitizeRoute(value)
           : sanitizeValue(value);
     }
+  }
+  // Derive this from sanitized native evidence, never a caller-supplied diagnosis.
+  delete properties.exception_diagnostic;
+  if (event.event === "$exception") {
+    const diagnostic = exceptionDiagnostic(properties);
+    if (diagnostic) properties.exception_diagnostic = diagnostic;
   }
   const url = typeof properties.$current_url === "string" ? new URL(properties.$current_url, "https://hackuniverse.invalid") : null;
   if (url && url.protocol.startsWith("http")) {

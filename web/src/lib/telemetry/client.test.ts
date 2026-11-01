@@ -410,3 +410,41 @@ test("warning failures cannot prevent custom capture or recursively produce exce
   assert.equal(sdk.captureException.mock.callCount(), 0);
   assert.equal(sdk.consoleCalls.length, 0);
 });
+
+
+test("opaque automatic errors stay native and observable without fabricated attribution", (t) => {
+  const sdk = setup(t);
+  initializeClientTelemetry();
+  const beforeSend = sdk.configuration().before_send;
+  if (typeof beforeSend !== "function") throw new Error("Missing transport hook");
+  const exception = { type: "Error", value: "Script error.", mechanism: { synthetic: true, handled: false } };
+  const opaque = beforeSend({ uuid: "synthetic-opaque", event: "$exception", properties: {
+    $exception_list: [exception], $exception_sources: [], exception_diagnostic: "caller-guessed-cause",
+  } });
+  assert.ok(opaque);
+  assert.equal(opaque.properties.exception_diagnostic, "opaque-script-error");
+  assert.deepEqual(opaque.properties.$exception_list, [exception]);
+  assert.equal(opaque.properties.source, "browser-automatic");
+  assert.equal(sdk.capture.mock.callCount(), 0);
+  assert.equal(sdk.captureException.mock.callCount(), 0);
+
+  for (const detail of [
+    { ...exception, mechanism: { synthetic: false, handled: false } },
+    { ...exception, stacktrace: { frames: [{ filename: "https://assets.example.test/app.js?token=synthetic-private#private", lineno: 1 }] } },
+    { ...exception, value: "Synthetic real application failure" },
+  ]) {
+    const result = beforeSend({ uuid: "synthetic-attributed", event: "$exception", properties: { $exception_list: [detail] } });
+    assert.ok(result);
+    assert.equal(result.properties.exception_diagnostic, "details-available");
+    assert.ok(!JSON.stringify(result).includes("synthetic-private"));
+  }
+  const sourced = beforeSend({ uuid: "synthetic-source", event: "$exception", properties: {
+    $exception_list: [exception], $exception_sources: ["https://assets.example.test/app.js"],
+  } });
+  assert.equal(sourced?.properties.exception_diagnostic, "details-available");
+  for (const source of ["console", "react-boundary"]) {
+    const manual = beforeSend({ uuid: "synthetic-manual", event: "$exception", properties: { source, $exception_list: [exception] } });
+    assert.ok(manual);
+    assert.equal(manual.properties.exception_diagnostic, undefined);
+  }
+});
