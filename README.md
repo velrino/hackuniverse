@@ -8,6 +8,14 @@ https://github.com/user-attachments/assets/71ee72c3-f5f6-4b40-8359-383dcdcb93ad
 
 [Explore the live demo](https://universe.velrino.co/) · [Run locally](#run-the-web-app) · [Download the demo (MP4)](assets/demo/video/demo.mp4)
 
+## Community recognition
+
+[OpenAI Developers (@OpenAIDevs)](https://x.com/OpenAIDevs/reposts) reposted the HackUniverse demo on X.
+
+<p align="center">
+  <a href="assets/recognition/openai-developers-repost.png"><img src="assets/recognition/openai-developers-repost.png" alt="Screenshot captured November 2, 2026 showing OpenAI Developers reposting Velrino's HackUniverse demo on X" width="400" /></a>
+</p>
+
 ## Product tour
 
 Select any screenshot below to open it at full resolution. Names and descriptions use sourced astronomical records; rendered positions and appearances are illustrative.
