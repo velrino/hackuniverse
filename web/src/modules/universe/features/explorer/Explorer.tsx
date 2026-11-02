@@ -121,8 +121,9 @@ export function Explorer() {
     try { audio?.onCameraGestureEnd?.(motion); } catch { /* Optional feedback cannot block navigation. */ }
   }, [audio]);
   const hoverFeedback = useCallback((id: string) => {
+    if (id === (flightEnabled ? flightTargetId : current.id)) return;
     try { audio?.onDestinationHover?.(id); } catch { /* Optional feedback cannot block navigation. */ }
-  }, [audio]);
+  }, [audio, current.id, flightEnabled, flightTargetId]);
   const tourZoomFeedback = useCallback((direction: "in" | "out") => {
     try { audio?.onTourZoomIntent?.(direction); } catch { /* Optional feedback cannot block the tour. */ }
   }, [audio]);

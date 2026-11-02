@@ -18,7 +18,7 @@ Only these nine aliases are preloaded for real interactions:
 | `camera-orbit.mp3` | Silent alias for camera rotation with a real single-pointer drag |
 | `zoom-in.mp3`, `zoom-out.mp3` | Silent aliases for manual zoom and explicit tour travel |
 | `toggle-on.mp3`, `toggle-off.mp3` | Commit an enabled switch or toggle change |
-| `destination-hover.mp3` | Physically move the pointer onto a new destination |
+| `destination-hover.mp3` | Physically move the pointer onto an unselected destination; the current location and selected flight target stay silent |
 
 The runtime files `camera-orbit.mp3`, `zoom-in.mp3` and `zoom-out.mp3` contain digitally silent audio, retaining their documented playback durations. The original CAMRotate/CAMZoom WAVs and imported MP3 catalog remain unchanged, as do music and every other runtime effect. Movement callbacks, lease renewal and native audio-clock deadlines still run; their camera voices carry silence. MP3 durations include frame padding; the [manifest](../assets/audio/manifest.json) owns exact durations, processing, byte counts, levels and hashes. Other SystemAmbient and Unused recordings have no runtime action or eager loading assignment.
 
