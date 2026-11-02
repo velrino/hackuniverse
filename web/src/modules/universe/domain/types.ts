@@ -34,6 +34,8 @@ export type UniversePlanet = EntityFields & Readonly<{
   parentId: string;
   reference?: PlanetReference;
   tags?: readonly string[];
+  /** Sourced radius; null explicitly means unavailable, undefined keeps illustrative catalogs compatible. */
+  radiusKm?: number | null;
 }>;
 
 export type UniverseEntity = UniverseGroup | UniversePlanet;
@@ -60,6 +62,7 @@ export type SceneNode = {
   seed: number;
   color: string;
   children?: SceneNode[];
+  radiusKm?: number | null;
 };
 
 export type UniverseSceneView = {

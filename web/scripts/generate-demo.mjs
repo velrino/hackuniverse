@@ -36,6 +36,10 @@ const constellationBytes = await readFile(new URL(manifest.constellationSnapshot
 assert.equal(sha256(rawBytes), manifest.rawSha256, "NASA snapshot hash mismatch");
 assert.equal(sha256(constellationBytes), manifest.constellationSha256, "Constellation snapshot hash mismatch");
 const rows = JSON.parse(rawBytes.toString("utf8"));
+const radiiSource = await json("planet-radii-source.json");
+const radiiBytes = await readFile(new URL(radiiSource.snapshot, assets));
+assert.equal(sha256(radiiBytes), radiiSource.sha256, "Planet radii snapshot hash mismatch");
+const radii = new Map(JSON.parse(radiiBytes).map((row) => [row.pl_name, row]));
 const planetNames = new Set();
 const grouped = new Map();
 for (const row of rows) {
@@ -119,6 +123,7 @@ function planetNode(row, constellation) {
   }
   return {
     id, name: row.pl_name, description: facts.join(" "), seed: seed(id), type: "demo",
+    radiusKm: positive(radii.get(row.pl_name)?.pl_rade) && radii.get(row.pl_name).pl_radelim === 0 ? radii.get(row.pl_name).pl_rade * radiiSource.earthRadiusKm : null,
     reference: { label: `NASA Exoplanet Archive / ${row.pl_name}`, href: overview(row.pl_name) },
     tags: ["confirmed exoplanet", "NASA Exoplanet Archive", row.hostname, constellation.name, ...(row.discoverymethod ? [row.discoverymethod] : [])],
   };
@@ -205,9 +210,10 @@ const output = {
     counts: { galaxies: galaxies.length, regions: 1 + constellationRegions.length, systems: allSystems.length, exoplanetHosts: hostCount, planets: planetCount, exoplanets: planetCount - curated.solarSystem.planets.length, entities: ids.length },
     descriptions: "Planet descriptions use source names, host relationships, discovery year/method and only positive orbital periods with a zero limit flag. Missing facts are omitted. No climate, surface, habitability or life claim is inferred for an exoplanet.",
     stellarParameters: "Optional non-limited stellar temperature, radius and age are copied from a source row; stellar radius in Solar radii is multiplied by NASA's 695700 km nominal Solar radius. Composite fields can have different literature references, retained in the raw snapshot. Stellar age estimates above the approximately 13.8-billion-year age of the universe are omitted from display because this interface does not show their uncertainties; the raw NASA snapshot is unchanged.",
-    appearance: "Visual seeds preserve deterministic illustrations. Positions, colors, surfaces, rings, sizes, spacing and motion are not observed exoplanet measurements.",
+    radiusSource: radiiSource,
+    appearance: "Sourced stellar and planetary radii share one linear display scale. Unavailable radii use explicitly unscaled markers. Composite planetary radii can be archive-calculated estimates. Positions, colors, surfaces, rings, orbital spacing and motion remain illustrative.",
     galaxySources: Object.fromEntries(curated.galaxies.map((galaxy) => [galaxy.id, galaxy.source])),
-    solarSources: [curated.solarFactsSource, ...curated.solarSystem.planets.map((planet) => planet.reference.href), curated.solarSystem.star.reference.href],
+    solarSources: [curated.solarRadiusSource, curated.solarFactsSource, ...curated.solarSystem.planets.map((planet) => planet.reference.href), curated.solarSystem.star.reference.href],
     references: [manifest.tableDocumentation, manifest.compositeCaveats, manifest.attributionGuidance, assignments.iauReference, assignments.source, "https://science.nasa.gov/exoplanets/what-is-the-universe/"],
     attribution: manifest.attribution,
   },

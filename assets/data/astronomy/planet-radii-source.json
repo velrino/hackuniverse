@@ -1,0 +1,11 @@
+{
+  "retrievedAt": "2026-11-02T22:39:38.333254+00:00",
+  "table": "pscomppars",
+  "query": "select pl_name,pl_rade,pl_radelim,pl_rade_reflink from pscomppars where pl_controv_flag=0 and sy_snum=1 and cb_flag=0 and hostname in (select hostname from pscomppars where sy_dist<=100 and ra is not null and dec is not null) order by pl_name",
+  "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name%2Cpl_rade%2Cpl_radelim%2Cpl_rade_reflink+from+pscomppars+where+pl_controv_flag%3D0+and+sy_snum%3D1+and+cb_flag%3D0+and+hostname+in+%28select+hostname+from+pscomppars+where+sy_dist%3C%3D100+and+ra+is+not+null+and+dec+is+not+null%29+order+by+pl_name&format=json",
+  "snapshot": "nasa-planet-radii-2026-11-02.json",
+  "sha256": "4189d4f47ac5ed5ac339969f1a16112b42f5baf6b88b078a8035006e1d85eaa5",
+  "earthRadiusKm": 6378.1,
+  "reference": "https://exoplanetarchive.ipac.caltech.edu/docs/API_TD_columns.html",
+  "caveats": "Composite radii may be literature values or archive-calculated estimates; this snapshot does not establish measurement precision. Original parameter references are preserved."
+}

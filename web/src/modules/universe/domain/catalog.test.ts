@@ -341,3 +341,15 @@ test("rejects unsafe reference URLs without echoing their values", async (t) => 
     assertRedactedFailure(patchEntity("ticket:42", { reference: { label: "Source", href } }), marker);
   });
 });
+
+test("planet radii distinguish known, unavailable and illustrative sizes at the scene boundary", () => {
+  for (const radiusKm of [6371, null, undefined]) {
+    const catalog = parseUniverseCatalog(patchEntity("ticket:42", { radiusKm }));
+    const planet = catalog.planets.find(({ id }) => id === "ticket:42")!;
+    assert.equal(planet.radiusKm, radiusKm);
+    assert.equal(getSceneView(catalog, planet.id).nodes.find(({ id }) => id === planet.id)?.radiusKm, radiusKm);
+  }
+  for (const radiusKm of [-1, 0, Infinity, NaN, "6371", 1e11]) {
+    assert.throws(() => parseUniverseCatalog(patchEntity("ticket:42", { radiusKm })));
+  }
+});

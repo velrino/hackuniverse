@@ -21,17 +21,19 @@ export function clusterPosition(node: SceneNode, index: number, total: number, s
 }
 
 export function nodeGeometrySignature(node: SceneNode): string {
-  return `${node.id}:${node.kind}:${node.seed}:${node.color}:${node.count}[${(node.children ?? []).map(nodeGeometrySignature).join(",")}]`;
+  return `${node.id}:${node.kind}:${node.seed}:${node.color}:${node.radiusKm}:${node.count}[${(node.children ?? []).map(nodeGeometrySignature).join(",")}]`;
 }
 
-export const systemOrbit = (index: number) => 9 + Math.min(index, 4) * 6 + Math.max(0, index - 4) * 5;
-export const systemRadius = (count: number) => Math.max(28, systemOrbit(Math.max(0, count - 1)) + 9);
-export const planetRadius = (seed: number) => getPlanetAppearance(seed).radius;
+export const systemOrbit = (index: number, centralRadius = 3.4) => Math.max(0, centralRadius - 3.4) * 2 + 9 + Math.min(index, 4) * 6 + Math.max(0, index - 4) * 5;
+export const systemRadius = (count: number, centralRadius = 3.4) => Math.max(28, systemOrbit(Math.max(0, count - 1), centralRadius) + 9);
+export const physicalRadius = (radiusKm: number) => radiusKm * 3.4 / 695700;
+export const starRadius = (node?: Pick<SceneNode, "radiusKm">) => node?.radiusKm === null ? 0.02 : node?.radiusKm !== undefined ? physicalRadius(node.radiusKm) : 3.4;
+export const planetRadius = (seed: number, radiusKm?: number | null) => radiusKm === null ? 0.02 : radiusKm !== undefined ? physicalRadius(radiusKm) : getPlanetAppearance(seed).radius;
 export const orbitalSpeed = (orbit: number) => 0.09 * Math.pow(9 / orbit, 1.5);
-export const orbitalAngle = (index: number, elapsed: number) => index * 2.39996 + 0.4 + elapsed * orbitalSpeed(systemOrbit(index));
+export const orbitalAngle = (index: number, elapsed: number, centralRadius = 3.4) => index * 2.39996 + 0.4 + elapsed * orbitalSpeed(systemOrbit(index, centralRadius));
 
 /** Exact child-coordinate scale used by a parent marker and hierarchy handoff. */
-export function previewScale(node: Pick<SceneNode, "kind"> & { children?: readonly Pick<SceneNode, "kind">[] }, extent: number) {
-  if (node.kind === "system") return extent / systemRadius((node.children ?? []).filter((child) => child.kind === "planet").length);
+export function previewScale(node: Pick<SceneNode, "kind" | "radiusKm"> & { children?: readonly Pick<SceneNode, "kind">[] }, extent: number) {
+  if (node.kind === "system") return extent / systemRadius(node.radiusKm !== undefined ? 8 : (node.children ?? []).filter((child) => child.kind === "planet").length);
   return extent * (node.kind === "cloud" ? 1.1 : 1) / clusterScale(node.children ?? []).radius;
 }

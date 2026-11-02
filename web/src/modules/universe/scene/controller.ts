@@ -7,7 +7,7 @@ import { createShipPilot, type ShipFlightInput } from "./flight";
 import type { UniverseEntityTransition, UniverseFlightStatus, UniverseSceneErrorOperation, UniverseTourCameraStep } from "./types";
 import { createEntityTransition, ENTITY_TRANSITION_DURATION_MS } from "./entity-transition";
 import { createSemanticZoomGate } from "./semantic-zoom";
-import { clusterPosition, clusterScale, nodeGeometrySignature, orbitalAngle, orbitalSpeed, planetRadius, previewScale, systemOrbit, systemRadius } from "./layout";
+import { clusterPosition, clusterScale, nodeGeometrySignature, orbitalAngle, orbitalSpeed, planetRadius, previewScale, systemOrbit, systemRadius, starRadius } from "./layout";
 import { createSpatialBackground } from "./background";
 import { createDestinationHover } from "./destination-hover";
 import { createDestinationHighlight } from "./destination-highlight";
@@ -274,7 +274,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       const previous = previousEntityViewKey === currentView?.key ? previousEntityAnchors.get(transition.entityId) : undefined;
       const position = body ? body.object.getWorldPosition(new THREE.Vector3()) : star ? star.getWorldPosition(new THREE.Vector3())
         : previous?.position.clone() ?? controls.target.clone();
-      let radius = body ? currentView?.mode === "cluster" ? body.extent : body.radius : star ? 3.4 : previous?.radius
+      let radius = body ? currentView?.mode === "cluster" ? body.extent : body.radius : star ? starRadius(currentView?.anchor) : previous?.radius
         ?? Math.min(sceneRadius * 0.15, Math.max(1, camera.position.distanceTo(controls.target) * 0.08));
       if (transition.kind === "universe") {
         // A universe birth spans the viewport, including an empty catalog with no body extent.
@@ -502,19 +502,20 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       body.detail.add(body.localOrbits);
       const scale = previewScale(node, extent);
       const star = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ map: starMap, color: 0xffffff, toneMapped: false }));
-      star.scale.setScalar(3.4 * scale);
+      star.scale.setScalar(starRadius(node) * scale);
+      if (node.radiusKm === null) (star.material as THREE.MeshBasicMaterial).wireframe = true;
       body.mesh = star;
       body.detail.add(star);
       star.userData.id = node.id;
       hitTargets.push(star);
-      addGlow(body.detail, 3.4 * 8.6 * scale, 0xffffff, 0.75, coronaMap, false);
+      addGlow(body.detail, starRadius(node) * 8.6 * scale, 0xffffff, 0.75, coronaMap, false);
       body.miniPlanets = [];
       children.filter((child) => child.kind === "planet").forEach((planet, index) => {
-        const orbit = systemOrbit(index);
-        const angle = orbitalAngle(index, orbitalTime);
+        const orbit = systemOrbit(index, starRadius(node));
+        const angle = orbitalAngle(index, orbitalTime, starRadius(node));
         const appearance = getPlanetAppearance(planet.seed);
-        const dot = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: planet.color, toneMapped: false }));
-        dot.scale.setScalar(planetRadius(planet.seed) * scale);
+        const dot = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: planet.color, toneMapped: false, wireframe: planet.radiusKm === null }));
+        dot.scale.setScalar(planetRadius(planet.seed, planet.radiusKm) * scale);
         dot.rotation.z = appearance.tilt;
         addPlanetRings(dot, 1, appearance, 0);
         dot.position.set(Math.cos(angle) * orbit * scale, 0, Math.sin(angle) * orbit * scale);
@@ -523,7 +524,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         dot.userData.id = planet.id;
         hitTargets.push(dot);
         registerDestination({ id: planet.id, kind: planet.kind, name: planet.name, object: dot,
-          position: new THREE.Vector3(), radius: 1, extent: planetRadius(planet.seed) * scale,
+          position: new THREE.Vector3(), radius: 1, extent: planetRadius(planet.seed, planet.radiusKm) * scale,
           highlight: createDestinationHighlight(dot) });
       });
       addOrbits(body.miniPlanets.map((planet) => planet.orbit * scale), body.localOrbits);
@@ -604,6 +605,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     controls.target.set(0, 0, 0);
     controls.minDistance = currentView?.mode === "planet" ? 8 : 7;
     controls.maxDistance = zoomOutLimit(Math.max(180, distance * 3));
+    camera.near = 0.1;
     camera.far = Math.max(1600, cameraDistance * 5 + sceneRadius * 4);
     camera.updateProjectionMatrix();
     controls.update();
@@ -658,6 +660,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     const distance = body.radius / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * (camera.aspect < 0.85 ? 4.2 : 3);
     focusDistance = distance;
     const target = body.object.position.clone();
+    camera.near = Math.min(0.1, body.radius * 0.05);
+    camera.updateProjectionMatrix();
     controls.minDistance = body.radius * 2.4;
     beginCameraTween({ position: target.clone().addScaledVector(direction, distance), target }, 1, undefined, Boolean(worldTransition));
   }
@@ -736,7 +740,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     for (const body of priorBodies.slice(0, 128)) previousEntityAnchors.set(body.node.id, {
       position: body.object.getWorldPosition(new THREE.Vector3()), radius: currentView?.mode === "cluster" ? body.extent : body.radius,
     });
-    if (centralStar) previousEntityAnchors.set(centralStar.systemId, { position: centralStar.object.getWorldPosition(new THREE.Vector3()), radius: 3.4 });
+    if (centralStar) previousEntityAnchors.set(centralStar.systemId, { position: centralStar.object.getWorldPosition(new THREE.Vector3()), radius: starRadius(currentView?.anchor) });
     if (currentView?.key !== view.key) finishEntityTransition();
     finishWorldTransition();
     destinationHover.clear();
@@ -802,14 +806,15 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     const focus = view.mode === "planet";
     const cluster = view.mode === "cluster";
     const layout = clusterScale(view.nodes);
-    sceneRadius = focus ? 10 : cluster ? layout.radius : systemRadius(view.nodes.length);
+    sceneRadius = focus ? 10 : cluster ? layout.radius : systemRadius(view.nodes.length, starRadius(view.anchor));
     if (!canTransition) background.reset(sceneRadius, view);
     sunLight.position.set(0, 0, 0);
     sunLight.intensity = focus || cluster ? 0.7 : 3.8;
 
     if (view.mode === "system") {
       const star = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ map: starMap, color: 0xffffff, toneMapped: false }));
-      star.scale.setScalar(3.4);
+      star.scale.setScalar(starRadius(view.anchor));
+      if (view.anchor?.radiusKm === null) (star.material as THREE.MeshBasicMaterial).wireframe = true;
       viewGroup.add(star);
       addGlow(star, 8.6, 0xffffff, 0.75, coronaMap, false);
       // Reuse the unique parent system ID, which cannot collide with child planets.
@@ -823,7 +828,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     view.nodes.forEach((node, index) => {
       const object = new THREE.Group();
       const appearance = getPlanetAppearance(node.seed);
-      const radius = focus ? 5.2 : cluster ? 0.8 : planetRadius(node.seed);
+      const radius = focus ? 5.2 : cluster ? 0.8 : planetRadius(node.seed, node.radiusKm);
       let material: THREE.Material;
       if (cluster) material = new THREE.MeshBasicMaterial({ visible: false });
       else {
@@ -833,14 +838,15 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       }
       const mesh = new THREE.Mesh(sphere, material);
       mesh.visible = !cluster;
+      if (node.radiusKm === null && material instanceof THREE.MeshStandardMaterial) material.wireframe = true;
       mesh.scale.setScalar(radius);
       mesh.rotation.order = "ZYX";
       mesh.rotation.z = appearance.tilt;
       mesh.rotation.y = (node.seed % 17) / 17 * Math.PI;
       mesh.userData.id = node.id;
       object.add(mesh);
-      const angle = orbitalAngle(index, orbitalTime);
-      const orbit = focus || cluster ? 0 : systemOrbit(index);
+      const angle = orbitalAngle(index, orbitalTime, starRadius(view.anchor));
+      const orbit = focus || cluster ? 0 : systemOrbit(index, starRadius(view.anchor));
       if (cluster) object.position.set(...clusterPosition(node, index, view.nodes.length, sceneRadius));
       else object.position.set(Math.cos(angle) * orbit, 0, Math.sin(angle) * orbit);
       const body: Body = { node, object, radius, extent: cluster ? layout.marker : radius, angle, orbit, mesh };
@@ -1148,7 +1154,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
         body.object.position.set(Math.cos(body.angle) * body.orbit, 0, Math.sin(body.angle) * body.orbit);
       }
       if (body.detail?.visible !== false) body.miniPlanets?.forEach((planet) => {
-        const angle = orbitalAngle(planet.index, orbitalTime);
+        const angle = orbitalAngle(planet.index, orbitalTime, starRadius(body.node));
         planet.mesh.position.set(Math.cos(angle) * planet.orbit * planet.scale, 0, Math.sin(angle) * planet.orbit * planet.scale);
       });
       body.mesh.rotation.y += delta * 0.09;
@@ -1293,7 +1299,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     }
     else if (starSelected && centralStar && !piloting) {
       selection.position.copy(centralStar.object.position);
-      const radius = physicalSelectionRadius(centralStar.object.position, 3.4);
+      const radius = physicalSelectionRadius(centralStar.object.position, starRadius(currentView?.anchor));
       if (radius === null) selection.visible = false;
       else selection.scale.setScalar(radius);
       selection.lookAt(camera.position);
@@ -1658,7 +1664,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     getSystemRadius: () => sceneRadius,
     getSpawnAnchor: () => controls.target.clone(),
     getObstacles: () => [
-      ...(currentView?.mode === "system" ? [{ position: new THREE.Vector3(), radius: 3.4 }] : []),
+      ...(currentView?.mode === "system" ? [{ position: new THREE.Vector3(), radius: starRadius(currentView?.anchor) }] : []),
       ...bodies.map((body) => ({ position: body.object.position, radius: body.radius })),
     ],
     reducedMotion: () => reducedMotion,

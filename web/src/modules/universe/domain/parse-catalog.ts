@@ -109,6 +109,7 @@ function entity(value: unknown, index: number): UniverseEntity {
       ...common, kind, parentId: identifier(input.parentId, `${field}.parentId`),
       ...(input.reference === undefined ? {} : { reference: reference(input.reference, `${field}.reference`) }),
       ...(tags === undefined ? {} : { tags }),
+      ...(input.radiusKm === undefined ? {} : { radiusKm: input.radiusKm === null ? null : positiveNumber(input.radiusKm, `${field}.radiusKm`, 10_000_000_000) }),
     });
   }
   if (kind === "system") return Object.freeze({

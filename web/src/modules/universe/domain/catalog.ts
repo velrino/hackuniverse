@@ -113,6 +113,8 @@ function sceneNode(index: ReturnType<typeof indexCatalog>, entity: UniverseEntit
     subtitle: planet?.reference?.label || entity.description,
     count: entity.kind === "planet" ? Number(Boolean(planet)) : index.counts.get(entity.id) ?? 0,
     seed: entity.seed,
+    ...(entity.kind === "planet" && entity.radiusKm !== undefined ? { radiusKm: entity.radiusKm } : {}),
+    ...(entity.kind === "system" && entity.star ? { radiusKm: entity.star.radiusKm ?? null } : {}),
     color: entity.kind === "planet" ? getPlanetAppearance(entity.seed).color : groupColors[entity.kind],
     ...(entity.kind !== "planet" && depth < 4 ? {
       children: (index.children.get(entity.id) ?? []).map((child) => sceneNode(index, child, projected, depth + 1)),

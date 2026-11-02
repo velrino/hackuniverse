@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { getSceneView } from "../domain/catalog";
 import { parseUniverseCatalog } from "../domain/parse-catalog";
 import type { SceneNode, UniverseSceneView } from "../domain/types";
-import { clusterPosition, clusterScale, previewScale } from "./layout";
+import { clusterPosition, clusterScale, previewScale, physicalRadius, starRadius, planetRadius, systemOrbit } from "./layout";
 import { mapAncestorToAnchor, mapSceneViews, type SceneCoordinateMapping } from "./view-coordinates";
 
 const fields = (id: string, seed: number) => ({ id, name: id, description: "Synthetic coordinate fixture.", seed });
@@ -130,4 +130,16 @@ test("scene mapping has no fallback across unrelated roots or malformed chains",
   const broken = { ...view("system-a"), ancestors: [root.anchor!] };
   assert.equal(mapSceneViews(root, broken), null);
   assert.equal(mapSceneViews(broken, broken), null, "matching anchor IDs cannot bypass invalid ancestor links");
+});
+
+
+test("sourced body sizes preserve physical ratios across different system previews", () => {
+  const sun = { kind: "system" as const, radiusKm: 695700, children: Array.from({ length: 8 }, () => ({ kind: "planet" as const })) };
+  const dwarf = { kind: "system" as const, radiusKm: 695700 * 0.35, children: [{ kind: "planet" as const }] };
+  near(starRadius(sun) / planetRadius(1, 6371), 695700 / 6371);
+  near(starRadius(dwarf) / starRadius(sun), 0.35);
+  near(previewScale(sun, 11), previewScale(dwarf, 11));
+  near(physicalRadius(69911) / physicalRadius(6371), 69911 / 6371);
+  assert.ok(systemOrbit(0, physicalRadius(9670230)) > physicalRadius(9670230));
+  assert.notEqual(planetRadius(1, null), planetRadius(1, 6371));
 });

@@ -36,6 +36,7 @@ export function StarDetails({ star, systemName, planetCount, copy, onClose, form
       <p className="hud-kicker">{copy.star} / {copy.details}{demo && <> / {copy.demoObject}</>}</p>
       <h2><TypewriterText text={star.name} replayKey={replayKey} /></h2>
       <p className="universe-details-description"><TypewriterText text={star.description.trim() || copy.starFallbackDescription} replayKey={replayKey} /></p>
+      <p className="universe-source-note">{star.radiusKm === undefined ? copy.unknownSize : copy.proportionalSize}</p>
       <dl className="universe-star-facts">
         {facts.map(({ label, value }) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
       </dl>

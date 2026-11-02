@@ -15,6 +15,7 @@ export function PlanetDetails({ planet, copy, onBack, demo, allowDemoReferences 
       <p className="hud-kicker">{copy.kinds.planet} / {reference ? copy.source : copy.details}</p>
       <h2><TypewriterText text={planet.name} replayKey={planet.id} /></h2>
       <p className="universe-details-description"><TypewriterText text={planet.description} replayKey={planet.id} /></p>
+      {planet.radiusKm !== undefined && <p className="universe-source-note">{planet.radiusKm === null ? copy.unknownSize : copy.proportionalSize}</p>}
       {reference && <div className="universe-source"><SourceIcon size={15} aria-hidden="true" /><span>{reference.label}</span></div>}
       {demo && reference && <p className="universe-source-note">{allowDemoReferences ? copy.demoFactualReference : copy.demoReference}</p>}
       <div className="universe-details-actions">

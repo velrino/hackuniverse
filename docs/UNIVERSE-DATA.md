@@ -174,3 +174,14 @@ Interface localization does not translate or rewrite catalog content, labels, ta
 From `web/`, run `npm run test:demo` and `npm run test:catalog`. Native Node tests cover canonical and supplier boundaries, URLless/empty catalogs, hierarchy and input failures, safe projection, immutability, derived identity, adapter conversion and projection isolation. The runner compiles tests with the existing TypeScript dependency into ignored `.catalog-tests/` output. Demo checks verify canonical parity, Solar/tour identity, factual snapshot membership/integrity and selection bounds. `npm run test:scene` separately checks tour continuity, distance bounds and shared orbital motion.
 
 `npm run test:workspace` separately checks local CRUD, the multi-universe envelope, persistence limits, conflicting snapshots and write-lock behavior; see [workspace validation](LOCAL-WORKSPACE.md#validation-and-roadmap).
+
+
+## Proportional body radii
+
+Canonical planets accept optional `radiusKm`: a finite positive radius in kilometers, or `null` for explicitly unavailable data. Omission preserves compatibility with illustrative Local/provider catalogs. System radii come from `star.radiusKm`; the scene projection carries the value without importing supplier fields.
+
+Stars and planets with known radii use one linear conversion, 3.4 display units per 695,700 km. System previews share a common conversion instead of fitting every star to the same marker size. Orbital distances remain illustrative and expand where needed to avoid placing planets inside a giant star. Galaxy/region graphics remain navigation representations, not physical size models.
+
+The separately pinned [planet-radius source](../assets/data/astronomy/planet-radii-source.json) retains the NASA query, retrieval time and SHA-256. Its parameter references remain in the raw snapshot. NASA composite radii may be archive-calculated estimates, not direct measurements; limit values are excluded. The current catalog has available radii for 752 of 767 planets and 445 of 450 stars. Missing radii use unscaled wireframe symbols with localized explanatory copy. Solar mean radii come from [NASA/JPL physical parameters](https://ssd.jpl.nasa.gov/planets/phys_par.html).
+
+Small planets retain their labels and accessible atlas selection. Focusing a planet adjusts the near clipping plane to its radius so proportional terrestrial planets remain visible close up. The physical radii do not establish real surfaces, rings, orbital phase or a physical distance scale.

@@ -53,6 +53,8 @@ const fil = {
   starPlanets: "Mga planeta",
   starSpectralType: "Uri ng ispektrum",
   starTemperature: "Epektibong temperatura",
+  proportionalSize: 'Proporsyonal ang laki sa radius sa katalogo; inayos ang distansya ng mga orbit para sa paggalugad.',
+  unknownSize: 'Walang radius na magagamit; hindi ayon sa sukat ang simbolo.',
   starRadius: "Radyus",
   starAge: "Edad",
   starBillionYears: { one: "bilyong taon", other: "bilyong taon" },

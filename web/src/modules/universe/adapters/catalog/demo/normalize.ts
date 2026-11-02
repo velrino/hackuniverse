@@ -42,6 +42,7 @@ export function normalizeDemoCatalog(input: unknown): UniverseCatalogDocument {
       ...(node.type === undefined ? {} : { type: node.type }),
       ...(kind === "system" && node.star !== undefined ? { star: node.star } : {}),
       ...(kind === "planet" && node.reference !== undefined ? { reference: node.reference } : {}),
+      ...(kind === "planet" && node.radiusKm !== undefined ? { radiusKm: node.radiusKm } : {}),
       ...(kind === "planet" && node.tags !== undefined ? { tags: node.tags } : {}),
     });
     if (!branch) return;

@@ -37,7 +37,7 @@
   "solarSystem": {
     "id": "system-solar",
     "name": "Solar System",
-    "description": "The Solar System contains the Sun and eight planets. Planet sizes, distances, surfaces and orbital motion in this map are illustrative.",
+    "description": "The Solar System contains the Sun and eight planets. Body radii are proportional to sourced values; orbital distances, surfaces and motion remain illustrative.",
     "seed": 2283689132,
     "type": "demo",
     "star": {
@@ -68,7 +68,8 @@
           "Milky Way",
           "real planet",
           "terrestrial planet"
-        ]
+        ],
+        "radiusKm": 2439.7
       },
       {
         "id": "planet-venus",
@@ -85,7 +86,8 @@
           "Milky Way",
           "real planet",
           "terrestrial planet"
-        ]
+        ],
+        "radiusKm": 6051.8
       },
       {
         "id": "planet-earth",
@@ -102,7 +104,8 @@
           "Milky Way",
           "real planet",
           "terrestrial planet"
-        ]
+        ],
+        "radiusKm": 6371
       },
       {
         "id": "planet-mars",
@@ -119,7 +122,8 @@
           "Milky Way",
           "real planet",
           "terrestrial planet"
-        ]
+        ],
+        "radiusKm": 3389.5
       },
       {
         "id": "planet-jupiter",
@@ -136,7 +140,8 @@
           "Milky Way",
           "real planet",
           "gas giant"
-        ]
+        ],
+        "radiusKm": 69911
       },
       {
         "id": "planet-saturn",
@@ -153,7 +158,8 @@
           "Milky Way",
           "real planet",
           "gas giant"
-        ]
+        ],
+        "radiusKm": 58232
       },
       {
         "id": "planet-uranus",
@@ -170,7 +176,8 @@
           "Milky Way",
           "real planet",
           "ice giant"
-        ]
+        ],
+        "radiusKm": 25362
       },
       {
         "id": "planet-neptune",
@@ -187,7 +194,8 @@
           "Milky Way",
           "real planet",
           "ice giant"
-        ]
+        ],
+        "radiusKm": 24622
       }
     ]
   },
@@ -315,5 +323,6 @@
     }
   ],
   "solarFactsSource": "https://science.nasa.gov/solar-system/planets/",
-  "sunRadiusKm": 695700
+  "sunRadiusKm": 695700,
+  "solarRadiusSource": "https://ssd.jpl.nasa.gov/planets/phys_par.html"
 }
