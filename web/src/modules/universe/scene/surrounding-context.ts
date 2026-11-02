@@ -152,7 +152,7 @@ function contextRadius(root: THREE.Group) {
 export function createSurroundingContext(
   view: UniverseSceneView,
   resources: ClusterVisualResources,
-  { mobile, elapsed }: { mobile: boolean; elapsed: number },
+  { mobile, elapsed, excludedIds }: { mobile: boolean; elapsed: number; excludedIds?: ReadonlySet<string> },
 ) {
   const root = new THREE.Group();
   root.name = "surrounding-context";
@@ -220,7 +220,9 @@ export function createSurroundingContext(
       id: node.id, kind: node.kind, name: node.name, position, extent,
       opacity: 0, screenRadius: 1, highlight: () => {},
     }));
-    updateMarkers = addDestinationMarkers(root, nearest, destinations, typeof ratio === "function" ? ratio : () => ratio);
+    const markers = nearest.filter(({ node }) => !excludedIds?.has(node.id));
+    const markerDestinations = destinations.filter((destination) => !excludedIds?.has(destination.id));
+    if (markers.length) updateMarkers = addDestinationMarkers(root, markers, markerDestinations, typeof ratio === "function" ? ratio : () => ratio);
     const named = new Set<Candidate>();
     // Keep the wider context identifiable even when nearby systems dominate the count.
     for (const kind of ["system", "galaxy", "cloud"]) {

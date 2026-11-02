@@ -16,7 +16,7 @@ import { createTourZoomFeedback } from "./tour-zoom-feedback";
 import { galaxyParticleTexture } from "./galaxy-particles";
 import { createCloudHaze, createGalaxyVisual, createGlow, createRoundPointMaterial, updateCloudHaze, updateGalaxyVisual } from "./cluster-visuals";
 import { createSurroundingContext, type ContextLabel } from "./surrounding-context";
-import { mapSceneViews } from "./view-coordinates";
+import { mapAncestorToAnchor, mapSceneViews } from "./view-coordinates";
 import { destinationPosition, findPhysicalHit, isObjectVisible, pickSceneDestination, type ScenePickTarget } from "./destination-picking";
 import { isManualZoomSample } from "./zoom-intent";
 import { isManualOrbitSample } from "./orbit-intent";
@@ -125,6 +125,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
 
   let bodies: Body[] = [];
   let systemPreviews: Body[] = [];
+  let regionalSystems: Body[] = [];
   let centralStar: CentralStar | null = null;
   let surroundingContext: ReturnType<typeof createSurroundingContext> | null = null;
   let contextMobile = false;
@@ -407,18 +408,21 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       disposeObjects(surroundingContext.root, true);
     }
     contextMobile = width < 640;
-    surroundingContext = createSurroundingContext(view, clusterResources, { mobile: contextMobile, elapsed: orbitalTime });
+    surroundingContext = createSurroundingContext(view, clusterResources, { mobile: contextMobile, elapsed: orbitalTime, excludedIds: new Set(regionalSystems.map((body) => body.node.id)) });
     viewGroup.add(surroundingContext.root);
     labels.filter((label) => label.context).forEach(({ element }) => element.remove());
     labels = labels.filter((label) => !label.context);
     visibleDestinations = visibleDestinations.filter((destination) => !destination.context);
     destinationById.clear();
     visibleDestinations.forEach((destination) => destinationById.set(destination.id, destination));
-    for (const context of surroundingContext.destinations) registerDestination({
-      id: context.id, kind: context.kind, name: context.name, object: surroundingContext.root,
-      position: context.position, radius: context.extent, extent: context.extent,
-      screenRadius: () => context.screenRadius, highlight: context.highlight, context: true,
-    });
+    for (const context of surroundingContext.destinations) {
+      if (destinationById.has(context.id)) continue;
+      registerDestination({
+        id: context.id, kind: context.kind, name: context.name, object: surroundingContext.root,
+        position: context.position, radius: context.extent, extent: context.extent,
+        screenRadius: () => context.screenRadius, highlight: context.highlight, context: true,
+      });
+    }
     for (const context of surroundingContext.labels) addLabel(context.name, undefined, context.position, false, context, destinationById.get(context.id));
   }
 
@@ -426,6 +430,39 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     visibleDestinations.push(destination);
     destinationById.set(destination.id, destination);
     return destination;
+  }
+
+  function addRegionalSystems(view: UniverseSceneView) {
+    if (view.mode !== "system" || !view.anchor) return;
+    const chain = [...(view.ancestors ?? []), view.anchor];
+    const regionIndex = chain.length - 2;
+    const region = chain[regionIndex];
+    const mapping = mapAncestorToAnchor(chain, regionIndex);
+    if (region?.kind !== "cloud" || !mapping) return;
+    const children = region.children ?? [];
+    const layout = clusterScale(children);
+    const neighbors = children.flatMap((node, index) => {
+      if (node.kind !== "system" || node.id === view.anchor!.id) return [];
+      const position = new THREE.Vector3(...clusterPosition(node, index, children.length, layout.radius));
+      position.multiplyScalar(mapping.scale).add(mapping.offset);
+      return [{ node, position }];
+    }).sort((a, b) => a.position.lengthSq() - b.position.lengthSq());
+    // Reuse the region's preview factory and LOD budgets; never expand a whole
+    // galaxy when entering a system. More distant neighbors retain point markers.
+    for (const { node, position } of neighbors.slice(0, 12)) {
+      const object = new THREE.Group();
+      object.name = `regional-system:${node.id}`;
+      object.position.copy(position);
+      const extent = layout.marker * mapping.scale;
+      // The shared system factory replaces this resource-free placeholder with its star.
+      const body: Body = { node, object, radius: extent, extent, angle: 0, orbit: 0, mesh: new THREE.Mesh(sphere, []) };
+      viewGroup.add(object);
+      addCluster(body);
+      body.highlight = createDestinationHighlight(object);
+      regionalSystems.push(body);
+      registerDestination({ id: node.id, kind: node.kind, name: node.name, object,
+        position: new THREE.Vector3(), radius: extent * 0.24, extent, highlight: body.highlight });
+    }
   }
 
   function addLabel(text: string, body?: Body, position?: THREE.Vector3, star = false, context?: ContextLabel, destination?: VisibleDestination, preview = false) {
@@ -647,9 +684,10 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     suppressCameraGestures();
     if (!body || currentView?.mode !== "cluster") { callbacks.onSelect(id); return; }
     const viewKey = currentView.key;
-    const direction = camera.position.clone().sub(controls.target).normalize();
-    const distance = body.extent / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 1.25 / Math.min(camera.aspect, 1);
     const target = body.object.position.clone();
+    const direction = camera.position.clone().sub(target).normalize();
+    const fitDistance = body.extent / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 1.25 / Math.min(camera.aspect, 1);
+    const distance = Math.min(camera.position.distanceTo(target), fitDistance);
     beginCameraTween({ position: target.clone().addScaledVector(direction, distance), target }, 0, () => {
       if (!destroyed && currentView?.key === viewKey && !pilot.isActive() && playing) callbacks.onSelect(id);
     });
@@ -718,6 +756,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     const entering = bodies.find((body) => `${body.node.kind}:${body.node.id}` === view.key);
     const parent = view.nodes.find((node) => `${node.kind}:${node.id}` === previousView?.key);
     const coordinateMapping = previousView && previousView.key !== view.key ? mapSceneViews(previousView, view) : null;
+    const adjacentRegionSystem = previousView && ((previousView.anchor?.kind === "cloud" && view.anchor?.kind === "system" && entering)
+      || (previousView.anchor?.kind === "system" && view.anchor?.kind === "cloud" && parent));
+    const preservePose = Boolean(coordinateMapping && adjacentRegionSystem && playing && !focusedId && !tourStep && !tourPreparing);
     const canTransition = Boolean(previousView && !reducedMotion && (coordinateMapping || entering || parent));
     const outgoing = new THREE.Group();
     const orbitsVisible = orbitGroup.visible;
@@ -751,6 +792,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     autopilotTargetId = null;
     bodies = [];
     systemPreviews = [];
+    regionalSystems = [];
     labels = [];
     hitTargets = [];
     visibleDestinations = [];
@@ -765,7 +807,6 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     sunLight.position.set(0, 0, 0);
     sunLight.intensity = focus || cluster ? 0.7 : 3.8;
 
-    refreshSurroundingContext(view);
     if (view.mode === "system") {
       const star = new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ map: starMap, color: 0xffffff, toneMapped: false }));
       star.scale.setScalar(3.4);
@@ -811,11 +852,21 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       body.highlight = createDestinationHighlight(object);
       if (labels.filter((label) => !label.context).length < LABEL_BUDGET) addLabel(node.name, body);
     });
-    systemPreviews = bodies.filter((body) => body.detail && body.proxy);
+    addRegionalSystems(view);
+    refreshSurroundingContext(view);
+    systemPreviews = [...bodies.filter((body) => body.detail && body.proxy), ...regionalSystems];
     // Reuse a small set of captions for the currently visible preview destinations.
     for (let index = 0; index < 8; index++) addLabel("", undefined, undefined, false, undefined, undefined, true);
     if (!cluster && !focus) addOrbits(bodies.map((body) => body.orbit));
     fit();
+    if (preservePose && coordinateMapping && !canTransition) {
+      camera.position.copy(previousPose.position).multiplyScalar(coordinateMapping.scale).add(coordinateMapping.offset);
+      controls.target.copy(previousPose.target).multiplyScalar(coordinateMapping.scale).add(coordinateMapping.offset);
+      const distance = camera.position.distanceTo(controls.target);
+      controls.minDistance = Math.min(controls.minDistance, distance);
+      controls.maxDistance = zoomOutLimit(Math.max(controls.maxDistance, distance));
+      controls.update();
+    }
     if (canTransition) {
       const destinationParent = bodies.find((body) => body.node.id === parent?.id);
       const scale = coordinateMapping?.scale ?? (entering ? 1 / previewScale(entering.node, entering.extent) : previewScale(destinationParent!.node, destinationParent!.extent));
@@ -831,7 +882,10 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       });
       const from = { position: previousPose.position.clone().multiplyScalar(scale).add(translation), target: previousPose.target.clone().multiplyScalar(scale).add(translation) };
       const direction = previousPose.position.clone().sub(previousPose.target).normalize();
-      const to = { position: direction.multiplyScalar(overviewDistance), target: new THREE.Vector3() };
+      // An adjacent handoff changes units, not the visible camera pose. Tours
+      // retain their explicitly configured overview destinations.
+      const to = preservePose ? { position: from.position.clone(), target: from.target.clone() }
+        : { position: direction.multiplyScalar(overviewDistance), target: new THREE.Vector3() };
       // Capture each incoming guide's destination opacity, rather than fading to a
       // default that would change abruptly when distance-aware rendering resumes.
       for (const guides of orbitGuides) guides.update(camera, height, to.position);
@@ -862,7 +916,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       const toIntensity = sunLight.intensity;
       sunLight.position.copy(fromLightPosition);
       sunLight.intensity = previousIntensity;
-      worldTransition = { outgoing, incomingMaterials, outgoingMaterials, from, to, started: performance.now(), duration: 720, cameraOwned: true, fromFraming: previousFraming, far, minDistance, maxDistance, fromLightPosition, fromIntensity: previousIntensity, toIntensity };
+      worldTransition = { outgoing, incomingMaterials, outgoingMaterials, from, to, started: performance.now(), duration: 720, cameraOwned: !preservePose, fromFraming: previousFraming, far, minDistance, maxDistance, fromLightPosition, fromIntensity: previousIntensity, toIntensity };
       labelLayer.style.opacity = "0";
       labelLayer.inert = true;
     }
@@ -976,11 +1030,12 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
 
   function updatePreviewLabels() {
     const slots = labels.filter((label) => label.preview);
+    const contextIds = new Set(labels.flatMap((label) => label.context ? [label.context.id] : []));
     const budget = width < 640 ? 4 : 8;
     const nearest: { destination: VisibleDestination; distance: number }[] = [];
     const world = new THREE.Vector3();
     for (const destination of visibleDestinations) {
-      if (destination.context || !isObjectVisible(destination.object) || destination.visible?.() === false) continue;
+      if (destination.context || contextIds.has(destination.id) || !isObjectVisible(destination.object) || destination.visible?.() === false) continue;
       destinationPosition(destination, world);
       projected.copy(world).project(camera);
       if (projected.z < -1 || projected.z > 1 || Math.abs(projected.x) > 1 || Math.abs(projected.y) > 1) continue;
@@ -1087,8 +1142,8 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     lastRendered = time;
     const animate = playing && !reducedMotion;
     if (animate) orbitalTime += delta;
-    if (animate) bodies.forEach((body) => {
-      if (currentView?.mode === "system") {
+    if (animate) [...bodies, ...regionalSystems].forEach((body) => {
+      if (currentView?.mode === "system" && body.node.kind === "planet") {
         body.angle += delta * orbitalSpeed(body.orbit);
         body.object.position.set(Math.cos(body.angle) * body.orbit, 0, Math.sin(body.angle) * body.orbit);
       }
@@ -1842,7 +1897,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       renderer.forceContextLoss();
       canvas.remove();
       labelLayer.remove();
-      bodies = []; labels = []; hitTargets = []; visibleDestinations = [];
+      bodies = []; regionalSystems = []; systemPreviews = []; labels = []; hitTargets = []; visibleDestinations = [];
       destinationById.clear();
     },
   };
