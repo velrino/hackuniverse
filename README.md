@@ -16,6 +16,12 @@ https://github.com/user-attachments/assets/71ee72c3-f5f6-4b40-8359-383dcdcb93ad
   <a href="assets/recognition/openai-developers-repost.png"><img src="assets/recognition/openai-developers-repost.png" alt="Screenshot captured November 2, 2026 showing OpenAI Developers reposting Velrino's HackUniverse demo on X" width="400" /></a>
 </p>
 
+OpenAI Developers also liked four of Velrino's posts, as shown in the notification below.
+
+<p align="center">
+  <a href="assets/recognition/openai-developers-likes.png"><img src="assets/recognition/openai-developers-likes.png" alt="X notification captured November 2, 2026 stating that OpenAI Developers liked four of Velrino's posts, with a preview mentioning the Velrino UI design system" width="700" /></a>
+</p>
+
 ## Product tour
 
 Select any screenshot below to open it at full resolution. Names and descriptions use sourced astronomical records; rendered positions and appearances are illustrative.
