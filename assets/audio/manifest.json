@@ -1280,17 +1280,17 @@
     },
     {
       "path": "web/public/audio/sfx/camera-orbit.mp3",
-      "sha256": "d3f376d4badcc3f6f3c8cd4ce013adc6a0d43dc8aa41504c304faadaa9c88de1",
+      "sha256": "d951ed189772a5c4b9b98dab40eaaade172aea86294d4feebbebf1145b4558ce",
       "bytes": 19017,
       "durationSeconds": 2.3771428571428572,
       "encodedDurationSeconds": 2.377125,
       "sampleRate": 44100,
       "channels": 1,
-      "meanDbfs": -28.553,
-      "peakDbfs": -12.731,
-      "silent": false,
-      "integratedLufs": -25.12,
-      "truePeakDbtp": -12.73
+      "meanDbfs": null,
+      "peakDbfs": null,
+      "silent": true,
+      "integratedLufs": null,
+      "truePeakDbtp": null
     },
     {
       "path": "web/public/audio/sfx/zoom-in.mp3",
@@ -1364,7 +1364,7 @@
     }
   ],
   "licenseReview": "Open Skies generated-music rights and imported third-party Starmap recording rights are not established by technical checks. No LICENSE file was found in the supplied Starmap project; do not infer original authorship or redistribution permission.",
-  "soundDesign": "Imported Starmap interface and camera recordings; Open Skies music unchanged. SystemAmbient and Unused assets remain catalog-only; eight supplied silent placeholders stay silent. Only the two runtime zoom aliases are muted by user request; the imported CAM_Zoom recording and its catalog derivative retain their original sound.",
+  "soundDesign": "Imported Starmap interface and camera recordings; Open Skies music unchanged. SystemAmbient and Unused assets remain catalog-only; eight supplied silent placeholders stay silent. The runtime camera-orbit and two zoom aliases are muted by user request; the imported CAM_Rotate and CAM_Zoom recordings and their catalog derivatives retain their original sound.",
   "effectsCatalog": "assets/audio/imported/starmap/catalog.json",
   "publicEffectsCatalog": "web/public/audio/catalog/starmap/catalog.json",
   "previousEffects": "assets/audio/drafts/pre-starmap/manifest.json",
@@ -1387,7 +1387,8 @@
     "camera-orbit": {
       "sourceRelativePath": "CAM_Rotate.wav",
       "path": "web/public/audio/sfx/camera-orbit.mp3",
-      "durationSeconds": 2.3771428571428572
+      "durationSeconds": 2.3771428571428572,
+      "muted": true
     },
     "zoom-in": {
       "sourceRelativePath": "CAM_Zoom.wav",

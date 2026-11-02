@@ -13,8 +13,37 @@ const pcmTest = test.extend({
   trace: { mode: "retain-on-failure", screenshots: false, snapshots: false },
 });
 
+pcmTest("runtime camera orbit audio decodes to silence with its preserved duration", async ({ page }) => {
+  await page.goto("/example?lang=en");
+  const decoded = await page.evaluate(async () => {
+    const context = new AudioContext();
+    try {
+      const response = await fetch("/audio/sfx/camera-orbit.mp3");
+      if (!response.ok) throw new Error(`Orbit audio returned ${response.status}`);
+      const buffer = await context.decodeAudioData(await response.arrayBuffer());
+      let peak = 0;
+      for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+        for (const sample of buffer.getChannelData(channel)) peak = Math.max(peak, Math.abs(sample));
+      }
+      return { peak, duration: buffer.duration, channels: buffer.numberOfChannels, frames: buffer.length };
+    } finally { await context.close(); }
+  });
+  expect(decoded.frames).toBeGreaterThan(0);
+  expect(decoded.duration).toBeCloseTo(2.3771428571428572, 2);
+  expect(decoded.channels).toBe(1);
+  expect(decoded.peak).toBe(0);
+});
+
 for (const motion of ["orbit", "zoom"] as const) {
-  pcmTest(motion === "orbit" ? "audible orbit feedback expires while JavaScript cleanup is blocked" : "both zoom directions remain silent while enabled effects schedule real camera voices", async ({ page, isMobile }, testInfo) => {
+  pcmTest(motion === "orbit" ? "audible orbit fixture expires while JavaScript cleanup is blocked" : "both zoom directions remain silent while enabled effects schedule real camera voices", async ({ page, isMobile }, testInfo) => {
+    if (motion === "orbit") {
+      // Keep a positive audio-thread signal for the deadline check independently
+      // of the intentionally silent runtime alias verified above.
+      await page.route("**/audio/sfx/camera-orbit.mp3", (route) => route.fulfill({
+        path: "public/audio/catalog/starmap/CAM_Rotate.mp3",
+        contentType: "audio/mpeg",
+      }));
+    }
     await page.setViewportSize(isMobile ? { width: 360, height: 640 } : { width: 640, height: 480 });
     await page.addInitScript(() => {
       localStorage.setItem("hackuniverse.intro.v1.seen", "1");
