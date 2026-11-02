@@ -948,8 +948,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       else {
         focusedId = null;
         const manualExit = Boolean(manualZoomDestination && manualZoomDestination.viewKey === currentView?.key && performance.now() < manualZoomDestination.expiresAt);
-        if (manualExit) {
-          // Dropping selection is UI state, not an instruction to fly back to
+        if (manualExit || tourStep || tourPreparing) {
+          // Manual zoom and tour steps own their camera movement. Dropping
+          // selection is UI state, not an instruction to fly back to
           // the saved overview or clamp a tiny physical planet to seven units.
           controls.minDistance = Math.min(7, camera.position.distanceTo(controls.target) * 0.5);
           overviewPose = null;
