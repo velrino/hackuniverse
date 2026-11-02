@@ -63,7 +63,7 @@ The optional location adapter supplies URL, clipboard and navigation integration
 
 ## Scene detail and scale
 
-Sourced stars and planets use proportional radii with independently adjusted orbital spacing. See [body radius provenance and unavailable measurements](UNIVERSE-DATA.md#proportional-body-radii). Galaxy/region symbols remain navigation graphics.
+Settings → Visual selects Illustrative (default, with stars at twice the former visual radius) or Proportional. In Proportional, sourced stars and planets use proportional radii with independently adjusted orbital spacing. See [body radius provenance and unavailable measurements](UNIVERSE-DATA.md#proportional-body-radii). Galaxy/region symbols remain navigation graphics.
 
 Camera distance drives semantic navigation as well as optical zoom. Recent wheel/pinch input can move from a planet back to its intact system, then to its cloud, galaxy and universe. Enter/exit thresholds and a cooldown prevent bouncing between levels; camera tweens and piloting do not trigger these transitions. A validated user crossing survives a short cooldown instead of requiring another wheel impulse, and is consumed once or cancelled on reversal, navigation, menu or flight. Labels relay wheel input to the canvas. Zooming near the projected bounds of a group under the cursor or pinch midpoint can enter its detail. A normal system view does not automatically select a random planet when approaching its central star.
 

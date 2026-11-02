@@ -51,6 +51,8 @@ const en = {
   starPlanets: "Planets",
   starSpectralType: "Spectral type",
   starTemperature: "Effective temperature",
+  bodyScaleLabel: "Body sizes",
+  bodyScaleModes: { illustrative: "Illustrative", proportional: "Proportional" },
   proportionalSize: 'Size proportional to catalog radius; orbital distances adjusted for exploration.',
   unknownSize: 'Radius unavailable; symbol is not to scale.',
   starRadius: "Radius",

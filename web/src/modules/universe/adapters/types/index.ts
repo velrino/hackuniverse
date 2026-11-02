@@ -1,5 +1,6 @@
 import type { ComponentType, ReactNode } from "react";
 import type { NavigationTarget, UniverseCatalog } from "../../domain/types";
+import type { BodyScaleMode } from "../../domain/body-scale";
 import type { UniverseCopy } from "../../messages";
 import type { UniverseEntityTransition, UniverseSceneProps } from "../../scene/types";
 import type { UniverseTourStep } from "../../hooks/use-universe-tour";
@@ -38,6 +39,7 @@ export type UniverseManagement = {
 };
 
 export type UniverseAdapters = {
+  bodyScale?: { mode: BodyScaleMode; onChange: (mode: BodyScaleMode) => void };
   catalog: UniverseCatalog;
   copy: UniverseCopy;
   tour?: UniverseTourDefinition;

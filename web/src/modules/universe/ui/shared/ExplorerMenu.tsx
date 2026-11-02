@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getBreadcrumbs, searchPlanets } from "../../domain/catalog";
 import type { NavigationTarget, UniverseCatalog } from "../../domain/types";
-import type { UniverseManagement } from "../../adapters/types";
+import type { UniverseManagement, UniverseAdapters } from "../../adapters/types";
 import { getPlanetAppearance } from "../../domain/planet-appearance";
 import type { UniverseCopy } from "../../messages";
 import { MenuAbout } from "./MenuAbout";
@@ -26,6 +26,7 @@ export type ExplorerMenuProps = {
   onNavigate: (id: string) => void;
   currentTarget: NavigationTarget;
   discoveryTarget?: NavigationTarget;
+  bodyScale?: UniverseAdapters["bodyScale"];
   showOrbits: boolean;
   onToggleOrbits: () => void;
   autoOrbit: boolean;
@@ -91,7 +92,7 @@ export function ExplorerMenu(props: ExplorerMenuProps) {
 }
 
 /** Opening mounts fresh tab navigation while the parent retains the atlas draft. */
-function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, discoveryTarget, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, resetAvailable, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, tourAvailable, onStartTour, LanguagePicker, DesignLink, DataControls, AudioControls, query, page, setQuery, setPage }: MenuContentsProps) {
+function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, discoveryTarget, bodyScale, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, resetAvailable, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, tourAvailable, onStartTour, LanguagePicker, DesignLink, DataControls, AudioControls, query, page, setQuery, setPage }: MenuContentsProps) {
   const [tab, setTab] = useState<MenuTab>("pause");
   const resultsList = useRef<HTMLUListElement>(null);
   const id = useId();
@@ -187,6 +188,10 @@ function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, 
         </SettingsCategory>}
         <SettingsCategory title={copy.menuGroups.view} icon={<Eye aria-hidden="true" />} closeLabel={copy.close}>
           <div className="universe-menu-group">
+            {bodyScale && <fieldset className="universe-menu-group">
+              <legend>{copy.bodyScaleLabel}</legend>
+              {(["illustrative", "proportional"] as const).map((mode) => <Button key={mode} type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={bodyScale.mode === mode} onClick={() => bodyScale.onChange(mode)}>{copy.bodyScaleModes[mode]}</Button>)}
+            </fieldset>}
             <Button type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={showOrbits} onClick={onToggleOrbits}>
               <Orbit aria-hidden="true" />{showOrbits ? copy.hideOrbits : copy.orbits}
             </Button>

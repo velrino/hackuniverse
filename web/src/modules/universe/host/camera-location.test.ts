@@ -188,3 +188,15 @@ test("own history replacement and catalog renames do not reapply an acknowledged
   assert.equal(instance.controller.getSnapshot(), before);
   assert.equal(instance.controller.getSnapshot().restore, undefined);
 });
+
+test("shared camera links include the active body scale even when entered without a scale query", async () => {
+  const instance = fixture();
+  instance.controller.mount();
+  instance.reader();
+  instance.controller.setBodyScale("proportional");
+  await instance.controller.copy();
+  assert.equal(new URL(instance.copied.at(-1)!).searchParams.get("scale"), "proportional");
+  instance.controller.setBodyScale("illustrative");
+  await instance.controller.copy();
+  assert.equal(new URL(instance.copied.at(-1)!).searchParams.get("scale"), "illustrative");
+});

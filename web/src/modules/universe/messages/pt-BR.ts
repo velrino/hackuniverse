@@ -53,6 +53,8 @@ const ptBR = {
   starPlanets: "Planetas",
   starSpectralType: "Tipo espectral",
   starTemperature: "Temperatura efetiva",
+  bodyScaleLabel: "Tamanho dos corpos",
+  bodyScaleModes: { illustrative: "Ilustrativo", proportional: "Proporcional" },
   proportionalSize: 'Tamanho proporcional ao raio do catálogo; distâncias orbitais ajustadas para exploração.',
   unknownSize: 'Raio indisponível; símbolo fora de escala.',
   starRadius: "Raio",

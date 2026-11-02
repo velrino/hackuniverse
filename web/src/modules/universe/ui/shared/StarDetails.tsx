@@ -6,6 +6,7 @@ import type { SystemStar } from "../../domain/types";
 import type { UniverseCopy } from "../../messages";
 
 export type StarDetailsProps = {
+  proportional?: boolean;
   star: SystemStar;
   systemName: string;
   planetCount: number;
@@ -15,7 +16,7 @@ export type StarDetailsProps = {
   demo?: boolean;
 };
 
-export function StarDetails({ star, systemName, planetCount, copy, onClose, formatNumber = String, demo = false }: StarDetailsProps) {
+export function StarDetails({ star, systemName, planetCount, copy, onClose, formatNumber = String, demo = false, proportional = false }: StarDetailsProps) {
   const replayKey = `${systemName}:${star.name}`;
   const facts = [
     { label: copy.starSystem, value: systemName },
@@ -36,7 +37,7 @@ export function StarDetails({ star, systemName, planetCount, copy, onClose, form
       <p className="hud-kicker">{copy.star} / {copy.details}{demo && <> / {copy.demoObject}</>}</p>
       <h2><TypewriterText text={star.name} replayKey={replayKey} /></h2>
       <p className="universe-details-description"><TypewriterText text={star.description.trim() || copy.starFallbackDescription} replayKey={replayKey} /></p>
-      <p className="universe-source-note">{star.radiusKm === undefined ? copy.unknownSize : copy.proportionalSize}</p>
+      {proportional && <p className="universe-source-note">{star.radiusKm === undefined ? copy.unknownSize : copy.proportionalSize}</p>}
       <dl className="universe-star-facts">
         {facts.map(({ label, value }) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
       </dl>

@@ -53,6 +53,8 @@ const fil = {
   starPlanets: "Mga planeta",
   starSpectralType: "Uri ng ispektrum",
   starTemperature: "Epektibong temperatura",
+  bodyScaleLabel: "Laki ng mga bagay",
+  bodyScaleModes: { illustrative: "Ilustratibo", proportional: "Proporsyonal" },
   proportionalSize: 'Proporsyonal ang laki sa radius sa katalogo; inayos ang distansya ng mga orbit para sa paggalugad.',
   unknownSize: 'Walang radius na magagamit; hindi ayon sa sukat ang simbolo.',
   starRadius: "Radyus",

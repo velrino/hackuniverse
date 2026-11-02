@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTranslations } from "@/i18n";
 import type { CameraLinkSource } from "../domain/camera-link";
+import type { BodyScaleMode } from "../domain/body-scale";
 import type { UniverseCatalog } from "../domain/types";
 import { createCameraLocation, type CameraLocationState } from "./camera-location";
 
@@ -13,7 +14,7 @@ type CameraLocation = ReturnType<typeof createCameraLocation>;
 export const CameraLocationContext = createContext<{ controller: CameraLocation; state: CameraLocationState; source?: CameraLinkSource } | null>(null);
 export const useCameraLocationContext = () => useContext(CameraLocationContext);
 
-export function useCameraLocation(catalog: UniverseCatalog, source?: CameraLinkSource) {
+export function useCameraLocation(catalog: UniverseCatalog, source?: CameraLinkSource, bodyScale?: BodyScaleMode) {
   const [controller] = useState(() => createCameraLocation(catalog, source, {
     href: () => window.location.href,
     replace: (href) => {
@@ -25,8 +26,9 @@ export function useCameraLocation(catalog: UniverseCatalog, source?: CameraLinkS
     copy: (text) => navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject(new Error("Clipboard unavailable")),
     later: (run, delay) => window.setTimeout(run, delay),
     cancel: (timer) => window.clearTimeout(timer as number),
-  }));
+  }, bodyScale));
   const state = useSyncExternalStore(controller.subscribe, controller.getSnapshot, controller.getServerSnapshot);
+  useEffect(() => { controller.setBodyScale(bodyScale); }, [controller, bodyScale]);
   useEffect(() => { controller.update(catalog, source); }, [catalog, source, controller]);
   useEffect(() => {
     controller.mount();

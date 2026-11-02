@@ -24,7 +24,7 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
       });
       const errors: string[] = [];
       page.on("pageerror", (error) => errors.push(error.message));
-      const query = new URLSearchParams({ lang: "en", source: "demo", target: "cloud-local-interstellar", camera: [...position.toArray(), ...center.toArray()].join(",") });
+      const query = new URLSearchParams({ lang: "en", source: "demo", scale: "proportional", target: "cloud-local-interstellar", camera: [...position.toArray(), ...center.toArray()].join(",") });
       await page.goto(`/?${query}`);
       await expect(page.locator('.universe-scene[aria-busy]')).toHaveAttribute("aria-busy", "false");
       const canvas = await page.locator("canvas").elementHandle();

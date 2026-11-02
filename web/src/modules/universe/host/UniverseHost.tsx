@@ -15,6 +15,8 @@ import type { NavigationTarget } from "../domain/types";
 import { CameraLocationContext, CameraLinkStatus, CameraShareControls, useCameraLocation, useCameraLocationContext } from "./use-camera-location";
 import type { UniverseCopy } from "../messages";
 
+import { useBodyScale } from "./use-body-scale";
+
 const Scene = dynamic(() => import("../scene").then((module) => module.UniverseScene), { ssr: false });
 
 function ObservedScene(props: UniverseSceneProps) {
@@ -64,7 +66,8 @@ export function UniverseHost({ catalog, tour, management, source, presentation }
   } : translations, [translations, regionPresentation]);
   const { format } = useI18n();
   const { playCue, cameraMotion, stopCameraMotion, unlockFromGesture } = useAudio();
-  const camera = useCameraLocation(catalog, source);
+  const bodyScale = useBodyScale();
+  const camera = useCameraLocation(catalog, source, bodyScale.mode);
   const location = useMemo(() => ({ navigationRequest: camera.state.navigationRequest, Controls: CameraShareControls, Status: CameraLinkStatus }), [camera.state.navigationRequest]);
   const audio = useMemo<UniverseAudio>(() => ({
     onTourStart: unlockFromGesture,
@@ -82,6 +85,6 @@ export function UniverseHost({ catalog, tour, management, source, presentation }
   const reducedMotion = useSyncExternalStore(subscribeMotion, getReducedMotion, () => true);
   const allowDemoReferences = Boolean(presentation?.factualReferences);
   const discoveryTarget = presentation?.discoveryTarget;
-  const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, tour, management, audio, location, presentationReady, allowDemoReferences, discoveryTarget, autoTour: camera.state.ready && !camera.state.suppressAutoTour && !reducedMotion, formatNumber: format.number, components: { Scene: ObservedScene, BrandLogo, LanguagePicker: InlineLanguageSelector, DesignLink: DesignSystemLink } }), [catalog, copy, tour, management, audio, location, presentationReady, allowDemoReferences, discoveryTarget, camera.state.ready, camera.state.suppressAutoTour, reducedMotion, format.number]);
+  const adapters = useMemo<UniverseAdapters>(() => ({ catalog, copy, tour, management, audio, location, bodyScale, presentationReady, allowDemoReferences, discoveryTarget, autoTour: camera.state.ready && !camera.state.suppressAutoTour && !reducedMotion, formatNumber: format.number, components: { Scene: ObservedScene, BrandLogo, LanguagePicker: InlineLanguageSelector, DesignLink: DesignSystemLink } }), [catalog, copy, tour, management, audio, location, bodyScale, presentationReady, allowDemoReferences, discoveryTarget, camera.state.ready, camera.state.suppressAutoTour, reducedMotion, format.number]);
   return <CameraLocationContext value={{ ...camera, source }}><UniverseRoot adapters={adapters} /></CameraLocationContext>;
 }

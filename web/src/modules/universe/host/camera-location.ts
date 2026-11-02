@@ -1,3 +1,4 @@
+import type { BodyScaleMode } from "../domain/body-scale";
 import { getEntity } from "../domain/catalog";
 import { buildCameraLinkUrl, isCameraPose, readCameraLink, type CameraLinkSource, type UniverseCameraPose, type UniverseCameraRestore } from "../domain/camera-link";
 import type { NavigationTarget, UniverseCatalog } from "../domain/types";
@@ -22,7 +23,7 @@ type Ports = {
 export const initialCameraLocation: CameraLocationState = Object.freeze({ ready: false, suppressAutoTour: false, status: "idle", canShare: false, sharedUrl: "" });
 
 /** Owns URL intent; no scene, router, browser storage or provider data enters this controller. */
-export function createCameraLocation(catalog: UniverseCatalog, source: CameraLinkSource | undefined, ports: Ports) {
+export function createCameraLocation(catalog: UniverseCatalog, source: CameraLinkSource | undefined, ports: Ports, bodyScale?: BodyScaleMode) {
   let state = initialCameraLocation;
   let sequence = 0;
   let mounted = false;
@@ -42,7 +43,9 @@ export function createCameraLocation(catalog: UniverseCatalog, source: CameraLin
   };
   const known = (capture: CameraSnapshot | null): capture is CameraSnapshot => Boolean(capture && getEntity(catalog, capture.target) && isCameraPose(capture.pose));
   const write = (capture: CameraSnapshot) => {
-    const url = buildCameraLinkUrl(ports.href(), capture.target.id, capture.pose, source);
+    const href = new URL(ports.href());
+    if (bodyScale) href.searchParams.set("scale", bodyScale);
+    const url = buildCameraLinkUrl(href.href, capture.target.id, capture.pose, source);
     if (!url) return null;
     ports.replace(url); lastKey = key();
     return url;
@@ -68,6 +71,7 @@ export function createCameraLocation(catalog: UniverseCatalog, source: CameraLin
     publish({ ready: true, suppressAutoTour: true, status: "idle", canShare: false, navigationRequest: { token, target }, restore: { token, target, pose: link.pose } });
   }
   return {
+    setBodyScale(mode?: BodyScaleMode) { bodyScale = mode; },
     getSnapshot: () => state,
     getServerSnapshot: () => initialCameraLocation,
     subscribe(listener: () => void) { listeners.add(listener); return () => { listeners.delete(listener); }; },

@@ -5,6 +5,8 @@ import { getSceneView } from "../domain/catalog";
 import { parseUniverseCatalog } from "../domain/parse-catalog";
 import type { SceneNode, UniverseSceneView } from "../domain/types";
 import { clusterPosition, clusterScale, previewScale, physicalRadius, starRadius, planetRadius, systemOrbit } from "./layout";
+import { bodyScaleFromQuery, projectBodyScale } from "../domain/body-scale";
+import { getPlanetAppearance } from "../domain/planet-appearance";
 import { mapAncestorToAnchor, mapSceneViews, type SceneCoordinateMapping } from "./view-coordinates";
 
 const fields = (id: string, seed: number) => ({ id, name: id, description: "Synthetic coordinate fixture.", seed });
@@ -142,4 +144,20 @@ test("sourced body sizes preserve physical ratios across different system previe
   near(physicalRadius(69911) / physicalRadius(6371), 69911 / 6371);
   assert.ok(systemOrbit(0, physicalRadius(9670230)) > physicalRadius(9670230));
   assert.notEqual(planetRadius(1, null), planetRadius(1, 6371));
+});
+
+
+test("illustrative sizes retain planet dimensions and double only the legacy star radius", () => {
+  near(starRadius(), 6.8);
+  near(planetRadius(5), getPlanetAppearance(5).radius);
+  for (const query of [[], ["invalid"], ["proportional", "illustrative"]]) assert.equal(bodyScaleFromQuery(query), null);
+  assert.equal(bodyScaleFromQuery(["proportional"]), "proportional");
+  const original = view("system-a");
+  original.anchor!.radiusKm = 695700;
+  original.nodes[0].radiusKm = 6371;
+  const illustrated = projectBodyScale(original, "illustrative");
+  assert.equal(illustrated.anchor!.radiusKm, undefined);
+  assert.equal(illustrated.nodes[0].radiusKm, undefined);
+  assert.equal(original.nodes[0].radiusKm, 6371);
+  assert.equal(projectBodyScale(original, "proportional"), original);
 });
