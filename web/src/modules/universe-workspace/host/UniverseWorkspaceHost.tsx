@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useId, useMemo, type ComponentProps } from "react";
+import { createContext, useContext, useId, useMemo, useState, type ComponentProps } from "react";
 import { Database, Globe2, Pencil, Plus, Share2, Sparkles, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
@@ -94,7 +94,7 @@ function EmptyState({ target, onInteraction }: UniverseActionContext) {
 }
 
 /** Application composition: local/demo selection stays outside the reusable universe renderer. */
-export function UniverseWorkspaceHost({ demoCatalog, demoTour, demoPresentation }: { demoCatalog: UniverseCatalog; demoTour?: UniverseTourDefinition; demoPresentation?: ComponentProps<typeof UniverseHost>["presentation"] }) {
+export function EditableUniverseWorkspaceHost({ demoCatalog, demoTour, demoPresentation }: { demoCatalog: UniverseCatalog; demoTour?: UniverseTourDefinition; demoPresentation?: ComponentProps<typeof UniverseHost>["presentation"] }) {
   const { locale } = useI18n();
   const copy = getWorkspaceCopy(locale);
   const identity = useIdentityDialog();
@@ -125,4 +125,28 @@ export function UniverseWorkspaceHost({ demoCatalog, demoTour, demoPresentation 
       {session.transfer && <WorkspaceImportDialog base={session.transfer} current={session.local.workspace} copy={copy} busy={session.busy} blocked={!session.local.ready || Boolean(session.local.error && session.local.error !== "conflict")} error={error} onOpenChange={(open) => { if (!open) session.setTransfer(null); }} onImport={session.importJson} />}
     </div>
   </WorkspaceContext>;
+}
+
+
+function DemoActions({ disabled, share, onInteraction }: ComponentProps<UniverseManagement["Actions"]>) {
+  const { locale } = useI18n();
+  const copy = getWorkspaceCopy(locale);
+  const [open, setOpen] = useState(false);
+  if (!share) return null;
+  return <div className="workspace-float"><FloatButtonGroup label={copy.actions} open={open} onOpenChange={(next) => { if (next) onInteraction(); setOpen(next); }} disabled={disabled} actions={[
+    { id: "share", label: share.label, icon: <Share2 aria-hidden="true" />, onSelect: share.onSelect },
+  ]} /></div>;
+}
+const noSelectionActions = () => null;
+const demoSourceControls = () => null;
+const demoManagement: UniverseManagement = {
+  blocked: false, workspaceEnabled: false,
+  Actions: DemoActions, SelectionActions: noSelectionActions, Controls: demoSourceControls,
+};
+
+/** Temporarily expose only the Demo, preserving the editable host and stored Local data. */
+export function UniverseWorkspaceHost({ demoCatalog, demoTour, demoPresentation }: ComponentProps<typeof EditableUniverseWorkspaceHost>) {
+  return <div className="workspace-host" data-source="demo" data-transition="idle">
+    <UniverseHost catalog={demoCatalog} source="demo" tour={demoTour} presentation={demoPresentation} management={demoManagement} />
+  </div>;
 }

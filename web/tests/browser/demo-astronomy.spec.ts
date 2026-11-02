@@ -170,41 +170,19 @@ test("the initial Demo neighborhood exposes multiple real systems from Pause", a
   await canvas!.dispose();
 });
 
-test("switching and direct entry to Local retain its content and ordinary stellar-cloud label", async ({ page, context }) => {
+test("Demo-only entry preserves stored Local data and disables workspace controls", async ({ page, context }) => {
   const { errors, providerRequests } = await prepare(context, page);
-  await page.goto("/?lang=en&source=demo");
+  await page.addInitScript(() => localStorage.setItem("hackuniverse.data-source.v1", "local"));
+  await page.goto("/?lang=en&source=local&target=synthetic-local-cloud&camera=10,8,20,0,0,0");
+  await expect(page.locator('.workspace-host[data-source="demo"]')).toBeVisible();
   await expect(page.locator('.universe-scene[aria-busy]')).toHaveAttribute("aria-busy", "false");
   await expectStoredWorkspace(page);
   await page.getByRole("button", { name: "Explorer menu", exact: true }).click();
   const menu = page.getByRole("dialog", { name: "Mission controls", exact: true });
   await menu.getByRole("tab", { name: "Settings", exact: true }).click();
-  await menu.getByRole("button", { name: "Workspace and data", exact: true }).click();
-  const settings = page.getByRole("dialog", { name: "Workspace and data", exact: true });
-  await settings.getByRole("combobox", { name: "Universe source", exact: true }).click();
-  await settings.getByRole("option", { name: "Local", exact: true }).click();
-  await expect(page.locator('.workspace-host[data-source="local"]')).toBeVisible();
-  const localPlanet = localDocument.entities.find(({ id }) => id === "synthetic-local-planet")!;
-  const localPanel = page.getByRole("region", { name: localPlanet.name, exact: true });
-  await expect(localPanel.getByRole("heading", { name: localPlanet.name, exact: true })).toBeVisible();
-  await expect(localPanel.locator(".universe-details-description")).toContainText(localPlanet.description);
+  await expect(menu.getByRole("button", { name: "Workspace and data", exact: true })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Create", exact: true })).toHaveCount(0);
   await expectStoredWorkspace(page);
-  await localPanel.getByRole("button", { name: "Back to system", exact: true }).click();
-  await page.locator("button.universe-scale-back").click();
-  await expect(page.locator("main")).toHaveAttribute("data-scale", "cloud");
-  await expect(page.locator(".universe-context > span")).toHaveText("Stellar cloud");
-  await expect(page.locator(".universe-context h1")).toHaveText("Synthetic local cloud");
-  await expectStoredWorkspace(page);
-
-  await page.goto("/?lang=en&source=local&target=synthetic-local-cloud&camera=10,8,20,0,0,0#local-data");
-  await expect(page.locator('.workspace-host[data-source="local"]')).toBeVisible();
-  await expect(page.locator("main")).toHaveAttribute("data-scale", "cloud");
-  await expect(page.locator(".universe-context > span")).toHaveText("Stellar cloud");
-  await expect(page.locator(".universe-context h1")).toHaveText("Synthetic local cloud");
-  await expectStoredWorkspace(page);
-  await page.getByRole("button", { name: "Explorer menu", exact: true }).click();
-  await expect(menu.getByRole("tabpanel", { name: "Pause", exact: true })).toBeVisible();
-  await expect(menu.getByRole("button", { name: "Nearby systems", exact: true })).toHaveCount(0);
-  await page.keyboard.press("Escape");
   expect(providerRequests).toEqual([]);
   expect(errors).toEqual([]);
 });

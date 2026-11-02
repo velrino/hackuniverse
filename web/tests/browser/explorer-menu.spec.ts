@@ -28,7 +28,7 @@ for (const locale of ["en", "pt-BR"] as const) {
     await expect(dialog.getByRole("tab", { name: tabs[0], exact: true })).toHaveAttribute("aria-selected", "true");
     const pause = dialog.getByRole("tabpanel", { name: tabs[0], exact: true });
     const quickActions = locale === "en" ? ["Resume", "Nearby systems", "Tour", "Reset", "Close"] : ["Retomar", "Sistemas próximos", "Tour", "Restaurar", "Fechar"];
-    await expect(pause.getByRole("button")).toHaveText(quickActions);
+    await expect(pause.locator(".universe-menu-pause__actions").getByRole("button")).toHaveText(quickActions);
     await pause.getByRole("button", { name: quickActions[0], exact: true }).click();
     await expect(dialog).toBeHidden();
     await expect(trigger).toBeFocused();
@@ -117,6 +117,8 @@ for (const locale of ["en", "pt-BR"] as const) {
     const floatingActions = page.getByRole("button", { name: locale === "en" ? "Actions" : "Ações", exact: true });
     const shareName = locale === "en" ? "Share view" : "Compartilhar vista";
     await floatingActions.click();
+    await expect(page.getByRole("button", { name: locale === "en" ? "Create" : "Criar", exact: true })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: locale === "en" ? "Manage objects" : "Gerenciar objetos", exact: true })).toHaveCount(0);
     await page.getByRole("button", { name: shareName, exact: true }).click();
     const share = page.getByRole("dialog", { name: shareName, exact: true });
     await expect(share).toBeInViewport();

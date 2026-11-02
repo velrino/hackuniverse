@@ -28,6 +28,7 @@ export type UniverseLocation = {
 };
 /** Optional host-owned editing tools; the explorer never knows their persistence/provider. */
 export type UniverseManagement = {
+  workspaceEnabled?: boolean;
   blocked: boolean;
   navigationRequest?: { token: string; target: NavigationTarget };
   entityTransition?: UniverseEntityTransition | null;

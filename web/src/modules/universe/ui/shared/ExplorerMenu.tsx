@@ -42,6 +42,7 @@ export type ExplorerMenuProps = {
   onCloseAutoFocus?: (event: Event) => void;
   LanguagePicker: ComponentType;
   DesignLink: ComponentType<{ children: ReactNode; className?: string }>;
+  dataControlsDisabled?: boolean;
   DataControls?: UniverseManagement["Controls"];
   AudioControls?: ComponentType;
 };
@@ -54,10 +55,10 @@ type MenuContentsProps = ExplorerMenuProps & {
 };
 
 /** Native nested dialogs preserve the paused parent and return focus to each row. */
-function SettingsCategory({ title, icon, closeLabel, children }: { title: string; icon: ReactNode; closeLabel: string; children: ReactNode }) {
+function SettingsCategory({ title, icon, closeLabel, children, disabled = false }: { title: string; icon: ReactNode; closeLabel: string; children: ReactNode; disabled?: boolean }) {
   return <Dialog>
     <DialogTrigger asChild>
-      <Button type="button" variant="outline" className="hud-option universe-menu-category">
+      <Button type="button" variant="outline" className="hud-option universe-menu-category" disabled={disabled}>
         {icon}<span>{title}</span><ChevronRight aria-hidden="true" />
       </Button>
     </DialogTrigger>
@@ -92,7 +93,7 @@ export function ExplorerMenu(props: ExplorerMenuProps) {
 }
 
 /** Opening mounts fresh tab navigation while the parent retains the atlas draft. */
-function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, discoveryTarget, bodyScale, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, resetAvailable, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, tourAvailable, onStartTour, LanguagePicker, DesignLink, DataControls, AudioControls, query, page, setQuery, setPage }: MenuContentsProps) {
+function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, discoveryTarget, bodyScale, showOrbits, onToggleOrbits, autoOrbit, onToggleAutoOrbit, resetAvailable, onResetCamera, flightEnabled, flightAvailable, flightStatus, onToggleFlight, tourAvailable, onStartTour, LanguagePicker, DesignLink, DataControls, dataControlsDisabled, AudioControls, query, page, setQuery, setPage }: MenuContentsProps) {
   const [tab, setTab] = useState<MenuTab>("pause");
   const resultsList = useRef<HTMLUListElement>(null);
   const id = useId();
@@ -118,6 +119,12 @@ function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, 
       </TabsList>
 
       <TabsContent value="pause" className="universe-menu-panel universe-menu-pause">
+        {bodyScale && <fieldset className="universe-menu-group">
+          <legend>{copy.bodyScaleLabel}</legend>
+          <div className="universe-menu-body-scale">
+            {(["illustrative", "proportional"] as const).map((mode) => <Button key={mode} type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={bodyScale.mode === mode} onClick={() => bodyScale.onChange(mode)}>{copy.bodyScaleModes[mode]}</Button>)}
+          </div>
+        </fieldset>}
         <div className="universe-menu-pause__actions">
           <Button type="button" className="hud-button universe-menu-action" onClick={() => onOpenChange(false)}>
             <Play aria-hidden="true" />{copy.menuActions.resume}
@@ -183,15 +190,12 @@ function MenuContents({ catalog, copy, onOpenChange, onNavigate, currentTarget, 
         {AudioControls && <SettingsCategory title={copy.menuGroups.sound} icon={<Volume2 aria-hidden="true" />} closeLabel={copy.close}>
           <AudioControls />
         </SettingsCategory>}
-        {DataControls && <SettingsCategory title={copy.menuGroups.workspace} icon={<Database aria-hidden="true" />} closeLabel={copy.close}>
+        {DataControls && <SettingsCategory disabled={dataControlsDisabled} title={copy.menuGroups.workspace} icon={<Database aria-hidden="true" />} closeLabel={copy.close}>
           <DataControls target={currentTarget} onRequestClose={() => onOpenChange(false)} />
         </SettingsCategory>}
         <SettingsCategory title={copy.menuGroups.view} icon={<Eye aria-hidden="true" />} closeLabel={copy.close}>
           <div className="universe-menu-group">
-            {bodyScale && <fieldset className="universe-menu-group">
-              <legend>{copy.bodyScaleLabel}</legend>
-              {(["illustrative", "proportional"] as const).map((mode) => <Button key={mode} type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={bodyScale.mode === mode} onClick={() => bodyScale.onChange(mode)}>{copy.bodyScaleModes[mode]}</Button>)}
-            </fieldset>}
+
             <Button type="button" variant="outline" className="hud-button universe-menu-action" aria-pressed={showOrbits} onClick={onToggleOrbits}>
               <Orbit aria-hidden="true" />{showOrbits ? copy.hideOrbits : copy.orbits}
             </Button>

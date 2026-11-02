@@ -3,9 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 async function openViewSettings(page: Page) {
   await page.getByRole("button", { name: "Explorer menu", exact: true }).click();
   const menu = page.getByRole("dialog", { name: "Mission controls", exact: true });
-  await menu.getByRole("tab", { name: "Settings", exact: true }).click();
-  await menu.getByRole("button", { name: "Visual", exact: true }).click();
-  return page.getByRole("dialog", { name: "Visual", exact: true });
+  return menu.getByRole("tabpanel", { name: "Pause", exact: true });
 }
 
 test.beforeEach(async ({ page }) => {
@@ -22,6 +20,12 @@ test("illustrative defaults, settings persist, and a query overrides the saved c
   await expect(page.locator('.universe-scene[aria-busy]')).toHaveAttribute("aria-busy", "false");
   const canvas = await page.locator("canvas").elementHandle();
   const visual = await openViewSettings(page);
+  const illustrativeBox = await visual.getByRole("button", { name: "Illustrative", exact: true }).boundingBox();
+  const proportionalBox = await visual.getByRole("button", { name: "Proportional", exact: true }).boundingBox();
+  expect(illustrativeBox).not.toBeNull();
+  expect(proportionalBox).not.toBeNull();
+  expect(Math.abs(illustrativeBox!.y - proportionalBox!.y)).toBeLessThan(1);
+  expect(proportionalBox!.x).toBeGreaterThan(illustrativeBox!.x);
   await expect(visual.getByRole("button", { name: "Illustrative", exact: true })).toHaveAttribute("aria-pressed", "true");
   await visual.getByRole("button", { name: "Proportional", exact: true }).click();
   await expect(page.locator("main")).toHaveAttribute("data-body-scale", "proportional");

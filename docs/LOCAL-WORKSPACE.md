@@ -1,5 +1,7 @@
 # Local universe workspace
 
+The public application is temporarily Demo-only. Workspace and data remains visible but disabled; creation and management actions are hidden. Stored Local content is preserved without loading or modifying it. The editable host and workflows described below remain implemented for future reactivation.
+
 The web application separates its immutable bundled demo from an editable browser workspace. Local editing uses the same [canonical catalog contract](UNIVERSE-DATA.md) and renderer. Account authentication, remote persistence and provider ingestion remain future integrations; the local editor does not call a backend or upload its catalog.
 
 ## Sources and everyday use
