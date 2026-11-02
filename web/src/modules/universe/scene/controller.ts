@@ -183,6 +183,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
   let gestureGeneration = 0;
   let orbitFeedbackActive = false;
   let zoomFeedbackActive = false;
+  let manualZoomDestination: { viewKey: string; expiresAt: number } | null = null;
   let semanticZoomContinuation: { viewKey: string; expiresAt: number } | null = null;
   const wheelDistances = new WeakMap<WheelEvent, number>();
   const pointerMotionSamples = new WeakMap<PointerEvent, () => void>();
@@ -762,7 +763,9 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     const coordinateMapping = previousView && previousView.key !== view.key ? mapSceneViews(previousView, view) : null;
     const adjacentRegionSystem = previousView && ((previousView.anchor?.kind === "cloud" && view.anchor?.kind === "system" && entering)
       || (previousView.anchor?.kind === "system" && view.anchor?.kind === "cloud" && parent));
-    const preservePose = Boolean(coordinateMapping && adjacentRegionSystem && playing && !focusedId && !tourStep && !tourPreparing);
+    const manualHandoff = manualZoomDestination?.viewKey === view.key && performance.now() < manualZoomDestination.expiresAt;
+    const preservePose = Boolean(coordinateMapping && (manualHandoff || adjacentRegionSystem && !focusedId) && playing && !tourStep && !tourPreparing);
+    manualZoomDestination = null;
     const canTransition = Boolean(previousView && !reducedMotion && (coordinateMapping || entering || parent));
     const outgoing = new THREE.Group();
     const orbitsVisible = orbitGroup.visible;
@@ -944,7 +947,15 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       if (body) focusBody(body);
       else {
         focusedId = null;
-        controls.minDistance = 7;
+        const manualExit = Boolean(manualZoomDestination && manualZoomDestination.viewKey === currentView?.key && performance.now() < manualZoomDestination.expiresAt);
+        if (manualExit) {
+          // Dropping selection is UI state, not an instruction to fly back to
+          // the saved overview or clamp a tiny physical planet to seven units.
+          controls.minDistance = Math.min(7, camera.position.distanceTo(controls.target) * 0.5);
+          overviewPose = null;
+          focusDistance = undefined;
+          manualZoomDestination = null;
+        } else controls.minDistance = 7;
         if (overviewPose) beginCameraTween({ position: overviewPose.position.clone(), target: overviewPose.target.clone() }, 0);
       }
     }
@@ -1133,6 +1144,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
     if (!continueSemanticZoom || !canContinueSemanticZoom()) endCameraGesture("zoom");
     userZoom = null;
     semanticZoom.cancelPending();
+    if (!continueSemanticZoom) manualZoomDestination = null;
   }
 
   function render(time: number) {
@@ -1574,6 +1586,7 @@ export function createUniverseController(container: HTMLElement, callbacks: Call
       // setup. This token never renews sound; the audio-thread lease still ends it.
       semanticZoomContinuation = destination && userZoom && zoomFeedbackActive && time - userZoom.at < 180
         ? { viewKey: `${destination.kind}:${destination.id}`, expiresAt: userZoom.at + 180 } : null;
+      manualZoomDestination = destination ? { viewKey: `${destination.kind}:${destination.id}`, expiresAt: time + 1600 } : null;
       userZoom = null;
       if (decision.type === "out") callbacks.onScaleOut();
       else callbacks.onScaleIn(decision.id);

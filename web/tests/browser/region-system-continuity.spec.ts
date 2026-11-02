@@ -52,3 +52,32 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
     });
   });
 }
+
+for (const scale of ["proportional", "illustrative"] as const) {
+  test(`leaving a selected planet by wheel keeps its optical distance (${scale})`, async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem("hackuniverse.intro.v1.seen", "1");
+      localStorage.setItem("hackuniverse.demo-tour.v1.seen", "1");
+      localStorage.setItem("hackuniverse.audio.v1", JSON.stringify({ schemaVersion: 1, muted: true, musicEnabled: false, effectsEnabled: false, musicVolume: 0.35, effectsVolume: 0.5 }));
+    });
+    const distance = scale === "proportional" ? 0.7 : 40;
+    const query = new URLSearchParams({ lang: "en", source: "demo", scale, target: "planet-earth", camera: `0,0,${distance},0,0,0` });
+    await page.goto(`/?${query}`);
+    await expect(page.locator('.universe-scene[aria-busy]')).toHaveAttribute("aria-busy", "false");
+    const earth = page.locator('button.universe-node-label[data-destination-id="planet-earth"]');
+    await expect(earth).toHaveAttribute("aria-pressed", "true");
+    await earth.hover();
+    await page.mouse.wheel(0, 20);
+    await expect.poll(() => new URL(page.url()).searchParams.get("target")).toBe("system-solar");
+    const opticalDistance = () => {
+      const values = new URL(page.url()).searchParams.get("camera")!.split(",").map(Number);
+      return Math.hypot(values[0] - values[3], values[1] - values[4], values[2] - values[5]);
+    };
+    expect(opticalDistance()).toBeGreaterThan(distance * 0.95);
+    expect(opticalDistance()).toBeLessThan(distance * 1.15);
+    const afterExit = opticalDistance();
+    await page.waitForTimeout(1100);
+    expect(opticalDistance()).toBeCloseTo(afterExit, 2);
+    await expect(earth).toHaveAttribute("aria-pressed", "false");
+  });
+}
