@@ -1,7 +1,7 @@
 import type { SceneNode, UniverseSceneView } from "./types";
 
 export type BodyScaleMode = "illustrative" | "proportional";
-export const defaultBodyScale: BodyScaleMode = "illustrative";
+export const defaultBodyScale: BodyScaleMode = "proportional";
 export const bodyScaleStorageKey = "hackuniverse.body-scale.v1";
 export const isBodyScaleMode = (value: unknown): value is BodyScaleMode => value === "illustrative" || value === "proportional";
 export function bodyScaleFromQuery(values: readonly string[]): BodyScaleMode | null {
